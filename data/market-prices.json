@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "description": "The Crude Oracle market price data. All values are SAMPLE / INDICATIVE placeholders pending a licensed data feed. Edit manually or replace with API integration. See docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-03T07:00:00Z",
+    "status": "published"
+  },
+  "prices": [
+    {
+      "asset": "Brent Crude",
+      "ticker": "BRN",
+      "price": 78.42,
+      "currency": "USD/bbl",
+      "daily_change": 1.12,
+      "weekly_change": 2.87,
+      "monthly_change": -1.35,
+      "trend": "up",
+      "source": "ICE via EIA (indicative)",
+      "source_url": "https://www.eia.gov/petroleum/",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
+      "asset": "WTI Crude",
+      "ticker": "WTI",
+      "price": 74.18,
+      "currency": "USD/bbl",
+      "daily_change": 0.94,
+      "weekly_change": 2.41,
+      "monthly_change": -1.82,
+      "trend": "up",
+      "source": "NYMEX via EIA (indicative)",
+      "source_url": "https://www.eia.gov/petroleum/",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
+      "asset": "Dubai Crude",
+      "ticker": "DUB",
+      "price": 76.9,
+      "currency": "USD/bbl",
+      "daily_change": 0.71,
+      "weekly_change": 1.95,
+      "monthly_change": -0.9,
+      "trend": "up",
+      "source": "Assessment (indicative)",
+      "source_url": "https://www.eia.gov/petroleum/",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
+      "asset": "UK Natural Gas (NBP)",
+      "ticker": "NBP",
+      "price": 92.4,
+      "currency": "p/therm",
+      "daily_change": -1.6,
+      "weekly_change": 3.2,
+      "monthly_change": 5.8,
+      "trend": "mixed",
+      "source": "National Gas / DESNZ (indicative)",
+      "source_url": "https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
+      "asset": "European Gas (TTF)",
+      "ticker": "TTF",
+      "price": 36.85,
+      "currency": "EUR/MWh",
+      "daily_change": -0.9,
+      "weekly_change": 2.1,
+      "monthly_change": 4.4,
+      "trend": "mixed",
+      "source": "ICE Endex (indicative)",
+      "source_url": "https://www.iea.org/data-and-statistics",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
+      "asset": "Henry Hub Gas",
+      "ticker": "HH",
+      "price": 2.86,
+      "currency": "USD/MMBtu",
+      "daily_change": 0.4,
+      "weekly_change": -1.2,
+      "monthly_change": 3.1,
+      "trend": "mixed",
+      "source": "EIA (indicative)",
+      "source_url": "https://www.eia.gov/naturalgas/",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
+      "asset": "LNG Asia Marker (JKM proxy)",
+      "ticker": "JKM*",
+      "price": 11.72,
+      "currency": "USD/MMBtu",
+      "daily_change": 0.3,
+      "weekly_change": 1.8,
+      "monthly_change": 2.6,
+      "trend": "up",
+      "source": "API placeholder — licensed assessment required",
+      "source_url": "https://www.iea.org/data-and-statistics",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "API placeholder"
+    },
+    {
+      "asset": "US Dollar Index",
+      "ticker": "DXY*",
+      "price": 103.6,
+      "currency": "index",
+      "daily_change": -0.2,
+      "weekly_change": 0.5,
+      "monthly_change": -0.8,
+      "trend": "flat",
+      "source": "API placeholder (e.g. Alpha Vantage / Polygon.io)",
+      "source_url": "https://www.federalreserve.gov/releases/h10/",
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "API placeholder"
+    }
+  ]
+}

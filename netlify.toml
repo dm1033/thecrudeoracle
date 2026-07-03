@@ -1,0 +1,18 @@
+# Netlify configuration for The Crude Oracle (alternative to Vercel).
+# The official Next.js runtime plugin is applied automatically for Next.js
+# projects on Netlify; this file pins the build settings.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

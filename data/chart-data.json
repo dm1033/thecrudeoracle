@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "description": "Chart series for The Crude Oracle dashboards. SAMPLE / INDICATIVE data for layout and demonstration only — replace with licensed or public-source series. See docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-03T07:00:00Z",
+    "data_type": "manual",
+    "source": "Sample series shaped on public EIA/IEA ranges (indicative)"
+  },
+  "brent_wti_30d": [
+    { "date": "06-04", "brent": 79.8, "wti": 75.9 },
+    { "date": "06-06", "brent": 79.1, "wti": 75.2 },
+    { "date": "06-09", "brent": 78.3, "wti": 74.1 },
+    { "date": "06-11", "brent": 77.6, "wti": 73.5 },
+    { "date": "06-13", "brent": 76.9, "wti": 72.8 },
+    { "date": "06-16", "brent": 77.4, "wti": 73.2 },
+    { "date": "06-18", "brent": 76.2, "wti": 72.1 },
+    { "date": "06-20", "brent": 75.8, "wti": 71.6 },
+    { "date": "06-23", "brent": 76.5, "wti": 72.4 },
+    { "date": "06-25", "brent": 77.2, "wti": 73.0 },
+    { "date": "06-27", "brent": 76.4, "wti": 72.3 },
+    { "date": "06-30", "brent": 77.0, "wti": 72.9 },
+    { "date": "07-01", "brent": 77.3, "wti": 73.2 },
+    { "date": "07-02", "brent": 77.3, "wti": 73.2 },
+    { "date": "07-03", "brent": 78.4, "wti": 74.2 }
+  ],
+  "gas_trend_30d": [
+    { "date": "06-04", "ttf": 34.2, "nbp": 84.1, "hh": 2.61 },
+    { "date": "06-09", "ttf": 34.9, "nbp": 86.3, "hh": 2.7 },
+    { "date": "06-13", "ttf": 35.6, "nbp": 88.0, "hh": 2.74 },
+    { "date": "06-18", "ttf": 36.4, "nbp": 90.2, "hh": 2.66 },
+    { "date": "06-23", "ttf": 35.8, "nbp": 89.1, "hh": 2.72 },
+    { "date": "06-27", "ttf": 36.1, "nbp": 90.6, "hh": 2.8 },
+    { "date": "07-01", "ttf": 37.2, "nbp": 93.5, "hh": 2.83 },
+    { "date": "07-03", "ttf": 36.85, "nbp": 92.4, "hh": 2.86 }
+  ],
+  "us_inventories_weeks": [
+    { "week": "W-9", "stocks": 459.2, "fiveYearAvg": 462.0 },
+    { "week": "W-8", "stocks": 457.1, "fiveYearAvg": 461.4 },
+    { "week": "W-7", "stocks": 455.8, "fiveYearAvg": 460.6 },
+    { "week": "W-6", "stocks": 452.3, "fiveYearAvg": 459.9 },
+    { "week": "W-5", "stocks": 453.6, "fiveYearAvg": 459.0 },
+    { "week": "W-4", "stocks": 450.4, "fiveYearAvg": 458.2 },
+    { "week": "W-3", "stocks": 448.9, "fiveYearAvg": 457.5 },
+    { "week": "W-2", "stocks": 447.2, "fiveYearAvg": 456.8 },
+    { "week": "W-1", "stocks": 445.8, "fiveYearAvg": 456.0 },
+    { "week": "Latest", "stocks": 443.7, "fiveYearAvg": 455.3 }
+  ],
+  "rig_count_weeks": [
+    { "week": "W-9", "oil": 507, "gas": 101 },
+    { "week": "W-8", "oil": 509, "gas": 100 },
+    { "week": "W-7", "oil": 511, "gas": 99 },
+    { "week": "W-6", "oil": 510, "gas": 101 },
+    { "week": "W-5", "oil": 512, "gas": 100 },
+    { "week": "W-4", "oil": 514, "gas": 98 },
+    { "week": "W-3", "oil": 513, "gas": 99 },
+    { "week": "W-2", "oil": 511, "gas": 100 },
+    { "week": "W-1", "oil": 512, "gas": 100 },
+    { "week": "Latest", "oil": 512, "gas": 101 }
+  ],
+  "opec_production_months": [
+    { "month": "Jan", "production": 26.6, "target": 26.4 },
+    { "month": "Feb", "production": 26.5, "target": 26.4 },
+    { "month": "Mar", "production": 26.7, "target": 26.4 },
+    { "month": "Apr", "production": 26.6, "target": 26.4 },
+    { "month": "May", "production": 26.8, "target": 26.4 },
+    { "month": "Jun", "production": 26.7, "target": 26.4 }
+  ],
+  "watchlist_performance_30d": [
+    { "date": "06-04", "watchlist": 100, "benchmark": 100 },
+    { "date": "06-11", "watchlist": 101.8, "benchmark": 100.6 },
+    { "date": "06-18", "watchlist": 100.9, "benchmark": 100.2 },
+    { "date": "06-25", "watchlist": 103.1, "benchmark": 101.1 },
+    { "date": "07-03", "watchlist": 104.6, "benchmark": 101.8 }
+  ],
+  "sector_heatmap": [
+    { "sector": "Upstream", "move": 1.4 },
+    { "sector": "Integrated", "move": 0.9 },
+    { "sector": "LNG", "move": 0.6 },
+    { "sector": "Midstream", "move": 0.3 },
+    { "sector": "Services", "move": 1.1 },
+    { "sector": "Drillers", "move": 2.2 },
+    { "sector": "Tankers", "move": 1.8 },
+    { "sector": "Refiners", "move": -0.7 },
+    { "sector": "North Sea", "move": -0.4 },
+    { "sector": "Exploration", "move": 3.1 }
+  ]
+}

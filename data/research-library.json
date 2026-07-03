@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "description": "The Crude Oracle research library index. SAMPLE entries — replace with real research notes. See docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-03T07:00:00Z",
+    "status": "published"
+  },
+  "notes": [
+    {
+      "id": "spare-capacity-2026",
+      "title": "Spare Capacity: The Market's Thinning Safety Margin",
+      "category": "Supply",
+      "access": "premium",
+      "summary": "Why effective global spare capacity is more concentrated — and more fragile — than headline numbers suggest, and what that means for tail-risk pricing in crude.",
+      "date": "2026-06-28",
+      "reading_time": "12 min",
+      "sources": ["IEA Oil Market Report (public pages)", "OPEC Monthly Oil Market Report (public pages)"],
+      "status": "published"
+    },
+    {
+      "id": "ukcs-fiscal-risk",
+      "title": "UKCS Fiscal Risk: Pricing Policy Uncertainty in North Sea Equities",
+      "category": "UK / North Sea",
+      "access": "premium",
+      "summary": "A framework for valuing UK North Sea producers under alternative windfall-tax and licensing scenarios.",
+      "date": "2026-06-21",
+      "reading_time": "15 min",
+      "sources": ["North Sea Transition Authority", "UK DESNZ publications", "Company RNS announcements"],
+      "status": "published"
+    },
+    {
+      "id": "lng-wave",
+      "title": "The Second LNG Wave: Supply Surge vs Asian Demand Elasticity",
+      "category": "Gas / LNG",
+      "access": "premium",
+      "summary": "Mapping the 2026–2029 liquefaction build-out against price-sensitive Asian demand, and the implications for TTF, JKM and LNG equities.",
+      "date": "2026-06-14",
+      "reading_time": "14 min",
+      "sources": ["IEA Gas Market Report (public pages)", "Company investor presentations"],
+      "status": "published"
+    },
+    {
+      "id": "tanker-cycle",
+      "title": "Tanker Cycle Notes: Fleet Age, Orderbook and the Rerouting Premium",
+      "category": "Shipping",
+      "access": "premium",
+      "summary": "Why tanker supply fundamentals remain tight even if geopolitical rerouting normalises.",
+      "date": "2026-06-07",
+      "reading_time": "10 min",
+      "sources": ["UNCTAD shipping data", "Company fleet status reports"],
+      "status": "published"
+    },
+    {
+      "id": "oil-101-demand",
+      "title": "Oil 101: Where Demand Really Comes From",
+      "category": "Education",
+      "access": "free",
+      "summary": "A free primer on the structure of global oil demand — transport, petrochemicals, aviation, industry — and why 'peak demand' timing is contested.",
+      "date": "2026-05-30",
+      "reading_time": "8 min",
+      "sources": ["Energy Institute Statistical Review", "IEA public data"],
+      "status": "published"
+    },
+    {
+      "id": "inventory-signals",
+      "title": "Reading Inventory Data Like a Professional",
+      "category": "Education",
+      "access": "free",
+      "summary": "How to interpret weekly EIA inventory reports: headline vs adjustment factors, Cushing, SPR, and product stocks.",
+      "date": "2026-05-22",
+      "reading_time": "9 min",
+      "sources": ["EIA Weekly Petroleum Status Report"],
+      "status": "published"
+    }
+  ]
+}
