@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
@@ -108,6 +109,42 @@ export default function OilTruthPage() {
             fortunes. Understanding the physical system is the edge.
           </p>
 
+          <h2>How much is left? Reserves and depletion horizons</h2>
+          <p>
+            One of the most common questions novices ask is &ldquo;when does the oil run
+            out?&rdquo; The professional answer is that reserves are an economic number, not just
+            a geological one: they grow with technology and price, and the reserves-to-production
+            (R/P) ratio is a snapshot, not a countdown. Our report{" "}
+            <em>Energy Reserves and Years Remaining</em> works through oil, gas and coal reserve
+            concentration, R/P ratios and what they do — and don&apos;t — tell investors.
+          </p>
+        </div>
+
+        <figure className="overflow-hidden rounded-lg border border-ink-700">
+          <Image
+            src="/images/reserves-infographic.png"
+            alt="Infographic panels covering global proven oil, gas and coal reserves, reserves-to-production ratios and carbon constraint risks"
+            width={1408}
+            height={768}
+            sizes="(min-width: 1024px) 960px, 100vw"
+            className="h-auto w-full"
+          />
+          <figcaption className="border-t border-ink-700 bg-ink-900 p-4 text-xs leading-relaxed text-steel-500">
+            Global reserves and depletion horizons at a glance — illustrative summary graphic from
+            our <em>Energy Reserves and Years Remaining</em> report. Values are indicative, for
+            orientation only; verify against primary sources such as the Energy Institute
+            Statistical Review and EIA.{" "}
+            <a
+              href="/reports/energy-reserves-and-years-remaining.pdf"
+              download
+              className="font-semibold text-gold-400 underline hover:text-gold-300"
+            >
+              Download the full report (PDF)
+            </a>
+          </figcaption>
+        </figure>
+
+        <div className="prose-dark max-w-3xl">
           <h2>Sources for the numbers</h2>
           <ul>
             <li>

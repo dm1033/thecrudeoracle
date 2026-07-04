@@ -15,11 +15,13 @@ export function pageMeta(title: string, description: string, path: string): Meta
       siteName: SITE.name,
       type: "website",
       locale: "en_GB",
+      images: [{ url: "/images/brand-compass.png", width: 1408, height: 768, alt: SITE.name }],
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} | ${SITE.name}`,
       description,
+      images: ["/images/brand-compass.png"],
     },
   };
 }

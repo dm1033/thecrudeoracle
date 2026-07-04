@@ -6,6 +6,17 @@
   },
   "notes": [
     {
+      "id": "energy-reserves-years-remaining",
+      "title": "Energy Reserves and Years Remaining",
+      "category": "Education",
+      "access": "free",
+      "summary": "How much oil, gas and coal is actually left — reserve concentration by country, R/P ratios, the production-to-reserves paradox and carbon-constraint risk. Downloadable PDF report with summary infographic.",
+      "date": "2026-07-04",
+      "reading_time": "PDF report",
+      "sources": ["Energy Institute Statistical Review", "EIA public data"],
+      "status": "published"
+    },
+    {
       "id": "spare-capacity-2026",
       "title": "Spare Capacity: The Market's Thinning Safety Margin",
       "category": "Supply",
