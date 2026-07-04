@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { pageMeta } from "@/lib/seo";
 import { SITE, STRIPE_SUBSCRIPTION_LINK, STRIPE_LINK_IS_PLACEHOLDER } from "@/lib/site";
 import PageHeader from "@/components/PageHeader";
@@ -68,7 +69,19 @@ export default function SubscribePage() {
       <div className="container-site py-10">
         <div className="mx-auto grid max-w-4xl gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <div className="rounded-xl border border-gold-600/50 bg-gradient-to-b from-ink-800 to-ink-900 p-8">
+            <div className="overflow-hidden rounded-xl border border-gold-600/50 bg-gradient-to-b from-ink-800 to-ink-900">
+              <div className="relative aspect-[21/9]">
+                <Image
+                  src="/images/operations-room.png"
+                  alt="Professional energy intelligence operations room with global market screens"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                  className="object-cover"
+                />
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink-900 to-transparent" />
+              </div>
+              <div className="p-8 pt-4">
               <h2 className="text-xl font-bold text-white">What&apos;s included</h2>
               <ul className="mt-5 space-y-3 text-sm text-steel-300">
                 {FEATURES.map((f) => (
@@ -82,6 +95,7 @@ export default function SubscribePage() {
                 Members also receive priority responses to research questions and early access to
                 new coverage areas as the platform expands.
               </p>
+              </div>
             </div>
           </div>
 

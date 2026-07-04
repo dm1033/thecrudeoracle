@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { SITE } from "@/lib/site";
 import { marketPrices, riskSignals, supplySignals } from "@/lib/data";
@@ -70,8 +71,17 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-ink-700 bg-gradient-to-b from-navy-900 via-ink-950 to-ink-950">
-        <div className="container-site py-16 text-center sm:py-24">
+      <section className="relative overflow-hidden border-b border-ink-700 bg-ink-950">
+        <Image
+          src="/images/hero-globe.png"
+          alt="Holographic globe surrounded by market charts, crude tankers and a navigator's compass — The Crude Oracle intelligence terminal"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-60"
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink-950/70 via-ink-950/55 to-ink-950" />
+        <div className="container-site relative py-20 text-center sm:py-32">
           <p className="eyebrow">Professional Oil &amp; Gas Intelligence Platform</p>
           <h1 className="h1 mx-auto mt-4 max-w-4xl">
             Crude Oil Intelligence <span className="text-gold-400">Without the Noise</span>
@@ -159,6 +169,47 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Inside the Oracle */}
+      <section className="container-site py-14">
+        <p className="eyebrow">Inside The Crude Oracle</p>
+        <h2 className="h2 mt-1">Built like a professional intelligence desk</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-steel-400">
+          Every briefing starts the way a trading desk starts its day: prices, flows, inventories,
+          shipping, positioning — cross-checked against primary sources, then distilled into the
+          few paragraphs that actually matter.
+        </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <figure className="group overflow-hidden rounded-lg border border-ink-700">
+            <div className="relative aspect-video">
+              <Image
+                src="/images/operations-room.png"
+                alt="Energy market operations room with global supply maps and price screens"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+            <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
+              Global supply, demand and risk — monitored continuously, summarised daily.
+            </figcaption>
+          </figure>
+          <figure className="group overflow-hidden rounded-lg border border-ink-700">
+            <div className="relative aspect-video">
+              <Image
+                src="/images/terminal-desk.png"
+                alt="Terminal-grade dual-screen desk showing oil volatility charts and a global supply heatmap"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+            <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
+              Terminal-grade clarity — without the terminal-grade noise.
+            </figcaption>
+          </figure>
         </div>
       </section>
 

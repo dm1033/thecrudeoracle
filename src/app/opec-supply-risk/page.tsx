@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { pageMeta } from "@/lib/seo";
 import { supplySignals, riskSignals } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
@@ -38,6 +39,23 @@ export default function OpecSupplyRiskPage() {
         intro="The supply side of the ledger: OPEC+ policy, inventories, rig activity, spare capacity, shipping disruption and the geopolitical risk premium — monitored continuously, summarised daily."
       />
       <div className="container-site space-y-10 py-10">
+        <figure className="overflow-hidden rounded-lg border border-ink-700">
+          <div className="relative aspect-[21/9]">
+            <Image
+              src="/images/tanker-intelligence.png"
+              alt="Crude oil tanker under way with global trade-route and chokepoint data overlaid"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
+            Physical flows are the truth serum of the oil market: tanker routings, chokepoint
+            transit and freight rates reveal what press releases don&apos;t.
+          </figcaption>
+        </figure>
+
         <section aria-labelledby="supply-h">
           <h2 id="supply-h" className="h2">
             Supply signals

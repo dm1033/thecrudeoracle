@@ -33,11 +33,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     type: "website",
     locale: "en_GB",
+    images: [{ url: "/images/brand-compass.png", width: 1408, height: 768, alt: SITE.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
+    images: ["/images/brand-compass.png"],
   },
   robots: { index: true, follow: true },
   manifest: "/manifest.json",

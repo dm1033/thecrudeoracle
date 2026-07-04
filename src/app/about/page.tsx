@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
@@ -20,6 +21,23 @@ export default function AboutPage() {
         intro="A professional oil and gas intelligence platform built on one belief: serious investors deserve terminal-grade data, explained clearly, without the noise."
       />
       <div className="container-site space-y-10 py-10">
+        <figure className="overflow-hidden rounded-lg border border-ink-700">
+          <div className="relative aspect-[21/9]">
+            <Image
+              src="/images/brand-compass.png"
+              alt="Navigator's compass and sextant in front of a market screen showing TheCrudeOracle.com"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
+            Old instruments, new market: navigation has always been about trusted readings, taken
+            daily. That&apos;s the job.
+          </figcaption>
+        </figure>
+
         <div className="prose-dark max-w-3xl">
           <h2>What we do</h2>
           <p>

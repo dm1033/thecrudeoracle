@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { pageMeta } from "@/lib/seo";
 import { researchNotes } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
@@ -25,6 +26,46 @@ export default function ResearchLibraryPage() {
         intro="Deep-dive research notes on the themes that drive the energy complex. Free primers are open to everyone; the full archive is part of The Crude Oracle Premium."
       />
       <div className="container-site space-y-10 py-10">
+        <section aria-labelledby="featured-h" className="overflow-hidden rounded-xl border border-gold-600/40 bg-gradient-to-br from-navy-900 to-ink-900 lg:flex">
+          <div className="relative aspect-video lg:aspect-auto lg:w-1/2">
+            <Image
+              src="/images/reserves-infographic.png"
+              alt="Preview of the Energy Reserves and Years Remaining report: proven oil, gas and coal reserves and depletion horizons"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover object-left-top"
+            />
+          </div>
+          <div className="p-6 sm:p-8 lg:w-1/2">
+            <p className="eyebrow">Featured Report · Free Download</p>
+            <h2 id="featured-h" className="mt-2 text-xl font-bold text-white sm:text-2xl">
+              Energy Reserves and Years Remaining
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-steel-400">
+              How much oil, gas and coal is actually left — and why reserves-to-production ratios
+              are an economic signal, not a countdown clock. Reserve concentration by country,
+              depletion horizons, the production-to-reserves paradox and what carbon constraints
+              mean for asset values.
+            </p>
+            <p className="mt-3 text-xs text-steel-500">
+              PDF report · Figures are indicative — verify against primary sources (Energy
+              Institute Statistical Review, EIA). Not investment advice.
+            </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="/reports/energy-reserves-and-years-remaining.pdf"
+                download
+                className="btn-primary"
+              >
+                Download the report (PDF)
+              </a>
+              <Link href="/oil-truth" className="btn-secondary">
+                Read Oil Truth first
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section aria-labelledby="free-h">
           <h2 id="free-h" className="h2">
             Free primers
