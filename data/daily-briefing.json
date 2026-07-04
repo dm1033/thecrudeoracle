@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "description": "The Crude Oracle Daily Briefing. The first entry in 'briefings' is today's edition. SAMPLE content — replace daily. See docs/DAILY_UPDATE_GUIDE.md.",
+    "status": "published"
+  },
+  "briefings": [
+    {
+      "date": "2026-07-03",
+      "status": "published",
+      "headline": "Crude firms on inventory draw as OPEC+ keeps the market guessing",
+      "oil_summary": "Brent settled higher after a surprise draw in US commercial crude stocks and steady summer demand indicators. The prompt spread firmed, suggesting a modestly tighter physical market. Positioning remains cautious ahead of the next OPEC+ ministerial meeting.",
+      "gas_summary": "European TTF eased on strong storage injections and healthy LNG arrivals, while UK NBP tracked lower. Henry Hub was supported by cooling demand and softer production. Asian LNG spot interest remains price-sensitive below the mid-teens.",
+      "supply_risk": "Red Sea shipping disruption persists, keeping voyage times and freight costs elevated. No major export terminal outages reported. US Gulf Coast enters peak hurricane season — a rising background risk for both crude exports and LNG loadings.",
+      "demand_signal": "US gasoline demand is tracking the five-year average through the driving season. Indian consumption growth remains the structural bright spot. European diesel demand is still the weak link, consistent with soft manufacturing data.",
+      "opec_note": "OPEC+ maintained voluntary cuts and reiterated a data-dependent approach to unwinding. Compliance and the pace of any barrel returns are the key variables; the group retains significant optionality either way.",
+      "inventory_signal": "US commercial crude stocks drew 2.1 mb (sample figure) against expectations of a small build. Cushing remains below the five-year average, supporting WTI timespreads.",
+      "geopolitical_risk": "Middle East tensions and sanctions enforcement on Russian barrels remain the principal risk premia. Any escalation affecting the Strait of Hormuz or key export infrastructure would be materially price-positive; de-escalation would do the opposite.",
+      "equities_to_watch": "Quality upstream producers with low break-evens, LNG-exposed names with contracted capacity, and tanker owners benefiting from extended voyage times. See the Investment Watchlist — these are monitored names, not recommendations.",
+      "uk_energy_note": "UKCS production continues its long-run decline while the fiscal and licensing debate rolls on. Import dependency keeps UK gas prices exposed to global LNG competition. North Sea operators' capital allocation decisions remain the sector watch item.",
+      "one_chart": "Brent vs WTI 30-day trend — the spread narrowed this week as US export demand firmed. See the dashboard chart.",
+      "bottom_line": "The market is tighter than headline sentiment suggests: inventories are drawing, freight is expensive, and spare capacity is concentrated. But OPEC+ optionality caps the upside until the unwinding path is clearer. Range-bound with upside skew is the base case; the next inventory print and OPEC+ commentary are the near-term catalysts.",
+      "sources": [
+        { "name": "EIA Weekly Petroleum Status Report", "url": "https://www.eia.gov/petroleum/supply/weekly/" },
+        { "name": "IEA Oil Market Report (public pages)", "url": "https://www.iea.org/topics/oil-market-report" },
+        { "name": "OPEC press releases", "url": "https://www.opec.org/" },
+        { "name": "Baker Hughes rig count", "url": "https://rigcount.bakerhughes.com/" }
+      ],
+      "last_updated": "2026-07-03T07:00:00Z"
+    },
+    {
+      "date": "2026-07-02",
+      "status": "published",
+      "headline": "Range trade holds as market waits on inventories",
+      "oil_summary": "Brent and WTI traded in narrow ranges with volumes light ahead of the weekly US inventory data. Physical differentials were steady.",
+      "gas_summary": "TTF drifted lower on mild weather and steady Norwegian flows. NBP followed. Henry Hub was little changed.",
+      "supply_risk": "No new disruptions. Shipping reroutings around the Cape of Good Hope continue.",
+      "demand_signal": "High-frequency demand indicators steady; aviation fuel demand continues to trend above prior-year levels.",
+      "opec_note": "No new OPEC+ communication. Compliance chatter continues in the trade press.",
+      "inventory_signal": "Market consensus expects a small US crude build (sample).",
+      "geopolitical_risk": "Background risk unchanged: Middle East tensions and sanctions enforcement remain the key premia.",
+      "equities_to_watch": "Integrated majors reporting capital-markets updates this month; watch shareholder-return guidance.",
+      "uk_energy_note": "UK policy commentary on North Sea licensing continues; no new formal announcements.",
+      "one_chart": "US commercial crude inventories vs five-year range.",
+      "bottom_line": "A waiting market. Inventories and OPEC+ signalling will decide the next leg; until then, range trade with headline sensitivity.",
+      "sources": [
+        { "name": "EIA", "url": "https://www.eia.gov/" },
+        { "name": "IEA (public pages)", "url": "https://www.iea.org/" }
+      ],
+      "last_updated": "2026-07-02T07:00:00Z"
+    }
+  ]
+}

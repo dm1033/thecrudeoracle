@@ -1,0 +1,16 @@
+{
+  "name": "The Crude Oracle",
+  "short_name": "Crude Oracle",
+  "description": "Daily crude oil, gas, energy security and investment intelligence for investors, traders and energy professionals.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07090c",
+  "theme_color": "#c9a038",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "description": "The Crude Oracle company intelligence notes. SAMPLE content — anonymised placeholder profiles. Not recommendations. See docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-03T07:00:00Z",
+    "status": "published"
+  },
+  "companies": [
+    {
+      "company": "Global Upstream Major (Sample A)",
+      "ticker": "SMPL-A",
+      "exchange": "LSE",
+      "country": "United Kingdom",
+      "description": "Large-cap integrated energy company with global upstream, LNG and marketing operations. Placeholder profile — replace with real coverage.",
+      "production_exposure": "~2.3 mboe/d (placeholder), roughly 60% liquids / 40% gas, diversified across OECD and non-OECD basins.",
+      "reserves_note": "Reserve life around 9 years on a proved basis (placeholder); resource depth supplemented by LNG contract portfolio.",
+      "financial_health_note": "Investment-grade balance sheet, gearing within stated target band, dividend covered at conservative planning prices.",
+      "valuation_note": "Trades at a discount to US peers on cash-flow multiples (placeholder observation) — the 'UK listing discount' debate is a live theme.",
+      "management_note": "Capital allocation framework prioritises base dividend, then balance-sheet strength, then buybacks. Track record of hitting guidance.",
+      "catalyst": "Capital markets day; quarterly shareholder-return updates; portfolio rotation announcements.",
+      "risk": "Oil price downside, windfall/political tax risk, long-run demand uncertainty, execution on transition projects.",
+      "latest_update": "Maintained buyback run-rate at Q2 results; reiterated full-year production guidance. (Sample note.)",
+      "sources": [
+        { "name": "Annual report", "url": "https://www.londonstockexchange.com/" },
+        { "name": "Investor presentation", "url": "https://www.londonstockexchange.com/" }
+      ],
+      "last_updated": "2026-07-01"
+    },
+    {
+      "company": "US Shale Producer (Sample B)",
+      "ticker": "SMPL-B",
+      "exchange": "NYSE",
+      "country": "United States",
+      "description": "Permian-focused independent E&P with a decade-plus of core inventory at sub-$45 WTI break-evens (placeholder profile).",
+      "production_exposure": "~700 kboe/d (placeholder), oil-weighted, concentrated in the Midland and Delaware basins.",
+      "reserves_note": "Inventory depth is the key debate: management guides to 12+ years of core locations (placeholder).",
+      "financial_health_note": "Net debt / EBITDA below 1.0x; base-plus-variable dividend framework returns the majority of free cash flow.",
+      "valuation_note": "Valuation tracks WTI strip and inventory-per-share metrics; consolidation has re-rated the basin (placeholder observation).",
+      "management_note": "Founder-led, strong operational track record, disciplined M&A history.",
+      "catalyst": "Well productivity trends, bolt-on acquisitions, variable dividend declarations.",
+      "risk": "WTI weakness, service cost inflation, degradation of well productivity, basin takeaway constraints.",
+      "latest_update": "Raised full-year oil guidance ~2% on strong well performance; service costs flat sequentially. (Sample note.)",
+      "sources": [
+        { "name": "10-K / 10-Q filings", "url": "https://www.sec.gov/" },
+        { "name": "Investor presentation", "url": "https://www.sec.gov/" }
+      ],
+      "last_updated": "2026-07-01"
+    },
+    {
+      "company": "North Sea Independent (Sample I)",
+      "ticker": "SMPL-I",
+      "exchange": "LSE / AIM",
+      "country": "United Kingdom",
+      "description": "Mid-cap UKCS producer with operated hub infrastructure and a mix of producing assets and near-field development options (placeholder profile).",
+      "production_exposure": "~45 kboe/d (placeholder), Brent-linked liquids with associated NBP gas.",
+      "reserves_note": "2P reserves ~150 mmboe (placeholder); near-field tie-back inventory dependent on fiscal stability.",
+      "financial_health_note": "RBL headroom adequate; hedging covers ~60% of near-term production; decommissioning liabilities are the long-term balance-sheet consideration.",
+      "valuation_note": "Trades at a steep discount to NAV (placeholder observation) reflecting UK fiscal risk — the central controversy for the whole UKCS peer group.",
+      "management_note": "Experienced North Sea operating team; capital allocation paused pending fiscal clarity.",
+      "catalyst": "UK fiscal regime decisions, reserves updates, consolidation among UKCS independents.",
+      "risk": "Windfall tax extension/expansion, licensing policy shifts, single-basin concentration, decommissioning cost inflation.",
+      "latest_update": "Deferred FID on a tie-back project citing fiscal uncertainty; production guidance unchanged. (Sample note.)",
+      "sources": [
+        { "name": "RNS announcements", "url": "https://www.londonstockexchange.com/news" },
+        { "name": "North Sea Transition Authority", "url": "https://www.nstauthority.co.uk/" }
+      ],
+      "last_updated": "2026-07-01"
+    },
+    {
+      "company": "Global LNG Operator (Sample C)",
+      "ticker": "SMPL-C",
+      "exchange": "NYSE",
+      "country": "United States",
+      "description": "Large-scale LNG producer and exporter with contracted liquefaction capacity and brownfield expansion optionality (placeholder profile).",
+      "production_exposure": "~45 mtpa liquefaction capacity (placeholder), predominantly sold under long-term SPAs with oil- and Henry Hub-linked pricing.",
+      "reserves_note": "Feedgas sourced from US market — resource risk is commercial rather than geological.",
+      "financial_health_note": "Project-level debt amortising on schedule; corporate leverage declining; buyback authorised.",
+      "valuation_note": "Valued on contracted cash-flow duration plus expansion option value (placeholder observation).",
+      "management_note": "Commercial team regarded as best-in-class at SPA structuring; disciplined FID criteria.",
+      "catalyst": "Expansion FIDs, new long-term SPAs, US permitting policy developments.",
+      "risk": "Global LNG oversupply into the late 2020s, construction cost inflation, US permitting/political risk, contract counterparty risk.",
+      "latest_update": "Signed a new 20-year SPA with an Asian buyer (sample note); expansion FID targeted within 12 months.",
+      "sources": [
+        { "name": "SEC filings", "url": "https://www.sec.gov/" },
+        { "name": "IEA Gas Market Report (public pages)", "url": "https://www.iea.org/topics/gas-market-report" }
+      ],
+      "last_updated": "2026-06-28"
+    }
+  ]
+}
