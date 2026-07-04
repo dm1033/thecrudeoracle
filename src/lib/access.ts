@@ -1,39 +1,36 @@
 "use client";
 
 // ---------------------------------------------------------------------------
-// ACCESS CONTROL PLACEHOLDER
+// ACCESS CONTROL — dual mode
 // ---------------------------------------------------------------------------
-// This is a demonstration-only access layer using localStorage so the three
-// content tiers (public / free / premium) can be exercised end-to-end before
-// real authentication is wired in.
-//
-// PRODUCTION UPGRADE PATH (see docs/ROADMAP.md):
-//   1. Add Supabase Auth (or Firebase Auth) for identity.
-//   2. On Stripe webhook `checkout.session.completed` /
-//      `customer.subscription.updated`, set the user's tier in the database.
-//   3. Replace useAccess() with a server-verified session lookup and protect
-//      premium routes in middleware.
-// Client-side gating is NOT a security boundary — do not ship real premium
-// content behind this placeholder alone.
+// "supabase" mode (production): when Supabase env vars are configured, the
+//   tier is server-verified via /api/me (session cookie + profiles table),
+//   and premium is granted automatically by the Stripe webhook
+//   (/api/stripe-webhook). See docs/PHASE2_SETUP.md.
+// "placeholder" mode (demo): without configuration, tiers live in
+//   localStorage so the three content levels can still be exercised.
+//   Client-side gating is NOT a security boundary.
 // ---------------------------------------------------------------------------
 
 import { useEffect, useState } from "react";
+import { getBrowserSupabase } from "@/lib/supabase";
 
 export type AccessLevel = "public" | "free" | "premium";
+export type AccessMode = "placeholder" | "supabase";
 
 const STORAGE_KEY = "tco_access_level";
 const EMAIL_KEY = "tco_account_email";
 
-// Demo unlock code for previewing the premium tier before Stripe is live.
+// Demo unlock code for previewing the premium tier in placeholder mode.
 export const DEMO_PREMIUM_CODE = "ORACLE-PREMIUM";
 
-export function getAccessLevel(): AccessLevel {
+function getLocalLevel(): AccessLevel {
   if (typeof window === "undefined") return "public";
   const v = window.localStorage.getItem(STORAGE_KEY);
   return v === "premium" || v === "free" ? v : "public";
 }
 
-export function getAccountEmail(): string | null {
+function getLocalEmail(): string | null {
   if (typeof window === "undefined") return null;
   return window.localStorage.getItem(EMAIL_KEY);
 }
@@ -50,25 +47,65 @@ export function setAccess(level: AccessLevel, email?: string) {
   window.dispatchEvent(new Event("tco-access-changed"));
 }
 
-export function useAccess(): { level: AccessLevel; email: string | null; ready: boolean } {
-  const [level, setLevel] = useState<AccessLevel>("public");
-  const [email, setEmail] = useState<string | null>(null);
-  const [ready, setReady] = useState(false);
+/** Signs out of whichever mode is active (Supabase session and/or demo storage). */
+export async function signOutEverywhere() {
+  const supabase = getBrowserSupabase();
+  if (supabase) {
+    await supabase.auth.signOut();
+  }
+  setAccess("public");
+}
+
+export interface AccessState {
+  level: AccessLevel;
+  email: string | null;
+  mode: AccessMode;
+  ready: boolean;
+}
+
+export function useAccess(): AccessState {
+  const [state, setState] = useState<AccessState>({
+    level: "public",
+    email: null,
+    mode: "placeholder",
+    ready: false,
+  });
 
   useEffect(() => {
-    const sync = () => {
-      setLevel(getAccessLevel());
-      setEmail(getAccountEmail());
-      setReady(true);
-    };
+    let cancelled = false;
+
+    async function sync() {
+      try {
+        const res = await fetch("/api/me", { cache: "no-store" });
+        const data = await res.json();
+        if (cancelled) return;
+        if (data.mode === "supabase") {
+          setState({
+            level: data.level === "premium" ? "premium" : data.level === "free" ? "free" : "public",
+            email: data.email ?? null,
+            mode: "supabase",
+            ready: true,
+          });
+          return;
+        }
+      } catch {
+        // API unreachable — fall through to placeholder mode.
+      }
+      if (!cancelled) {
+        setState({ level: getLocalLevel(), email: getLocalEmail(), mode: "placeholder", ready: true });
+      }
+    }
+
     sync();
-    window.addEventListener("tco-access-changed", sync);
-    window.addEventListener("storage", sync);
+    const onChange = () => sync();
+    window.addEventListener("tco-access-changed", onChange);
+    window.addEventListener("storage", onChange);
     return () => {
-      window.removeEventListener("tco-access-changed", sync);
-      window.removeEventListener("storage", sync);
+      cancelled = true;
+      window.removeEventListener("tco-access-changed", onChange);
+      window.removeEventListener("storage", onChange);
     };
   }, []);
 
-  return { level, email, ready };
+  return state;
 }
