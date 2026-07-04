@@ -10,11 +10,10 @@ export const SITE = {
   contactEmail: "intelligence@thecrudeoracle.com",
 } as const;
 
-// Stripe Payment Link placeholder.
-// Replace with your live Stripe Payment Link for the £299.99/month subscription,
-// or wire up Stripe Checkout via the env vars documented in .env.example.
+// Live Stripe Payment Link for The Crude Oracle Premium (£299.99/month).
+// To move to full Stripe Checkout later, see .env.example and README_DEPLOYMENT.md.
 export const STRIPE_SUBSCRIPTION_LINK =
-  "[INSERT_STRIPE_MONTHLY_SUBSCRIPTION_LINK_299_99]";
+  "https://buy.stripe.com/8x2aEY2r7eCO2lfbJSgYU00";
 
 export const STRIPE_LINK_IS_PLACEHOLDER =
   STRIPE_SUBSCRIPTION_LINK.startsWith("[");
