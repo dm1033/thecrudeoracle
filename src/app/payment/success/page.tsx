@@ -27,12 +27,13 @@ export default function PaymentSuccessPage() {
           archive.
         </p>
         <p className="mt-3 text-xs text-steel-500">
-          A receipt has been sent to your email by Stripe. Your premium access code follows by
-          email while automated account activation is being finalised.
+          A receipt has been sent to your email by Stripe. To access your membership, log in with
+          the <strong className="text-steel-300">same email you used at checkout</strong> — premium
+          access is linked to it automatically.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link href="/login" className="btn-primary">
-            Activate access
+            Log in to activate access
           </Link>
           <Link href="/premium-dashboard" className="btn-secondary">
             Go to Premium Dashboard

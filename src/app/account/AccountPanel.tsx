@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useAccess, setAccess } from "@/lib/access";
+import { useAccess, signOutEverywhere } from "@/lib/access";
 import { SITE } from "@/lib/site";
 
 export default function AccountPanel() {
-  const { level, email, ready } = useAccess();
+  const { level, email, mode, ready } = useAccess();
 
   if (!ready) {
     return <div className="card mx-auto max-w-lg animate-pulse py-16 text-center text-sm text-steel-500">Loading…</div>;
@@ -38,7 +38,7 @@ export default function AccountPanel() {
         <dl className="mt-4 space-y-3 text-sm">
           <div className="flex justify-between gap-4">
             <dt className="text-steel-500">Email</dt>
-            <dd className="text-white">{email}</dd>
+            <dd className="break-all text-white">{email}</dd>
           </div>
           <div className="flex justify-between gap-4">
             <dt className="text-steel-500">Tier</dt>
@@ -58,6 +58,12 @@ export default function AccountPanel() {
               {level === "premium" ? `The Crude Oracle Premium — ${SITE.price}${SITE.priceSuffix}` : "Free registered"}
             </dd>
           </div>
+          <div className="flex justify-between gap-4">
+            <dt className="text-steel-500">Sign-in method</dt>
+            <dd className="text-steel-300">
+              {mode === "supabase" ? "Secure magic link (server-verified)" : "Demo placeholder"}
+            </dd>
+          </div>
         </dl>
       </div>
 
@@ -66,7 +72,7 @@ export default function AccountPanel() {
           <h3 className="text-sm font-semibold text-white">Upgrade to Premium</h3>
           <p className="mt-2 text-sm text-steel-400">
             Unlock the full dashboard, daily briefings, watchlists, company intelligence and the
-            research archive.
+            research archive. {mode === "supabase" && "Use this same email at checkout and premium access activates automatically."}
           </p>
           <Link href="/subscribe" className="btn-primary mt-4 w-full">
             Subscribe — {SITE.price}
@@ -77,20 +83,33 @@ export default function AccountPanel() {
 
       <div className="card p-6">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-steel-500">Billing</h2>
-        <p className="mt-3 text-sm text-steel-400">
-          Billing is managed by Stripe. Once Stripe Checkout is live, a &ldquo;Manage billing&rdquo;
-          button here will open your Stripe customer portal (see README_DEPLOYMENT.md — customer
-          portal placeholder).
-        </p>
-        <button type="button" disabled className="btn-secondary mt-4 w-full cursor-not-allowed opacity-50">
-          Manage billing (Stripe portal placeholder)
-        </button>
+        {mode === "supabase" ? (
+          <>
+            <p className="mt-3 text-sm text-steel-400">
+              Manage your payment method, invoices and cancellation in the secure Stripe customer
+              portal.
+            </p>
+            <a href="/api/billing-portal" className="btn-secondary mt-4 w-full">
+              Manage billing (Stripe portal)
+            </a>
+          </>
+        ) : (
+          <>
+            <p className="mt-3 text-sm text-steel-400">
+              Billing is managed by Stripe. The customer portal button activates once Supabase and
+              Stripe environment variables are configured (docs/PHASE2_SETUP.md).
+            </p>
+            <button type="button" disabled className="btn-secondary mt-4 w-full cursor-not-allowed opacity-50">
+              Manage billing (activates with live auth)
+            </button>
+          </>
+        )}
       </div>
 
       <div className="text-center">
         <button
           type="button"
-          onClick={() => setAccess("public")}
+          onClick={() => signOutEverywhere()}
           className="text-sm text-steel-500 underline hover:text-loss"
         >
           Sign out
