@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "description": "Module 5 — Positioning & Crowd-Risk Engine. SAMPLE / INDICATIVE values shaped on public CFTC COT / ICE COT report formats. Update weekly after the Friday COT release. See docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-04T07:00:00Z",
+    "status": "published",
+    "methodology": "Managed-money net positioning from the public CFTC Commitments of Traders and ICE COT reports, expressed in contracts and as a percentile of the 3-year range. Crowding is judged by a three-part checklist: (1) is positioning stretched, (2) is market structure confirming or weakening, (3) do physical flows support the position? Stretched positioning with weakening structure and neutral physical support = elevated liquidation risk. Positioning data is published with a lag (Tuesday data, Friday release) — treat as directional, not real-time."
+  },
+  "positioning": [
+    {
+      "instrument": "WTI (NYMEX) — managed money",
+      "net_position": "+185k contracts",
+      "change": "+12k w/w",
+      "percentile": "65th (3-yr)",
+      "stance": "long",
+      "note": "Longs rebuilding with the inventory draws — positioning follows the physical story rather than leading it.",
+      "source": "CFTC Commitments of Traders (public)",
+      "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm",
+      "last_updated": "2026-07-01",
+      "data_type": "delayed"
+    },
+    {
+      "instrument": "Brent (ICE) — managed money",
+      "net_position": "+310k contracts",
+      "change": "+25k w/w",
+      "percentile": "82nd (3-yr)",
+      "stance": "heavily long",
+      "note": "Fastest four-week build in a year. Length is concentrated in the front — sensitive to any prompt disappointment.",
+      "source": "ICE COT report (public)",
+      "source_url": "https://www.ice.com/futures-europe/commitments-of-traders",
+      "last_updated": "2026-07-01",
+      "data_type": "delayed"
+    },
+    {
+      "instrument": "ICE Gasoil — managed money",
+      "net_position": "-45k contracts",
+      "change": "-6k w/w",
+      "percentile": "8th (3-yr)",
+      "stance": "heavily short",
+      "note": "Near record short on the soft diesel story. Crowded consensus positions are fragile against supply surprises.",
+      "source": "ICE COT report (public)",
+      "source_url": "https://www.ice.com/futures-europe/commitments-of-traders",
+      "last_updated": "2026-07-01",
+      "data_type": "delayed"
+    },
+    {
+      "instrument": "RBOB Gasoline — managed money",
+      "net_position": "+62k contracts",
+      "change": "+3k w/w",
+      "percentile": "55th (3-yr)",
+      "stance": "neutral",
+      "note": "Middle of the range — the driving-season trade is on but not crowded.",
+      "source": "CFTC Commitments of Traders (public)",
+      "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm",
+      "last_updated": "2026-07-01",
+      "data_type": "delayed"
+    }
+  ],
+  "crowd_risk": [
+    {
+      "id": "brent-long-crowding",
+      "instrument": "Brent — long crowding check",
+      "direction_of_risk": "Downside — long liquidation",
+      "checklist": [
+        { "condition": "Funds heavily long Brent", "status": "yes", "detail": "Managed money at the 82nd percentile of the 3-year range, +25k w/w." },
+        { "condition": "Timespreads weakening", "status": "no", "detail": "M1/M2 still tightening (+0.10 w/w) — structure currently confirms the length." },
+        { "condition": "Physical flows neutral or contradicting", "status": "partial", "detail": "Prompt physical supportive (stock draws), but Atlantic Basin length building at 2.3σ (Module 2) undermines the deferred story." }
+      ],
+      "liquidation_risk": "moderate",
+      "explanation": "Two of three crowding conditions are live. The length is stretched but still 'earned' while prompt spreads tighten. The trigger to watch: if Brent M1/M2 stalls or the WAF overhang starts landing, an 82nd-percentile long has a lot of company at the exit — liquidation risk steps up to elevated.",
+      "watch": "Brent M1/M2 momentum (Module 3); WAF differentials and floating storage (Module 2); next COT print for continued build.",
+      "source": "The Crude Oracle assessment on CFTC/ICE COT data",
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    },
+    {
+      "id": "gasoil-short-crowding",
+      "instrument": "ICE Gasoil — short crowding check",
+      "direction_of_risk": "Upside — short squeeze",
+      "checklist": [
+        { "condition": "Funds heavily short gasoil", "status": "yes", "detail": "8th percentile of the 3-year range — near record short." },
+        { "condition": "Structure confirming the short", "status": "partial", "detail": "Diesel crack still loosening, but distillate stocks sit below seasonal average — the cushion is thinner than the positioning implies." },
+        { "condition": "Physical flows neutral or contradicting", "status": "yes", "detail": "Rotterdam outage (Module 4, 400 kb/d) and tightening clean freight into Europe (Module 2) both point against the short." }
+      ],
+      "liquidation_risk": "elevated",
+      "explanation": "A crowded short into rising supply risk: the outage removes diesel production while stocks are already below seasonal norms. If the crack starts repricing, the 8th-percentile short covers into it — classic squeeze mechanics. This is the positioning backdrop to Hypothesis #1 in Module 6.",
+      "watch": "ARA distillate stocks (two consecutive weekly draws would be the tell); Rotterdam restart guidance; gasoil timespreads.",
+      "source": "The Crude Oracle assessment on ICE COT data",
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    },
+    {
+      "id": "wti-long-check",
+      "instrument": "WTI — long crowding check",
+      "direction_of_risk": "Downside — long liquidation",
+      "checklist": [
+        { "condition": "Funds heavily long WTI", "status": "no", "detail": "65th percentile — long, but not stretched." },
+        { "condition": "Timespreads weakening", "status": "no", "detail": "M1/M2 tightening with Cushing draws — structure confirms." },
+        { "condition": "Physical flows neutral or contradicting", "status": "no", "detail": "Export pull and hub draws both support the position (Modules 1–2)." }
+      ],
+      "liquidation_risk": "low",
+      "explanation": "No crowding conditions met: moderate length, confirming structure, supportive physical. The cleanest positioning picture on the board.",
+      "watch": "Cushing stocks approaching operational minimums can cause spread spikes — volatility risk, not crowding risk.",
+      "source": "The Crude Oracle assessment on CFTC COT data",
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    }
+  ]
+}
