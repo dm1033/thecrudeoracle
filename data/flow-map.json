@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "description": "Module 2 — Physical Flow Map. SAMPLE / INDICATIVE values. Tanker-tracking data of Kpler/Vortexa grade requires commercial licensing — these are manual desk estimates from public summaries until a licensed feed is wired in. Update per docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-04T07:00:00Z",
+    "status": "published",
+    "methodology": "Anomaly detection compares each observed flow metric against its 30-day rolling baseline. Deviation is expressed in standard deviations (σ). Anomalies are flagged at |σ| ≥ 1.5 (watch) and |σ| ≥ 2.0 (alert), then explained by cross-referencing the supply, demand and freight factors moving at the same time. Manual assessment on sample data — methodology carries over unchanged to licensed feeds."
+  },
+  "flow_summary": {
+    "headline": "Atlantic Basin lengthening: West African barrels are loading faster than Asia is pulling them",
+    "comment": "Loadings are firm out of the Middle East Gulf and West Africa while Chinese discharge activity cools from June's restocking pace. The gap is showing up in floating storage and softer Atlantic differentials rather than headline flat price — classic early-cycle looseness in the physical market. Sample assessment.",
+    "source": "The Crude Oracle desk assessment of public flow summaries",
+    "last_updated": "2026-07-04T07:00:00Z",
+    "data_type": "manual"
+  },
+  "anomalies": [
+    {
+      "id": "waf-loadings",
+      "severity": "alert",
+      "sigma": 2.3,
+      "title": "West African loadings running hot into a cooling Asian bid",
+      "observed": "4.8 mb/d loaded (7-day avg)",
+      "baseline": "4.1 mb/d (30-day mean)",
+      "explanation": "This flow is unusual because exports from West Africa are 2.3 standard deviations above their 30-day normal while refinery demand in Asia — the marginal buyer of these grades — is falling: Chinese teapot margins have turned negative and run cuts are being nominated for August.",
+      "factors": [
+        { "factor": "WAF export programmes", "direction": "up", "detail": "August loading programmes at a 6-month high; two deferred July cargoes rolled forward." },
+        { "factor": "Asian refinery demand", "direction": "down", "detail": "Teapot margins negative; state refiners well-covered from June restocking." },
+        { "factor": "Suezmax freight WAF→East", "direction": "up", "detail": "Rates firming as more cargoes chase the long-haul route — consistent with unsold length." }
+      ],
+      "implication": "Unsold Atlantic barrels typically pressure prompt differentials first and Dated structure second. Watch for WAF grades trading at wider discounts and any build in floating storage off Singapore. Not a flat-price signal on its own.",
+      "source": "Manual assessment of public flow summaries",
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    },
+    {
+      "id": "dark-ais-malacca",
+      "severity": "watch",
+      "sigma": 1.8,
+      "title": "Dark AIS activity rising on the eastbound sanctioned route",
+      "observed": "310 vessel-days dark (7-day)",
+      "baseline": "230 vessel-days (30-day mean)",
+      "explanation": "AIS gaps around the Malacca approaches are 1.8 standard deviations above normal at the same time as Iranian export loadings have ticked up — the classic signature of sanctioned barrels moving via ship-to-ship transfer rather than a data outage.",
+      "factors": [
+        { "factor": "Iranian export loadings", "direction": "up", "detail": "Loadings up ~0.2 mb/d month-on-month on public estimates." },
+        { "factor": "STS transfer activity", "direction": "up", "detail": "More rendezvous patterns observed off Riau and in the South China Sea." },
+        { "factor": "Enforcement pressure", "direction": "up", "detail": "New designations of shadow-fleet tankers pushing more of the trade dark." }
+      ],
+      "implication": "More sanctioned supply is reaching the market than headline tracker numbers show — a hidden bearish offset to the official balance. If enforcement bites, these barrels reprice quickly; that is upside optionality on the risk premium.",
+      "source": "Manual assessment of public flow summaries",
+      "last_updated": "2026-07-03",
+      "data_type": "manual"
+    },
+    {
+      "id": "usg-congestion",
+      "severity": "watch",
+      "sigma": 1.6,
+      "title": "US Gulf export queue building while Cushing draws",
+      "observed": "38 vessel-days waiting (7-day)",
+      "baseline": "27 vessel-days (30-day mean)",
+      "explanation": "Port congestion at US Gulf crude terminals is 1.6 standard deviations above normal while Cushing inventories are drawing — vessels are queuing because export demand for US barrels is strong, not because cargoes are stranded.",
+      "factors": [
+        { "factor": "US crude exports", "direction": "up", "detail": "Weekly exports near 4.5 mb/d as Brent-WTI stays wide enough to work." },
+        { "factor": "Cushing stocks", "direction": "down", "detail": "Hub drawing toward operational minimums — barrels moving to the coast." },
+        { "factor": "Terminal maintenance", "direction": "up", "detail": "One VLCC berth on reduced capacity, amplifying the queue." }
+      ],
+      "implication": "A demand-pull queue is WTI-supportive: it tightens domestic availability and firms timespreads. Distinguish from supply-glut congestion, which would show discharges backing up instead.",
+      "source": "Manual assessment of public flow summaries",
+      "last_updated": "2026-07-03",
+      "data_type": "manual"
+    },
+    {
+      "id": "td3c-freight",
+      "severity": "info",
+      "sigma": 1.2,
+      "title": "TD3C freight firming without a matching cargo surge",
+      "observed": "WS 62 (TD3C, MEG→China)",
+      "baseline": "WS 54 (30-day mean)",
+      "explanation": "VLCC rates on the benchmark Middle East–China route are 1.2 standard deviations above normal, but loaded cargo counts are flat — the move is fleet-driven, not demand-driven: vessels absorbed into floating storage and longer sanctioned-trade voyages are shrinking effective supply.",
+      "factors": [
+        { "factor": "Loaded cargo count MEG→East", "direction": "flat", "detail": "Fixture volumes within normal range." },
+        { "factor": "Floating storage", "direction": "up", "detail": "+6 mb month-on-month tying up tonnage (see Balance Engine)." },
+        { "factor": "Voyage distances", "direction": "up", "detail": "Rerouting and dark-fleet inefficiency lengthening average voyages." }
+      ],
+      "implication": "Freight strength without cargo strength is a tanker-equity signal more than a crude signal — effective fleet supply is tightening. For crude, it modestly widens East-West arbs.",
+      "source": "Manual assessment of public flow summaries",
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    }
+  ],
+  "loadings": [
+    { "metric": "Middle East Gulf loadings", "value": "17.6", "unit": "mb/d", "change": "+0.2 w/w", "trend": "up", "impact": "bearish", "note": "Steady OPEC+ programmes; Basrah exports recovering after terminal maintenance.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "West Africa loadings", "value": "4.8", "unit": "mb/d", "change": "+0.7 w/w", "trend": "up", "impact": "bearish", "note": "Anomaly flagged: 2.3σ above 30-day norm into a soft Asian bid — see radar.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "US Gulf loadings (exports)", "value": "4.5", "unit": "mb/d", "change": "+0.3 w/w", "trend": "up", "impact": "neutral", "note": "Arb open; queue building at terminals is demand-pull, not congestion-glut.", "source": "EIA weekly / public summaries", "source_url": "https://www.eia.gov/petroleum/supply/weekly/", "last_updated": "2026-07-03", "data_type": "manual" },
+    { "metric": "Russia seaborne loadings", "value": "3.3", "unit": "mb/d", "change": "-0.2 w/w", "trend": "down", "impact": "bullish", "note": "Baltic loadings dip on enforcement friction; Pacific steady. Watch dark fleet.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "North Sea loadings", "value": "1.9", "unit": "mb/d", "change": "flat w/w", "trend": "flat", "impact": "neutral", "note": "Normal programmes; Forties stream steady — anchors Dated Brent physical.", "source": "Public loading programmes", "source_url": "https://www.nstauthority.co.uk/", "last_updated": "2026-07-04", "data_type": "manual" }
+  ],
+  "discharges": [
+    { "metric": "China discharges", "value": "11.0", "unit": "mb/d", "change": "-0.4 w/w", "trend": "down", "impact": "bearish", "note": "Cooling from June restocking pace; port stocks comfortable, teapot margins negative.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "India discharges", "value": "5.2", "unit": "mb/d", "change": "+0.1 w/w", "trend": "up", "impact": "bullish", "note": "Steady structural pull; discounted barrels remain the preferred diet.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "Europe (ARA + Med) discharges", "value": "8.9", "unit": "mb/d", "change": "+0.2 w/w", "trend": "up", "impact": "bullish", "note": "Post-turnaround refinery restart pull; diesel imports still needed.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-03", "data_type": "manual" },
+    { "metric": "US discharges (imports)", "value": "6.5", "unit": "mb/d", "change": "flat w/w", "trend": "flat", "impact": "neutral", "note": "Heavy Canadian and Latin grades for Gulf Coast refiners; normal seasonal pattern.", "source": "EIA weekly", "source_url": "https://www.eia.gov/petroleum/supply/weekly/", "last_updated": "2026-07-02", "data_type": "manual" },
+    { "metric": "Singapore / SE Asia discharges", "value": "3.1", "unit": "mb/d", "change": "-0.1 w/w", "trend": "down", "impact": "bearish", "note": "Regional refining margins mid-cycle; some cargoes idling offshore — watch storage.", "source": "Public flow summaries (indicative)", "source_url": "https://www.iea.org/", "last_updated": "2026-07-04", "data_type": "manual" }
+  ],
+  "signals": [
+    { "metric": "Destination changes (in-transit)", "value": "14", "unit": "cargoes/wk", "change": "+5 w/w", "trend": "up", "impact": "neutral", "note": "Above-normal re-routing, mostly WAF cargoes swapping East for NW Europe — unsold length repositioning.", "source": "Public flow summaries (indicative)", "source_url": "https://unctad.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "Dark AIS gaps", "value": "310", "unit": "vessel-days/wk", "change": "+35% vs norm", "trend": "up", "impact": "bearish", "note": "Anomaly flagged at 1.8σ — sanctioned flows going dark via STS; see radar.", "source": "Public flow summaries (indicative)", "source_url": "https://unctad.org/", "last_updated": "2026-07-03", "data_type": "manual" },
+    { "metric": "Floating storage (crude ≥7 days)", "value": "78", "unit": "mb", "change": "+6 m/m", "trend": "up", "impact": "bearish", "note": "Build is concentrated in sanctioned grades seeking buyers — quality-specific, not a global glut.", "source": "Public flow summaries (indicative)", "source_url": "https://unctad.org/", "last_updated": "2026-07-02", "data_type": "manual" },
+    { "metric": "Port congestion (crude terminals)", "value": "142", "unit": "vessel-days", "change": "+12% w/w", "trend": "up", "impact": "neutral", "note": "US Gulf demand-pull queue (1.6σ) plus routine weather delays in the MEG.", "source": "Public flow summaries (indicative)", "source_url": "https://unctad.org/", "last_updated": "2026-07-03", "data_type": "manual" },
+    { "metric": "VLCC freight (TD3C MEG→China)", "value": "WS 62", "unit": "worldscale", "change": "+8 pts w/w", "trend": "up", "impact": "neutral", "note": "Fleet-driven firmness (1.2σ) — storage and long routes absorbing tonnage; cargo count flat.", "source": "Public freight assessments (indicative)", "source_url": "https://unctad.org/", "last_updated": "2026-07-04", "data_type": "manual" },
+    { "metric": "Clean tanker freight (MR Atlantic)", "value": "WS 148", "unit": "worldscale", "change": "+4 pts w/w", "trend": "up", "impact": "neutral", "note": "Product arbs open USG→Europe on diesel pull; supportive for product tanker owners.", "source": "Public freight assessments (indicative)", "source_url": "https://unctad.org/", "last_updated": "2026-07-04", "data_type": "manual" }
+  ]
+}
