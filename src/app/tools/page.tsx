@@ -32,12 +32,12 @@ const MODULES = [
   },
   {
     id: 3,
-    title: "Spread & Curve Monitor",
+    title: "Futures Curve & Spread Dashboard",
     approach: "Curve / relative-value traders",
     description:
-      "Timespreads, Brent–WTI and Brent–Dubai differentials, contango/backwardation state and crack spreads — the market structure signals behind the flat price.",
-    href: "/tools",
-    status: "in development",
+      "Brent and WTI forward curves, M1/M2 through 6-month timespreads, Brent–WTI, Brent–Dubai and Midland–Cushing differentials, gasoline/diesel/jet cracks and freight-adjusted arbs — each marked cheap/fair/expensive, tightening/loosening, and supported or contradicted by the physical data.",
+    href: "/tools/curve-monitor",
+    status: "live",
   },
   {
     id: 4,
