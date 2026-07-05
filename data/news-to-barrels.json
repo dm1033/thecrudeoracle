@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "description": "Module 4 — News-to-Barrels AI. Converts market-moving news into estimated barrel impact with an explicit impact chain and confidence grade. SAMPLE events for demonstration. Update per docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-04T07:00:00Z",
+    "status": "published",
+    "methodology": "Pipeline: (1) ingest the event from public reporting; (2) classify it (outage, policy, sanction, weather, infrastructure); (3) size the affected capacity in kb/d from public capacity data; (4) map it through the barrel chain — crude demand, product supply, cracks, differentials, freight; (5) grade confidence by how well the capacity figure and duration are corroborated, and state what would change the assessment. AI-assisted desk analysis reviewed by an editor — estimates for information, never trading signals."
+  },
+  "events": [
+    {
+      "id": "rotterdam-outage",
+      "date": "2026-07-04",
+      "headline": "Refinery outage in Rotterdam",
+      "event_type": "Refinery outage",
+      "region": "NW Europe",
+      "status": "confirmed",
+      "affected_capacity": "400 kb/d",
+      "capacity_type": "refining capacity offline",
+      "duration_estimate": "2–4 weeks (unplanned CDU repair)",
+      "impacts": [
+        { "market": "Crude demand", "direction": "bearish", "effect": "Lower crude demand in NW Europe — ~400 kb/d of crude runs lost while the unit is down." },
+        { "market": "Diesel imports", "direction": "bullish", "effect": "Higher diesel imports into ARA to replace lost production; East-of-Suez and US Gulf cargoes bid." },
+        { "market": "Diesel crack", "direction": "bullish", "effect": "Wider diesel crack in Europe — supply loss into an already import-dependent market." },
+        { "market": "North Sea differentials", "direction": "bearish", "effect": "Potential weakness in Forties/Ekofisk differentials as a natural local buyer of these grades steps away." }
+      ],
+      "confidence": "medium",
+      "confidence_note": "Outage confirmed by operator; capacity figure from public refinery data. Duration is the uncertain variable — repairs of this type have ranged 2–8 weeks.",
+      "watch": "Operator restart guidance; ARA diesel stock draws; Forties differential vs Dated. A restart inside two weeks halves the diesel-crack impact.",
+      "source": "Operator statement / press reporting (public)",
+      "source_url": "https://www.iea.org/",
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    },
+    {
+      "id": "opec-unwind-signal",
+      "date": "2026-07-03",
+      "headline": "OPEC+ ministers signal faster unwind of voluntary cuts",
+      "event_type": "Producer policy",
+      "region": "Global",
+      "status": "developing",
+      "affected_capacity": "+250 kb/d per month",
+      "capacity_type": "supply returning from October (indicated pace)",
+      "duration_estimate": "Phased over 6+ months if confirmed",
+      "impacts": [
+        { "market": "Crude supply", "direction": "bearish", "effect": "Adds ~250 kb/d per month from October — roughly +1.5 mb/d by end-Q1 if the full schedule runs." },
+        { "market": "Deferred timespreads", "direction": "bearish", "effect": "Back of the curve absorbs the supply first — pressures the rich Brent 6-month spread flagged in Module 3." },
+        { "market": "Medium-sour differentials", "direction": "bearish", "effect": "Returning barrels are mostly medium sour — narrows the sour premium, widens Brent–Dubai." },
+        { "market": "OPEC spare capacity", "direction": "bullish", "effect": "Paradoxically supportive of the risk premium: less spare cushion once barrels return." }
+      ],
+      "confidence": "low",
+      "confidence_note": "Ministerial signalling only — no formal decision. OPEC+ has deferred announced unwinds twice before when prices softened.",
+      "watch": "The formal ministerial statement; Saudi OSPs (a cut confirms barrels are really coming); compliance data for early over-production.",
+      "source": "OPEC communications / press reporting (public)",
+      "source_url": "https://www.opec.org/",
+      "last_updated": "2026-07-03",
+      "data_type": "manual"
+    },
+    {
+      "id": "usg-hurricane-watch",
+      "date": "2026-07-03",
+      "headline": "Tropical system tracking toward US Gulf production corridor",
+      "event_type": "Weather",
+      "region": "US Gulf Coast",
+      "status": "developing",
+      "affected_capacity": "up to 1.5 mb/d offshore + 2.0 mb/d refining in cone",
+      "capacity_type": "production and refining at risk (conditional)",
+      "duration_estimate": "Landfall window 5–7 days; shut-ins typically 3–10 days",
+      "impacts": [
+        { "market": "Crude supply", "direction": "bullish", "effect": "Precautionary platform shut-ins remove offshore barrels — bullish WTI prompt if evacuations begin." },
+        { "market": "Refining demand", "direction": "bearish", "effect": "Refinery shutdowns cut crude demand — a landfall on refining centres is crude-bearish, product-bullish." },
+        { "market": "Product cracks", "direction": "bullish", "effect": "Gasoline and diesel cracks widen on lost refinery output, especially mid-driving-season." },
+        { "market": "Freight", "direction": "bullish", "effect": "Port closures delay loadings; the existing US Gulf vessel queue (Module 2) lengthens." }
+      ],
+      "confidence": "low",
+      "confidence_note": "Track and intensity still wide. The net crude effect flips sign depending on whether production or refining takes the hit — this is a two-sided event.",
+      "watch": "NHC track updates; operator evacuation notices; LOOP and Corpus Christi port status.",
+      "source": "NHC public advisories / operator statements",
+      "source_url": "https://www.nhc.noaa.gov/",
+      "last_updated": "2026-07-03",
+      "data_type": "manual"
+    },
+    {
+      "id": "shadow-fleet-designations",
+      "date": "2026-07-02",
+      "headline": "New sanctions designations target shadow-fleet tankers",
+      "event_type": "Sanctions",
+      "region": "Global / Middle East–Asia routes",
+      "status": "confirmed",
+      "affected_capacity": "~300 kb/d",
+      "capacity_type": "sanctioned exports at risk of disruption",
+      "duration_estimate": "Structural — enforcement cycle measured in months",
+      "impacts": [
+        { "market": "Crude supply", "direction": "bullish", "effect": "Up to ~300 kb/d of sanctioned exports face friction finding vessels and buyers — effective supply tightens." },
+        { "market": "Dark fleet activity", "direction": "bullish", "effect": "More STS transfers and AIS gaps as the trade adapts — consistent with the 1.8σ dark-AIS anomaly in Module 2." },
+        { "market": "Compliant tanker rates", "direction": "bullish", "effect": "Designations shrink the usable fleet — supportive for compliant VLCC owners (see Module 3 freight note)." },
+        { "market": "Sour crude differentials", "direction": "bullish", "effect": "Asian refiners substituting away from discounted barrels bid up compliant sour grades." }
+      ],
+      "confidence": "medium",
+      "confidence_note": "Designations are public and specific; the offset is the shadow trade's demonstrated ability to re-route within weeks. Net effect likely smaller than the headline figure.",
+      "watch": "Iranian/Russian export loadings over the next 4 weeks (Module 2); the discount on sanctioned grades — a widening discount means enforcement is biting.",
+      "source": "OFAC / official announcements (public)",
+      "source_url": "https://ofac.treasury.gov/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    }
+  ]
+}

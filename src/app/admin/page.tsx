@@ -53,6 +53,11 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Refresh `flat_price`, `timespreads`, `differentials`, `cracks`, `arbitrage` rows and the `forward_curves` M1–M12 arrays. Each row needs the three verdicts: valuation (cheap/fair/expensive vs 5-yr seasonal range), momentum (tightening/loosening/stable over 20 sessions), physical_check (supported/contradicted/mixed vs Modules 1–2) plus a desk note explaining any contradiction. Rewrite `curve_summary`.",
   },
   {
+    title: "Update News-to-Barrels events",
+    file: "data/news-to-barrels.json",
+    what: "Add new events at the TOP of `events`. Each needs: headline, event_type, region, status (developing/confirmed/resolved), affected_capacity in kb/d, duration_estimate, an `impacts` chain (market + direction + effect), confidence (high/medium/low) with confidence_note, a `watch` line, and source. Revise confidence as facts firm up; mark resolved events and remove after ~2 weeks.",
+  },
+  {
     title: "Update charts",
     file: "data/chart-data.json",
     what: "Append the latest point to each series (Brent/WTI, gas, inventories, rig count, OPEC production, watchlist performance, sector heatmap) and update `meta.last_published`.",

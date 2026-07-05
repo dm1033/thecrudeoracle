@@ -41,6 +41,15 @@ const MODULES = [
   },
   {
     id: 4,
+    title: "News-to-Barrels AI",
+    approach: "News / event-driven traders",
+    description:
+      "AI-assisted analysis that converts headlines into estimated barrel impact: affected capacity in kb/d, the impact chain across crude demand, product flows, cracks and differentials, and an honest confidence grade with watchpoints.",
+    href: "/tools/news-to-barrels",
+    status: "live",
+  },
+  {
+    id: 5,
     title: "Positioning & Sentiment Tracker",
     approach: "Flow / momentum traders",
     description:
@@ -49,7 +58,7 @@ const MODULES = [
     status: "in development",
   },
   {
-    id: 5,
+    id: 6,
     title: "Geopolitical Risk Matrix",
     approach: "Event / macro traders",
     description:
