@@ -48,6 +48,11 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Refresh `loadings`, `discharges` and `signals` rows, rewrite `flow_summary`, and maintain `anomalies`: each needs severity (info/watch/alert), sigma vs 30-day baseline, observed vs baseline values, a plain-English explanation, contributing factors (direction up/down/flat) and a 'so what' implication. Remove anomalies that have normalised.",
   },
   {
+    title: "Update the Curve & Spread Dashboard",
+    file: "data/curve-monitor.json",
+    what: "Refresh `flat_price`, `timespreads`, `differentials`, `cracks`, `arbitrage` rows and the `forward_curves` M1–M12 arrays. Each row needs the three verdicts: valuation (cheap/fair/expensive vs 5-yr seasonal range), momentum (tightening/loosening/stable over 20 sessions), physical_check (supported/contradicted/mixed vs Modules 1–2) plus a desk note explaining any contradiction. Rewrite `curve_summary`.",
+  },
+  {
     title: "Update charts",
     file: "data/chart-data.json",
     what: "Append the latest point to each series (Brent/WTI, gas, inventories, rig count, OPEC production, watchlist performance, sector heatmap) and update `meta.last_published`.",
