@@ -155,6 +155,18 @@ function PremiumContent() {
         </h2>
         <BottomLineCard />
       </section>
+
+      <section className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-gold-600/40 bg-navy-900/30 p-5">
+        <div>
+          <p className="eyebrow">Trader Toolkit · Module 1</p>
+          <h2 className="mt-1 text-base font-semibold text-white">
+            Global Balance Engine — supply, demand and stocks on one screen
+          </h2>
+        </div>
+        <Link href="/tools/balance-engine" className="btn-primary">
+          Open the Balance Engine →
+        </Link>
+      </section>
     </div>
   );
 }

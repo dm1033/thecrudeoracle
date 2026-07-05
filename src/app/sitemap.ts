@@ -8,6 +8,8 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/daily-briefing", priority: 0.9, changeFrequency: "daily" },
   { path: "/watchlist", priority: 0.8, changeFrequency: "weekly" },
   { path: "/company-intelligence", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/tools", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/tools/balance-engine", priority: 0.8, changeFrequency: "daily" },
   { path: "/crude-oil-prices", priority: 0.9, changeFrequency: "daily" },
   { path: "/gas-lng", priority: 0.8, changeFrequency: "daily" },
   { path: "/opec-supply-risk", priority: 0.8, changeFrequency: "daily" },

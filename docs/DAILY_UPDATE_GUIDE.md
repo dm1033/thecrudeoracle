@@ -38,6 +38,18 @@ one_chart, bottom_line` — plus `date`, `headline`, `sources`, `last_updated`,
 and `status: "published"` (use `"draft"` to keep it hidden).
 Older entries stay below and become the archive automatically.
 
+### 3b. Balance Engine — `data/balance-engine.json`
+The Global Balance Engine (`/tools/balance-engine`) reads this file.
+- Update any `supply` / `demand` / `stocks` row that changed: `value`,
+  `change` (e.g. "+0.1 m/m"), `trend` (`up`|`down`|`flat`|`mixed`),
+  `impact` (`bullish`|`bearish`|`neutral` — from the PRICE's perspective:
+  less supply or more demand = bullish), `note`, `last_updated`.
+- Recompute `balance_summary`: `total_supply`, `total_demand`,
+  `implied_balance` = supply − demand (negative = deficit/stock draws),
+  and rewrite `comment`.
+- Weekly rows (EIA stocks) update Wednesdays; monthly rows (OPEC MOMR,
+  IEA OMR) update on report days.
+
 ### 4. Charts — `data/chart-data.json`
 Append today's point to each series you track (`brent_wti_30d`,
 `gas_trend_30d`, `us_inventories_weeks`, `rig_count_weeks`,
