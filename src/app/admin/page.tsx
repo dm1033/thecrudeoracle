@@ -43,6 +43,11 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Refresh `supply`, `demand` and `stocks` rows (value, change, trend, impact, note, last_updated) and recompute `balance_summary` (total_supply, total_demand, implied_balance = supply − demand). Impact flags read from the price's perspective: less supply / more demand = bullish.",
   },
   {
+    title: "Update the Flow Map",
+    file: "data/flow-map.json",
+    what: "Refresh `loadings`, `discharges` and `signals` rows, rewrite `flow_summary`, and maintain `anomalies`: each needs severity (info/watch/alert), sigma vs 30-day baseline, observed vs baseline values, a plain-English explanation, contributing factors (direction up/down/flat) and a 'so what' implication. Remove anomalies that have normalised.",
+  },
+  {
     title: "Update charts",
     file: "data/chart-data.json",
     what: "Append the latest point to each series (Brent/WTI, gas, inventories, rig count, OPEC production, watchlist performance, sector heatmap) and update `meta.last_published`.",

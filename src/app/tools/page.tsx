@@ -23,6 +23,15 @@ const MODULES = [
   },
   {
     id: 2,
+    title: "Physical Flow Map",
+    approach: "Physical / flow traders",
+    description:
+      "Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, port congestion and freight — with explainable anomaly detection: why a flow is unusual (in σ vs its 30-day norm), which factors moved with it, and what it means.",
+    href: "/tools/flow-map",
+    status: "live",
+  },
+  {
+    id: 3,
     title: "Spread & Curve Monitor",
     approach: "Curve / relative-value traders",
     description:
@@ -31,7 +40,7 @@ const MODULES = [
     status: "in development",
   },
   {
-    id: 3,
+    id: 4,
     title: "Positioning & Sentiment Tracker",
     approach: "Flow / momentum traders",
     description:
@@ -40,7 +49,7 @@ const MODULES = [
     status: "in development",
   },
   {
-    id: 4,
+    id: 5,
     title: "Geopolitical Risk Matrix",
     approach: "Event / macro traders",
     description:
@@ -84,7 +93,7 @@ export default function ToolsPage() {
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-steel-400">{m.description}</p>
                 {live ? (
                   <Link href={m.href} className="btn-primary mt-5 w-full">
-                    Open the Balance Engine →
+                    Open {m.title} →
                   </Link>
                 ) : (
                   <button
