@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "description": "Module 6 — Trade Hypothesis Builder. Structured research hypotheses assembled from Modules 1-5. NEVER instructions to trade. SAMPLE content. Update per docs/DAILY_UPDATE_GUIDE.md.",
+    "last_published": "2026-07-04T07:00:00Z",
+    "status": "published",
+    "methodology": "A hypothesis is generated when the modules disagree — a dislocation between physical data, market structure, positioning or news. Each one is stated falsifiably: the evidence for it, the specific conditions that would invalidate it, and a confidence score. Confidence is an evidence-weight score (how much of the framework supports the hypothesis), NOT a probability of profit and NOT a signal. Instruments listed are markets to research further — never recommendations to buy or sell."
+  },
+  "hypotheses": [
+    {
+      "id": "diesel-crack-undervalued",
+      "title": "Diesel cracks are undervalued relative to refinery outage risk",
+      "thesis_type": "Relative value — product cracks",
+      "status": "active",
+      "opened": "2026-07-04",
+      "evidence": [
+        { "point": "Refinery outage alerts rising — Rotterdam has removed 400 kb/d of European crude runs, with duration uncertainty skewed longer.", "module_ref": "Module 4 · News-to-Barrels", "module_href": "/tools/news-to-barrels", "strength": "strong" },
+        { "point": "Distillate stocks below seasonal average — the cushion for absorbing a supply loss is thin.", "module_ref": "Module 1 · Balance Engine", "module_href": "/tools/balance-engine", "strength": "strong" },
+        { "point": "Freight into Europe tightening — clean MR rates firming as replacement barrels get pulled across the Atlantic.", "module_ref": "Module 2 · Flow Map", "module_href": "/tools/flow-map", "strength": "moderate" },
+        { "point": "The diesel crack has not repriced — still marked cheap and loosening despite the above; managed money near record short adds squeeze fuel.", "module_ref": "Modules 3 & 5 · Curve + Positioning", "module_href": "/tools/curve-monitor", "strength": "strong" }
+      ],
+      "invalidation": [
+        "The Rotterdam refinery returns earlier than expected (restart inside two weeks).",
+        "Distillate stocks build for two consecutive weeks.",
+        "Freight into Europe normalises (clean MR rates give back the move)."
+      ],
+      "confidence_pct": 68,
+      "confidence_note": "Three strong and one moderate evidence leg; the offset is that diesel demand itself remains genuinely weak (the crack can stay cheap if the outage resolves quickly). Score reflects evidence weight, not probability of profit.",
+      "instruments_to_research": ["ICE Gasoil futures", "NY Harbor Heating Oil (HO)", "Diesel crack spread (gasoil vs Brent)"],
+      "risk_note": "Crowded-short squeezes are violent but brief — timing risk is high, and a fast refinery restart removes the entire thesis.",
+      "sources": ["EIA weekly data", "ICE COT (public)", "Operator statements (public)"],
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    },
+    {
+      "id": "brent-deferred-overpriced",
+      "title": "Brent's 6-month backwardation is overpriced relative to Atlantic physical length",
+      "thesis_type": "Structure — timespreads",
+      "status": "active",
+      "opened": "2026-07-04",
+      "evidence": [
+        { "point": "West African loadings 2.3σ above the 30-day norm with unsold cargoes rerouting — physical length building in the Atlantic Basin.", "module_ref": "Module 2 · Flow Map", "module_href": "/tools/flow-map", "strength": "strong" },
+        { "point": "The WAF→Asia freight-adjusted arb is negative — the barrels have no natural eastern home at current prices.", "module_ref": "Module 3 · Curve Dashboard", "module_href": "/tools/curve-monitor", "strength": "moderate" },
+        { "point": "Brent M1/M7 marked expensive and contradicted by physical — the only spread on the board with that combination.", "module_ref": "Module 3 · Curve Dashboard", "module_href": "/tools/curve-monitor", "strength": "strong" },
+        { "point": "Managed money heavily long Brent at the 82nd percentile — the exit is crowded if the deferred story cracks.", "module_ref": "Module 5 · Positioning", "module_href": "/tools/positioning", "strength": "moderate" }
+      ],
+      "invalidation": [
+        "August WAF loading programmes are revised down materially.",
+        "Chinese buying resumes and clears the overhang (discharge activity re-accelerates).",
+        "Floating storage draws for two consecutive weeks instead of building."
+      ],
+      "confidence_pct": 61,
+      "confidence_note": "The prompt tightness is real (stock draws), so this is strictly a deferred-structure hypothesis — the front of the curve is not in question. Evidence-weight score only.",
+      "instruments_to_research": ["ICE Brent calendar spreads (M1/M7)", "Brent CFDs / Dated structure (professional market)", "WAF grade differentials"],
+      "risk_note": "OPEC+ rhetoric can steepen backwardation abruptly regardless of Atlantic fundamentals — event risk cuts both ways.",
+      "sources": ["Public flow summaries", "ICE COT (public)", "OPEC communications"],
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    },
+    {
+      "id": "compliant-tanker-tightness",
+      "title": "Compliant tanker earnings strength is structural, not a spot blip",
+      "thesis_type": "Cross-asset — freight / equities research theme",
+      "status": "monitoring",
+      "opened": "2026-07-02",
+      "evidence": [
+        { "point": "TD3C firm at +1.2σ with flat cargo counts — the move is fleet-supply driven, which persists; demand blips don't.", "module_ref": "Module 2 · Flow Map", "module_href": "/tools/flow-map", "strength": "moderate" },
+        { "point": "New shadow-fleet designations shrink the compliant fleet further and lengthen average voyages.", "module_ref": "Module 4 · News-to-Barrels", "module_href": "/tools/news-to-barrels", "strength": "moderate" },
+        { "point": "Floating storage building (+6 mb m/m) ties up additional tonnage.", "module_ref": "Module 1 · Balance Engine", "module_href": "/tools/balance-engine", "strength": "weak" }
+      ],
+      "invalidation": [
+        "Sanctions enforcement visibly relaxes (designated vessels resume normal trading).",
+        "Floating storage unwinds quickly, releasing tonnage.",
+        "Newbuild ordering accelerates materially at the next round of yard slots."
+      ],
+      "confidence_pct": 55,
+      "confidence_note": "Directionally supported but every leg is second-order — hence monitoring status rather than active. Evidence-weight score only.",
+      "instruments_to_research": ["Tanker owner equities (see Investment Watchlist — monitored names, not recommendations)", "Baltic Exchange dirty tanker indices (licensed data)"],
+      "risk_note": "Freight is among the most volatile series in the complex; position sizing research matters more than direction here.",
+      "sources": ["Public freight assessments", "OFAC announcements", "Company filings"],
+      "last_updated": "2026-07-04",
+      "data_type": "manual"
+    }
+  ]
+}

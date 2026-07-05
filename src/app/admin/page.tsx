@@ -58,6 +58,16 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Add new events at the TOP of `events`. Each needs: headline, event_type, region, status (developing/confirmed/resolved), affected_capacity in kb/d, duration_estimate, an `impacts` chain (market + direction + effect), confidence (high/medium/low) with confidence_note, a `watch` line, and source. Revise confidence as facts firm up; mark resolved events and remove after ~2 weeks.",
   },
   {
+    title: "Update positioning (weekly, after Friday COT)",
+    file: "data/positioning-engine.json",
+    what: "Refresh `positioning` rows (net_position, change, percentile, stance) from the public CFTC/ICE COT releases, then re-grade each `crowd_risk` card: checklist statuses (yes/partial/no), liquidation_risk (low/moderate/elevated) and the explanation. Positioning data is delayed — keep the `delayed` badge.",
+  },
+  {
+    title: "Update hypotheses",
+    file: "data/hypothesis-builder.json",
+    what: "Add hypotheses when modules disagree; each needs title, evidence with module_ref + strength, explicit invalidation conditions, confidence_pct (evidence weight, NOT probability of profit), instruments_to_research and a risk_note. When an invalidation triggers, set status to `invalidated` and keep it visible for a week — the track record is the product. NEVER write buy/sell language.",
+  },
+  {
     title: "Update charts",
     file: "data/chart-data.json",
     what: "Append the latest point to each series (Brent/WTI, gas, inventories, rig count, OPEC production, watchlist performance, sector heatmap) and update `meta.last_published`.",

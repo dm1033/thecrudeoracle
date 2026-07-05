@@ -13,6 +13,8 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/tools/flow-map", priority: 0.8, changeFrequency: "daily" },
   { path: "/tools/curve-monitor", priority: 0.8, changeFrequency: "daily" },
   { path: "/tools/news-to-barrels", priority: 0.8, changeFrequency: "daily" },
+  { path: "/tools/positioning", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/tools/hypothesis-builder", priority: 0.8, changeFrequency: "daily" },
   { path: "/crude-oil-prices", priority: 0.9, changeFrequency: "daily" },
   { path: "/gas-lng", priority: 0.8, changeFrequency: "daily" },
   { path: "/opec-supply-risk", priority: 0.8, changeFrequency: "daily" },

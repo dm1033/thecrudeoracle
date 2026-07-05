@@ -50,19 +50,55 @@ const MODULES = [
   },
   {
     id: 5,
-    title: "Positioning & Sentiment Tracker",
+    title: "Positioning & Crowd-Risk Engine",
     approach: "Flow / momentum traders",
     description:
-      "Managed-money net length, options skew and crowded-trade warnings from public COT-style data — where the speculative money sits and when it's stretched.",
-    href: "/tools",
-    status: "in development",
+      "Managed-money positioning from public CFTC and ICE COT reports, graded through a three-part crowding checklist — stretched positioning, structure confirmation, physical support — into an explicit liquidation-risk call.",
+    href: "/tools/positioning",
+    status: "live",
   },
   {
     id: 6,
+    title: "Trade Hypothesis Builder",
+    approach: "Systematic / discretionary researchers",
+    description:
+      "Structured, falsifiable research hypotheses built from dislocations between the modules: evidence with strength grades, explicit invalidation conditions, an evidence-weight confidence score and instruments to research. Never buy/sell signals.",
+    href: "/tools/hypothesis-builder",
+    status: "live",
+  },
+  {
+    id: 7,
     title: "Geopolitical Risk Matrix",
     approach: "Event / macro traders",
     description:
       "Chokepoints, sanction regimes, election and OPEC+ event calendar with scenario impact ranges — the risk premium, mapped and monitored.",
+    href: "/tools",
+    status: "in development",
+  },
+  {
+    id: 8,
+    title: "What Changed Today?",
+    approach: "Everyone — the decision screen",
+    description:
+      "One screen that answers the only question that matters each morning: what changed, why, and which module saw it first. Dashboards report; this decides what deserves your attention.",
+    href: "/tools",
+    status: "in development",
+  },
+  {
+    id: 9,
+    title: "Nowcast Engine",
+    approach: "Fundamental traders who can't wait for the EIA",
+    description:
+      "Inventory and demand nowcasts ahead of official EIA/IEA/OPEC releases, plus an IEA-vs-OPEC disagreement tracker — with the nowcast error history published honestly.",
+    href: "/tools",
+    status: "in development",
+  },
+  {
+    id: 10,
+    title: "Scenario & Backtest Lab",
+    approach: "Risk managers / systematic researchers",
+    description:
+      "Monte Carlo scenarios for supply disruption, demand shocks and OPEC decisions, plus event studies: how did spreads, cracks and positioning actually behave around past inventory surprises, meetings and hurricanes?",
     href: "/tools",
     status: "in development",
   },
@@ -74,7 +110,7 @@ export default function ToolsPage() {
       <PageHeader
         eyebrow="Premium · Trader Toolkit"
         title="Tools, matched to your trading approach"
-        intro="No two desks trade oil the same way. The toolkit is built in modules — pick the one that matches how you take risk: fundamentals, curve structure, positioning or events."
+        intro="An oil market intelligence toolkit that converts physical flows, inventories, positioning and news into explainable market scenarios — decision intelligence, not another wall of dashboards. Pick the module that matches how you take risk."
       />
       <div className="container-site space-y-10 py-10">
         <div className="grid gap-4 md:grid-cols-2">
