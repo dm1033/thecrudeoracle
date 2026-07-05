@@ -1,0 +1,231 @@
+{
+  "meta": {
+    "description": "Module 1 — Global Balance Engine. SAMPLE / INDICATIVE values shaped on public EIA/IEA/OPEC ranges. Update daily/weekly per docs/DAILY_UPDATE_GUIDE.md. All figures manual until licensed feeds are wired in.",
+    "last_published": "2026-07-04T07:00:00Z",
+    "status": "published"
+  },
+  "balance_summary": {
+    "total_supply": 103.0,
+    "total_demand": 103.2,
+    "implied_balance": -0.2,
+    "unit": "mb/d",
+    "comment": "Implied deficit of ~0.2 mb/d this quarter: OPEC+ restraint and flat US shale against resilient summer demand. Consistent with observed OECD stock draws. Sample assessment — verify against latest IEA/EIA balances.",
+    "source": "The Crude Oracle assessment on EIA/IEA public data",
+    "last_updated": "2026-07-04T07:00:00Z",
+    "data_type": "manual"
+  },
+  "supply": [
+    {
+      "metric": "OPEC crude production",
+      "value": "26.7",
+      "unit": "mb/d",
+      "change": "+0.1 m/m",
+      "trend": "up",
+      "impact": "bearish",
+      "note": "Slight compliance slippage above voluntary targets; watch the unwinding schedule.",
+      "source": "OPEC MOMR (secondary sources, public summary)",
+      "source_url": "https://www.opec.org/",
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Non-OPEC supply",
+      "value": "71.4",
+      "unit": "mb/d",
+      "change": "+0.2 m/m",
+      "trend": "up",
+      "impact": "bearish",
+      "note": "Growth led by US, Brazil, Guyana and Canada; the structural counterweight to OPEC+ cuts.",
+      "source": "IEA Oil Market Report (public summary)",
+      "source_url": "https://www.iea.org/topics/oil-market-report",
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
+    },
+    {
+      "metric": "US shale (L48 tight oil)",
+      "value": "9.9",
+      "unit": "mb/d",
+      "change": "flat m/m",
+      "trend": "flat",
+      "impact": "neutral",
+      "note": "Capital discipline holding output flat despite supportive prices; rig count sideways.",
+      "source": "EIA Drilling Productivity Report",
+      "source_url": "https://www.eia.gov/petroleum/drilling/",
+      "last_updated": "2026-06-30",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Sanctioned barrels (Russia / Iran / Venezuela)",
+      "value": "~4.6",
+      "unit": "mb/d exports",
+      "change": "-0.2 m/m",
+      "trend": "down",
+      "impact": "bullish",
+      "note": "Enforcement tightening on shadow-fleet tankers; discounts widening. Key swing variable.",
+      "source": "Public tanker-tracking summaries / press reporting",
+      "source_url": "https://www.iea.org/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Unplanned outages",
+      "value": "0.8",
+      "unit": "mb/d",
+      "change": "+0.3 w/w",
+      "trend": "up",
+      "impact": "bullish",
+      "note": "Field maintenance overruns plus a West African export terminal issue.",
+      "source": "Manual monitoring of operator statements",
+      "source_url": "https://www.eia.gov/",
+      "last_updated": "2026-07-03",
+      "data_type": "manual"
+    },
+    {
+      "metric": "SPR releases / refills",
+      "value": "+0.1",
+      "unit": "mb/d refill",
+      "change": "unchanged",
+      "trend": "flat",
+      "impact": "bullish",
+      "note": "US refilling slowly at price ceilings; strategic stocks now a demand source, not supply.",
+      "source": "US DOE / EIA weekly data",
+      "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    }
+  ],
+  "demand": [
+    {
+      "metric": "Refinery runs (global)",
+      "value": "83.6",
+      "unit": "mb/d",
+      "change": "+0.9 m/m",
+      "trend": "up",
+      "impact": "bullish",
+      "note": "Seasonal peak: post-turnaround ramp into the driving season, strong US utilisation (~93%).",
+      "source": "IEA OMR / EIA weekly (public summaries)",
+      "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Product demand (global)",
+      "value": "103.2",
+      "unit": "mb/d",
+      "change": "+1.1 y/y",
+      "trend": "up",
+      "impact": "bullish",
+      "note": "Growth concentrated in non-OECD; petrochemical feedstocks and jet lead the barrel.",
+      "source": "IEA Oil Market Report (public summary)",
+      "source_url": "https://www.iea.org/topics/oil-market-report",
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
+    },
+    {
+      "metric": "China / India crude imports",
+      "value": "16.4",
+      "unit": "mb/d combined",
+      "change": "+0.4 m/m",
+      "trend": "up",
+      "impact": "bullish",
+      "note": "China restocking at attractive prices; India's structural growth intact (~5.2 mb/d).",
+      "source": "Customs data / PPAC (public summaries)",
+      "source_url": "https://www.iea.org/",
+      "last_updated": "2026-06-30",
+      "data_type": "manual"
+    },
+    {
+      "metric": "OECD demand",
+      "value": "45.5",
+      "unit": "mb/d",
+      "change": "-0.1 y/y",
+      "trend": "flat",
+      "impact": "neutral",
+      "note": "Mature-market plateau: efficiency and EVs offsetting income growth.",
+      "source": "IEA Oil Market Report (public summary)",
+      "source_url": "https://www.iea.org/topics/oil-market-report",
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Jet / diesel / gasoline demand",
+      "value": "7.6 / 28.3 / 26.9",
+      "unit": "mb/d",
+      "change": "jet +4% y/y",
+      "trend": "mixed",
+      "impact": "neutral",
+      "note": "Jet strongest (aviation recovery), gasoline seasonal-normal, diesel still the weak link.",
+      "source": "IEA / IATA public data",
+      "source_url": "https://www.iata.org/",
+      "last_updated": "2026-06-30",
+      "data_type": "manual"
+    }
+  ],
+  "stocks": [
+    {
+      "metric": "US commercial crude stocks",
+      "value": "443.7",
+      "unit": "mb",
+      "change": "-2.1 w/w",
+      "trend": "down",
+      "impact": "bullish",
+      "note": "Fourth draw in five weeks; ~11 mb below the five-year average.",
+      "source": "EIA Weekly Petroleum Status Report",
+      "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Cushing (WTI delivery hub)",
+      "value": "24.8",
+      "unit": "mb",
+      "change": "-0.6 w/w",
+      "trend": "down",
+      "impact": "bullish",
+      "note": "Approaching operational minimums; supportive for WTI timespreads.",
+      "source": "EIA Weekly Petroleum Status Report",
+      "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    },
+    {
+      "metric": "OECD industry stocks",
+      "value": "2,760",
+      "unit": "mb",
+      "change": "-15 m/m",
+      "trend": "down",
+      "impact": "bullish",
+      "note": "Below the five-year average in days-of-cover terms; the market's core tightness signal.",
+      "source": "IEA Oil Market Report (public summary)",
+      "source_url": "https://www.iea.org/topics/oil-market-report",
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
+    },
+    {
+      "metric": "Floating storage",
+      "value": "78",
+      "unit": "mb",
+      "change": "+6 m/m",
+      "trend": "up",
+      "impact": "bearish",
+      "note": "Rise driven by sanctioned cargoes seeking buyers, not a demand failure — read with care.",
+      "source": "Public tanker-tracking summaries",
+      "source_url": "https://unctad.org/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    },
+    {
+      "metric": "US product stocks (gasoline + distillate)",
+      "value": "345",
+      "unit": "mb",
+      "change": "+1.8 w/w",
+      "trend": "up",
+      "impact": "bearish",
+      "note": "Gasoline build on strong refinery runs; distillates still below seasonal norms.",
+      "source": "EIA Weekly Petroleum Status Report",
+      "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "last_updated": "2026-07-02",
+      "data_type": "manual"
+    }
+  ]
+}

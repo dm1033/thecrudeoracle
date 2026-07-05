@@ -38,6 +38,11 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Add or update a company object with production, reserves, financial health, valuation, management, catalyst, risk, `latest_update` and `sources`.",
   },
   {
+    title: "Update the Balance Engine",
+    file: "data/balance-engine.json",
+    what: "Refresh `supply`, `demand` and `stocks` rows (value, change, trend, impact, note, last_updated) and recompute `balance_summary` (total_supply, total_demand, implied_balance = supply − demand). Impact flags read from the price's perspective: less supply / more demand = bullish.",
+  },
+  {
     title: "Update charts",
     file: "data/chart-data.json",
     what: "Append the latest point to each series (Brent/WTI, gas, inventories, rig count, OPEC production, watchlist performance, sector heatmap) and update `meta.last_published`.",
