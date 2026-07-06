@@ -37,6 +37,7 @@ export const NAV_MAIN: NavItem[] = [
   { label: "Watchlist", href: "/watchlist", premium: true },
   { label: "Company Intel", href: "/company-intelligence", premium: true },
   { label: "Tools", href: "/tools", premium: true },
+  { label: "$1M Portfolio", href: "/portfolio" },
   { label: "Crude Prices", href: "/crude-oil-prices" },
   { label: "Gas / LNG", href: "/gas-lng" },
   { label: "OPEC / Supply Risk", href: "/opec-supply-risk" },
