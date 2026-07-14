@@ -20,12 +20,25 @@
       "one_chart": "Brent vs WTI 30-day trend — the spread narrowed this week as US export demand firmed. See the dashboard chart.",
       "bottom_line": "The market is tighter than headline sentiment suggests: inventories are drawing, freight is expensive, and spare capacity is concentrated. But OPEC+ optionality caps the upside until the unwinding path is clearer. Range-bound with upside skew is the base case; the next inventory print and OPEC+ commentary are the near-term catalysts.",
       "sources": [
-        { "name": "EIA Weekly Petroleum Status Report", "url": "https://www.eia.gov/petroleum/supply/weekly/" },
-        { "name": "IEA Oil Market Report (public pages)", "url": "https://www.iea.org/topics/oil-market-report" },
-        { "name": "OPEC press releases", "url": "https://www.opec.org/" },
-        { "name": "Baker Hughes rig count", "url": "https://rigcount.bakerhughes.com/" }
+        {
+          "name": "EIA Weekly Petroleum Status Report",
+          "url": "https://www.eia.gov/petroleum/supply/weekly/"
+        },
+        {
+          "name": "IEA Oil Market Report (public pages)",
+          "url": "https://www.iea.org/topics/oil-market-report"
+        },
+        {
+          "name": "OPEC press releases",
+          "url": "https://www.opec.org/"
+        },
+        {
+          "name": "Baker Hughes rig count",
+          "url": "https://rigcount.bakerhughes.com/"
+        }
       ],
-      "last_updated": "2026-07-03T07:00:00Z"
+      "last_updated": "2026-07-03T07:00:00Z",
+      "data_type": "manual"
     },
     {
       "date": "2026-07-02",
@@ -43,10 +56,17 @@
       "one_chart": "US commercial crude inventories vs five-year range.",
       "bottom_line": "A waiting market. Inventories and OPEC+ signalling will decide the next leg; until then, range trade with headline sensitivity.",
       "sources": [
-        { "name": "EIA", "url": "https://www.eia.gov/" },
-        { "name": "IEA (public pages)", "url": "https://www.iea.org/" }
+        {
+          "name": "EIA",
+          "url": "https://www.eia.gov/"
+        },
+        {
+          "name": "IEA (public pages)",
+          "url": "https://www.iea.org/"
+        }
       ],
-      "last_updated": "2026-07-02T07:00:00Z"
+      "last_updated": "2026-07-02T07:00:00Z",
+      "data_type": "manual"
     }
   ]
 }

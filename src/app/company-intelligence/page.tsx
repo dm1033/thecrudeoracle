@@ -4,6 +4,8 @@ import { companyIntel, type CompanyIntel } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
+import FreshnessBadge from "@/components/FreshnessBadge";
+import { DataTypeBadge } from "@/components/DataMeta";
 
 export const metadata: Metadata = pageMeta(
   "Company Intelligence — Oil & Gas Equity Research Notes",
@@ -53,6 +55,8 @@ function IntelCard({ c }: { c: CompanyIntel }) {
           </a>
         ))}
         <span>· Updated: {c.last_updated}</span>
+        <DataTypeBadge dataType="manual" />
+        <FreshnessBadge lastUpdated={c.last_updated} staleAfterHours={720} />
         <span className="rounded bg-risk/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-risk">
           Research note, not a recommendation
         </span>

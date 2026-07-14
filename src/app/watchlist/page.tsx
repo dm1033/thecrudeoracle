@@ -4,6 +4,8 @@ import { watchlistCategories, watchlistCompanies, type WatchlistCompany } from "
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
+import FreshnessBadge from "@/components/FreshnessBadge";
+import { DataTypeBadge } from "@/components/DataMeta";
 import { WatchlistPerformanceChart } from "@/components/charts/Charts";
 
 export const metadata: Metadata = pageMeta(
@@ -70,6 +72,8 @@ function CompanyCard({ c }: { c: WatchlistCompany }) {
           </a>
         </span>
         <span>Updated: {c.last_updated}</span>
+        <DataTypeBadge dataType="manual" />
+        <FreshnessBadge lastUpdated={c.last_updated} staleAfterHours={720} />
         <span className="rounded bg-risk/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-risk">
           Watchlist, not recommendation
         </span>

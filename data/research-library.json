@@ -13,8 +13,12 @@
       "summary": "How much oil, gas and coal is actually left — reserve concentration by country, R/P ratios, the production-to-reserves paradox and carbon-constraint risk. Downloadable PDF report with summary infographic.",
       "date": "2026-07-04",
       "reading_time": "PDF report",
-      "sources": ["Energy Institute Statistical Review", "EIA public data"],
-      "status": "published"
+      "sources": [
+        "Energy Institute Statistical Review",
+        "EIA public data"
+      ],
+      "status": "published",
+      "data_type": "manual"
     },
     {
       "id": "spare-capacity-2026",
@@ -24,8 +28,12 @@
       "summary": "Why effective global spare capacity is more concentrated — and more fragile — than headline numbers suggest, and what that means for tail-risk pricing in crude.",
       "date": "2026-06-28",
       "reading_time": "12 min",
-      "sources": ["IEA Oil Market Report (public pages)", "OPEC Monthly Oil Market Report (public pages)"],
-      "status": "published"
+      "sources": [
+        "IEA Oil Market Report (public pages)",
+        "OPEC Monthly Oil Market Report (public pages)"
+      ],
+      "status": "published",
+      "data_type": "manual"
     },
     {
       "id": "ukcs-fiscal-risk",
@@ -35,8 +43,13 @@
       "summary": "A framework for valuing UK North Sea producers under alternative windfall-tax and licensing scenarios.",
       "date": "2026-06-21",
       "reading_time": "15 min",
-      "sources": ["North Sea Transition Authority", "UK DESNZ publications", "Company RNS announcements"],
-      "status": "published"
+      "sources": [
+        "North Sea Transition Authority",
+        "UK DESNZ publications",
+        "Company RNS announcements"
+      ],
+      "status": "published",
+      "data_type": "manual"
     },
     {
       "id": "lng-wave",
@@ -46,8 +59,12 @@
       "summary": "Mapping the 2026–2029 liquefaction build-out against price-sensitive Asian demand, and the implications for TTF, JKM and LNG equities.",
       "date": "2026-06-14",
       "reading_time": "14 min",
-      "sources": ["IEA Gas Market Report (public pages)", "Company investor presentations"],
-      "status": "published"
+      "sources": [
+        "IEA Gas Market Report (public pages)",
+        "Company investor presentations"
+      ],
+      "status": "published",
+      "data_type": "manual"
     },
     {
       "id": "tanker-cycle",
@@ -57,8 +74,12 @@
       "summary": "Why tanker supply fundamentals remain tight even if geopolitical rerouting normalises.",
       "date": "2026-06-07",
       "reading_time": "10 min",
-      "sources": ["UNCTAD shipping data", "Company fleet status reports"],
-      "status": "published"
+      "sources": [
+        "UNCTAD shipping data",
+        "Company fleet status reports"
+      ],
+      "status": "published",
+      "data_type": "manual"
     },
     {
       "id": "oil-101-demand",
@@ -68,8 +89,12 @@
       "summary": "A free primer on the structure of global oil demand — transport, petrochemicals, aviation, industry — and why 'peak demand' timing is contested.",
       "date": "2026-05-30",
       "reading_time": "8 min",
-      "sources": ["Energy Institute Statistical Review", "IEA public data"],
-      "status": "published"
+      "sources": [
+        "Energy Institute Statistical Review",
+        "IEA public data"
+      ],
+      "status": "published",
+      "data_type": "manual"
     },
     {
       "id": "inventory-signals",
@@ -79,8 +104,11 @@
       "summary": "How to interpret weekly EIA inventory reports: headline vs adjustment factors, Cushing, SPR, and product stocks.",
       "date": "2026-05-22",
       "reading_time": "9 min",
-      "sources": ["EIA Weekly Petroleum Status Report"],
-      "status": "published"
+      "sources": [
+        "EIA Weekly Petroleum Status Report"
+      ],
+      "status": "published",
+      "data_type": "manual"
     }
   ]
 }
