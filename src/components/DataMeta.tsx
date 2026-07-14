@@ -1,4 +1,5 @@
 import { formatUpdated } from "@/lib/data";
+import FreshnessBadge from "@/components/FreshnessBadge";
 
 const BADGE_STYLES: Record<string, string> = {
   live: "bg-gain/15 text-gain",
@@ -22,11 +23,13 @@ export default function DataMeta({
   sourceUrl,
   lastUpdated,
   dataType,
+  staleAfterHours = 96,
 }: {
   source: string;
   sourceUrl?: string;
   lastUpdated: string;
   dataType: string;
+  staleAfterHours?: number;
 }) {
   return (
     <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-ink-700 pt-2 text-[11px] text-steel-500">
@@ -42,6 +45,7 @@ export default function DataMeta({
       </span>
       <span>Updated: {formatUpdated(lastUpdated)}</span>
       <DataTypeBadge dataType={dataType} />
+      <FreshnessBadge lastUpdated={lastUpdated} staleAfterHours={staleAfterHours} />
     </div>
   );
 }

@@ -36,7 +36,8 @@
       "status": "Monitoring",
       "source": "Company annual report / investor presentation",
       "source_url": "https://www.londonstockexchange.com/",
-      "last_updated": "2026-07-01"
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
     },
     {
       "company": "US Shale Producer (Sample B)",
@@ -55,7 +56,8 @@
       "status": "Monitoring",
       "source": "SEC filings / investor presentation",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-07-01"
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
     },
     {
       "company": "Global LNG Operator (Sample C)",
@@ -74,7 +76,8 @@
       "status": "Monitoring",
       "source": "SEC filings / investor presentation",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-28"
+      "last_updated": "2026-06-28",
+      "data_type": "manual"
     },
     {
       "company": "Midstream Pipeline Operator (Sample D)",
@@ -93,7 +96,8 @@
       "status": "Monitoring",
       "source": "SEC filings",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-25"
+      "last_updated": "2026-06-25",
+      "data_type": "manual"
     },
     {
       "company": "Oilfield Services Leader (Sample E)",
@@ -112,7 +116,8 @@
       "status": "Monitoring",
       "source": "SEC filings / investor presentation",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-25"
+      "last_updated": "2026-06-25",
+      "data_type": "manual"
     },
     {
       "company": "Offshore Driller (Sample F)",
@@ -131,7 +136,8 @@
       "status": "Monitoring — higher risk",
       "source": "SEC filings / fleet status reports",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-20"
+      "last_updated": "2026-06-20",
+      "data_type": "manual"
     },
     {
       "company": "Crude Tanker Owner (Sample G)",
@@ -150,7 +156,8 @@
       "status": "Monitoring — higher risk",
       "source": "Company filings / public shipping data",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-20"
+      "last_updated": "2026-06-20",
+      "data_type": "manual"
     },
     {
       "company": "Independent Refiner (Sample H)",
@@ -169,7 +176,8 @@
       "status": "Monitoring",
       "source": "SEC filings",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-22"
+      "last_updated": "2026-06-22",
+      "data_type": "manual"
     },
     {
       "company": "North Sea Independent (Sample I)",
@@ -188,7 +196,8 @@
       "status": "Monitoring — higher risk",
       "source": "RNS announcements / annual report",
       "source_url": "https://www.londonstockexchange.com/news",
-      "last_updated": "2026-07-01"
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
     },
     {
       "company": "High-Dividend Integrated (Sample J)",
@@ -207,7 +216,8 @@
       "status": "Monitoring",
       "source": "Annual report / RNS",
       "source_url": "https://www.londonstockexchange.com/",
-      "last_updated": "2026-06-30"
+      "last_updated": "2026-06-30",
+      "data_type": "manual"
     },
     {
       "company": "Frontier Explorer (Sample K)",
@@ -226,7 +236,8 @@
       "status": "Monitoring — speculative",
       "source": "RNS announcements",
       "source_url": "https://www.londonstockexchange.com/news",
-      "last_updated": "2026-06-15"
+      "last_updated": "2026-06-15",
+      "data_type": "manual"
     },
     {
       "company": "Distressed Energy Situation (Sample L)",
@@ -245,7 +256,8 @@
       "status": "Monitoring — speculative",
       "source": "SEC filings / court documents",
       "source_url": "https://www.sec.gov/",
-      "last_updated": "2026-06-10"
+      "last_updated": "2026-06-10",
+      "data_type": "manual"
     }
   ]
 }

@@ -20,10 +20,17 @@
       "risk": "Oil price downside, windfall/political tax risk, long-run demand uncertainty, execution on transition projects.",
       "latest_update": "Maintained buyback run-rate at Q2 results; reiterated full-year production guidance. (Sample note.)",
       "sources": [
-        { "name": "Annual report", "url": "https://www.londonstockexchange.com/" },
-        { "name": "Investor presentation", "url": "https://www.londonstockexchange.com/" }
+        {
+          "name": "Annual report",
+          "url": "https://www.londonstockexchange.com/"
+        },
+        {
+          "name": "Investor presentation",
+          "url": "https://www.londonstockexchange.com/"
+        }
       ],
-      "last_updated": "2026-07-01"
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
     },
     {
       "company": "US Shale Producer (Sample B)",
@@ -40,10 +47,17 @@
       "risk": "WTI weakness, service cost inflation, degradation of well productivity, basin takeaway constraints.",
       "latest_update": "Raised full-year oil guidance ~2% on strong well performance; service costs flat sequentially. (Sample note.)",
       "sources": [
-        { "name": "10-K / 10-Q filings", "url": "https://www.sec.gov/" },
-        { "name": "Investor presentation", "url": "https://www.sec.gov/" }
+        {
+          "name": "10-K / 10-Q filings",
+          "url": "https://www.sec.gov/"
+        },
+        {
+          "name": "Investor presentation",
+          "url": "https://www.sec.gov/"
+        }
       ],
-      "last_updated": "2026-07-01"
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
     },
     {
       "company": "North Sea Independent (Sample I)",
@@ -60,10 +74,17 @@
       "risk": "Windfall tax extension/expansion, licensing policy shifts, single-basin concentration, decommissioning cost inflation.",
       "latest_update": "Deferred FID on a tie-back project citing fiscal uncertainty; production guidance unchanged. (Sample note.)",
       "sources": [
-        { "name": "RNS announcements", "url": "https://www.londonstockexchange.com/news" },
-        { "name": "North Sea Transition Authority", "url": "https://www.nstauthority.co.uk/" }
+        {
+          "name": "RNS announcements",
+          "url": "https://www.londonstockexchange.com/news"
+        },
+        {
+          "name": "North Sea Transition Authority",
+          "url": "https://www.nstauthority.co.uk/"
+        }
       ],
-      "last_updated": "2026-07-01"
+      "last_updated": "2026-07-01",
+      "data_type": "manual"
     },
     {
       "company": "Global LNG Operator (Sample C)",
@@ -80,10 +101,17 @@
       "risk": "Global LNG oversupply into the late 2020s, construction cost inflation, US permitting/political risk, contract counterparty risk.",
       "latest_update": "Signed a new 20-year SPA with an Asian buyer (sample note); expansion FID targeted within 12 months.",
       "sources": [
-        { "name": "SEC filings", "url": "https://www.sec.gov/" },
-        { "name": "IEA Gas Market Report (public pages)", "url": "https://www.iea.org/topics/gas-market-report" }
+        {
+          "name": "SEC filings",
+          "url": "https://www.sec.gov/"
+        },
+        {
+          "name": "IEA Gas Market Report (public pages)",
+          "url": "https://www.iea.org/topics/gas-market-report"
+        }
       ],
-      "last_updated": "2026-06-28"
+      "last_updated": "2026-06-28",
+      "data_type": "manual"
     }
   ]
 }
