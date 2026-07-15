@@ -1,7 +1,7 @@
 {
   "meta": {
     "description": "Supply, demand and risk signals shown on The Crude Oracle dashboards. SAMPLE / INDICATIVE placeholder values — update daily. See docs/DAILY_UPDATE_GUIDE.md.",
-    "last_published": "2026-07-03T07:00:00Z",
+    "last_published": "2026-07-15T07:00:00Z",
     "status": "published"
   },
   "supply": [
@@ -13,7 +13,7 @@
       "detail": "OPEC+ ministers maintained current voluntary production cuts and signalled a data-dependent approach to unwinding. Compliance remains the key watch item.",
       "source": "OPEC press releases",
       "source_url": "https://www.opec.org/",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -24,7 +24,7 @@
       "detail": "Commercial crude stocks drew against expectations of a small build. Cushing levels remain below the five-year average.",
       "source": "EIA Weekly Petroleum Status Report",
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -35,7 +35,7 @@
       "detail": "Oil-directed rigs broadly flat week on week. Capital discipline continues to cap US supply growth.",
       "source": "Baker Hughes rig count (public summary)",
       "source_url": "https://rigcount.bakerhughes.com/",
-      "last_updated": "2026-06-27",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -46,7 +46,7 @@
       "detail": "Effective spare capacity is concentrated in a small number of OPEC+ members, keeping the market sensitive to supply disruption.",
       "source": "IEA Oil Market Report (public summary)",
       "source_url": "https://www.iea.org/topics/oil-market-report",
-      "last_updated": "2026-07-01",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -57,7 +57,7 @@
       "detail": "Seasonally strong runs into the driving season. Watch unplanned outages and turnaround schedules.",
       "source": "EIA Weekly Petroleum Status Report",
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -68,7 +68,7 @@
       "detail": "A meaningful share of tanker traffic continues to route around the Cape of Good Hope, extending voyage times and supporting freight rates.",
       "source": "Public shipping data / press reporting",
       "source_url": "https://unctad.org/",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -79,7 +79,7 @@
       "detail": "Major Gulf, US Gulf Coast and North Sea loading programmes operating normally. Weather watch on the US Gulf Coast during hurricane season.",
       "source": "Manual monitoring of public announcements",
       "source_url": "https://www.eia.gov/",
-      "last_updated": "2026-07-03",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     }
   ],
@@ -92,7 +92,7 @@
       "detail": "Crude imports and refinery throughput show tentative recovery. Petrochemical feedstock demand remains the bright spot.",
       "source": "IEA / customs data (public summary)",
       "source_url": "https://www.iea.org/",
-      "last_updated": "2026-07-01",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -103,7 +103,7 @@
       "detail": "Diesel and gasoline consumption continue to grow year on year. India remains the largest single source of incremental global oil demand.",
       "source": "PPAC / IEA (public summary)",
       "source_url": "https://www.iea.org/",
-      "last_updated": "2026-07-01",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -114,7 +114,7 @@
       "detail": "Implied gasoline demand tracking the five-year average through the summer driving season.",
       "source": "EIA weekly data",
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -125,7 +125,7 @@
       "detail": "Jet fuel demand continues its multi-year recovery, led by Asia-Pacific international capacity.",
       "source": "IATA public data",
       "source_url": "https://www.iata.org/",
-      "last_updated": "2026-06-30",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -136,7 +136,7 @@
       "detail": "Middle distillate demand remains the weak link in the barrel, tracking soft manufacturing PMIs in Europe.",
       "source": "IEA Oil Market Report (public summary)",
       "source_url": "https://www.iea.org/topics/oil-market-report",
-      "last_updated": "2026-07-01",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -147,7 +147,7 @@
       "detail": "Composite refining margins around mid-cycle levels. Gasoline strength offsetting distillate weakness.",
       "source": "Public margin indicators (indicative)",
       "source_url": "https://www.eia.gov/",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     }
   ],
@@ -160,7 +160,7 @@
       "detail": "Middle East tensions, Russia sanctions enforcement and shipping-lane security remain the principal supply-side risk premia in crude pricing.",
       "source": "The Crude Oracle assessment of public reporting",
       "source_url": "https://www.iea.org/",
-      "last_updated": "2026-07-03",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -171,7 +171,7 @@
       "detail": "Market positioning ahead of the next OPEC+ meeting is the key near-term event risk for crude prices.",
       "source": "OPEC calendar",
       "source_url": "https://www.opec.org/",
-      "last_updated": "2026-07-03",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     },
     {
@@ -182,18 +182,18 @@
       "detail": "New liquefaction capacity ramping while Asian spot demand stays price-sensitive. European storage refill pace is the swing factor.",
       "source": "IEA gas market data (public summary)",
       "source_url": "https://www.iea.org/topics/gas-market-report",
-      "last_updated": "2026-07-02",
+      "last_updated": "2026-07-14",
       "data_type": "manual"
     }
   ],
   "bottom_line": {
-    "what_moved": "Crude rallied on a surprise US inventory draw and firmer risk appetite. Brent reclaimed the upper end of its recent range.",
+    "what_moved": "Crude extended its grind higher over the past fortnight; Brent holding the upper-$78/low-$79 area after another modest US stock draw.",
     "why_it_moved": "A larger-than-expected stock draw, resilient summer demand indicators and persistent shipping disruption offset macro caution.",
     "what_matters_next": "OPEC+ signalling on the pace of unwinding voluntary cuts, plus weekly EIA inventory data.",
     "biggest_risk": "A faster-than-expected return of OPEC+ barrels into a soft diesel demand environment.",
     "biggest_opportunity": "Quality upstream producers with low break-evens remain attractively valued relative to strip prices (watchlist, not a recommendation).",
-    "watch_tomorrow": "EIA weekly inventories, Baker Hughes rig count, and any OPEC+ ministerial commentary.",
-    "last_updated": "2026-07-03T07:00:00Z",
+    "watch_tomorrow": "Weekly EIA inventories (Wed), OPEC MOMR follow-through, and Atlantic hurricane tracking.",
+    "last_updated": "2026-07-15T07:00:00Z",
     "source": "The Crude Oracle editorial desk",
     "data_type": "manual"
   }

@@ -5,6 +5,38 @@
   },
   "briefings": [
     {
+      "date": "2026-07-15",
+      "status": "published",
+      "headline": "Quiet grind higher as draws continue and OPEC+ stays silent",
+      "oil_summary": "Brent marked at $79.15 and WTI at $74.86 (indicative), both firmer over the fortnight on continued inventory draws. Prompt spreads remain backwardated; positioning still long but stable.",
+      "gas_summary": "TTF and NBP eased on strong storage injections; Henry Hub firmed slightly on cooling demand. Asian LNG interest steady near $12 (placeholder marker).",
+      "supply_risk": "No new outages; Rotterdam refinery repair timeline unchanged. Red Sea rerouting persists. Peak hurricane season is the key watch on the US Gulf Coast.",
+      "demand_signal": "US driving-season demand tracking the five-year average; Indian growth intact; European diesel still soft.",
+      "opec_note": "No formal OPEC+ communication since the unwind signalling — the silence itself keeps deferred prices capped.",
+      "inventory_signal": "Draw cycle intact (sample); Cushing holding below the five-year average, supporting WTI structure.",
+      "geopolitical_risk": "Risk premium steady: Middle East tension, sanctions enforcement and shipping-lane security unchanged as the principal premia.",
+      "equities_to_watch": "Tanker owners and LNG names remain the monitored strength; UKCS names still awaiting fiscal clarity. Watchlist, not recommendations.",
+      "uk_energy_note": "No new North Sea policy announcements; UKCS capital-allocation pause continues.",
+      "one_chart": "Brent vs WTI 30-day trend — steady backwardated grind. See dashboard chart.",
+      "bottom_line": "The tightness thesis is intact but ageing: draws continue, freight stays expensive, and OPEC+ optionality still caps the topside. Range with upside skew until the next inventory print or ministerial word.",
+      "sources": [
+        {
+          "name": "EIA Weekly Petroleum Status Report",
+          "url": "https://www.eia.gov/petroleum/supply/weekly/"
+        },
+        {
+          "name": "IEA Oil Market Report (public pages)",
+          "url": "https://www.iea.org/topics/oil-market-report"
+        },
+        {
+          "name": "OPEC press releases",
+          "url": "https://www.opec.org/"
+        }
+      ],
+      "last_updated": "2026-07-15T07:00:00Z",
+      "data_type": "manual"
+    },
+    {
       "date": "2026-07-03",
       "status": "published",
       "headline": "Crude firms on inventory draw as OPEC+ keeps the market guessing",
