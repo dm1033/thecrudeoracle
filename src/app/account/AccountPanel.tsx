@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useAccess, signOutEverywhere } from "@/lib/access";
-import { SITE } from "@/lib/site";
 
 export default function AccountPanel() {
   const { level, email, mode, ready } = useAccess();
@@ -16,15 +15,14 @@ export default function AccountPanel() {
       <div className="card mx-auto max-w-lg p-8 text-center">
         <h2 className="text-lg font-semibold text-white">You are not signed in</h2>
         <p className="mt-2 text-sm text-steel-400">
-          Log in to view your membership, or subscribe to join The Crude Oracle Premium.
+          The Crude Oracle is now 100% free — a login is optional and no longer unlocks anything extra.
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <Link href="/login" className="btn-secondary">
             Log in
           </Link>
           <Link href="/subscribe" className="btn-primary">
-            Subscribe — {SITE.price}
-            {SITE.priceSuffix}
+            See What&apos;s Free (Everything)
           </Link>
         </div>
       </div>
@@ -55,7 +53,7 @@ export default function AccountPanel() {
           <div className="flex justify-between gap-4">
             <dt className="text-steel-500">Plan</dt>
             <dd className="text-white">
-              {level === "premium" ? `The Crude Oracle Premium — ${SITE.price}${SITE.priceSuffix}` : "Free registered"}
+              "Free — full access (site-wide, no paid tier)"
             </dd>
           </div>
           <div className="flex justify-between gap-4">
@@ -75,8 +73,7 @@ export default function AccountPanel() {
             research archive. {mode === "supabase" && "Use this same email at checkout and premium access activates automatically."}
           </p>
           <Link href="/subscribe" className="btn-primary mt-4 w-full">
-            Subscribe — {SITE.price}
-            {SITE.priceSuffix}
+See What&apos;s Free (Everything)
           </Link>
         </div>
       )}

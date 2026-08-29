@@ -4,8 +4,8 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...pageMeta(
-    "Payment Successful — Welcome to The Crude Oracle Premium",
-    "Your Crude Oracle Premium subscription is active.",
+    "Payment Page — The Crude Oracle is now free",
+    "The paid subscription has been retired — everything on The Crude Oracle is free.",
     "/payment/success"
   ),
   robots: { index: false, follow: false },

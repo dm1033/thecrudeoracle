@@ -1,5 +1,16 @@
 # CHANGELOG — The Crude Oracle
 
+## 2026-07-15 — The paywall is removed: The Crude Oracle is now 100% free
+
+- Retired the £299.99/month premium subscription; no payment flow remains on the site.
+- `PremiumGate` now renders all content for everyone; `SubscribeCTA` became the free-access banner.
+- Site-wide gold announcement banner; header CTA now "100% Free — No Paywall".
+- `/subscribe` rewritten as the Free Access announcement page (with FAQ on retired billing).
+- Homepage pricing card replaced with a £0/forever card plus a live $1M virtual-portfolio
+  performance strip (account value, return since inception, open positions, max drawdown).
+- Subscription Terms marked historic; payment success/cancelled pages neutralised;
+  login/account copy updated to reflect free access.
+
 ## 2026-07-05 — Audit + improvement loop #1
 - Protected baseline: branch `baseline/v1.0-pre-audit` @ `3530706`
 - Published audit suite: CURRENT_SITE_AUDIT, FEATURE_INVENTORY, DATA_SOURCE_REGISTER, DATA_LICENSING_REGISTER, KNOWN_ISSUES, IMPROVEMENT_BACKLOG, SECURITY_REVIEW, SEO_AUDIT, PRODUCT_READINESS_SCORE, TEST_REPORT, ADMIN_GUIDE, SUBSCRIBER_GUIDE

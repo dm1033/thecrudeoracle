@@ -98,7 +98,7 @@ export default function PortfolioPublicPage() {
           </h2>
           <p className="mt-1 text-sm text-steel-500">
             Two entries from the public journal — one open hypothesis trade, one closed trade with
-            its lesson. Full rationale, sizing and risk levels are in the premium dashboard.
+            its lesson. Full rationale, sizing and risk levels are in the portfolio dashboard — free.
           </p>
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
             <article className="card">
@@ -138,7 +138,7 @@ export default function PortfolioPublicPage() {
 
         <section aria-labelledby="value-h">
           <h2 id="value-h" className="h2">
-            What this demonstrates for subscribers
+            What this demonstrates
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {VALUE_POINTS.map(([title, body]) => (
@@ -152,19 +152,18 @@ export default function PortfolioPublicPage() {
 
         <section className="rounded-lg border border-gold-600/40 bg-gradient-to-br from-navy-900 to-ink-900 p-8 text-center sm:p-10">
           <h2 className="text-xl font-bold text-white sm:text-2xl">
-            The full portfolio, journal and daily briefs are in Premium
+            The full portfolio, journal and daily briefs are free
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-steel-400">
             Detailed trade rationale, full watchlist, position sizing, risk levels, daily updates,
             benchmark comparison, source links, company notes and upcoming catalysts.
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/subscribe" className="btn-primary">
-              Subscribe for Full Daily Intelligence — {SITE.price}
-              {SITE.priceSuffix}
+            <Link href="/portfolio/dashboard" className="btn-primary">
+              Open the Full Portfolio Dashboard — Free
             </Link>
-            <Link href="/portfolio/dashboard" className="btn-secondary">
-              View the Premium Portfolio Dashboard
+            <Link href="/daily-briefing" className="btn-secondary">
+              Read Today&apos;s Free Briefing
             </Link>
           </div>
         </section>

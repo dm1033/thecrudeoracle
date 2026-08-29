@@ -156,7 +156,7 @@ export default function ToolsPage() {
 
         <SubscribeCTA
           heading="The toolkit is part of Premium"
-          body="Every module — current and future — is included in The Crude Oracle Premium at £299.99/month, alongside the dashboard, daily briefings, watchlist and research archive."
+          body="Every module — current and future — is free, alongside the dashboard, daily briefings, watchlist and research archive."
         />
         <DisclaimerBlock />
       </div>

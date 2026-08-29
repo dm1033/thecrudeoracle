@@ -25,7 +25,7 @@ import {
 
 export const metadata: Metadata = pageMeta(
   "Premium Dashboard — Terminal-Grade Oil & Gas Intelligence",
-  "The full Crude Oracle premium dashboard: complete crude and gas price complex, supply data, demand signals, investment intelligence and the daily bottom line.",
+  "The full Crude Oracle dashboard — free: complete crude and gas price complex, supply data, demand signals, investment intelligence and the daily bottom line.",
   "/premium-dashboard"
 );
 
@@ -185,7 +185,7 @@ export default function PremiumDashboardPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Premium · Subscriber Only"
+        eyebrow="Full Dashboard · Free For Everyone"
         title="Premium Dashboard"
         intro="The complete terminal-grade view: full price complex, supply data, demand signals, risk monitor, chart pack, investment intelligence and the daily bottom line."
       />

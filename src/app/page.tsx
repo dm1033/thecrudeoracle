@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { SITE } from "@/lib/site";
 import { marketPrices, riskSignals, supplySignals } from "@/lib/data";
+import portfolioData from "../../data/virtual-portfolio.json";
 import MarketCard from "@/components/MarketCard";
 import SignalCardView from "@/components/SignalCardView";
 import BottomLineCard from "@/components/BottomLineCard";
@@ -13,7 +13,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta(
   "Crude Oil Intelligence Without the Noise",
-  "Professional oil and gas intelligence platform: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security and investor-focused research. £299.99/month.",
+  "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security, investor-focused research and a transparent $1M virtual portfolio.",
   "/"
 );
 
@@ -30,7 +30,7 @@ const MEMBER_BENEFITS = [
 ] as const;
 
 const PRICING_FEATURES = [
-  "Premium terminal-grade dashboard",
+  "Full terminal-grade dashboard",
   "Daily crude oil briefing",
   "Crude and gas market intelligence",
   "Investment watchlist",
@@ -38,7 +38,7 @@ const PRICING_FEATURES = [
   "Supply and demand alerts",
   "OPEC / geopolitical risk monitoring",
   "Research archive",
-  "Premium subscriber-only analysis",
+  "$1M virtual portfolio with full trade journal",
 ];
 
 const FAQ_ITEMS = [
@@ -55,8 +55,8 @@ const FAQ_ITEMS = [
     a: "No. Data is labelled on every card as manual, delayed, indicative or an API placeholder, with its source and last-updated time. We do not display unlicensed real-time exchange data. Verify all figures with primary sources before trading.",
   },
   {
-    q: "How much does it cost and can I cancel?",
-    a: "The Crude Oracle Premium is £299.99 per month, billed via Stripe. You can cancel at any time and retain access until the end of the paid period. See the Subscription Terms for details.",
+    q: "How much does it cost?",
+    a: "Nothing. The Crude Oracle is now completely free — the former £299.99/month subscription has been retired and the paywall removed. Every dashboard, briefing, watchlist, tool and the $1M virtual portfolio is open to everyone.",
   },
   {
     q: "How often is the intelligence updated?",
@@ -91,19 +91,18 @@ export default function HomePage() {
             energy professionals — presented clearly, concisely and with source-backed data.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/subscribe" className="btn-primary">
-              Subscribe — {SITE.price}
-              {SITE.priceSuffix}
+            <Link href="/premium-dashboard" className="btn-primary">
+              Open the Full Dashboard — 100% Free
             </Link>
-            <Link href="/dashboard" className="btn-secondary">
-              View Today&apos;s Free Market Snapshot
+            <Link href="/portfolio/dashboard" className="btn-secondary">
+              $1M Portfolio Performance
             </Link>
             <Link href="/oil-truth" className="btn-ghost">
               Read Oil Truth →
             </Link>
           </div>
           <p className="mt-6 text-xs text-steel-500">
-            Terminal-grade market dashboard · Daily briefings · Not financial advice
+            Now 100% free · Terminal-grade dashboard · Daily briefings · Not financial advice
           </p>
         </div>
       </section>
@@ -136,7 +135,7 @@ export default function HomePage() {
           <div className="card flex flex-col justify-between border-navy-700 bg-navy-900/40">
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest text-gold-500">
-                Premium unlocks
+                All free — no paywall
               </h3>
               <ul className="mt-4 space-y-2 text-sm text-steel-400">
                 <li>· Full price complex: Brent, WTI, Dubai, NBP, TTF, Henry Hub, LNG marker</li>
@@ -146,8 +145,8 @@ export default function HomePage() {
                 <li>· Research archive and charts</li>
               </ul>
             </div>
-            <Link href="/subscribe" className="btn-primary mt-6 w-full">
-              Unlock Premium
+            <Link href="/premium-dashboard" className="btn-primary mt-6 w-full">
+              Open the Full Dashboard
             </Link>
           </div>
         </div>
@@ -159,8 +158,8 @@ export default function HomePage() {
       {/* Why subscribe */}
       <section className="border-y border-ink-700 bg-ink-900">
         <div className="container-site py-14">
-          <p className="eyebrow">Why Subscribe</p>
-          <h2 className="h2 mt-1">What members receive</h2>
+          <p className="eyebrow">What You Get — Free</p>
+          <h2 className="h2 mt-1">Everything below is free for everyone</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {MEMBER_BENEFITS.map(([title, body]) => (
               <div key={title} className="card card-hover">
@@ -213,15 +212,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Free access + portfolio performance */}
       <section className="container-site py-14" id="pricing">
         <div className="mx-auto max-w-xl">
           <div className="rounded-xl border border-gold-600/50 bg-gradient-to-b from-ink-800 to-ink-900 p-8 text-center shadow-2xl shadow-gold-600/5">
-            <p className="eyebrow">Single Plan · No Tiers · No Upsells</p>
-            <h2 className="mt-3 text-2xl font-bold text-white">The Crude Oracle Premium</h2>
+            <p className="eyebrow">No Plans · No Tiers · No Paywall</p>
+            <h2 className="mt-3 text-2xl font-bold text-white">The Crude Oracle is Free</h2>
             <div className="mt-4">
-              <span className="text-5xl font-bold tracking-tight text-white">{SITE.price}</span>
-              <span className="text-base text-steel-500">{SITE.priceSuffix}</span>
+              <span className="text-5xl font-bold tracking-tight text-white">£0</span>
+              <span className="text-base text-steel-500">/forever</span>
             </div>
             <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left text-sm text-steel-400">
               {PRICING_FEATURES.map((f) => (
@@ -231,14 +230,67 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <Link href="/subscribe" className="btn-primary mt-8 w-full">
-              Subscribe Now — {SITE.price}
-              {SITE.priceSuffix}
+            <Link href="/premium-dashboard" className="btn-primary mt-8 w-full">
+              Open the Full Dashboard — Free
             </Link>
             <p className="mt-4 text-xs text-steel-500">
-              Billed monthly via Stripe. Cancel any time. Not financial advice — capital at risk.
+              The former £299.99/month subscription has been retired. Not financial advice —
+              capital at risk.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Free $1M portfolio performance */}
+      <section className="border-y border-ink-700 bg-ink-900">
+        <div className="container-site py-14">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="eyebrow">Free Virtual Trading Account · Paper Trading</p>
+              <h2 className="h2 mt-1">The $1,000,000 portfolio — performance in the open</h2>
+            </div>
+            <Link href="/portfolio/dashboard" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
+              Full portfolio dashboard →
+            </Link>
+          </div>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-steel-400">
+            A transparent paper-trading account run on The Crude Oracle&apos;s own daily
+            intelligence — every position journaled with thesis, risk and stop before entry, wins
+            and losses both published. Virtual capital only; simulated performance is not a promise
+            of future results.
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="card text-center">
+              <p className="text-xs uppercase tracking-widest text-steel-500">Account value</p>
+              <p className="mt-2 text-2xl font-bold text-white">
+                ${portfolioData.account.current_value.toLocaleString("en-US")}
+              </p>
+              <p className="mt-1 text-xs text-steel-500">from $1,000,000 virtual start</p>
+            </div>
+            <div className="card text-center">
+              <p className="text-xs uppercase tracking-widest text-steel-500">Return since inception</p>
+              <p className={`mt-2 text-2xl font-bold ${portfolioData.account.return_pct >= 0 ? "text-gain" : "text-loss"}`}>
+                {portfolioData.account.return_pct >= 0 ? "+" : ""}
+                {portfolioData.account.return_pct}%
+              </p>
+              <p className="mt-1 text-xs text-steel-500">since {portfolioData.meta.inception}</p>
+            </div>
+            <div className="card text-center">
+              <p className="text-xs uppercase tracking-widest text-steel-500">Open positions</p>
+              <p className="mt-2 text-2xl font-bold text-white">{portfolioData.account.open_positions}</p>
+              <p className="mt-1 text-xs text-steel-500">{portfolioData.account.cash_pct}% held in cash</p>
+            </div>
+            <div className="card text-center">
+              <p className="text-xs uppercase tracking-widest text-steel-500">Max drawdown</p>
+              <p className="mt-2 text-2xl font-bold text-white">{portfolioData.account.max_drawdown_pct}%</p>
+              <p className="mt-1 text-xs text-steel-500">{portfolioData.account.risk_level}</p>
+            </div>
+          </div>
+          <p className="mt-4 text-xs text-steel-500">
+            PAPER TRADING — virtual capital only. Educational demonstration, not financial advice.
+            Data last updated {portfolioData.account.last_updated.slice(0, 10)} (
+            {portfolioData.account.data_type}).
+          </p>
         </div>
       </section>
 

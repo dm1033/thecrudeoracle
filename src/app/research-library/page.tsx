@@ -109,7 +109,7 @@ export default function ResearchLibraryPage() {
                 </p>
                 <p className="mt-3 text-xs text-steel-500">
                   <Link href="/subscribe" className="text-gold-400 underline">
-                    Subscribe to read the full note →
+                    Read the full note — free →
                   </Link>
                 </p>
               </article>

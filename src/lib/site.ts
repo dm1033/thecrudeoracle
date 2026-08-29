@@ -4,19 +4,20 @@ export const SITE = {
   url: "https://www.thecrudeoracle.com",
   tagline: "Crude Oil Intelligence Without the Noise",
   description:
-    "Daily crude oil, gas, energy security and investment intelligence for investors, traders and energy professionals — presented clearly, concisely and with source-backed data.",
-  price: "£299.99",
-  priceSuffix: "/month",
+    "Daily crude oil, gas, energy security and investment intelligence for investors, traders and energy professionals — 100% free, presented clearly, concisely and with source-backed data.",
+  price: "Free",
+  priceSuffix: "",
   contactEmail: "intelligence@thecrudeoracle.com",
 } as const;
 
-// Live Stripe Payment Link for The Crude Oracle Premium (£299.99/month).
-// To move to full Stripe Checkout later, see .env.example and README_DEPLOYMENT.md.
-export const STRIPE_SUBSCRIPTION_LINK =
-  "https://buy.stripe.com/8x2aEY2r7eCO2lfbJSgYU00";
+// The Crude Oracle is free — the paid subscription has been retired.
+// The former Stripe Payment Link is kept for reference only and is no longer rendered anywhere.
+export const STRIPE_SUBSCRIPTION_LINK = "";
 
-export const STRIPE_LINK_IS_PLACEHOLDER =
-  STRIPE_SUBSCRIPTION_LINK.startsWith("[");
+export const STRIPE_LINK_IS_PLACEHOLDER = true;
+
+export const FREE_ANNOUNCEMENT =
+  "The Crude Oracle is now 100% free. Every dashboard, daily briefing, watchlist, company note, tool and the $1,000,000 virtual portfolio — no paywall, no card, no catch.";
 
 export const FINANCIAL_DISCLAIMER_SHORT =
   "The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital.";
@@ -32,11 +33,11 @@ export interface NavItem {
 
 export const NAV_MAIN: NavItem[] = [
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Premium Dashboard", href: "/premium-dashboard", premium: true },
-  { label: "Daily Briefing", href: "/daily-briefing", premium: true },
-  { label: "Watchlist", href: "/watchlist", premium: true },
-  { label: "Company Intel", href: "/company-intelligence", premium: true },
-  { label: "Tools", href: "/tools", premium: true },
+  { label: "Premium Dashboard", href: "/premium-dashboard" },
+  { label: "Daily Briefing", href: "/daily-briefing" },
+  { label: "Watchlist", href: "/watchlist" },
+  { label: "Company Intel", href: "/company-intelligence" },
+  { label: "Tools", href: "/tools" },
   { label: "$1M Portfolio", href: "/portfolio" },
   { label: "Crude Prices", href: "/crude-oil-prices" },
   { label: "Gas / LNG", href: "/gas-lng" },
@@ -57,7 +58,7 @@ export const NAV_FOOTER_LEGAL: NavItem[] = [
 
 export const NAV_FOOTER_COMPANY: NavItem[] = [
   { label: "About", href: "/about" },
-  { label: "Subscribe", href: "/subscribe" },
+  { label: "Free Access", href: "/subscribe" },
   { label: "Login", href: "/login" },
   { label: "Account", href: "/account" },
   { label: "Contact", href: "/contact" },

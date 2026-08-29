@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
-import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   ...pageMeta(
@@ -31,8 +30,7 @@ export default function PaymentCancelledPage() {
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           <Link href="/subscribe" className="btn-primary">
-            Try again — {SITE.price}
-            {SITE.priceSuffix}
+Good news — it&apos;s all free now
           </Link>
           <Link href="/contact" className="btn-secondary">
             Contact us

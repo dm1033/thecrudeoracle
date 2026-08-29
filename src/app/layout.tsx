@@ -59,6 +59,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-GB">
       <body className="flex min-h-screen flex-col">
+        <a
+          href="/subscribe"
+          className="block bg-gold-500 px-4 py-2 text-center text-xs font-semibold text-ink-950 hover:bg-gold-400"
+        >
+          The Crude Oracle is now 100% FREE — every dashboard, briefing, tool and the $1M virtual
+          portfolio. No paywall, no card. Learn more →
+        </a>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

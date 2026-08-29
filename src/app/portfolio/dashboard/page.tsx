@@ -9,7 +9,7 @@ import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
   "Virtual Portfolio Dashboard — Positions, Journal, Risk & Benchmarks",
-  "The premium dashboard for The Crude Oracle $1,000,000 Oil Intelligence Portfolio: open paper positions with sources and risk levels, full trade journal, exposure, drawdown ladder, benchmarks and the daily trading brief.",
+  "The free dashboard for The Crude Oracle $1,000,000 Oil Intelligence Portfolio: open paper positions with sources and risk levels, full trade journal, exposure, drawdown ladder, benchmarks and the daily trading brief.",
   "/portfolio/dashboard"
 );
 
@@ -384,7 +384,7 @@ export default function PortfolioDashboardPage() {
       <div className="container-site space-y-10 py-10">
         <PaperTradingDisclaimer />
         <PremiumGate
-          title="The full virtual portfolio dashboard is for premium subscribers"
+          title="The full virtual portfolio dashboard"
           preview={
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Stat label="Account value" value={`$${account.current_value.toLocaleString("en-US")}`} />

@@ -44,7 +44,7 @@ function MagicLinkForm() {
           Click it on this device to access your membership.
         </p>
         <p className="mt-3 text-xs text-steel-500">
-          Use the same email you paid with at checkout — premium access is linked to it
+          Optional — everything on The Crude Oracle is now free, no login required
           automatically.
         </p>
       </div>
@@ -80,7 +80,7 @@ function MagicLinkForm() {
       <p className="text-center text-xs text-steel-500">
         Not a member yet?{" "}
         <Link href="/subscribe" className="text-gold-400 underline">
-          Subscribe — £299.99/month
+          100% Free — No Subscription Needed
         </Link>
       </p>
     </form>
@@ -106,7 +106,7 @@ function DemoForm() {
     } else {
       setAccess("free", email);
       setMessage(
-        "Signed in on the FREE tier — limited dashboard and sample content unlocked. Enter your premium access code (or subscribe) for full access."
+        "Signed in. Note: The Crude Oracle is now 100% free — every page is already unlocked, signed in or not."
       );
     }
   }
@@ -150,7 +150,7 @@ function DemoForm() {
         <p className="text-center text-xs text-steel-500">
           Not a member yet?{" "}
           <Link href="/subscribe" className="text-gold-400 underline">
-            Subscribe — £299.99/month
+            100% Free — No Subscription Needed
           </Link>
         </p>
       </form>

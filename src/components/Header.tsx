@@ -48,7 +48,7 @@ export default function Header() {
             href="/subscribe"
             className="rounded-md bg-gold-500 px-4 py-2 text-xs font-semibold text-ink-950 transition-colors hover:bg-gold-400"
           >
-            Subscribe — {SITE.price}{SITE.priceSuffix}
+            100% Free — No Paywall
           </Link>
         </div>
 
@@ -98,7 +98,7 @@ export default function Header() {
               onClick={() => setOpen(false)}
               className="block rounded-md bg-gold-500 px-4 py-3 text-center text-sm font-semibold text-ink-950"
             >
-              Subscribe — {SITE.price}{SITE.priceSuffix}
+              100% Free — No Paywall
             </Link>
           </div>
         </nav>

@@ -6,7 +6,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
   "Subscription Terms",
-  "Terms for The Crude Oracle Premium subscription: £299.99 per month via Stripe, monthly billing, cancellation and refunds.",
+  "The paid subscription has been retired — The Crude Oracle is now 100% free. Historic terms are preserved below for reference.",
   "/subscription-terms"
 );
 
@@ -16,7 +16,18 @@ export default function SubscriptionTermsPage() {
       <PageHeader eyebrow="Legal" title="Subscription Terms" />
       <div className="container-site py-10">
         <div className="prose-dark max-w-3xl">
-          <h2>1. The plan</h2>
+          <div className="not-prose mb-8 rounded-lg border border-gold-600/40 bg-navy-900/40 p-6">
+            <p className="text-sm font-semibold text-gold-400">
+              Notice — the paid subscription has been retired
+            </p>
+            <p className="mt-2 text-sm text-steel-400">
+              The Crude Oracle is now 100% free. No new subscriptions are taken and no payments are
+              collected. The historic terms below are preserved for reference only and apply solely
+              to any past paid period. Questions about a historic charge? Contact us and we will
+              resolve it directly.
+            </p>
+          </div>
+          <h2>1. The plan (historic)</h2>
           <p>
             The Crude Oracle Premium costs <strong>£299.99 per month</strong>, billed monthly in
             advance via Stripe. The plan includes the premium dashboard, daily briefings,
