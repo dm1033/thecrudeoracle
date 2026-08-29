@@ -4,9 +4,10 @@
 // ACCESS CONTROL — dual mode
 // ---------------------------------------------------------------------------
 // "supabase" mode (production): when Supabase env vars are configured, the
-//   tier is server-verified via /api/me (session cookie + profiles table),
-//   and premium is granted automatically by the Stripe webhook
-//   (/api/stripe-webhook). See docs/PHASE2_SETUP.md.
+//   tier is server-verified via /api/me (session cookie + profiles table).
+//   The paid subscription has been retired — The Crude Oracle is 100% free —
+//   so the Stripe webhook that used to grant premium has been removed; the
+//   tier field is kept only as a legacy status label, not a gate.
 // "placeholder" mode (demo): without configuration, tiers live in
 //   localStorage so the three content levels can still be exercised.
 //   Client-side gating is NOT a security boundary.

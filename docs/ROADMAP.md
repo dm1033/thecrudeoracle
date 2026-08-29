@@ -1,5 +1,13 @@
 # Future Roadmap — The Crude Oracle
 
+> **Update:** The paid subscription has been retired — The Crude Oracle is
+> now 100% free, and the Stripe payment integration has been removed from the
+> codebase. The phases below are kept as a historical record of the original
+> plan; every Stripe/billing/monetization item in them (Payment Link, Stripe
+> webhooks, customer portal, premium alerts, per-seat billing, etc.) is void
+> and should not be re-implemented without a new decision to reintroduce paid
+> tiers.
+
 ## Phase 1 — Launch (this build)
 - Next.js + TypeScript + Tailwind platform, 24+ pages
 - JSON-driven dashboards, briefings, watchlist, company intel, research index

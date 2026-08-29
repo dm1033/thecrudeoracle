@@ -1,6 +1,11 @@
 # KNOWN_ISSUES.md — The Crude Oracle
 Updated: 2026-07-05 · Severity: 🔴 blocking-for-real-money · 🟠 important · 🟡 minor
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free — and the Stripe payment integration has been
+> removed from the codebase, so KI-08 below (a Stripe Payment Link redirect
+> issue) is moot. Left unmodified below as a historical record.
+
 | ID | Sev | Issue | Impact | Mitigation today | Fix |
 |----|-----|-------|--------|------------------|-----|
 | KI-01 | 🔴 | Paying customers don't get access automatically — Supabase env vars not yet set | Manual access-code fulfilment | Demo code + email fulfilment; full code deployed | Owner completes PHASE2_SETUP.md (~15 min) |

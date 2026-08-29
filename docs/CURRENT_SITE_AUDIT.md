@@ -1,6 +1,12 @@
 # CURRENT_SITE_AUDIT.md — The Crude Oracle
 Audit date: 2026-07-05 · Auditor: Claude Code · Baseline: branch `baseline/v1.0-pre-audit` @ `3530706`
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free — and the Stripe payment integration
+> described below (Payment Link, webhook, billing portal) has been removed
+> from the codebase. This audit is left unmodified below as a historical
+> record of the state at the time it was written.
+
 ## Stack & architecture
 - **Framework:** Next.js 14.2.35 (App Router), TypeScript strict, Tailwind CSS 3.4, Recharts 2.12
 - **Data layer:** 14 JSON files in `/data` (all content admin-editable, git-versioned); typed via `src/lib/data.ts`

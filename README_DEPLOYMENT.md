@@ -25,52 +25,17 @@ Target domain: **www.thecrudeoracle.com**.
 
 ---
 
-## 3. Stripe subscription setup (£299.99/month)
+## 3. Payments — RETIRED
 
-### Option A — Payment Link (fastest, no code, no keys)
-
-1. Stripe Dashboard → **Product catalogue → Add product**
-   - Name: `The Crude Oracle Premium`
-   - Price: **£299.99 GBP**, recurring, monthly.
-2. **Payment Links → New** → select that price.
-   - After payment: redirect to `https://www.thecrudeoracle.com/payment/success`
-   - Allow customers to cancel via the customer portal (enable in Settings → Billing → Customer portal).
-3. Copy the link (`https://buy.stripe.com/...`) and paste it into
-   `src/lib/site.ts` → `STRIPE_SUBSCRIPTION_LINK`, replacing
-   `[INSERT_STRIPE_MONTHLY_SUBSCRIPTION_LINK_299_99]`.
-4. Commit and deploy. The setup warning on `/subscribe` disappears automatically.
-
-> Payment Links cannot redirect on cancel; users who abandon checkout use their
-> back button. The site's `/payment/cancelled` page is wired for Option B.
-
-### Option B — Stripe Checkout (full integration, Phase 2)
-
-Use environment variables **only** (never in code):
-
-| Variable | Where | Purpose |
-|---|---|---|
-| `STRIPE_SECRET_KEY` | Server env only | Create Checkout sessions, verify subscriptions |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Public env | Stripe.js on the client |
-| `STRIPE_WEBHOOK_SECRET` | Server env only | Verify webhook signatures |
-| `PRICE_ID_CRUDE_ORACLE_PREMIUM` | Server env | The £299.99/month price |
-
-Steps:
-1. Copy `.env.example` → `.env.local` (local) and add the same vars in
-   Vercel → Settings → Environment Variables (or Netlify equivalent).
-2. Add an API route (e.g. `src/app/api/checkout/route.ts`) that creates a
-   Checkout Session with `mode: "subscription"`, `success_url: /payment/success`,
-   `cancel_url: /payment/cancelled`.
-3. Add a webhook route (e.g. `/api/stripe-webhook`) handling
-   `checkout.session.completed`, `customer.subscription.updated`,
-   `customer.subscription.deleted` → update the member's tier in your database.
-4. Point a Stripe webhook endpoint at it and store the signing secret in
-   `STRIPE_WEBHOOK_SECRET`.
-
-**Security rules (enforced in this codebase):**
-- No secret keys in frontend code — verified: the only Stripe reference in `src/`
-  is the public Payment Link constant.
-- `.env*` files are git-ignored.
-- Set secrets only in the hosting dashboard, never commit them.
+The Crude Oracle's paid subscription has been retired; the site is now 100%
+free. The Stripe payment integration that used to live here (Payment Link,
+Checkout, the `/api/stripe-webhook` and `/api/billing-portal` routes, the
+`stripe` npm dependency, and all `STRIPE_*` environment variables) has been
+removed from the codebase entirely — there is nothing to configure and no
+payment-related attack surface left running. This section is kept only so the
+deployment history is not silently erased; do not re-add these steps unless a
+paid tier is reintroduced, and if it is, re-review the removed routes in git
+history rather than restoring them verbatim.
 
 ---
 
@@ -82,11 +47,12 @@ placeholder, **not** a security boundary.
 
 Production path (see `docs/ROADMAP.md`):
 1. Create a Supabase project; enable email (magic link) auth.
-2. `profiles` table with a `tier` column (`free` | `premium`).
-3. Stripe webhook sets `tier = 'premium'` on active subscription, downgrades on cancellation.
-4. Replace `useAccess()` with a Supabase session hook and add `middleware.ts`
-   protecting `/premium-dashboard`, `/daily-briefing`, `/watchlist`,
-   `/company-intelligence` server-side.
+2. `profiles` table with a `tier` column (`free` | `premium`) — the site is
+   fully free, so this column is now purely informational and nothing grants
+   `premium` automatically (the Stripe webhook that used to do this has been
+   removed).
+3. Replace `useAccess()` with a Supabase session hook if server-side identity
+   checks are needed anywhere beyond `/api/me`.
 
 ---
 
@@ -100,8 +66,6 @@ route, and set the real inbox in `src/lib/site.ts` → `contactEmail`.
 
 ## 6. Post-deploy checklist
 
-- [ ] Stripe Payment Link live and tested end-to-end (test mode first)
-- [ ] `/payment/success` reached after test checkout
 - [ ] Domain + HTTPS working on `www.thecrudeoracle.com`
 - [ ] `https://www.thecrudeoracle.com/sitemap.xml` and `/robots.txt` reachable
 - [ ] Submit sitemap in Google Search Console

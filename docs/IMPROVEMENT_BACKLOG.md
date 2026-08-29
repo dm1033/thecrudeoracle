@@ -1,6 +1,12 @@
 # IMPROVEMENT_BACKLOG.md — The Crude Oracle
 Updated: 2026-07-05 · Ranked by charter criteria (data integrity → security → subscription → core features → …)
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free — and the Stripe payment integration has been
+> removed from the codebase. Any backlog item below about Stripe webhooks,
+> checkout, or subscription entitlement is void. Left unmodified below as a
+> historical record.
+
 ## ✅ B-01 — Stale-data marking (COMPLETED — loop #1, 2026-07-05)
 - **Problem:** timestamps existed but nothing flagged out-of-date values; charter gate "stale data visibly marked" unmet. 4 data files lacked row-level data_type.
 - **Solution:** client-computed `FreshnessBadge` (age vs per-dataset threshold) wired into DataMeta (all price/signal cards); row-level `data_type` added to briefing/watchlist/company/research records; badges surfaced on watchlist + company cards.

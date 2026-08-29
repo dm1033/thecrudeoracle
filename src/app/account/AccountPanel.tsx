@@ -65,42 +65,12 @@ export default function AccountPanel() {
         </dl>
       </div>
 
-      {level === "free" && (
-        <div className="card border-gold-600/40 p-6 text-center">
-          <h3 className="text-sm font-semibold text-white">Upgrade to Premium</h3>
-          <p className="mt-2 text-sm text-steel-400">
-            Unlock the full dashboard, daily briefings, watchlists, company intelligence and the
-            research archive. {mode === "supabase" && "Use this same email at checkout and premium access activates automatically."}
-          </p>
-          <Link href="/subscribe" className="btn-primary mt-4 w-full">
-See What&apos;s Free (Everything)
-          </Link>
-        </div>
-      )}
-
       <div className="card p-6">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-steel-500">Billing</h2>
-        {mode === "supabase" ? (
-          <>
-            <p className="mt-3 text-sm text-steel-400">
-              Manage your payment method, invoices and cancellation in the secure Stripe customer
-              portal.
-            </p>
-            <a href="/api/billing-portal" className="btn-secondary mt-4 w-full">
-              Manage billing (Stripe portal)
-            </a>
-          </>
-        ) : (
-          <>
-            <p className="mt-3 text-sm text-steel-400">
-              Billing is managed by Stripe. The customer portal button activates once Supabase and
-              Stripe environment variables are configured (docs/PHASE2_SETUP.md).
-            </p>
-            <button type="button" disabled className="btn-secondary mt-4 w-full cursor-not-allowed opacity-50">
-              Manage billing (activates with live auth)
-            </button>
-          </>
-        )}
+        <p className="mt-3 text-sm text-steel-400">
+          The paid subscription has been retired — The Crude Oracle is 100% free, so there is no
+          billing to manage.
+        </p>
       </div>
 
       <div className="text-center">

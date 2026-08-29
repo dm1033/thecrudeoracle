@@ -1,6 +1,11 @@
 # TEST_REPORT.md — The Crude Oracle
 Run: 2026-07-05 · Environment: local production build (next build && next start) + live-domain spot checks
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free — and the Stripe payment integration
+> referenced below (`/api/stripe-webhook`, the Payment Link) has been removed
+> from the codebase. Left unmodified below as a historical record.
+
 | Test | Method | Result |
 |---|---|---|
 | Production build | `npm run build` | ✅ 40/40 routes compile & prerender |

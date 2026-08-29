@@ -4,40 +4,46 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...pageMeta(
-    "Payment Cancelled",
-    "Your checkout was cancelled — no payment was taken.",
+    "The Crude Oracle is now free",
+    "The paid subscription has been retired. No payments are taken and everything on The Crude Oracle is free.",
     "/payment/cancelled"
   ),
   robots: { index: false, follow: false },
 };
 
-export default function PaymentCancelledPage() {
+/**
+ * Retained only as a landing point for historic checkout redirects. No payment
+ * is taken anywhere on the site any more.
+ */
+export default function PaymentRetiredPage() {
   return (
     <div className="container-site flex min-h-[60vh] items-center justify-center py-16">
       <div className="card max-w-lg p-10 text-center">
-        <div aria-hidden className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-risk/15 text-risk">
+        <div aria-hidden className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold-500/15 text-gold-400">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h1 className="mt-5 text-2xl font-bold text-white">Checkout cancelled</h1>
+        <h1 className="mt-5 text-2xl font-bold text-white">Nothing to pay — it&apos;s all free</h1>
         <p className="mt-3 text-sm leading-relaxed text-steel-400">
-          No payment was taken. Your card has not been charged and no subscription was created.
+          You have reached an old checkout page. No payment was taken and none is required: the
+          £299.99/month subscription has been retired and every part of The Crude Oracle is now
+          open to everyone.
         </p>
-        <p className="mt-3 text-sm text-steel-400">
-          If something went wrong during checkout, or you have a question before subscribing,
-          we&apos;re happy to help.
+        <p className="mt-3 text-xs text-steel-500">
+          No login or card is required. If you have a question about a historic charge from when
+          the subscription was active, please contact us and we will resolve it directly.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link href="/subscribe" className="btn-primary">
-Good news — it&apos;s all free now
+          <Link href="/premium-dashboard" className="btn-primary">
+            Open the Full Dashboard — Free
           </Link>
           <Link href="/contact" className="btn-secondary">
             Contact us
           </Link>
         </div>
         <p className="mt-6 text-[11px] text-steel-500">
-          You can keep using the free snapshot, Oil Truth and free research primers meanwhile.
+          Not financial advice. Capital at risk. See Terms of Use.
         </p>
       </div>
     </div>

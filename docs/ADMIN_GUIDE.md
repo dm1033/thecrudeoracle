@@ -23,5 +23,5 @@ Fix the value, update `last_updated`, put the reason in the commit message — g
 - Deploys/rollbacks: Vercel dashboard → Deployments (any previous build can be promoted)
 - Baseline snapshot: branch `baseline/v1.0-pre-audit`
 - Stale warnings: visible on-page via amber STALE badges
-- Subscriptions: Stripe dashboard (payments, refunds, cancellations); entitlement automation → PHASE2_SETUP.md
+- Subscriptions: retired — The Crude Oracle is 100% free; the Stripe integration (payments, webhook, billing portal) has been removed from the codebase, see README_DEPLOYMENT.md §3
 - Full references: DAILY_UPDATE_GUIDE.md · PORTFOLIO_PLAYBOOK.md · README_DEPLOYMENT.md

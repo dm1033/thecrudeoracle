@@ -1,6 +1,12 @@
 # PRODUCT_READINESS_SCORE.md — The Crude Oracle
 Scored: 2026-07-05 (post improvement loop #1) · Scale 0–100 · Honest scoring: sample-data platform, pre-revenue-operations
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free (pre-revenue by design, not by gap) — and the
+> Stripe payment integration has been removed from the codebase. The
+> "Subscription reliability" scoring below no longer applies. Left unmodified
+> below as a historical record.
+
 | Category | Score | Rationale |
 |---|---|---|
 | Data accuracy | 62 | Nothing fabricated-as-real; all values labelled indicative samples — accurate *as labelled*; real feeds absent |

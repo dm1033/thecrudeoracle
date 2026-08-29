@@ -10,12 +10,8 @@ export const SITE = {
   contactEmail: "intelligence@thecrudeoracle.com",
 } as const;
 
-// The Crude Oracle is free — the paid subscription has been retired.
-// The former Stripe Payment Link is kept for reference only and is no longer rendered anywhere.
-export const STRIPE_SUBSCRIPTION_LINK = "";
-
-export const STRIPE_LINK_IS_PLACEHOLDER = true;
-
+// The Crude Oracle is free — the paid subscription has been retired and the
+// Stripe payment integration (webhook, billing portal, subscription link) removed.
 export const FREE_ANNOUNCEMENT =
   "The Crude Oracle is now 100% free. Every dashboard, daily briefing, watchlist, company note, tool and the $1,000,000 virtual portfolio — no paywall, no card, no catch.";
 

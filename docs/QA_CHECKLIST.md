@@ -3,6 +3,10 @@
 Run before every significant release and before pointing the domain.
 
 ## Commercial
+> **Update (2026-08-29):** The paid subscription has been retired — The
+> Crude Oracle is 100% free — and the Stripe payment integration has been
+> removed from the codebase. The items below are kept as a historical record
+> of the pre-retirement checklist; do not run them against the current site.
 - [x] Subscription price shown as **£299.99/month** everywhere (home hero, pricing card, subscribe page, nav CTA, gates)
 - [x] Stripe placeholder present (`STRIPE_SUBSCRIPTION_LINK` in `src/lib/site.ts`); `/subscribe` shows a setup warning until replaced
 - [ ] Replace placeholder with live Payment Link and test checkout in Stripe test mode

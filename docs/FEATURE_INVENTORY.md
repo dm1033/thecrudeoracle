@@ -1,6 +1,12 @@
 # FEATURE_INVENTORY.md — The Crude Oracle
 Updated: 2026-07-05
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free — and the Stripe integration (rows 23, 26, 27
+> below) has been removed from the codebase (`/api/stripe-webhook`,
+> `/api/billing-portal`, the `stripe` package). Left unmodified below as a
+> historical record.
+
 Status legend: ✅ working · 🟡 working placeholder (labelled) · ⚪ dormant (code ready, config pending) · 📋 roadmap
 
 | # | Feature | Route | Status | Notes |

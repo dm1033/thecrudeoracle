@@ -1,5 +1,18 @@
 # CHANGELOG — The Crude Oracle
 
+## 2026-07-15 — Remove dead payment plumbing
+
+- Deleted `/api/stripe-webhook` and `/api/billing-portal` routes; removed the `stripe` dependency.
+- Removed unused `STRIPE_SUBSCRIPTION_LINK` / `STRIPE_LINK_IS_PLACEHOLDER` exports.
+- Account panel: dropped the Stripe billing-portal link and the upgrade upsell (both dead).
+- Rewrote the orphaned `/payment/success` and `/payment/cancelled` pages, which still claimed a
+  payment had been taken and a Stripe receipt sent. Routes kept for historic redirects.
+- `.env.example`, deployment and setup docs updated to record the retirement; historical audit
+  docs keep their content below a retirement banner.
+- Kept `/api/me` (serves auth identity, no Stripe) and the legal pages (Terms, Privacy,
+  Subscription Terms) — those still name Stripe as past processor and need a legal review, not a
+  unilateral edit.
+
 ## 2026-07-15 — The paywall is removed: The Crude Oracle is now 100% free
 
 - Retired the £299.99/month premium subscription; no payment flow remains on the site.

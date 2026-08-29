@@ -15,7 +15,7 @@ export default function LoginPage() {
       <PageHeader
         eyebrow="Member Access"
         title="Login"
-        intro="Access your membership. Authentication here is a working placeholder — see the deployment guide for wiring Supabase or Firebase auth with Stripe-verified entitlements."
+        intro="Access your membership. Login is optional — The Crude Oracle is 100% free either way. Authentication here is a working placeholder until Supabase env vars are configured — see the deployment guide."
       />
       <div className="container-site py-10">
         <LoginForm />

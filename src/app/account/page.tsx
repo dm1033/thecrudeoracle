@@ -15,7 +15,7 @@ export default function AccountPage() {
       <PageHeader
         eyebrow="Membership"
         title="Account"
-        intro="Your membership status and billing. Billing itself is managed securely by Stripe — card details never touch this site."
+        intro="Your membership status. The Crude Oracle is 100% free, so there is no billing to manage."
       />
       <div className="container-site py-10">
         <AccountPanel />

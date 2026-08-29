@@ -1,6 +1,13 @@
 # SECURITY_REVIEW.md — The Crude Oracle
 Reviewed: 2026-07-05
 
+> **Update (2026-08-29):** The paid subscription has since been retired — The
+> Crude Oracle is now 100% free — and the entire Stripe payment surface
+> referenced below (`/api/stripe-webhook`, `/api/billing-portal`, the Payment
+> Link, the `stripe` package) has been removed from the codebase, closing the
+> attack surface these controls used to protect. Left unmodified below as a
+> historical record of the review at the time.
+
 ## Verified controls ✅
 - **Secrets:** none in shipped code (grep sweep of src/data/public/docs clean); all keys via env vars only; `.env*` git-ignored; `.env.example` placeholders only
 - **Headers:** X-Content-Type-Options nosniff, X-Frame-Options DENY, Referrer-Policy strict-origin-when-cross-origin, Permissions-Policy camera/mic/geo off (vercel.json + netlify.toml); HSTS via Vercel

@@ -171,16 +171,6 @@ function PremiumContent() {
   );
 }
 
-function GatePreview() {
-  return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {marketPrices.slice(0, 4).map((p) => (
-        <MarketCard key={p.ticker} price={p} />
-      ))}
-    </div>
-  );
-}
-
 export default function PremiumDashboardPage() {
   return (
     <>
@@ -190,7 +180,7 @@ export default function PremiumDashboardPage() {
         intro="The complete terminal-grade view: full price complex, supply data, demand signals, risk monitor, chart pack, investment intelligence and the daily bottom line."
       />
       <div className="container-site space-y-10 py-10">
-        <PremiumGate title="The Premium Dashboard is for subscribers" preview={<GatePreview />}>
+        <PremiumGate>
           <PremiumContent />
         </PremiumGate>
         <DisclaimerBlock />

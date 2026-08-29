@@ -1,6 +1,12 @@
-# SUBSCRIBER_GUIDE.md — The Crude Oracle Premium
+# SUBSCRIBER_GUIDE.md — The Crude Oracle
 
-Welcome. Premium is £299.99/month and includes everything below. Not financial advice; data may be delayed, indicative or manually updated — every card shows its source, timestamp and data-type badge (an amber STALE badge means a value hasn't been re-verified within its freshness window).
+> **Update:** The paid subscription has been retired and the Stripe payment
+> integration removed from the codebase. The Crude Oracle is now 100% free —
+> every feature described below is available to everyone, no login or
+> payment required. This guide is kept as a walkthrough of what's on the
+> site; ignore any remaining references to "Premium" as a paid tier.
+
+Welcome. Everything below is free. Not financial advice; data may be delayed, indicative or manually updated — every card shows its source, timestamp and data-type badge (an amber STALE badge means a value hasn't been re-verified within its freshness window).
 
 ## Your daily flow (10 minutes)
 1. **Daily Briefing** (/daily-briefing) — 11 sections: what moved, why, what's next
@@ -17,8 +23,8 @@ Welcome. Premium is £299.99/month and includes everything below. Not financial 
 - **Watchlist / Company Intelligence / Research Library / UK & North Sea coverage**
 
 ## Account
-- Log in at /login (magic link — use your checkout email; premium activates automatically once live entitlements are enabled)
-- Manage billing / cancel any time: /account → Stripe portal (access runs to end of paid period)
+- Log in at /login (magic link) — optional, everything is unlocked whether you're signed in or not
+- No billing to manage — the paid subscription has been retired
 - Questions: /contact
 
 ## Reading the labels
