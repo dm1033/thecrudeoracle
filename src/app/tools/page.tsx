@@ -108,7 +108,7 @@ export default function ToolsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Premium · Trader Toolkit"
+        eyebrow="Trader Toolkit"
         title="Tools, matched to your trading approach"
         intro="An oil market intelligence toolkit that converts physical flows, inventories, positioning and news into explainable market scenarios — decision intelligence, not another wall of dashboards. Pick the module that matches how you take risk."
       />
@@ -155,7 +155,7 @@ export default function ToolsPage() {
         </div>
 
         <SubscribeCTA
-          heading="The toolkit is part of Premium"
+          heading="The toolkit is 100% free"
           body="Every module — current and future — is free, alongside the dashboard, daily briefings, watchlist and research archive."
         />
         <DisclaimerBlock />

@@ -70,8 +70,8 @@ export default function CrudeOilPricesPage() {
             story from a rally led by the prompt.
           </p>
           <p>
-            Premium members receive this context every trading day in the Daily Briefing, together
-            with the supply, demand and positioning signals behind the move.
+            The Daily Briefing covers this context every trading day, free, together with the
+            supply, demand and positioning signals behind the move.
           </p>
         </section>
 

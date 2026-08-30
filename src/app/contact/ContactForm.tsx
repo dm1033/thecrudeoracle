@@ -32,18 +32,18 @@ export default function ContactForm() {
       `Email: ${form.email}`,
       `Company: ${form.company}`,
       `Role: ${form.role}`,
-      `Subscription question: ${form.subscriptionQuestion}`,
+      `Question: ${form.subscriptionQuestion}`,
       "",
       form.message,
     ].join("\n");
     window.location.href = `mailto:${SITE.contactEmail}?subject=${encodeURIComponent(
-      "Premium Intelligence Enquiry — The Crude Oracle"
+      "Contact enquiry — The Crude Oracle"
     )}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
   }
 
   const inputClass =
-    "mt-1 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-sm text-white placeholder-steel-500 focus:border-gold-500 focus:outline-none";
+    "mt-1 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-sm text-white placeholder-steel-500 focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-ink-950";
   const labelClass = "block text-xs font-semibold uppercase tracking-wide text-steel-500";
 
   return (
@@ -82,9 +82,9 @@ export default function ContactForm() {
       </div>
       <div>
         <label htmlFor="c-subq" className={labelClass}>
-          Subscription question
+          What&apos;s this about?
         </label>
-        <input id="c-subq" value={form.subscriptionQuestion} onChange={update("subscriptionQuestion")} className={inputClass} placeholder="e.g. team access, billing, coverage" />
+        <input id="c-subq" value={form.subscriptionQuestion} onChange={update("subscriptionQuestion")} className={inputClass} placeholder="e.g. data sources, coverage request, feedback" />
       </div>
       <div>
         <label htmlFor="c-msg" className={labelClass}>
@@ -94,14 +94,14 @@ export default function ContactForm() {
       </div>
 
       {submitted && (
-        <p className="rounded border border-gain/40 bg-gain/10 p-3 text-xs text-gain">
+        <p className="rounded border border-gain/60 bg-gain/10 p-3 text-xs text-gain">
           Thank you — your email client should have opened with your enquiry. If not, email us
           directly at {SITE.contactEmail}.
         </p>
       )}
 
       <button type="submit" className="btn-primary w-full">
-        Request Access / Ask About Premium Intelligence
+        Send message
       </button>
       <p className="text-center text-[11px] text-steel-500">
         We use your details only to respond to your enquiry. See the Privacy Policy.

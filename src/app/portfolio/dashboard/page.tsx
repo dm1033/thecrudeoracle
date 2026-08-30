@@ -37,19 +37,20 @@ function PositionsTable() {
   return (
     <div className="overflow-x-auto rounded-lg border border-ink-700">
       <table className="table-dark min-w-[1150px]">
+        <caption className="sr-only">Open paper trading positions with entry, current price, unrealised P/L, risk level and source</caption>
         <thead className="bg-ink-900">
           <tr>
-            <th>ID</th>
-            <th>Asset</th>
-            <th>Ticker / Exch / Ccy</th>
-            <th className="text-right">Size</th>
-            <th className="text-right">Entry</th>
-            <th className="text-right">Current</th>
-            <th className="text-right">Allocated</th>
-            <th className="text-right">Unrealised P/L</th>
-            <th className="text-center">Risk</th>
-            <th>Stop</th>
-            <th>Source / Data</th>
+            <th scope="col">ID</th>
+            <th scope="col">Asset</th>
+            <th scope="col">Ticker / Exch / Ccy</th>
+            <th scope="col" className="text-right">Size</th>
+            <th scope="col" className="text-right">Entry</th>
+            <th scope="col" className="text-right">Current</th>
+            <th scope="col" className="text-right">Allocated</th>
+            <th scope="col" className="text-right">Unrealised P/L</th>
+            <th scope="col" className="text-center">Risk</th>
+            <th scope="col">Stop</th>
+            <th scope="col">Source / Data</th>
           </tr>
         </thead>
         <tbody>
@@ -134,12 +135,13 @@ function DashboardContent() {
         <SectionTitle id="alloc-h">Allocation vs illustrative targets</SectionTitle>
         <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
           <table className="table-dark min-w-[640px]">
+            <caption className="sr-only">Portfolio allocation by category versus illustrative targets</caption>
             <thead className="bg-ink-900">
               <tr>
-                <th>Category</th>
-                <th className="text-right">Target</th>
-                <th className="text-right">Actual</th>
-                <th>Note</th>
+                <th scope="col">Category</th>
+                <th scope="col" className="text-right">Target</th>
+                <th scope="col" className="text-right">Actual</th>
+                <th scope="col">Note</th>
               </tr>
             </thead>
             <tbody>
@@ -227,7 +229,7 @@ function DashboardContent() {
                 <div className="sm:col-span-2"><dt className="font-semibold uppercase tracking-wide text-steel-500">Strategy fit</dt><dd className="text-steel-400">{t.strategy_fit}</dd></div>
               </dl>
               {t.special_risk_warning && (
-                <p className="mt-3 rounded border border-loss/40 bg-loss/10 p-2 text-xs text-loss">
+                <p className="mt-3 rounded border border-loss/70 bg-loss/10 p-2 text-xs text-loss">
                   <strong>Special risk warning:</strong> {t.special_risk_warning}
                 </p>
               )}
@@ -279,14 +281,15 @@ function DashboardContent() {
         <p className="mt-1 text-sm text-steel-500">{benchmarks.period}</p>
         <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
           <table className="table-dark min-w-[760px]">
+            <caption className="sr-only">Portfolio performance benchmarked against Brent, WTI and an energy ETF</caption>
             <thead className="bg-ink-900">
               <tr>
-                <th>Metric</th>
-                <th className="text-right">Crude Oracle Virtual Portfolio</th>
-                <th className="text-right">Brent</th>
-                <th className="text-right">WTI</th>
-                <th className="text-right">Energy ETF</th>
-                <th>Notes</th>
+                <th scope="col">Metric</th>
+                <th scope="col" className="text-right">Crude Oracle Virtual Portfolio</th>
+                <th scope="col" className="text-right">Brent</th>
+                <th scope="col" className="text-right">WTI</th>
+                <th scope="col" className="text-right">Energy ETF</th>
+                <th scope="col">Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -377,7 +380,7 @@ export default function PortfolioDashboardPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Premium · Paper Trading · Virtual Capital Only"
+        eyebrow="Paper Trading · Virtual Capital Only"
         title={meta.name}
         intro={meta.objective}
       />

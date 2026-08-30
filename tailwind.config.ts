@@ -31,7 +31,7 @@ const config: Config = {
           300: "#e9cd7e",
         },
         gain: "#2ecc71", // positive market moves
-        loss: "#e74c3c", // negative market moves
+        loss: "#ff6b5c", // negative market moves (WCAG AA on dark surfaces: >=5.18:1)
         risk: "#f0a92e", // amber risk alerts
       },
       fontFamily: {

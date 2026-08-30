@@ -11,6 +11,7 @@ import {
   Legend,
 } from "recharts";
 import curveData from "../../../data/curve-monitor.json";
+import ChartDataTable from "./ChartDataTable";
 
 const GOLD = "#c9a038";
 const NAVYLINE = "#5b8dd6";
@@ -26,7 +27,8 @@ export default function CurveChart() {
           USD/bbl · downward slope = backwardation · indicative
         </span>
       </figcaption>
-      <div className="h-72 w-full">
+      {/* Decorative — the sr-only table below is the accessible equivalent (WCAG 1.1.1) */}
+      <div aria-hidden className="h-72 w-full">
         <ResponsiveContainer>
           <LineChart data={curveData.forward_curves} margin={{ top: 5, right: 10, bottom: 0, left: -10 }}>
             <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
@@ -42,6 +44,15 @@ export default function CurveChart() {
           </LineChart>
         </ResponsiveContainer>
       </div>
+      <ChartDataTable
+        caption="Forward Curves — Brent vs WTI, M1–M12 — data table"
+        columns={[
+          { key: "month", label: "Contract month" },
+          { key: "brent", label: "Brent (USD/bbl)" },
+          { key: "wti", label: "WTI (USD/bbl)" },
+        ]}
+        rows={curveData.forward_curves}
+      />
       <p className="mt-2 text-[11px] text-steel-500">
         Source: {curveData.curve_summary.source} · Updated: {curveData.meta.last_published.slice(0, 10)} ·{" "}
         <span className="font-semibold uppercase">manual</span>

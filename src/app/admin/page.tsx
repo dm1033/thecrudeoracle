@@ -93,7 +93,7 @@ export default function AdminPage() {
         intro="The site is fully data-driven from JSON files in /data. Edit, commit, deploy — every dashboard, briefing and card updates automatically. Full detail in docs/DAILY_UPDATE_GUIDE.md."
       />
       <div className="container-site space-y-8 py-10">
-        <div className="card border-risk/40 bg-risk/5 p-5 text-sm text-steel-300">
+        <div className="card border-risk/60 bg-risk/5 p-5 text-sm text-steel-300">
           <p>
             <strong className="text-risk">Publishing workflow:</strong> edit the JSON file → set{" "}
             <code className="font-mono text-gold-400">last_updated</code> /{" "}

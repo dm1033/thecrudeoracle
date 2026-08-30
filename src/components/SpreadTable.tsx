@@ -57,16 +57,17 @@ export default function SpreadTable({
       </div>
       <div className="mt-3 overflow-x-auto rounded-lg border border-ink-700">
         <table className="table-dark min-w-[980px]">
+          <caption className="sr-only">{title}</caption>
           <thead className="bg-ink-900">
             <tr>
-              <th>Instrument</th>
-              <th className="text-right">Latest</th>
-              <th className="text-right">Δ Change</th>
-              <th className="text-center">Valuation</th>
-              <th className="text-center">Momentum</th>
-              <th className="text-center">Physical check</th>
-              <th>Desk note</th>
-              <th className="whitespace-nowrap">Updated</th>
+              <th scope="col">Instrument</th>
+              <th scope="col" className="text-right">Latest</th>
+              <th scope="col" className="text-right">Δ Change</th>
+              <th scope="col" className="text-center">Valuation</th>
+              <th scope="col" className="text-center">Momentum</th>
+              <th scope="col" className="text-center">Physical check</th>
+              <th scope="col">Desk note</th>
+              <th scope="col" className="whitespace-nowrap">Updated</th>
             </tr>
           </thead>
           <tbody>

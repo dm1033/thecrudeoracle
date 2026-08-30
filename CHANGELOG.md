@@ -1,5 +1,26 @@
 # CHANGELOG — The Crude Oracle
 
+## 2026-07-15 — Accessibility (WCAG 2.2 AA), SEO and data-integrity fixes
+
+Accessibility:
+- Fixed real contrast failures: `loss` red was 3.51:1 on navy surfaces (AA needs 4.5:1) —
+  corrected to #ff6b5c in the Tailwind config; alert borders were 1.69–2.41:1 against a 3:1
+  non-text minimum — opacities raised in markup.
+- Added a skip-to-content link (WCAG 2.4.1); previously every page required tabbing through
+  the banner and full nav.
+- Screen-reader data tables for all 8 Recharts charts, which were SVG-only (WCAG 1.1.1).
+- Table captions and `scope="col"` on all 7 data tables; nav marked up as lists with
+  `aria-current`; `aria-controls` wired on the mobile nav toggle; focus rings on text inputs.
+
+Data integrity:
+- `/watchlist` and `/company-intelligence` hardcoded `dataType="manual"` instead of reading each
+  record's own `data_type`; the field was also missing from both TypeScript interfaces. A record
+  marked live or delayed would have kept displaying MANUAL.
+
+Copy/SEO:
+- Removed stale "Premium"/paid-tier language left over from the paywall, including contact and
+  account page metadata.
+
 ## 2026-07-15 — Remove dead payment plumbing
 
 - Deleted `/api/stripe-webhook` and `/api/billing-portal` routes; removed the `stripe` dependency.

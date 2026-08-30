@@ -111,7 +111,7 @@ export default function CurveMonitorPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 3 · Premium"
+        eyebrow="Trader Toolkit · Module 3"
         title="Futures Curve & Spread Dashboard"
         intro="Every spread that matters, marked three ways: cheap / fair / expensive, tightening / loosening, and supported or contradicted by the physical data in Modules 1 and 2. Structure first, flat price second."
       />

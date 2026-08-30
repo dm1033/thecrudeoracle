@@ -100,8 +100,8 @@ export default function UkEnergySecurityPage() {
           <p>
             For investors, UK energy security is a bundle of tradable themes: UKCS producers priced
             for fiscal risk, LNG infrastructure and shipping, grid and storage investment, and the
-            companies exposed to industrial energy costs. Premium members receive the UK / North
-            Sea note in every daily briefing.
+            companies exposed to industrial energy costs. Every daily briefing includes a UK /
+            North Sea note, free.
           </p>
         </div>
 

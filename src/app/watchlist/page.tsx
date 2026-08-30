@@ -72,7 +72,7 @@ function CompanyCard({ c }: { c: WatchlistCompany }) {
           </a>
         </span>
         <span>Updated: {c.last_updated}</span>
-        <DataTypeBadge dataType="manual" />
+        <DataTypeBadge dataType={c.data_type} />
         <FreshnessBadge lastUpdated={c.last_updated} staleAfterHours={720} />
         <span className="rounded bg-risk/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-risk">
           Watchlist, not recommendation
@@ -108,7 +108,7 @@ export default function WatchlistPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Premium · Monitored Names, Not Recommendations"
+        eyebrow="Monitored Names, Not Recommendations"
         title="Investment Watchlist"
         intro="Curated oil and gas equities across twelve segments, each with thesis, catalyst, risks and sources. Every entry is a monitored name — never a recommendation to buy, sell or hold."
       />

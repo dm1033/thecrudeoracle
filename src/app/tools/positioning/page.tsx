@@ -71,15 +71,16 @@ function PositioningTable() {
   return (
     <div className="overflow-x-auto rounded-lg border border-ink-700">
       <table className="table-dark min-w-[860px]">
+        <caption className="sr-only">Managed-money futures positioning by instrument, from CFTC/ICE COT reports</caption>
         <thead className="bg-ink-900">
           <tr>
-            <th>Instrument</th>
-            <th className="text-right">Net position</th>
-            <th className="text-right">Δ w/w</th>
-            <th className="text-center">3-yr percentile</th>
-            <th className="text-center">Stance</th>
-            <th>Desk note</th>
-            <th className="whitespace-nowrap">Updated</th>
+            <th scope="col">Instrument</th>
+            <th scope="col" className="text-right">Net position</th>
+            <th scope="col" className="text-right">Δ w/w</th>
+            <th scope="col" className="text-center">3-yr percentile</th>
+            <th scope="col" className="text-center">Stance</th>
+            <th scope="col">Desk note</th>
+            <th scope="col" className="whitespace-nowrap">Updated</th>
           </tr>
         </thead>
         <tbody>
@@ -201,7 +202,7 @@ export default function PositioningPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 5 · Premium"
+        eyebrow="Trader Toolkit · Module 5"
         title="Positioning & Crowd-Risk Engine"
         intro="Where the speculative money sits, and when it's stretched. CFTC and ICE COT positioning graded through a three-part crowding checklist — because crowded trades don't need bad news to unwind, just an exit rush."
       />

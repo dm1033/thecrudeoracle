@@ -86,6 +86,7 @@ export interface WatchlistCompany {
   source: string;
   source_url: string;
   last_updated: string;
+  data_type: string;
 }
 
 export interface CompanyIntel {
@@ -104,6 +105,7 @@ export interface CompanyIntel {
   latest_update: string;
   sources: { name: string; url: string }[];
   last_updated: string;
+  data_type: string;
 }
 
 export interface ResearchNote {

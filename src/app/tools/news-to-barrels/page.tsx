@@ -198,7 +198,7 @@ export default function NewsToBarrelsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 4 · Premium"
+        eyebrow="Trader Toolkit · Module 4"
         title="News-to-Barrels AI"
         intro="Headlines are noise until they're sized. Every market-moving event is converted into estimated barrel impact: affected capacity, the full impact chain across crude, products, cracks and differentials — and an honest confidence grade with watchpoints."
       />

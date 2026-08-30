@@ -66,9 +66,8 @@ export default function GasLngPage() {
             Gas is now a globally arbitraged market: US Henry Hub sets the cost of new LNG supply,
             European hubs (TTF, NBP) set the price of security, and Asian demand sets the
             competition for cargoes. The spreads between these hubs — minus freight and
-            regasification — decide where every flexible cargo sails. Premium members get this
-            arbitrage picture, storage trajectories and LNG equity implications in the daily
-            briefing.
+            regasification — decide where every flexible cargo sails. The daily briefing covers
+            this arbitrage picture, storage trajectories and LNG equity implications, free.
           </p>
         </section>
 

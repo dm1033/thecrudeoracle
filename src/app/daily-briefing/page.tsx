@@ -78,7 +78,7 @@ export default function DailyBriefingPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Premium · Updated Every Trading Day"
+        eyebrow="Updated Every Trading Day"
         title="The Crude Oracle Daily Briefing"
         intro="Eleven concise sections covering the entire crude complex — written for people who make decisions, not people with time to waste."
       />

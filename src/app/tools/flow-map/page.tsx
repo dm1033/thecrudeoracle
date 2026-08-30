@@ -42,7 +42,7 @@ const signals = flowData.signals as BalanceRow[];
 const summary = flowData.flow_summary;
 
 const SEVERITY_STYLE: Record<string, { border: string; badge: string; label: string }> = {
-  alert: { border: "border-loss/50", badge: "bg-loss/15 text-loss", label: "Alert" },
+  alert: { border: "border-loss/80", badge: "bg-loss/15 text-loss", label: "Alert" },
   watch: { border: "border-risk/50", badge: "bg-risk/15 text-risk", label: "Watch" },
   info: { border: "border-ink-600", badge: "bg-steel-500/15 text-steel-400", label: "Info" },
 };
@@ -166,7 +166,7 @@ export default function FlowMapPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 2 · Premium"
+        eyebrow="Trader Toolkit · Module 2"
         title="Physical Flow Map"
         intro="Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, congestion and freight — with explainable anomaly detection that tells you why a flow is unusual, not just that it is."
       />

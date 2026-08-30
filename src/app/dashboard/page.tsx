@@ -25,7 +25,7 @@ export default function DashboardPage() {
       <PageHeader
         eyebrow="Free Market Snapshot"
         title="Daily Oil Dashboard"
-        intro="A free daily snapshot of the crude oil and gas complex. Premium members receive the full price complex, supply and demand signal grids, the daily bottom line, watchlists and company intelligence."
+        intro="A free daily snapshot of the crude oil and gas complex. The Premium Dashboard has the full price complex, supply and demand signal grids, the daily bottom line, watchlists and company intelligence — also free."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="prices-h">

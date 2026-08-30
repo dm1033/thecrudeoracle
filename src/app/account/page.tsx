@@ -4,8 +4,8 @@ import PageHeader from "@/components/PageHeader";
 import AccountPanel from "./AccountPanel";
 
 export const metadata: Metadata = pageMeta(
-  "Account — Manage Your Membership",
-  "Manage your Crude Oracle membership: subscription status, billing and access level.",
+  "Account — Free Membership Status",
+  "Your Crude Oracle account status. The site is 100% free — there is no billing or subscription to manage.",
   "/account"
 );
 

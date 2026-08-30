@@ -86,7 +86,7 @@ export default function OpecSupplyRiskPage() {
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA
           heading="Get supply risk alerts as they develop"
-          body="Premium members receive OPEC+ decisions, inventory surprises and disruption alerts in context — what changed, why it matters, and what it means for the names on the watchlist."
+          body="The daily briefing covers OPEC+ decisions, inventory surprises and disruption alerts in context — what changed, why it matters, and what it means for the names on the watchlist."
         />
         <DisclaimerBlock />
       </div>

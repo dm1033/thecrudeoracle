@@ -168,7 +168,7 @@ export default function OilTruthPage() {
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA
           heading="Ready to go beyond the basics?"
-          body="Premium members get the daily briefing, dashboards, watchlists and the research library — the professional layer on top of this foundation."
+          body="The daily briefing, dashboards, watchlists and the research library are the free professional layer on top of this foundation."
         />
         <DisclaimerBlock />
       </div>

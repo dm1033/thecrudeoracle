@@ -119,14 +119,15 @@ function PremiumContent() {
         </p>
         <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
           <table className="table-dark min-w-[760px]">
+            <caption className="sr-only">Monitored oil and gas equities by segment, with investment theme and catalyst</caption>
             <thead>
               <tr>
-                <th>Segment</th>
-                <th>Name</th>
-                <th>Ticker</th>
-                <th>Theme</th>
-                <th>Catalyst</th>
-                <th>Updated</th>
+                <th scope="col">Segment</th>
+                <th scope="col">Name</th>
+                <th scope="col">Ticker</th>
+                <th scope="col">Theme</th>
+                <th scope="col">Catalyst</th>
+                <th scope="col">Updated</th>
               </tr>
             </thead>
             <tbody>

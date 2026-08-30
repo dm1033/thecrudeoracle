@@ -130,7 +130,7 @@ export default function NorthSeaPage() {
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA
           heading="The North Sea, covered like it matters"
-          body="Premium members receive UKCS fiscal analysis, company intelligence on basin names and a UK / North Sea note in every daily briefing."
+          body="UKCS fiscal analysis, company intelligence on basin names and a UK / North Sea note — free in every daily briefing."
         />
         <DisclaimerBlock />
       </div>

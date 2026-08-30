@@ -98,7 +98,7 @@ export default function BalanceEnginePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 1 · Premium"
+        eyebrow="Trader Toolkit · Module 1"
         title="Global Balance Engine"
         intro="The entire oil balance on one screen: supply, demand and stocks with desk notes, price-impact flags, sources and timestamps. For traders whose edge is the fundamental balance."
       />

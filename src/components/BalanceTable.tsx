@@ -42,16 +42,17 @@ export default function BalanceTable({
       </div>
       <div className="mt-3 overflow-x-auto rounded-lg border border-ink-700">
         <table className="table-dark min-w-[900px]">
+          <caption className="sr-only">{title}</caption>
           <thead className="bg-ink-900">
             <tr>
-              <th>Metric</th>
-              <th className="text-right">Latest</th>
-              <th className="text-right">Δ Change</th>
-              <th className="text-center">Trend</th>
-              <th className="text-center">Price impact</th>
-              <th>Desk note</th>
-              <th>Source</th>
-              <th className="whitespace-nowrap">Updated</th>
+              <th scope="col">Metric</th>
+              <th scope="col" className="text-right">Latest</th>
+              <th scope="col" className="text-right">Δ Change</th>
+              <th scope="col" className="text-center">Trend</th>
+              <th scope="col" className="text-center">Price impact</th>
+              <th scope="col">Desk note</th>
+              <th scope="col">Source</th>
+              <th scope="col" className="whitespace-nowrap">Updated</th>
             </tr>
           </thead>
           <tbody>

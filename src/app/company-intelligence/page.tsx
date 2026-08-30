@@ -55,7 +55,7 @@ function IntelCard({ c }: { c: CompanyIntel }) {
           </a>
         ))}
         <span>· Updated: {c.last_updated}</span>
-        <DataTypeBadge dataType="manual" />
+        <DataTypeBadge dataType={c.data_type} />
         <FreshnessBadge lastUpdated={c.last_updated} staleAfterHours={720} />
         <span className="rounded bg-risk/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-risk">
           Research note, not a recommendation
@@ -69,7 +69,7 @@ export default function CompanyIntelligencePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Premium · Structured Research Notes"
+        eyebrow="Structured Research Notes"
         title="Company Intelligence"
         intro="Structured intelligence notes on monitored oil and gas companies: production, reserves, balance sheet, valuation context, management and catalysts — each with sources and a last-updated stamp."
       />

@@ -17,6 +17,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import chartData from "../../../data/chart-data.json";
+import ChartDataTable, { type ChartTableColumn } from "./ChartDataTable";
 
 const GOLD = "#c9a038";
 const STEEL = "#8b98a9";
@@ -45,10 +46,14 @@ const tooltipStyle = {
 function ChartFrame({
   title,
   note,
+  data,
+  columns,
   children,
 }: {
   title: string;
   note: string;
+  data: Record<string, string | number>[];
+  columns: ChartTableColumn[];
   children: React.ReactNode;
 }) {
   return (
@@ -57,7 +62,11 @@ function ChartFrame({
         <span className="text-sm font-semibold text-white">{title}</span>
         <span className="text-[10px] uppercase tracking-wide text-steel-500">{note}</span>
       </figcaption>
-      <div className="h-64 w-full">{children}</div>
+      {/* Decorative — the sr-only table below is the accessible equivalent (WCAG 1.1.1) */}
+      <div aria-hidden className="h-64 w-full">
+        {children}
+      </div>
+      <ChartDataTable caption={`${title} — data table`} columns={columns} rows={data} />
       <p className="mt-2 text-[11px] text-steel-500">
         Source: {chartData.meta.source} · Updated: {chartData.meta.last_published.slice(0, 10)} ·{" "}
         <span className="font-semibold uppercase">{chartData.meta.data_type}</span>
@@ -68,7 +77,16 @@ function ChartFrame({
 
 export function BrentWtiChart() {
   return (
-    <ChartFrame title="Brent vs WTI — 30-Day Trend" note="USD/bbl · indicative">
+    <ChartFrame
+      title="Brent vs WTI — 30-Day Trend"
+      note="USD/bbl · indicative"
+      data={chartData.brent_wti_30d}
+      columns={[
+        { key: "date", label: "Date" },
+        { key: "brent", label: "Brent (USD/bbl)" },
+        { key: "wti", label: "WTI (USD/bbl)" },
+      ]}
+    >
       <ResponsiveContainer>
         <LineChart data={chartData.brent_wti_30d} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
           <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
@@ -86,7 +104,16 @@ export function BrentWtiChart() {
 
 export function GasTrendChart() {
   return (
-    <ChartFrame title="Gas Prices — 30-Day Trend" note="TTF EUR/MWh · NBP p/therm · indicative">
+    <ChartFrame
+      title="Gas Prices — 30-Day Trend"
+      note="TTF EUR/MWh · NBP p/therm · indicative"
+      data={chartData.gas_trend_30d}
+      columns={[
+        { key: "date", label: "Date" },
+        { key: "ttf", label: "TTF (EUR/MWh)" },
+        { key: "nbp", label: "UK NBP (p/therm)" },
+      ]}
+    >
       <ResponsiveContainer>
         <LineChart data={chartData.gas_trend_30d} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
           <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
@@ -104,7 +131,16 @@ export function GasTrendChart() {
 
 export function InventoriesChart() {
   return (
-    <ChartFrame title="US Commercial Crude Inventories" note="million barrels · indicative">
+    <ChartFrame
+      title="US Commercial Crude Inventories"
+      note="million barrels · indicative"
+      data={chartData.us_inventories_weeks}
+      columns={[
+        { key: "week", label: "Week" },
+        { key: "stocks", label: "Stocks (million barrels)" },
+        { key: "fiveYearAvg", label: "5-year average (million barrels)" },
+      ]}
+    >
       <ResponsiveContainer>
         <AreaChart data={chartData.us_inventories_weeks} margin={{ top: 5, right: 10, bottom: 0, left: -10 }}>
           <defs>
@@ -128,7 +164,16 @@ export function InventoriesChart() {
 
 export function RigCountChart() {
   return (
-    <ChartFrame title="US Rig Count" note="weekly · indicative">
+    <ChartFrame
+      title="US Rig Count"
+      note="weekly · indicative"
+      data={chartData.rig_count_weeks}
+      columns={[
+        { key: "week", label: "Week" },
+        { key: "oil", label: "Oil rigs" },
+        { key: "gas", label: "Gas rigs" },
+      ]}
+    >
       <ResponsiveContainer>
         <BarChart data={chartData.rig_count_weeks} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
           <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
@@ -146,7 +191,16 @@ export function RigCountChart() {
 
 export function OpecProductionChart() {
   return (
-    <ChartFrame title="OPEC Crude Production vs Target" note="mb/d · indicative">
+    <ChartFrame
+      title="OPEC Crude Production vs Target"
+      note="mb/d · indicative"
+      data={chartData.opec_production_months}
+      columns={[
+        { key: "month", label: "Month" },
+        { key: "production", label: "Production (mb/d)" },
+        { key: "target", label: "Target (mb/d)" },
+      ]}
+    >
       <ResponsiveContainer>
         <LineChart data={chartData.opec_production_months} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
           <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
@@ -164,7 +218,16 @@ export function OpecProductionChart() {
 
 export function WatchlistPerformanceChart() {
   return (
-    <ChartFrame title="Watchlist vs Benchmark — Indexed" note="30 days, 100 = start · indicative">
+    <ChartFrame
+      title="Watchlist vs Benchmark — Indexed"
+      note="30 days, 100 = start · indicative"
+      data={chartData.watchlist_performance_30d}
+      columns={[
+        { key: "date", label: "Date" },
+        { key: "watchlist", label: "Watchlist (indexed)" },
+        { key: "benchmark", label: "Benchmark (indexed)" },
+      ]}
+    >
       <ResponsiveContainer>
         <LineChart data={chartData.watchlist_performance_30d} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
           <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
@@ -183,7 +246,15 @@ export function WatchlistPerformanceChart() {
 
 export function SectorHeatmapChart() {
   return (
-    <ChartFrame title="Energy Sector Heatmap — Daily Moves" note="% change · indicative">
+    <ChartFrame
+      title="Energy Sector Heatmap — Daily Moves"
+      note="% change · indicative"
+      data={chartData.sector_heatmap}
+      columns={[
+        { key: "sector", label: "Sector" },
+        { key: "move", label: "Daily move (%)" },
+      ]}
+    >
       <ResponsiveContainer>
         <BarChart data={chartData.sector_heatmap} layout="vertical" margin={{ top: 5, right: 20, bottom: 0, left: 20 }}>
           <CartesianGrid stroke={GRID} strokeDasharray="3 3" horizontal={false} />

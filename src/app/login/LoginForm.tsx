@@ -7,7 +7,7 @@ import { setAccess, useAccess, signOutEverywhere, DEMO_PREMIUM_CODE } from "@/li
 import { getBrowserSupabase, supabaseConfigured } from "@/lib/supabase";
 
 const inputClass =
-  "mt-1 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-sm text-white placeholder-steel-500 focus:border-gold-500 focus:outline-none";
+  "mt-1 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-sm text-white placeholder-steel-500 focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-ink-950";
 const labelClass = "block text-xs font-semibold uppercase tracking-wide text-steel-500";
 
 /** Production login: Supabase magic link, emailed to the member. */
@@ -68,7 +68,7 @@ function MagicLinkForm() {
         />
       </div>
       {error && (
-        <p className="rounded border border-loss/40 bg-loss/10 p-3 text-xs text-loss">{error}</p>
+        <p className="rounded border border-loss/70 bg-loss/10 p-3 text-xs text-loss">{error}</p>
       )}
       <button type="submit" disabled={busy} className="btn-primary w-full disabled:opacity-60">
         {busy ? "Sending…" : "Email me a sign-in link"}
@@ -142,7 +142,7 @@ function DemoForm() {
           />
         </div>
         {message && (
-          <p className="rounded border border-risk/40 bg-risk/10 p-3 text-xs text-risk">{message}</p>
+          <p className="rounded border border-risk/60 bg-risk/10 p-3 text-xs text-risk">{message}</p>
         )}
         <button type="submit" className="btn-primary w-full">
           Log in
@@ -169,7 +169,7 @@ export default function LoginForm() {
   return (
     <div className="mx-auto max-w-md">
       {ready && level !== "public" && (
-        <div className="mb-6 rounded-lg border border-gain/40 bg-gain/10 p-4 text-sm text-steel-300">
+        <div className="mb-6 rounded-lg border border-gain/60 bg-gain/10 p-4 text-sm text-steel-300">
           You are signed in as <strong>{currentEmail}</strong> on the{" "}
           <strong className="uppercase">{level}</strong> tier.{" "}
           <Link href="/account" className="text-gold-400 underline">

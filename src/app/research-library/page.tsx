@@ -9,7 +9,7 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 
 export const metadata: Metadata = pageMeta(
   "Research Library — Oil & Gas Deep Dives",
-  "The Crude Oracle research library: deep-dive notes on crude supply, LNG, shipping, UK energy security and oil market education. Free primers plus a premium archive.",
+  "The Crude Oracle research library: deep-dive notes on crude supply, LNG, shipping, UK energy security and oil market education. Free primers and the full archive.",
   "/research-library"
 );
 
@@ -23,7 +23,7 @@ export default function ResearchLibraryPage() {
       <PageHeader
         eyebrow="Research Archive"
         title="Research Library"
-        intro="Deep-dive research notes on the themes that drive the energy complex. Free primers are open to everyone; the full archive is part of The Crude Oracle Premium."
+        intro="Deep-dive research notes on the themes that drive the energy complex. Free primers and the full archive are both open to everyone — no subscription required."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="featured-h" className="overflow-hidden rounded-xl border border-gold-600/40 bg-gradient-to-br from-navy-900 to-ink-900 lg:flex">
@@ -91,7 +91,7 @@ export default function ResearchLibraryPage() {
 
         <section aria-labelledby="prem-h">
           <h2 id="prem-h" className="h2">
-            Premium archive
+            Extended archive
           </h2>
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
             {premium.map((n) => (
@@ -99,7 +99,7 @@ export default function ResearchLibraryPage() {
                 <div className="flex items-center justify-between gap-2">
                   <span className="eyebrow">{n.category}</span>
                   <span className="rounded bg-gold-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase text-gold-400">
-                    Premium
+                    In-depth
                   </span>
                 </div>
                 <h3 className="mt-2 text-base font-semibold text-white">{n.title}</h3>
@@ -118,8 +118,8 @@ export default function ResearchLibraryPage() {
         </section>
 
         <SubscribeCTA
-          heading="Unlock the full research archive"
-          body="Every premium note, every framework, every deep dive — plus new research added continuously."
+          heading="Explore the full research archive"
+          body="Every note, every framework, every deep dive — plus new research added continuously."
         />
         <DisclaimerBlock />
       </div>

@@ -158,7 +158,7 @@ function HypothesisCard({ h }: { h: Hypothesis }) {
 function BuilderContent() {
   return (
     <div className="space-y-8">
-      <div className="rounded-lg border border-risk/40 bg-risk/5 p-4 text-sm leading-relaxed text-steel-300">
+      <div className="rounded-lg border border-risk/60 bg-risk/5 p-4 text-sm leading-relaxed text-steel-300">
         <strong className="text-risk">This tool never says buy or sell.</strong> It produces
         structured, falsifiable research hypotheses: the claim, the evidence, the exact conditions
         that would prove it wrong, and an evidence-weight score. What you do with a hypothesis —
@@ -187,7 +187,7 @@ export default function HypothesisBuilderPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 6 · Premium"
+        eyebrow="Trader Toolkit · Module 6"
         title="Trade Hypothesis Builder"
         intro="Not signals — scenarios. When the modules disagree, this tool turns the dislocation into a structured hypothesis: evidence, explicit invalidation conditions and an honest confidence score."
       />
