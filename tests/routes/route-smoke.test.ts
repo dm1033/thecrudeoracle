@@ -83,7 +83,7 @@ describe("sitemap coverage (src/app/sitemap.ts)", () => {
   // the module (importing would also drag in `next` internals we don't
   // need just to read a route list, and this regex is simpler to keep in
   // sync with the file's very stable literal-array shape).
-  const sitemapPaths = [...sitemapSource.matchAll(/path:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const sitemapPaths = Array.from(sitemapSource.matchAll(/path:\s*"([^"]+)"/g)).map((m) => m[1]);
 
   it("parsed at least one route out of sitemap.ts (sanity check on the regex itself)", () => {
     expect(sitemapPaths.length).toBeGreaterThan(20);
@@ -102,7 +102,7 @@ describe("sitemap coverage (src/app/sitemap.ts)", () => {
   });
 
   it("excluded-from-sitemap routes are still real routes (the allowlist itself doesn't drift)", () => {
-    const bogus = [...EXCLUDED_FROM_SITEMAP].filter((r) => !routes.includes(r));
+    const bogus = Array.from(EXCLUDED_FROM_SITEMAP).filter((r) => !routes.includes(r));
     expect(bogus, `EXCLUDED_FROM_SITEMAP names route(s) that don't exist: ${bogus.join(", ")}`).toEqual([]);
   });
 });
