@@ -1,0 +1,10 @@
+{
+  "response": {
+    "total": "2",
+    "dateFormat": "YYYY-MM-DD",
+    "data": [
+      { "series": "RWTC", "value": 74.86, "units": "$/BBL" },
+      { "period": "not-a-date", "series": "RWTC", "value": 73.9, "units": "$/BBL" }
+    ]
+  }
+}

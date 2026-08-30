@@ -1,0 +1,11 @@
+{
+  "response": {
+    "total": "3",
+    "dateFormat": "YYYY-MM-DD",
+    "data": [
+      { "period": "2026-08-28", "series": "RWTC", "value": null, "units": "$/BBL" },
+      { "period": "2026-08-27", "series": "RWTC", "value": null, "units": "$/BBL" },
+      { "period": "2026-08-26", "series": "RWTC", "value": null, "units": "$/BBL" }
+    ]
+  }
+}

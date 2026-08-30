@@ -1,0 +1,100 @@
+{
+  "response": {
+    "total": "6",
+    "dateFormat": "YYYY-MM-DD",
+    "frequency": "weekly",
+    "data": [
+      {
+        "period": "2026-08-22",
+        "duoarea": "R30",
+        "area-name": "Cushing, OK",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTOK1",
+        "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
+        "value": 24200,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-08-15",
+        "duoarea": "R30",
+        "area-name": "Cushing, OK",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTOK1",
+        "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
+        "value": 24351,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-08-08",
+        "duoarea": "R30",
+        "area-name": "Cushing, OK",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTOK1",
+        "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
+        "value": 23548,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-08-01",
+        "duoarea": "R30",
+        "area-name": "Cushing, OK",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTOK1",
+        "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
+        "value": 23524,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-07-25",
+        "duoarea": "R30",
+        "area-name": "Cushing, OK",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTOK1",
+        "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
+        "value": 24922,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-07-18",
+        "duoarea": "R30",
+        "area-name": "Cushing, OK",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTOK1",
+        "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
+        "value": 25313,
+        "units": "MBBL"
+      }
+    ],
+    "description": "Weekly Cushing, OK Ending Stocks of Crude Oil"
+  },
+  "request": {
+    "command": "/petroleum/stoc/wstk/data/",
+    "params": {
+      "frequency": "weekly",
+      "facets": {
+        "series": [
+          "WCESTOK1"
+        ]
+      }
+    }
+  },
+  "apiVersion": "2.1.8"
+}

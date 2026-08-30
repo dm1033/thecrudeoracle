@@ -1,0 +1,10 @@
+{
+  "response": {
+    "total": "2",
+    "dateFormat": "YYYY-MM-DD",
+    "data": [
+      { "period": "2026-08-28", "series": "RBRTE", "value": 79.15, "units": "$/BBL" },
+      { "period": "2026-08-27", "series": "RBRTE", "value": 78.9, "units": "$/BBL" }
+    ]
+  }
+}

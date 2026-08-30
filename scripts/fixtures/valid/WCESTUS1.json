@@ -1,0 +1,100 @@
+{
+  "response": {
+    "total": "6",
+    "dateFormat": "YYYY-MM-DD",
+    "frequency": "weekly",
+    "data": [
+      {
+        "period": "2026-08-22",
+        "duoarea": "NUS",
+        "area-name": "NUS",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTUS1",
+        "series-description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil",
+        "value": 441600,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-08-15",
+        "duoarea": "NUS",
+        "area-name": "NUS",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTUS1",
+        "series-description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil",
+        "value": 441751,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-08-08",
+        "duoarea": "NUS",
+        "area-name": "NUS",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTUS1",
+        "series-description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil",
+        "value": 440948,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-08-01",
+        "duoarea": "NUS",
+        "area-name": "NUS",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTUS1",
+        "series-description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil",
+        "value": 440924,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-07-25",
+        "duoarea": "NUS",
+        "area-name": "NUS",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTUS1",
+        "series-description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil",
+        "value": 442322,
+        "units": "MBBL"
+      },
+      {
+        "period": "2026-07-18",
+        "duoarea": "NUS",
+        "area-name": "NUS",
+        "product": "EPC0",
+        "product-name": "Crude Oil",
+        "process": "SAE",
+        "process-name": "Ending Stocks excluding SPR",
+        "series": "WCESTUS1",
+        "series-description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil",
+        "value": 442713,
+        "units": "MBBL"
+      }
+    ],
+    "description": "Weekly U.S. Ending Stocks excluding SPR of Crude Oil"
+  },
+  "request": {
+    "command": "/petroleum/stoc/wstk/data/",
+    "params": {
+      "frequency": "weekly",
+      "facets": {
+        "series": [
+          "WCESTUS1"
+        ]
+      }
+    }
+  },
+  "apiVersion": "2.1.8"
+}
