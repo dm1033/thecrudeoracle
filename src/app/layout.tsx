@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     type: "website",
     locale: "en_GB",
-    images: [{ url: "/images/brand-compass.png", width: 1408, height: 768, alt: SITE.name }],
+    images: [{ url: "/og-logo.jpg", width: 1200, height: 1200, alt: SITE.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
-    images: ["/images/brand-compass.png"],
+    images: ["/og-logo.jpg"],
   },
   robots: { index: true, follow: true },
   manifest: "/manifest.json",
@@ -57,6 +57,7 @@ const orgSchema = {
   "@type": "Organization",
   name: SITE.name,
   url: SITE.url,
+  logo: `${SITE.url}/logo.png`,
   description: SITE.description,
   email: SITE.contactEmail,
 };
