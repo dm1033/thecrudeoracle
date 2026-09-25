@@ -106,7 +106,8 @@ body {
 .hero-globe__image {
   object-fit: cover;
   object-position: center 46%;
-  opacity: 0.88;
+  opacity: 1;
+  filter: brightness(1.28) saturate(1.2) contrast(1.08);
   transform: scale(1.08);
   animation: hero-globe-orbit 56s ease-in-out infinite;
   will-change: transform;
@@ -116,8 +117,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 48% 52%, rgba(56, 189, 248, 0.1), transparent 38%),
-    radial-gradient(circle at 58% 46%, rgba(201, 160, 56, 0.12), transparent 32%);
+    radial-gradient(circle at 48% 52%, rgba(56, 189, 248, 0.14), transparent 42%),
+    radial-gradient(circle at 58% 46%, rgba(201, 160, 56, 0.16), transparent 36%);
   mix-blend-mode: screen;
   animation: hero-globe-pulse 7.5s ease-in-out infinite;
 }
@@ -141,17 +142,21 @@ body {
   inset: 0;
   background:
     radial-gradient(
-      ellipse 58% 72% at 50% 48%,
-      transparent 18%,
-      rgba(7, 9, 12, 0.28) 52%,
-      rgba(7, 9, 12, 0.86) 100%
+      ellipse 78% 86% at 50% 46%,
+      transparent 36%,
+      rgba(7, 9, 12, 0.12) 68%,
+      rgba(7, 9, 12, 0.55) 100%
     ),
     linear-gradient(
       to bottom,
-      rgba(7, 9, 12, 0.42) 0%,
-      rgba(7, 9, 12, 0.18) 42%,
-      rgba(7, 9, 12, 0.94) 100%
+      rgba(7, 9, 12, 0.18) 0%,
+      transparent 38%,
+      rgba(7, 9, 12, 0.82) 100%
     );
+}
+
+.hero-globe__copy {
+  text-shadow: 0 1px 2px rgba(7, 9, 12, 0.55), 0 8px 32px rgba(7, 9, 12, 0.7);
 }
 
 @keyframes hero-globe-orbit {

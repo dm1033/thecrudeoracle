@@ -13,7 +13,13 @@ export default function PageHeader({
   atmosphere?: "plain" | "globe";
 }) {
   const copy = (
-    <div className={atmosphere === "globe" ? "py-10 sm:py-16" : "container-site py-10 sm:py-14"}>
+    <div
+      className={
+        atmosphere === "globe"
+          ? "hero-globe__copy py-10 sm:py-16"
+          : "container-site py-10 sm:py-14"
+      }
+    >
       <p className="eyebrow">{eyebrow}</p>
       <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
         {title}

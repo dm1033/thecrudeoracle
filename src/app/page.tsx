@@ -73,7 +73,7 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <HeroGlobe>
-        <div className="py-20 text-center sm:py-32">
+        <div className="hero-globe__copy py-20 text-center sm:py-32">
           <p className="eyebrow">Professional Oil &amp; Gas Intelligence Platform</p>
           <h1 className="h1 mx-auto mt-4 max-w-4xl">
             Crude Oil Intelligence <span className="text-gold-400">Without the Noise</span>
