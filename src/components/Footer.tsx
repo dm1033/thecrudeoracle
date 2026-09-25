@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import {
   SITE,
   NAV_MAIN,
@@ -15,9 +16,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2">
-              <span aria-hidden className="flex h-8 w-8 items-center justify-center rounded bg-gold-500 font-mono text-sm font-bold text-ink-950">
-                CO
-              </span>
+              <BrandMark className="h-12 w-auto" />
               <span className="text-base font-bold text-white">{SITE.name}</span>
             </div>
             <p className="mt-3 max-w-md text-sm text-steel-500">{SITE.tagline}.</p>

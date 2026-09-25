@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import BrandMark from "@/components/BrandMark";
 import { NAV_MAIN, SITE } from "@/lib/site";
 
 export default function Header() {
@@ -13,9 +14,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-ink-700 bg-ink-950/95 backdrop-blur">
       <div className="container-site flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span aria-hidden className="flex h-8 w-8 items-center justify-center rounded bg-gold-500 font-mono text-sm font-bold text-ink-950">
-            CO
-          </span>
+          <BrandMark priority className="h-11 w-auto" />
           <span className="whitespace-nowrap text-base font-bold tracking-tight text-white">
             {SITE.name}
           </span>
