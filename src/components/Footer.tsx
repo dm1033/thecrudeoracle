@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="container-site py-12">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
-            <BrandMark className="h-24 w-auto" />
+            <BrandMark className="h-32 w-auto" />
             <p className="mt-3 max-w-md text-sm text-steel-500">{SITE.tagline}.</p>
             <p className="mt-4 max-w-md text-xs leading-relaxed text-steel-500">
               {FINANCIAL_DISCLAIMER_SHORT}

@@ -11,8 +11,8 @@ export default function BrandMark({
     <Image
       src="/logo.png"
       alt="The Crude Oracle"
-      width={1200}
-      height={740}
+      width={1100}
+      height={1227}
       priority={priority}
       className={className}
     />
