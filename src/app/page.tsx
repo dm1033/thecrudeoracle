@@ -3,13 +3,13 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import HeroGlobe from "@/components/HeroGlobe";
 import { marketPrices, riskSignals, supplySignals } from "@/lib/data";
-import portfolioData from "../../data/virtual-portfolio.json";
 import MarketCard from "@/components/MarketCard";
 import SignalCardView from "@/components/SignalCardView";
 import BottomLineCard from "@/components/BottomLineCard";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
+import PaperBookPanel from "@/components/PaperBookPanel";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta(
@@ -108,6 +108,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <PaperBookPanel />
 
       {/* Dashboard preview */}
       <section className="container-site py-14">
@@ -240,59 +242,6 @@ export default function HomePage() {
               capital at risk.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* Free $1M portfolio performance */}
-      <section className="border-y border-ink-700 bg-ink-900">
-        <div className="container-site py-14">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="eyebrow">Free Virtual Trading Account · Paper Trading</p>
-              <h2 className="h2 mt-1">The $1,000,000 portfolio — performance in the open</h2>
-            </div>
-            <Link href="/portfolio/dashboard" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
-              Full portfolio dashboard →
-            </Link>
-          </div>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-steel-400">
-            A transparent paper-trading account run on The Crude Oracle&apos;s own daily
-            intelligence — every position journaled with thesis, risk and stop before entry, wins
-            and losses both published. Virtual capital only; simulated performance is not a promise
-            of future results.
-          </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="card text-center">
-              <p className="text-xs uppercase tracking-widest text-steel-500">Account value</p>
-              <p className="mt-2 text-2xl font-bold text-white">
-                ${portfolioData.account.current_value.toLocaleString("en-US")}
-              </p>
-              <p className="mt-1 text-xs text-steel-500">from $1,000,000 virtual start</p>
-            </div>
-            <div className="card text-center">
-              <p className="text-xs uppercase tracking-widest text-steel-500">Return since inception</p>
-              <p className={`mt-2 text-2xl font-bold ${portfolioData.account.return_pct >= 0 ? "text-gain" : "text-loss"}`}>
-                {portfolioData.account.return_pct >= 0 ? "+" : ""}
-                {portfolioData.account.return_pct}%
-              </p>
-              <p className="mt-1 text-xs text-steel-500">since {portfolioData.meta.inception}</p>
-            </div>
-            <div className="card text-center">
-              <p className="text-xs uppercase tracking-widest text-steel-500">Open positions</p>
-              <p className="mt-2 text-2xl font-bold text-white">{portfolioData.account.open_positions}</p>
-              <p className="mt-1 text-xs text-steel-500">{portfolioData.account.cash_pct}% held in cash</p>
-            </div>
-            <div className="card text-center">
-              <p className="text-xs uppercase tracking-widest text-steel-500">Max drawdown</p>
-              <p className="mt-2 text-2xl font-bold text-white">{portfolioData.account.max_drawdown_pct}%</p>
-              <p className="mt-1 text-xs text-steel-500">{portfolioData.account.risk_level}</p>
-            </div>
-          </div>
-          <p className="mt-4 text-xs text-steel-500">
-            PAPER TRADING — virtual capital only. Educational demonstration, not financial advice.
-            Data last updated {portfolioData.account.last_updated.slice(0, 10)} (
-            {portfolioData.account.data_type}).
-          </p>
         </div>
       </section>
 
