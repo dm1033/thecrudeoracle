@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import HeroGlobe from "@/components/HeroGlobe";
 import { marketPrices, riskSignals, supplySignals } from "@/lib/data";
 import portfolioData from "../../data/virtual-portfolio.json";
 import MarketCard from "@/components/MarketCard";
@@ -72,38 +73,39 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-ink-700 bg-ink-950">
-        <Image
-          src="/images/hero-globe.png"
-          alt="Holographic globe surrounded by market charts, crude tankers and a navigator's compass — The Crude Oracle intelligence terminal"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-60"
+        <div className="pointer-events-none relative h-72 sm:absolute sm:inset-y-0 sm:right-0 sm:h-auto sm:w-[62%] lg:w-[54%]" aria-hidden>
+          <HeroGlobe />
+        </div>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,#07090c_0%,rgba(7,9,12,0.78)_34%,rgba(7,9,12,0.08)_58%,transparent_72%)] sm:block"
         />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink-950/70 via-ink-950/55 to-ink-950" />
-        <div className="container-site relative py-20 text-center sm:py-32">
-          <p className="eyebrow">Professional Oil &amp; Gas Intelligence Platform</p>
-          <h1 className="h1 mx-auto mt-4 max-w-4xl">
-            Crude Oil Intelligence <span className="text-gold-400">Without the Noise</span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-steel-400 sm:text-lg">
-            Daily oil, gas, supply-risk and investment intelligence for investors, traders and
-            energy professionals — presented clearly, concisely and with source-backed data.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/premium-dashboard" className="btn-primary">
-              Open the Full Dashboard — 100% Free
-            </Link>
-            <Link href="/portfolio/dashboard" className="btn-secondary">
-              $1M Portfolio Performance
-            </Link>
-            <Link href="/oil-truth" className="btn-ghost">
-              Read Oil Truth →
-            </Link>
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-24 bg-gradient-to-b from-transparent to-ink-950 sm:block" />
+        <div className="container-site relative py-16 text-center sm:py-24 lg:py-28 lg:text-left">
+          <div className="mx-auto max-w-xl lg:mx-0">
+            <p className="eyebrow">Professional Oil &amp; Gas Intelligence Platform</p>
+            <h1 className="h1 mt-4">
+              Crude Oil Intelligence <span className="text-gold-400">Without the Noise</span>
+            </h1>
+            <p className="mt-5 text-base leading-relaxed text-steel-400 sm:text-lg">
+              Daily oil, gas, supply-risk and investment intelligence for investors, traders and
+              energy professionals — presented clearly, concisely and with source-backed data.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
+              <Link href="/premium-dashboard" className="btn-primary">
+                Open the Full Dashboard — 100% Free
+              </Link>
+              <Link href="/portfolio/dashboard" className="btn-secondary">
+                $1M Portfolio Performance
+              </Link>
+              <Link href="/oil-truth" className="btn-ghost">
+                Read Oil Truth →
+              </Link>
+            </div>
+            <p className="mt-6 text-xs text-steel-500">
+              Now 100% free · Terminal-grade dashboard · Daily briefings · Not financial advice
+            </p>
           </div>
-          <p className="mt-6 text-xs text-steel-500">
-            Now 100% free · Terminal-grade dashboard · Daily briefings · Not financial advice
-          </p>
         </div>
       </section>
 
