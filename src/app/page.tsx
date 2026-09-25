@@ -296,8 +296,24 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-y border-ink-700 bg-ink-900">
+        <div className="container-site flex flex-col items-start justify-between gap-4 py-10 sm:flex-row sm:items-center">
+          <div className="max-w-2xl">
+            <p className="eyebrow">Cayman · Bermuda · British Virgin Islands</p>
+            <h2 className="h2 mt-1">Offshore asset desks can hire this AI from the UK</h2>
+            <p className="mt-2 text-sm leading-relaxed text-steel-400">
+              The globe, the desk and the tools on this site are the work. Open to employment
+              and relocation from the United Kingdom.
+            </p>
+          </div>
+          <Link href="/offshore" className="btn-primary shrink-0">
+            See the hire page
+          </Link>
+        </div>
+      </section>
+
       {/* FAQ */}
-      <section className="container-site pb-14">
+      <section className="container-site py-14">
         <FAQ items={FAQ_ITEMS} />
       </section>
 

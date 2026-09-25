@@ -54,6 +54,7 @@ export const NAV_FOOTER_LEGAL: NavItem[] = [
 
 export const NAV_FOOTER_COMPANY: NavItem[] = [
   { label: "About", href: "/about" },
+  { label: "Offshore hire", href: "/offshore" },
   { label: "Free Access", href: "/subscribe" },
   { label: "Login", href: "/login" },
   { label: "Account", href: "/account" },
