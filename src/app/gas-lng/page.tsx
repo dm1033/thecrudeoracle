@@ -37,6 +37,7 @@ export default function GasLngPage() {
   return (
     <>
       <PageHeader
+        atmosphere="globe"
         eyebrow="Market Data · Indicative"
         title="Gas / LNG Dashboard"
         intro="UK NBP, European TTF, US Henry Hub and the Asian LNG marker — the four prices that set the global gas balance, with the signals that connect them."

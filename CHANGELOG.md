@@ -1,5 +1,14 @@
 # CHANGELOG — The Crude Oracle
 
+## 2026-09-25 — Market-intelligence globe header
+
+- Replaced the abstract holographic hero with a cinematic night-side Earth: gold and cyan
+  tanker routes, oil tankers and offshore rigs, styled for a financial-intelligence header.
+- Added `HeroGlobe` with a slow orbital ken-burns, pulsing route wash and a gold/cyan scan
+  ring. Motion is disabled under `prefers-reduced-motion`.
+- Wired the globe into the homepage hero, Physical Flow Map and Gas/LNG page headers.
+- Open Graph / Twitter cards now use the globe (1280×720) instead of the compass still.
+
 ## 2026-07-15 — Accessibility (WCAG 2.2 AA), SEO and data-integrity fixes
 
 Accessibility:

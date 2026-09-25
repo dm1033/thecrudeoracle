@@ -95,3 +95,95 @@ body {
 .num {
   font-variant-numeric: tabular-nums;
 }
+
+/* Cinematic market-intelligence globe — homepage / flow-map headers */
+.hero-globe {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.hero-globe__image {
+  object-fit: cover;
+  object-position: center 46%;
+  opacity: 0.88;
+  transform: scale(1.08);
+  animation: hero-globe-orbit 56s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-globe__routes {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 48% 52%, rgba(56, 189, 248, 0.1), transparent 38%),
+    radial-gradient(circle at 58% 46%, rgba(201, 160, 56, 0.12), transparent 32%);
+  mix-blend-mode: screen;
+  animation: hero-globe-pulse 7.5s ease-in-out infinite;
+}
+
+.hero-globe__scan {
+  position: absolute;
+  inset: -25%;
+  background: conic-gradient(
+    from 200deg,
+    transparent 0 76%,
+    rgba(201, 160, 56, 0.09) 84%,
+    rgba(56, 189, 248, 0.06) 88%,
+    transparent 94%
+  );
+  mix-blend-mode: screen;
+  animation: hero-globe-scan 42s linear infinite;
+}
+
+.hero-globe__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 58% 72% at 50% 48%,
+      transparent 18%,
+      rgba(7, 9, 12, 0.28) 52%,
+      rgba(7, 9, 12, 0.86) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(7, 9, 12, 0.42) 0%,
+      rgba(7, 9, 12, 0.18) 42%,
+      rgba(7, 9, 12, 0.94) 100%
+    );
+}
+
+@keyframes hero-globe-orbit {
+  0%,
+  100% {
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.16) translate3d(-1.6%, 0.5%, 0);
+  }
+}
+
+@keyframes hero-globe-scan {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-globe-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-globe__image,
+  .hero-globe__scan,
+  .hero-globe__routes {
+    animation: none;
+  }
+}

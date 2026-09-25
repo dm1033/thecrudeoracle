@@ -166,6 +166,7 @@ export default function FlowMapPage() {
   return (
     <>
       <PageHeader
+        atmosphere="globe"
         eyebrow="Trader Toolkit · Module 2"
         title="Physical Flow Map"
         intro="Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, congestion and freight — with explainable anomaly detection that tells you why a flow is unusual, not just that it is."

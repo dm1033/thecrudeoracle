@@ -9,6 +9,7 @@ import BottomLineCard from "@/components/BottomLineCard";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
+import HeroGlobe from "@/components/HeroGlobe";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta(
@@ -71,17 +72,8 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-ink-700 bg-ink-950">
-        <Image
-          src="/images/hero-globe.png"
-          alt="Holographic globe surrounded by market charts, crude tankers and a navigator's compass — The Crude Oracle intelligence terminal"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-60"
-        />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink-950/70 via-ink-950/55 to-ink-950" />
-        <div className="container-site relative py-20 text-center sm:py-32">
+      <HeroGlobe>
+        <div className="py-20 text-center sm:py-32">
           <p className="eyebrow">Professional Oil &amp; Gas Intelligence Platform</p>
           <h1 className="h1 mx-auto mt-4 max-w-4xl">
             Crude Oil Intelligence <span className="text-gold-400">Without the Noise</span>
@@ -105,7 +97,7 @@ export default function HomePage() {
             Now 100% free · Terminal-grade dashboard · Daily briefings · Not financial advice
           </p>
         </div>
-      </section>
+      </HeroGlobe>
 
       {/* Dashboard preview */}
       <section className="container-site py-14">
