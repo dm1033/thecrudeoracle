@@ -10,9 +10,9 @@ export default function BrandMark({
   return (
     <Image
       src="/logo.png"
-      alt=""
-      width={542}
-      height={640}
+      alt="The Crude Oracle"
+      width={1200}
+      height={740}
       priority={priority}
       className={className}
     />
