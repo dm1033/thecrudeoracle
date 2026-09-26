@@ -6,6 +6,8 @@
 #   bash start.sh --cycle         # one dry-run draft → outbox/
 #   bash start.sh --publish       # PR path later. Human still merges.
 #   bash start.sh --ingest-eia    # require EIA key
+#   bash start.sh --paper-trade            # SIMULATED rebalance proposal → outbox/
+#   bash start.sh --paper-trade --publish  # open draft PR updating the virtual portfolio
 #
 # With no arguments this launches the console as a background daemon, waits
 # until it is healthy, prints the URL and returns 0 (so it is safe to use as
@@ -66,6 +68,14 @@ case "$sub" in
   --cycle)         log "Running one dry-run draft cycle…"; node agent/cycle.mjs ;;
   --publish)       log "Running publish cycle (opens a DRAFT PR; human merges)…"; node agent/cycle.mjs --publish ;;
   --ingest-eia)    log "Ingesting EIA series…"; node agent/ingest-eia.mjs ;;
-  -h|--help)       sed -n '2,12p' "${BASH_SOURCE[0]}" ;;
-  *) echo "start.sh: unknown option '$sub' (try --cycle, --publish, --ingest-eia)" >&2; exit 64 ;;
+  --paper-trade)
+    if [ "${2:-}" = "--publish" ]; then
+      log "Running SIMULATED paper-trade proposal (opens a DRAFT PR; human merges)…"
+      node agent/paper-trade.mjs --publish
+    else
+      log "Running SIMULATED paper-trade proposal (dry-run → outbox/)…"
+      node agent/paper-trade.mjs
+    fi ;;
+  -h|--help)       sed -n '2,14p' "${BASH_SOURCE[0]}" ;;
+  *) echo "start.sh: unknown option '$sub' (try --cycle, --publish, --ingest-eia, --paper-trade)" >&2; exit 64 ;;
 esac

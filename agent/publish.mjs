@@ -37,6 +37,29 @@ export async function publishDraft({ markdownPath, stamp }) {
   return pr;
 }
 
+// Generic path: open a DRAFT PR that creates or updates a single file in the
+// site repo (used by the SIMULATED paper-trade proposal). Human merges.
+export async function publishFile({ repoRelPath, content, branch, title, body }) {
+  requireUsable("GITHUB_TOKEN", "fine-grained PAT with contents:write + pull_requests");
+  const owner = get("GITHUB_OWNER", "dm1033");
+  const repo = get("GITHUB_SITE_REPO", "thecrudeoracle");
+
+  log.info(`Publishing ${repoRelPath} to ${owner}/${repo} on branch ${branch}`);
+  const { base, sha } = await gh.getDefaultBranchSha(owner, repo);
+  await gh.createBranch(owner, repo, branch, sha);
+  const existingSha = await gh.getFileSha(owner, repo, repoRelPath, branch);
+  await gh.putFile(
+    owner,
+    repo,
+    repoRelPath,
+    Buffer.from(content, "utf8").toString("base64"),
+    title,
+    branch,
+    existingSha,
+  );
+  return gh.openPr(owner, repo, branch, base, title, body);
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const p = process.argv[2];
   if (!p) {
