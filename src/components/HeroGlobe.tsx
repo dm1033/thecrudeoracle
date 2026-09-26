@@ -1,89 +1,92 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { RefObject } from "react";
 import { COAST, NODES } from "./globe-land";
-
-type Vec = { x: number; y: number; z: number };
-
-type Route = {
-  from: [number, number];
-  to: [number, number];
-  color: "gold" | "cyan";
-  speed: number;
-  phase: number;
-  kind: "tanker" | "lng";
-};
-
-const ROUTES: Route[] = [
-  { from: [26.6, 50.2], to: [51.9, 4.4], color: "gold", speed: 0.045, phase: 0.05, kind: "tanker" },
-  { from: [26.6, 50.2], to: [1.3, 103.8], color: "gold", speed: 0.038, phase: 0.42, kind: "tanker" },
-  { from: [1.3, 103.8], to: [29.9, 121.8], color: "gold", speed: 0.05, phase: 0.2, kind: "tanker" },
-  { from: [4.4, 6.8], to: [22.3, 114.2], color: "cyan", speed: 0.036, phase: 0.62, kind: "tanker" },
-  { from: [29.4, -94.8], to: [51.9, 4.4], color: "gold", speed: 0.042, phase: 0.28, kind: "tanker" },
-  { from: [59.9, 28.5], to: [51.5, 0.1], color: "gold", speed: 0.055, phase: 0.74, kind: "tanker" },
-  { from: [25.9, 51.6], to: [35.4, 139.7], color: "cyan", speed: 0.034, phase: 0.15, kind: "lng" },
-  { from: [29.7, -93.8], to: [51.7, -5.1], color: "cyan", speed: 0.04, phase: 0.55, kind: "lng" },
-  { from: [-20.6, 116.7], to: [35.6, 139.8], color: "cyan", speed: 0.033, phase: 0.83, kind: "lng" },
-];
-
-const RIGS: Array<[number, number]> = [
-  [61.2, 1.6],
-  [27.4, -90.2],
-  [26.2, 52.4],
-  [4.1, 5.4],
-  [-25.2, -42.6],
-  [-19.6, 116.2],
-];
-
-const HUBS: Array<[number, number]> = [
-  [51.5, -0.1],
-  [51.9, 4.4],
-  [29.7, -95.3],
-  [1.3, 103.8],
-  [31.2, 121.5],
-  [35.6, 139.8],
-  [25.2, 55.3],
-  [19.1, 72.9],
-  [6.4, 3.4],
-  [40.7, -74.0],
-];
+import { HEADING_RAY_HOURS } from "@/lib/tankermap";
+import {
+  LANES,
+  buildLaneFrame,
+  lanePosition,
+  maskPixel,
+  offsetByCourse,
+  toVec,
+  unwrapRing,
+  type GlobeShip,
+  type Vec,
+} from "@/lib/sea-lanes";
 
 const GOLD = [220, 181, 78];
 const CYAN = [72, 214, 224];
+const MASK_W = 720;
+const MASK_H = 360;
+const TILT = 0.4;
 
-function toVec(lat: number, lon: number): Vec {
-  const φ = (lat * Math.PI) / 180;
-  const λ = (lon * Math.PI) / 180;
-  const c = Math.cos(φ);
-  return { x: c * Math.sin(λ), y: Math.sin(φ), z: c * Math.cos(λ) };
+type Proj = { sx: number; sy: number; z: number };
+
+function project(v: Vec, cx: number, cy: number, radius: number): Proj {
+  return { sx: cx + v.x * radius, sy: cy - v.y * radius, z: v.z };
 }
 
-function tilt(v: Vec, tiltRad: number): Vec {
-  const c = Math.cos(tiltRad);
-  const s = Math.sin(tiltRad);
-  return { x: v.x, y: v.y * c - v.z * s, z: v.y * s + v.z * c };
+function spin(v: Vec, cosR: number, sinR: number): Vec {
+  return {
+    x: v.x * cosR + v.z * sinR,
+    y: v.y,
+    z: -v.x * sinR + v.z * cosR,
+  };
 }
 
-function rotateLon(lat: number, lon: number, rot: number): Vec {
-  return toVec(lat, lon + rot);
+function tiltOf(v: Vec, cosT: number, sinT: number): Vec {
+  return { x: v.x, y: v.y * cosT - v.z * sinT, z: v.y * sinT + v.z * cosT };
 }
 
-function slerp(a: Vec, b: Vec, t: number): Vec {
-  let dot = a.x * b.x + a.y * b.y + a.z * b.z;
-  dot = Math.max(-1, Math.min(1, dot));
-  const omega = Math.acos(dot);
-  if (omega < 1e-4) return a;
-  const so = Math.sin(omega);
-  const p = Math.sin((1 - t) * omega) / so;
-  const q = Math.sin(t * omega) / so;
-  return { x: a.x * p + b.x * q, y: a.y * p + b.y * q, z: a.z * p + b.z * q };
+function viewVec(base: Vec, cosR: number, sinR: number, cosT: number, sinT: number): Vec {
+  return tiltOf(spin(base, cosR, sinR), cosT, sinT);
 }
 
-function project(v: Vec, cx: number, cy: number, r: number) {
-  return { sx: cx + v.x * r, sy: cy - v.y * r, z: v.z };
+const PROBES: Array<{ lon: number; lat: number; land: boolean }> = [
+  { lon: 2.3, lat: 48.9, land: true },
+  { lon: -30, lat: 35, land: false },
+  { lon: 64, lat: 16, land: false },
+  { lon: 78, lat: 22, land: true },
+  { lon: -98, lat: 39, land: true },
+  { lon: 134, lat: -25, land: true },
+];
+
+function buildLandMask(): Uint8Array | null {
+  const canvas = document.createElement("canvas");
+  canvas.width = MASK_W;
+  canvas.height = MASK_H;
+  const g = canvas.getContext("2d", { willReadFrequently: true });
+  if (!g) return null;
+  g.clearRect(0, 0, MASK_W, MASK_H);
+  g.fillStyle = "#fff";
+  for (const ring of COAST) {
+    if (ring.length < 3) continue;
+    const unwrapped = unwrapRing(ring);
+    for (const shift of [-360, 0, 360]) {
+      g.beginPath();
+      for (let i = 0; i < unwrapped.length; i++) {
+        const x = ((unwrapped[i][0] + shift + 180) / 360) * MASK_W;
+        const y = ((90 - unwrapped[i][1]) / 180) * MASK_H;
+        if (i === 0) g.moveTo(x, y);
+        else g.lineTo(x, y);
+      }
+      g.closePath();
+      g.fill();
+    }
+  }
+  const pixels = g.getImageData(0, 0, MASK_W, MASK_H).data;
+  const mask = new Uint8Array(MASK_W * MASK_H);
+  for (let i = 0; i < mask.length; i++) mask[i] = pixels[i * 4] > 128 ? 1 : 0;
+  for (const probe of PROBES) {
+    const { x, y } = maskPixel(probe.lon, probe.lat, MASK_W, MASK_H);
+    if ((mask[y * MASK_W + x] === 1) !== probe.land) return null;
+  }
+  return mask;
 }
 
-export default function HeroGlobe() {
+export default function HeroGlobe({ shipRef }: { shipRef: RefObject<GlobeShip | null> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -96,17 +99,23 @@ export default function HeroGlobe() {
     let frame = 0;
     let running = true;
     let visible = true;
-    const tiltRad = 0.42;
+    const cosT = Math.cos(TILT);
+    const sinT = Math.sin(TILT);
+    const mask = buildLandMask();
 
     const coastVec = COAST.map((ring) => ring.map(([lon, lat]) => toVec(lat, lon)));
     const nodeVec = NODES.map(([lon, lat]) => toVec(lat, lon));
-    const hubVec = HUBS.map(([lat, lon]) => toVec(lat, lon));
-    const rigVec = RIGS.map(([lat, lon]) => toVec(lat, lon));
-    const routeVec = ROUTES.map((route) => ({
-      ...route,
-      a: toVec(route.from[0], route.from[1]),
-      b: toVec(route.to[0], route.to[1]),
+    const lanes = LANES.map((lane) => ({ ...lane, frame: buildLaneFrame(lane.waypoints) }));
+    const stars = Array.from({ length: 70 }, (_, i) => ({
+      x: ((i * 97) % 1000) / 1000,
+      y: ((i * 53) % 1000) / 1000,
+      a: 0.12 + (i % 5) * 0.07,
+      r: i % 7 === 0 ? 1.3 : 0.7,
     }));
+
+    const bake = document.createElement("canvas");
+    const bakeCtx = bake.getContext("2d", { willReadFrequently: true });
+    let image: ImageData | null = null;
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -128,46 +137,32 @@ export default function HeroGlobe() {
       visible = document.visibilityState === "visible";
     };
     document.addEventListener("visibilitychange", onVis);
-
     const io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
     });
     io.observe(canvas);
 
-    const drawShip = (sx: number, sy: number, angle: number, rgb: number[], lng: boolean) => {
+    const drawShip = (sx: number, sy: number, angle: number, rgb: number[], lng: boolean, scale: number) => {
       ctx.save();
       ctx.translate(sx, sy);
       ctx.rotate(angle);
-      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.95)`;
+      ctx.scale(scale, scale);
+      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.96)`;
       ctx.beginPath();
       if (lng) {
-        ctx.moveTo(11, 0);
-        ctx.lineTo(-8, 3.4);
-        ctx.lineTo(-5, 0);
-        ctx.lineTo(-8, -3.4);
-      } else {
-        ctx.moveTo(13, 0);
-        ctx.lineTo(-9, 4);
+        ctx.moveTo(16, 0);
+        ctx.lineTo(-10, 4);
         ctx.lineTo(-6, 0);
-        ctx.lineTo(-9, -4);
+        ctx.lineTo(-10, -4);
+      } else {
+        ctx.moveTo(18, 0);
+        ctx.lineTo(-12, 5);
+        ctx.lineTo(-7, 0);
+        ctx.lineTo(-12, -5);
       }
       ctx.closePath();
       ctx.fill();
       ctx.restore();
-    };
-
-    const drawRig = (sx: number, sy: number) => {
-      ctx.strokeStyle = "rgba(220, 181, 78, 0.9)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(sx - 5, sy + 4);
-      ctx.lineTo(sx, sy - 6);
-      ctx.lineTo(sx + 5, sy + 4);
-      ctx.moveTo(sx - 4, sy + 1);
-      ctx.lineTo(sx + 4, sy + 1);
-      ctx.stroke();
-      ctx.fillStyle = "rgba(72, 214, 224, 0.9)";
-      ctx.fillRect(sx - 1.2, sy - 7.5, 2.4, 2.4);
     };
 
     const paint = (time: number) => {
@@ -178,70 +173,119 @@ export default function HeroGlobe() {
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       ctx.clearRect(0, 0, w, h);
-      const cx = w * 0.5;
-      const cy = h * 0.5;
-      const r = Math.min(w, h) * 0.36;
-      if (r < 20) return;
+      const wide = w > h * 1.08;
+      const cx = wide ? w * 0.66 : w * 0.5;
+      const cy = wide ? h * 0.5 : h * 0.4;
+      const radius = wide ? Math.min(h * 0.5, w * 0.34) : Math.min(h * 0.36, w * 0.48);
+      if (radius < 40) return;
 
-      const rot = reduce ? 18 : (time / 1000) * 8;
+      const rot = (reduce ? -52 : -52 + (time / 1000) * 2.15) * (Math.PI / 180);
+      const cosR = Math.cos(rot);
+      const sinR = Math.sin(rot);
 
-      const glow = ctx.createRadialGradient(cx, cy, r * 0.7, cx, cy, r * 1.45);
-      glow.addColorStop(0, "rgba(18, 48, 82, 0.0)");
-      glow.addColorStop(0.55, "rgba(28, 78, 120, 0.18)");
-      glow.addColorStop(0.78, "rgba(201, 160, 56, 0.08)");
+      for (const star of stars) {
+        ctx.fillStyle = `rgba(198, 214, 226, ${star.a})`;
+        ctx.fillRect(star.x * w, star.y * h, star.r, star.r);
+      }
+
+      const glow = ctx.createRadialGradient(cx, cy, radius * 0.82, cx, cy, radius * 1.35);
+      glow.addColorStop(0, "rgba(18, 48, 82, 0)");
+      glow.addColorStop(0.72, "rgba(36, 92, 140, 0.16)");
       glow.addColorStop(1, "rgba(7, 9, 12, 0)");
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(cx, cy, r * 1.45, 0, Math.PI * 2);
+      ctx.arc(cx, cy, radius * 1.35, 0, Math.PI * 2);
       ctx.fill();
 
-      const ocean = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.3, r * 0.1, cx, cy, r);
-      ocean.addColorStop(0, "#16324f");
-      ocean.addColorStop(0.55, "#0c1b2e");
-      ocean.addColorStop(1, "#070d16");
-      ctx.fillStyle = ocean;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fill();
-
-      const sheen = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.4, r * 0.05, cx, cy, r);
-      sheen.addColorStop(0, "rgba(180, 220, 255, 0.16)");
-      sheen.addColorStop(0.45, "rgba(180, 220, 255, 0.02)");
-      sheen.addColorStop(1, "rgba(0, 0, 0, 0.28)");
-      ctx.fillStyle = sheen;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fill();
+      if (mask && bakeCtx) {
+        const size = Math.max(160, Math.min(420, Math.ceil(radius * 1.55)));
+        if (bake.width !== size || bake.height !== size || !image) {
+          bake.width = size;
+          bake.height = size;
+          image = bakeCtx.createImageData(size, size);
+        }
+        const buf = image.data;
+        const rad = size / 2;
+        const inv = 1 / rad;
+        const lx = -0.35;
+        const ly = 0.55;
+        const lz = 0.76;
+        for (let py = 0; py < size; py++) {
+          const ny = -((py + 0.5) - rad) * inv;
+          const row = py * size;
+          for (let px = 0; px < size; px++) {
+            const nx = ((px + 0.5) - rad) * inv;
+            const rr = nx * nx + ny * ny;
+            const i = (row + px) * 4;
+            if (rr > 1) {
+              buf[i + 3] = 0;
+              continue;
+            }
+            const nz = Math.sqrt(1 - rr);
+            const yR = ny * cosT + nz * sinT;
+            const zR = -ny * sinT + nz * cosT;
+            const x = nx * cosR - zR * sinR;
+            const z = nx * sinR + zR * cosR;
+            const lat = Math.asin(Math.max(-1, Math.min(1, yR))) * (180 / Math.PI);
+            const lon = Math.atan2(x, z) * (180 / Math.PI);
+            const sample = maskPixel(lon, lat, MASK_W, MASK_H);
+            const land = mask[sample.y * MASK_W + sample.x] === 1;
+            const ndotl = Math.max(0, nx * lx + ny * ly + nz * lz);
+            const shade = 0.16 + 0.84 * ndotl;
+            if (land) {
+              buf[i] = 36 + 78 * shade;
+              buf[i + 1] = 58 + 70 * shade;
+              buf[i + 2] = 46 + 36 * shade;
+            } else {
+              buf[i] = 3 + 16 * shade;
+              buf[i + 1] = 16 + 42 * shade;
+              buf[i + 2] = 30 + 62 * shade;
+              const spec = ndotl * ndotl;
+              const hot = spec * spec * spec;
+              buf[i] = Math.min(255, buf[i] + hot * 160);
+              buf[i + 1] = Math.min(255, buf[i + 1] + hot * 190);
+              buf[i + 2] = Math.min(255, buf[i + 2] + hot * 210);
+            }
+            const edge = rr > 0.965 ? (1 - rr) / 0.035 : 1;
+            buf[i + 3] = Math.round(255 * edge);
+          }
+        }
+        bakeCtx.putImageData(image, 0, 0);
+        ctx.imageSmoothingEnabled = true;
+        ctx.drawImage(bake, cx - radius, cy - radius, radius * 2, radius * 2);
+      } else {
+        const ocean = ctx.createRadialGradient(cx - radius * 0.28, cy - radius * 0.32, radius * 0.08, cx, cy, radius);
+        ocean.addColorStop(0, "#1a4568");
+        ocean.addColorStop(0.55, "#0c1d33");
+        ocean.addColorStop(1, "#070e18");
+        ctx.fillStyle = ocean;
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fill();
+        for (const base of nodeVec) {
+          const p = project(viewVec(base, cosR, sinR, cosT, sinT), cx, cy, radius);
+          if (p.z <= 0.05) continue;
+          const dot = Math.max(1.4, radius * 0.03 * p.z);
+          ctx.fillStyle = `rgba(78, 108, 86, ${0.35 + p.z * 0.55})`;
+          ctx.beginPath();
+          ctx.arc(p.sx, p.sy, dot, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
 
       ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
       ctx.clip();
 
       ctx.lineWidth = 0.6;
-      ctx.strokeStyle = "rgba(70, 130, 180, 0.22)";
-      for (let lat = -60; lat <= 75; lat += 15) {
+      ctx.strokeStyle = "rgba(150, 190, 210, 0.16)";
+      for (let lat = -60; lat <= 75; lat += 30) {
         ctx.beginPath();
         let started = false;
-        for (let lon = -180; lon <= 180; lon += 4) {
-          const p = project(tilt(rotateLon(lat, lon, rot), tiltRad), cx, cy, r);
-          if (p.z <= 0.02) {
-            started = false;
-            continue;
-          }
-          if (!started) {
-            ctx.moveTo(p.sx, p.sy);
-            started = true;
-          } else ctx.lineTo(p.sx, p.sy);
-        }
-        ctx.stroke();
-      }
-      for (let lon = -180; lon < 180; lon += 20) {
-        ctx.beginPath();
-        let started = false;
-        for (let lat = -80; lat <= 80; lat += 3) {
-          const p = project(tilt(rotateLon(lat, lon, rot), tiltRad), cx, cy, r);
-          if (p.z <= 0.02) {
+        for (let lon = -180; lon <= 180; lon += 6) {
+          const p = project(viewVec(toVec(lat, lon), cosR, sinR, cosT, sinT), cx, cy, radius);
+          if (p.z <= 0.04) {
             started = false;
             continue;
           }
@@ -253,20 +297,33 @@ export default function HeroGlobe() {
         ctx.stroke();
       }
 
-      ctx.lineWidth = 1.05;
-      ctx.strokeStyle = "rgba(201, 160, 56, 0.42)";
-      ctx.shadowColor = "rgba(201, 160, 56, 0.25)";
-      ctx.shadowBlur = 0;
+      ctx.lineWidth = 1.15;
+      ctx.strokeStyle = "rgba(236, 226, 198, 0.72)";
       for (const ring of coastVec) {
         ctx.beginPath();
         let started = false;
         for (const base of ring) {
-          const spun = {
-            x: base.x * Math.cos((rot * Math.PI) / 180) + base.z * Math.sin((rot * Math.PI) / 180),
-            y: base.y,
-            z: -base.x * Math.sin((rot * Math.PI) / 180) + base.z * Math.cos((rot * Math.PI) / 180),
-          };
-          const p = project(tilt(spun, tiltRad), cx, cy, r);
+          const p = project(viewVec(base, cosR, sinR, cosT, sinT), cx, cy, radius);
+          if (p.z <= 0.04) {
+            started = false;
+            continue;
+          }
+          if (!started) {
+            ctx.moveTo(p.sx, p.sy);
+            started = true;
+          } else ctx.lineTo(p.sx, p.sy);
+        }
+        ctx.stroke();
+      }
+
+      const samples = 28;
+      for (const lane of lanes) {
+        const rgb = lane.color === "gold" ? GOLD : CYAN;
+        ctx.beginPath();
+        let started = false;
+        for (let i = 0; i <= samples; i++) {
+          const v = lanePosition(lane.frame, i / samples);
+          const p = project(viewVec(v, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
           if (p.z <= 0.05) {
             started = false;
             continue;
@@ -276,132 +333,98 @@ export default function HeroGlobe() {
             started = true;
           } else ctx.lineTo(p.sx, p.sy);
         }
+        ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.42)`;
+        ctx.lineWidth = 1.15;
         ctx.stroke();
-      }
-      ctx.shadowBlur = 0;
 
-      for (const base of nodeVec) {
-        const spun = {
-          x: base.x * Math.cos((rot * Math.PI) / 180) + base.z * Math.sin((rot * Math.PI) / 180),
-          y: base.y,
-          z: -base.x * Math.sin((rot * Math.PI) / 180) + base.z * Math.cos((rot * Math.PI) / 180),
-        };
-        const p = project(tilt(spun, tiltRad), cx, cy, r);
-        if (p.z <= 0.08) continue;
-        const a = 0.15 + p.z * 0.45;
-        ctx.fillStyle = `rgba(90, 170, 210, ${a})`;
-        ctx.fillRect(p.sx, p.sy, 1.3, 1.3);
-      }
-
-      const samples = 48;
-      for (const route of routeVec) {
-        const rgb = route.color === "gold" ? GOLD : CYAN;
-        ctx.beginPath();
-        let started = false;
-        let prev: { sx: number; sy: number; z: number } | null = null;
-        const pts: Array<{ sx: number; sy: number; z: number }> = [];
-        for (let i = 0; i <= samples; i++) {
-          const v = slerp(route.a, route.b, i / samples);
-          const spun = {
-            x: v.x * Math.cos((rot * Math.PI) / 180) + v.z * Math.sin((rot * Math.PI) / 180),
-            y: v.y,
-            z: -v.x * Math.sin((rot * Math.PI) / 180) + v.z * Math.cos((rot * Math.PI) / 180),
-          };
-          const p = project(tilt(spun, tiltRad), cx, cy, r * 1.012);
-          pts.push(p);
-          if (p.z <= 0.04) {
-            started = false;
-            prev = null;
-            continue;
+        for (let s = 0; s < lane.ships; s++) {
+          const t = reduce
+            ? (lane.phase + s / lane.ships) % 1
+            : (lane.phase + s / lane.ships + time / 1000 / lane.duration) % 1;
+          const head = lanePosition(lane.frame, t);
+          const next = lanePosition(lane.frame, t + 0.01);
+          const p0 = project(viewVec(head, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
+          const p1 = project(viewVec(next, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
+          if (p0.z < 0.08) continue;
+          for (let trail = 6; trail >= 1; trail--) {
+            const back = lanePosition(lane.frame, t - trail * 0.012);
+            const pb = project(viewVec(back, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
+            if (pb.z < 0.06) continue;
+            ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${0.28 * (1 - trail / 7)})`;
+            ctx.beginPath();
+            ctx.arc(pb.sx, pb.sy, Math.max(0.8, (3.1 - trail * 0.32) * (radius / 280)), 0, Math.PI * 2);
+            ctx.fill();
           }
-          if (!started) {
-            ctx.moveTo(p.sx, p.sy);
-            started = true;
-          } else if (prev) {
-            ctx.lineTo(p.sx, p.sy);
-          }
-          prev = p;
+          const ang = Math.atan2(p1.sy - p0.sy, p1.sx - p0.sx);
+          const scale = (radius / 230) * (0.78 + 0.35 * p0.z);
+          drawShip(p0.sx, p0.sy, ang, rgb, lane.kind === "lng", scale);
         }
-        ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.95)`;
-        ctx.lineWidth = 2.2;
-        ctx.shadowColor = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.9)`;
-        ctx.shadowBlur = 10;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+      }
 
-        const t = reduce ? route.phase : (route.phase + time / 1000 * route.speed) % 1;
-        for (let trail = 7; trail >= 0; trail--) {
-          const tt = (t - trail * 0.012 + 1) % 1;
-          const idx = Math.min(samples - 1, Math.floor(tt * samples));
-          const p0 = pts[idx];
-          const p1 = pts[idx + 1];
-          if (!p0 || !p1 || p0.z < 0.05 || p1.z < 0.05) continue;
-          const f = tt * samples - idx;
-          const sx = p0.sx + (p1.sx - p0.sx) * f;
-          const sy = p0.sy + (p1.sy - p0.sy) * f;
-          const alpha = trail === 0 ? 0.95 : 0.28 * (1 - trail / 8);
-          const radius = trail === 0 ? 2.2 : 1.6 - trail * 0.12;
-          ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
+      const watched = shipRef.current;
+      if (watched) {
+        const glideHours = reduce || watched.cogDeg == null || watched.speedKn == null ? 0 : Math.sin(time / 1600) * 5;
+        const moved =
+          watched.cogDeg == null || watched.speedKn == null
+            ? { lat: watched.lat, lon: watched.lon }
+            : offsetByCourse(watched.lat, watched.lon, watched.cogDeg, watched.speedKn, glideHours);
+        const pos = project(viewVec(toVec(moved.lat, moved.lon), cosR, sinR, cosT, sinT), cx, cy, radius * 1.02);
+        if (pos.z > 0.08) {
+          if (watched.cogDeg != null && watched.speedKn != null && watched.speedKn > 0) {
+            ctx.beginPath();
+            ctx.setLineDash([3, 4]);
+            let drawing = false;
+            for (let hour = 0; hour <= HEADING_RAY_HOURS; hour += 4) {
+              const step = offsetByCourse(watched.lat, watched.lon, watched.cogDeg, watched.speedKn, hour);
+              const p = project(viewVec(toVec(step.lat, step.lon), cosR, sinR, cosT, sinT), cx, cy, radius * 1.02);
+              if (p.z <= 0.05) {
+                drawing = false;
+                continue;
+              }
+              if (!drawing) {
+                ctx.moveTo(p.sx, p.sy);
+                drawing = true;
+              } else ctx.lineTo(p.sx, p.sy);
+            }
+            ctx.strokeStyle = "rgba(233, 205, 126, 0.85)";
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+          const ahead =
+            watched.cogDeg == null
+              ? moved
+              : offsetByCourse(moved.lat, moved.lon, watched.cogDeg, watched.speedKn ?? 12, 2);
+          const p1 = project(viewVec(toVec(ahead.lat, ahead.lon), cosR, sinR, cosT, sinT), cx, cy, radius * 1.02);
+          ctx.strokeStyle = "rgba(233, 205, 126, 0.95)";
+          ctx.lineWidth = 1.4;
           ctx.beginPath();
-          ctx.arc(sx, sy, Math.max(0.4, radius), 0, Math.PI * 2);
-          ctx.fill();
-          if (trail === 0) {
-            const ang = Math.atan2(p1.sy - p0.sy, p1.sx - p0.sx);
-            drawShip(sx, sy, ang, rgb, route.kind === "lng");
+          ctx.arc(pos.sx, pos.sy, 9 * (radius / 280), 0, Math.PI * 2);
+          ctx.stroke();
+          drawShip(pos.sx, pos.sy, Math.atan2(p1.sy - pos.sy, p1.sx - pos.sx), GOLD, false, (radius / 250) * 1.2);
+          if (pos.z > 0.2) {
+            ctx.font = "600 13px Inter, sans-serif";
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "rgba(7, 9, 12, 0.8)";
+            ctx.strokeText(watched.name, pos.sx + 12, pos.sy - 10);
+            ctx.fillStyle = "#e9cd7e";
+            ctx.fillText(watched.name, pos.sx + 12, pos.sy - 10);
           }
         }
-      }
-
-      for (const base of hubVec) {
-        const spun = {
-          x: base.x * Math.cos((rot * Math.PI) / 180) + base.z * Math.sin((rot * Math.PI) / 180),
-          y: base.y,
-          z: -base.x * Math.sin((rot * Math.PI) / 180) + base.z * Math.cos((rot * Math.PI) / 180),
-        };
-        const p = project(tilt(spun, tiltRad), cx, cy, r);
-        if (p.z <= 0.08) continue;
-        ctx.fillStyle = "rgba(233, 205, 126, 0.95)";
-        ctx.shadowColor = "rgba(233, 205, 126, 0.8)";
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
-        ctx.arc(p.sx, p.sy, 2.1, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-
-      for (const base of rigVec) {
-        const spun = {
-          x: base.x * Math.cos((rot * Math.PI) / 180) + base.z * Math.sin((rot * Math.PI) / 180),
-          y: base.y,
-          z: -base.x * Math.sin((rot * Math.PI) / 180) + base.z * Math.cos((rot * Math.PI) / 180),
-        };
-        const p = project(tilt(spun, tiltRad), cx, cy, r);
-        if (p.z <= 0.1) continue;
-        drawRig(p.sx, p.sy);
       }
 
       ctx.restore();
 
       ctx.beginPath();
-      ctx.arc(cx, cy, r + 0.5, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(201, 160, 56, 0.45)";
-      ctx.lineWidth = 1.2;
+      ctx.arc(cx, cy, radius + 0.6, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(201, 160, 56, 0.55)";
+      ctx.lineWidth = 1.25;
       ctx.stroke();
-
       ctx.beginPath();
-      ctx.arc(cx, cy, r + 10, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(90, 140, 180, 0.25)";
+      ctx.arc(cx, cy, radius + 8, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(120, 160, 190, 0.28)";
       ctx.lineWidth = 0.6;
       ctx.stroke();
-      for (let i = 0; i < 72; i++) {
-        const a = (i / 72) * Math.PI * 2;
-        const inner = i % 6 === 0 ? r + 6 : r + 8;
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(a) * inner, cy + Math.sin(a) * inner);
-        ctx.lineTo(cx + Math.cos(a) * (r + 12), cy + Math.sin(a) * (r + 12));
-        ctx.strokeStyle = i % 6 === 0 ? "rgba(201, 160, 56, 0.55)" : "rgba(120, 160, 190, 0.35)";
-        ctx.stroke();
-      }
     };
 
     frame = requestAnimationFrame(paint);
@@ -412,13 +435,7 @@ export default function HeroGlobe() {
       io.disconnect();
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, []);
+  }, [shipRef]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="h-full w-full"
-      aria-hidden
-    />
-  );
+  return <canvas ref={canvasRef} className="h-full w-full" aria-hidden />;
 }
