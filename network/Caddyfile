@@ -1,0 +1,37 @@
+# CODA operator console — reverse proxy for the OPTIONAL public bind.
+#
+# By default the console binds 127.0.0.1:8787 (loopback) and this file is NOT
+# used. Only use Caddy when OPERATOR_BIND=public, and ALWAYS keep basic-auth in
+# front of the console — the console token alone is not sufficient exposure
+# control for a public interface.
+#
+# 1. Generate a bcrypt hash:   caddy hash-password --plaintext 'yourpassword'
+# 2. Paste it into basic_auth below (replace REPLACE_WITH_BCRYPT_HASH).
+# 3. Point coda.example.com at this host and run:  caddy run
+#
+# The upstream is loopback-only; Caddy is the sole public listener.
+
+coda.example.com {
+	encode zstd gzip
+
+	basic_auth {
+		# username  bcrypt-hash
+		operator REPLACE_WITH_BCRYPT_HASH
+	}
+
+	# Never expose the raw health/token surface publicly.
+	handle /healthz* {
+		respond "ok" 200
+	}
+
+	reverse_proxy 127.0.0.1:8787 {
+		header_up X-Forwarded-For {remote_host}
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+}

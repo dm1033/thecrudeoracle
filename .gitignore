@@ -32,6 +32,15 @@ yarn-error.log*
 # vercel
 .vercel
 
+# CODA desk agent — runtime state & secrets (never commit)
+/secrets/.env
+/outbox/*
+!/outbox/.gitkeep
+/repos/*
+!/repos/.gitkeep
+/logs/
+/run/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
