@@ -26,7 +26,7 @@ const MODULES = [
     title: "Physical Flow Map",
     approach: "Physical / flow traders",
     description:
-      "Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, port congestion and freight — with explainable anomaly detection: why a flow is unusual (in σ vs its 30-day norm), which factors moved with it, and what it means.",
+      "Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, port congestion and freight — plus a watched hull from TankerMap public AIS, with a desk note attached to the position. Anomalies still say why a flow is unusual, in σ against its 30-day norm.",
     href: "/tools/flow-map",
     status: "live",
   },
