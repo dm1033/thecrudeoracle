@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "description": "Desk notes attached to one TankerMap vessel on the Physical Flow Map. Live position, speed, course and the cargo flag are read from the TankerMap public API at request time and are not stored in this file.",
+    "last_published": "2026-09-26T15:00:00Z"
+  },
+  "attachments": [
+    {
+      "imo": 1076599,
+      "headline": "One hull on the Cape-side reading",
+      "read": "GEM DARCY is the hull behind the TankerMap share link: a single crude tanker, not a fleet. The AIS layer is where she was last seen. This note is what that observation is allowed to mean.",
+      "factors": [
+        {
+          "factor": "Destination",
+          "detail": "If the AIS destination is blank, this note does not invent a discharge port or a buyer. A filled-in destination replaces the guesswork."
+        },
+        {
+          "factor": "Cargo flag",
+          "detail": "TankerMap's loaded or ballast mark is a draught-class estimate. The confidence on the card is theirs. It is not a bill of lading and it is not a measured cargo."
+        },
+        {
+          "factor": "Heading ray",
+          "detail": "The gold dashed line is 48 hours of the reported course and speed, drawn as geometry. It is not a filed route and it is not an ETA."
+        },
+        {
+          "factor": "What one hull cannot do",
+          "detail": "This vessel does not update the anomaly radar. Those sigma scores stay desk estimates from public summaries until a licensed fleet feed is connected."
+        }
+      ],
+      "implication": "Check a southwest heading and a loaded-state estimate against an east-to-west barrel. A turn toward Malacca, or an eastbound destination, retires that check. The position stays a delayed AIS observation either way.",
+      "source": "The Crude Oracle desk note, attached to TankerMap public AIS",
+      "source_url": "https://tankermap.com/?vessel=1076599",
+      "last_updated": "2026-09-26T14:50:00Z",
+      "data_type": "indicative",
+      "places": [
+        { "id": "hormuz", "name": "Hormuz", "lat": 26.56, "lon": 56.25 },
+        { "id": "bab", "name": "Bab el-Mandeb", "lat": 12.58, "lon": 43.33 },
+        { "id": "malacca", "name": "Malacca", "lat": 2.5, "lon": 101.2 },
+        { "id": "cape", "name": "Cape of Good Hope", "lat": -34.36, "lon": 18.47 }
+      ]
+    }
+  ]
+}

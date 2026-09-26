@@ -7,10 +7,12 @@ import BalanceTable, { type BalanceRow } from "@/components/BalanceTable";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 import { formatUpdated } from "@/lib/data";
+import { loadWatchedVessel } from "@/lib/tankermap-feed";
+import VesselWatch from "@/components/VesselWatch";
 
 export const metadata: Metadata = pageMeta(
   "Physical Flow Map — Tanker Flows with Explainable Anomaly Detection",
-  "Module 2 of The Crude Oracle trader toolkit: tanker loadings and discharges, destination changes, dark AIS gaps, floating storage, port congestion and freight — with every anomaly explained in plain English, sigma by sigma.",
+  "Module 2 of The Crude Oracle trader toolkit: tanker loadings and discharges, destination changes, dark AIS gaps, floating storage, port congestion and freight — with a TankerMap vessel layer and a desk note attached to the hull.",
   "/tools/flow-map"
 );
 
@@ -113,7 +115,7 @@ function AnomalyCard({ a }: { a: Anomaly }) {
   );
 }
 
-function FlowContent() {
+function FlowContent({ watch }: { watch: Awaited<ReturnType<typeof loadWatchedVessel>> }) {
   return (
     <div className="space-y-10">
       <div className="rounded-lg border border-gold-600/40 bg-gradient-to-r from-navy-900 to-ink-900 p-5">
@@ -127,6 +129,8 @@ function FlowContent() {
           </span>
         </p>
       </div>
+
+      <VesselWatch view={watch} />
 
       <section aria-labelledby="radar-h">
         <h2 id="radar-h" className="h2">
@@ -153,22 +157,32 @@ function FlowContent() {
         </p>
         <p className="mt-2">
           Commercial-grade tanker tracking (Kpler, Vortexa class) requires licensing; until a
-          licensed feed is connected, values here are desk estimates from public summaries and are
-          labelled accordingly. The anomaly framework — baseline, sigma, factors, implication — is
-          feed-agnostic and carries over unchanged when live data lands.
+          licensed feed is connected, the anomaly tables are desk estimates from public summaries
+          and are labelled accordingly. The watched vessel is the exception: position, speed, course
+          and the cargo flag are read from TankerMap&apos;s public API for that hull and labelled
+          delayed. The desk layer attached to the hull is an indicative note, not a second AIS feed.
+          The anomaly framework — baseline, sigma, factors, implication — is feed-agnostic and
+          carries over unchanged when a licensed fleet feed lands.
         </p>
       </div>
     </div>
   );
 }
 
-export default function FlowMapPage() {
+export default async function FlowMapPage({
+  searchParams,
+}: {
+  searchParams?: { vessel?: string | string[] };
+}) {
+  const raw = Array.isArray(searchParams?.vessel) ? searchParams.vessel[0] : searchParams?.vessel;
+  const watch = await loadWatchedVessel(raw);
+
   return (
     <>
       <PageHeader
         eyebrow="Trader Toolkit · Module 2"
         title="Physical Flow Map"
-        intro="Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, congestion and freight — with explainable anomaly detection that tells you why a flow is unusual, not just that it is."
+        intro="Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, congestion and freight — with a TankerMap hull on the map and a desk note attached to that position."
       />
       <div className="container-site space-y-10 py-10">
         <PremiumGate
@@ -181,7 +195,7 @@ export default function FlowMapPage() {
             </div>
           }
         >
-          <FlowContent />
+          <FlowContent watch={watch} />
         </PremiumGate>
 
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm">
