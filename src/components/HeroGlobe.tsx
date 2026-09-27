@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { RefObject } from "react";
 import { COAST, NODES } from "./globe-land";
 import { HEADING_RAY_HOURS } from "@/lib/tankermap";
 import {
@@ -15,6 +14,7 @@ import {
   type GlobeShip,
   type Vec,
 } from "@/lib/sea-lanes";
+import { BARREL_MARKS, type TapePlayhead } from "@/lib/desk-tape";
 
 const GOLD = [220, 181, 78];
 const CYAN = [72, 214, 224];
@@ -86,7 +86,13 @@ function buildLandMask(): Uint8Array | null {
   return mask;
 }
 
-export default function HeroGlobe({ shipRef }: { shipRef: RefObject<GlobeShip | null> }) {
+export default function HeroGlobe({
+  shipRef,
+  tapeRef,
+}: {
+  shipRef: { current: GlobeShip | null };
+  tapeRef: { current: TapePlayhead | null };
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -361,6 +367,46 @@ export default function HeroGlobe({ shipRef }: { shipRef: RefObject<GlobeShip | 
         }
       }
 
+      const tape = tapeRef.current;
+      if (tape) {
+        const drawMark = (lat: number, lon: number, name: string, price: number) => {
+          const p = project(viewVec(toVec(lat, lon), cosR, sinR, cosT, sinT), cx, cy, radius * 1.02);
+          if (p.z < 0.28) return;
+          const s = (radius / 300) * (0.85 + 0.35 * p.z);
+          ctx.save();
+          ctx.translate(p.sx, p.sy - 16 * s);
+          ctx.scale(s, s);
+          ctx.fillStyle = "rgba(16, 12, 6, 0.88)";
+          ctx.strokeStyle = "rgba(220, 181, 78, 0.95)";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(-16, -12);
+          ctx.lineTo(16, -12);
+          ctx.lineTo(16, 14);
+          ctx.quadraticCurveTo(0, 22, -16, 14);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(-16, -4);
+          ctx.lineTo(16, -4);
+          ctx.moveTo(-16, 6);
+          ctx.lineTo(16, 6);
+          ctx.stroke();
+          ctx.fillStyle = "#e9cd7e";
+          ctx.font = "700 11px Inter, sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(`$${price.toFixed(2)}`, 0, 1);
+          ctx.font = "600 8px Inter, sans-serif";
+          ctx.fillStyle = "#c3ccd8";
+          ctx.fillText(name, 0, 22);
+          ctx.restore();
+        };
+        drawMark(BARREL_MARKS[0].lat, BARREL_MARKS[0].lon, "Brent", tape.brent);
+        drawMark(BARREL_MARKS[1].lat, BARREL_MARKS[1].lon, "WTI", tape.wti);
+      }
+
       const watched = shipRef.current;
       if (watched) {
         const glideHours = reduce || watched.cogDeg == null || watched.speedKn == null ? 0 : Math.sin(time / 1600) * 5;
@@ -435,7 +481,7 @@ export default function HeroGlobe({ shipRef }: { shipRef: RefObject<GlobeShip | 
       io.disconnect();
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, [shipRef]);
+  }, [shipRef, tapeRef]);
 
   return <canvas ref={canvasRef} className="h-full w-full" aria-hidden />;
 }
