@@ -28,12 +28,12 @@ export default function FrontScreen() {
 
   return (
     <section className="relative isolate overflow-hidden border-b border-ink-700 bg-ink-950 sm:min-h-[calc(100svh-6.5rem)]">
-      <div className="relative h-[48vh] min-h-[300px] sm:absolute sm:inset-0 sm:h-auto sm:min-h-0">
+      <div className="relative h-[78vh] min-h-[560px] sm:absolute sm:inset-0 sm:h-auto sm:min-h-0">
         <HeroGlobe shipRef={shipRef} tapeRef={tapeRef} />
       </div>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-[42vh] h-24 bg-gradient-to-b from-transparent to-ink-950 sm:hidden"
+        className="pointer-events-none absolute inset-x-0 top-[68vh] h-28 bg-gradient-to-b from-transparent to-ink-950 sm:hidden"
       />
       <div
         aria-hidden
@@ -46,8 +46,8 @@ export default function FrontScreen() {
             Crude Oil Intelligence <span className="text-gold-400">Without the Noise</span>
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-steel-400">
-            Ships move on the desk lanes. Brent and WTI barrels replay the published price path,
-            in dollars per barrel.
+            Ships move on the desk lanes. Offshore rigs mark the basins. Brent and WTI barrels
+            replay the published price path, in dollars per barrel.
           </p>
           <DeskTape tapeRef={tapeRef} />
           <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-steel-400">
@@ -62,6 +62,10 @@ export default function FrontScreen() {
             <li className="flex items-center gap-2">
               <span aria-hidden className="h-2.5 w-2.5 rounded-full border border-gold-300" />
               Delayed AIS
+            </li>
+            <li className="flex items-center gap-2">
+              <span aria-hidden className="inline-block h-2.5 w-2.5 border border-gold-300 bg-ink-950" />
+              Offshore rig
             </li>
           </ul>
           {ship ? (

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { COAST, NODES } from "./globe-land";
 import { HEADING_RAY_HOURS } from "@/lib/tankermap";
+import { OFFSHORE_RIGS } from "@/lib/offshore-rigs";
 import {
   LANES,
   buildLaneFrame,
@@ -18,8 +19,9 @@ import { BARREL_MARKS, type TapePlayhead } from "@/lib/desk-tape";
 
 const GOLD = [220, 181, 78];
 const CYAN = [72, 214, 224];
-const MASK_W = 720;
-const MASK_H = 360;
+const TEX_W = 1440;
+const TEX_H = 720;
+const BAKE_CAP = 960;
 const TILT = 0.4;
 
 type Proj = { sx: number; sy: number; z: number };
@@ -53,13 +55,14 @@ const PROBES: Array<{ lon: number; lat: number; land: boolean }> = [
   { lon: 134, lat: -25, land: true },
 ];
 
-function buildLandMask(): Uint8Array | null {
+/** 0 ocean, 1 land, 2 coastline. Null when the land mask fails its probes. */
+function buildEarthKind(): Uint8Array | null {
   const canvas = document.createElement("canvas");
-  canvas.width = MASK_W;
-  canvas.height = MASK_H;
+  canvas.width = TEX_W;
+  canvas.height = TEX_H;
   const g = canvas.getContext("2d", { willReadFrequently: true });
   if (!g) return null;
-  g.clearRect(0, 0, MASK_W, MASK_H);
+  g.clearRect(0, 0, TEX_W, TEX_H);
   g.fillStyle = "#fff";
   for (const ring of COAST) {
     if (ring.length < 3) continue;
@@ -67,8 +70,8 @@ function buildLandMask(): Uint8Array | null {
     for (const shift of [-360, 0, 360]) {
       g.beginPath();
       for (let i = 0; i < unwrapped.length; i++) {
-        const x = ((unwrapped[i][0] + shift + 180) / 360) * MASK_W;
-        const y = ((90 - unwrapped[i][1]) / 180) * MASK_H;
+        const x = ((unwrapped[i][0] + shift + 180) / 360) * TEX_W;
+        const y = ((90 - unwrapped[i][1]) / 180) * TEX_H;
         if (i === 0) g.moveTo(x, y);
         else g.lineTo(x, y);
       }
@@ -76,14 +79,131 @@ function buildLandMask(): Uint8Array | null {
       g.fill();
     }
   }
-  const pixels = g.getImageData(0, 0, MASK_W, MASK_H).data;
-  const mask = new Uint8Array(MASK_W * MASK_H);
+  const pixels = g.getImageData(0, 0, TEX_W, TEX_H).data;
+  const mask = new Uint8Array(TEX_W * TEX_H);
   for (let i = 0; i < mask.length; i++) mask[i] = pixels[i * 4] > 128 ? 1 : 0;
   for (const probe of PROBES) {
-    const { x, y } = maskPixel(probe.lon, probe.lat, MASK_W, MASK_H);
-    if ((mask[y * MASK_W + x] === 1) !== probe.land) return null;
+    const { x, y } = maskPixel(probe.lon, probe.lat, TEX_W, TEX_H);
+    if ((mask[y * TEX_W + x] === 1) !== probe.land) return null;
   }
-  return mask;
+  const kind = new Uint8Array(mask.length);
+  for (let y = 0; y < TEX_H; y++) {
+    const row = y * TEX_W;
+    const up = y > 0 ? row - TEX_W : row;
+    const down = y + 1 < TEX_H ? row + TEX_W : row;
+    for (let x = 0; x < TEX_W; x++) {
+      const i = row + x;
+      const land = mask[i] === 1;
+      const left = mask[row + (x > 0 ? x - 1 : x)] === 1;
+      const right = mask[row + (x + 1 < TEX_W ? x + 1 : x)] === 1;
+      const coast = left !== land || right !== land || (mask[up + x] === 1) !== land || (mask[down + x] === 1) !== land;
+      kind[i] = coast ? 2 : land ? 1 : 0;
+    }
+  }
+  return kind;
+}
+
+type SphereMap = {
+  size: number;
+  count: number;
+  nx: Float32Array;
+  zR: Float32Array;
+  row: Uint16Array;
+  shade: Uint8Array;
+  spec: Uint8Array;
+  alpha: Uint8Array;
+  slot: Uint32Array;
+};
+
+function prepareSphere(size: number, cosT: number, sinT: number): SphereMap {
+  const rad = size / 2;
+  const inv = 1 / rad;
+  const lx = -0.35;
+  const ly = 0.55;
+  const lz = 0.76;
+  let count = 0;
+  for (let py = 0; py < size; py++) {
+    const ny = -((py + 0.5) - rad) * inv;
+    for (let px = 0; px < size; px++) {
+      const nx = ((px + 0.5) - rad) * inv;
+      if (nx * nx + ny * ny <= 1) count += 1;
+    }
+  }
+  const map: SphereMap = {
+    size,
+    count,
+    nx: new Float32Array(count),
+    zR: new Float32Array(count),
+    row: new Uint16Array(count),
+    shade: new Uint8Array(count),
+    spec: new Uint8Array(count),
+    alpha: new Uint8Array(count),
+    slot: new Uint32Array(count),
+  };
+  let n = 0;
+  for (let py = 0; py < size; py++) {
+    const ny = -((py + 0.5) - rad) * inv;
+    for (let px = 0; px < size; px++) {
+      const nx = ((px + 0.5) - rad) * inv;
+      const rr = nx * nx + ny * ny;
+      if (rr > 1) continue;
+      const nz = Math.sqrt(1 - rr);
+      const yR = ny * cosT + nz * sinT;
+      const zR = -ny * sinT + nz * cosT;
+      const lat = Math.asin(Math.max(-1, Math.min(1, yR))) * (180 / Math.PI);
+      const sample = maskPixel(0, lat, TEX_W, TEX_H);
+      const ndotl = Math.max(0, nx * lx + ny * ly + nz * lz);
+      const hot = ndotl * ndotl;
+      const spec = hot * hot * hot;
+      const edge = rr > 0.972 ? (1 - rr) / 0.028 : 1;
+      map.nx[n] = nx;
+      map.zR[n] = zR;
+      map.row[n] = sample.y;
+      map.shade[n] = Math.round((0.2 + 0.8 * ndotl) * 255);
+      map.spec[n] = Math.round(spec * 255);
+      map.alpha[n] = Math.round(255 * edge);
+      map.slot[n] = py * size + px;
+      n += 1;
+    }
+  }
+  return map;
+}
+
+function paintSphere(
+  image: ImageData,
+  map: SphereMap,
+  kind: Uint8Array,
+  cosR: number,
+  sinR: number
+) {
+  const buf = image.data;
+  const { count, nx, zR, row, shade, spec, alpha, slot } = map;
+  const scale = (180 / Math.PI) / 360;
+  for (let i = 0; i < count; i++) {
+    const x = nx[i] * cosR - zR[i] * sinR;
+    const z = nx[i] * sinR + zR[i] * cosR;
+    let u = Math.atan2(x, z) * scale + 0.5;
+    u -= Math.floor(u);
+    const col = Math.min(TEX_W - 1, (u * TEX_W) | 0);
+    const surface = kind[row[i] * TEX_W + col];
+    const s = shade[i];
+    const o = slot[i] * 4;
+    if (surface === 1) {
+      buf[o] = 48 + ((96 * s) >> 8);
+      buf[o + 1] = 68 + ((82 * s) >> 8);
+      buf[o + 2] = 46 + ((42 * s) >> 8);
+    } else if (surface === 2) {
+      buf[o] = 168 + ((70 * s) >> 8);
+      buf[o + 1] = 156 + ((64 * s) >> 8);
+      buf[o + 2] = 122 + ((48 * s) >> 8);
+    } else {
+      const add = spec[i];
+      buf[o] = Math.min(255, 6 + ((28 * s) >> 8) + ((add * 170) >> 8));
+      buf[o + 1] = Math.min(255, 22 + ((58 * s) >> 8) + ((add * 200) >> 8));
+      buf[o + 2] = Math.min(255, 42 + ((78 * s) >> 8) + ((add * 220) >> 8));
+    }
+    buf[o + 3] = alpha[i];
+  }
 }
 
 export default function HeroGlobe({
@@ -107,21 +227,23 @@ export default function HeroGlobe({
     let visible = true;
     const cosT = Math.cos(TILT);
     const sinT = Math.sin(TILT);
-    const mask = buildLandMask();
+    const kind = buildEarthKind();
 
     const coastVec = COAST.map((ring) => ring.map(([lon, lat]) => toVec(lat, lon)));
     const nodeVec = NODES.map(([lon, lat]) => toVec(lat, lon));
     const lanes = LANES.map((lane) => ({ ...lane, frame: buildLaneFrame(lane.waypoints) }));
-    const stars = Array.from({ length: 70 }, (_, i) => ({
+    const rigs = OFFSHORE_RIGS.map((rig) => ({ ...rig, vec: toVec(rig.lat, rig.lon) }));
+    const stars = Array.from({ length: 90 }, (_, i) => ({
       x: ((i * 97) % 1000) / 1000,
       y: ((i * 53) % 1000) / 1000,
-      a: 0.12 + (i % 5) * 0.07,
-      r: i % 7 === 0 ? 1.3 : 0.7,
+      a: 0.15 + (i % 5) * 0.08,
+      r: i % 7 === 0 ? 1.4 : 0.8,
     }));
 
     const bake = document.createElement("canvas");
     const bakeCtx = bake.getContext("2d", { willReadFrequently: true });
     let image: ImageData | null = null;
+    let sphere: SphereMap | null = null;
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -134,6 +256,7 @@ export default function HeroGlobe({
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sphere = null;
     };
     resize();
     const observer = new ResizeObserver(resize);
@@ -153,20 +276,64 @@ export default function HeroGlobe({
       ctx.translate(sx, sy);
       ctx.rotate(angle);
       ctx.scale(scale, scale);
-      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.96)`;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
       ctx.beginPath();
-      if (lng) {
-        ctx.moveTo(16, 0);
-        ctx.lineTo(-10, 4);
-        ctx.lineTo(-6, 0);
-        ctx.lineTo(-10, -4);
-      } else {
-        ctx.moveTo(18, 0);
-        ctx.lineTo(-12, 5);
-        ctx.lineTo(-7, 0);
-        ctx.lineTo(-12, -5);
-      }
+      ctx.ellipse(1, 4.2, 15, 3.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.98)`;
+      ctx.beginPath();
+      ctx.moveTo(18, 0);
+      ctx.lineTo(11, 5.2);
+      ctx.lineTo(-13, 5.2);
+      ctx.lineTo(-16, 2.2);
+      ctx.lineTo(-16, -2.2);
+      ctx.lineTo(-13, -5.2);
+      ctx.lineTo(11, -5.2);
       ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgba(255, 248, 230, 0.92)";
+      ctx.fillRect(-12.5, -3.4, 6.2, 6.8);
+      if (lng) {
+        ctx.fillStyle = "rgba(210, 236, 240, 0.95)";
+        ctx.beginPath();
+        ctx.arc(-1, -0.4, 2.5, 0, Math.PI * 2);
+        ctx.arc(5.2, -0.4, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = "rgba(20, 16, 8, 0.35)";
+        ctx.fillRect(-2, -1.3, 10, 2.6);
+      }
+      ctx.restore();
+    };
+
+    const drawRig = (sx: number, sy: number, scale: number) => {
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.scale(scale, scale);
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "rgba(233, 205, 126, 0.95)";
+      ctx.fillStyle = "rgba(12, 14, 18, 0.94)";
+      ctx.lineWidth = 1.35;
+      ctx.beginPath();
+      ctx.moveTo(-7, 8);
+      ctx.lineTo(-4.5, 1);
+      ctx.moveTo(0, 9);
+      ctx.lineTo(0, 1);
+      ctx.moveTo(7, 8);
+      ctx.lineTo(4.5, 1);
+      ctx.stroke();
+      ctx.fillRect(-9, -3.5, 18, 6);
+      ctx.strokeRect(-9, -3.5, 18, 6);
+      ctx.beginPath();
+      ctx.moveTo(-3.2, -3.5);
+      ctx.lineTo(0, -16);
+      ctx.lineTo(3.2, -3.5);
+      ctx.moveTo(-1.5, -8);
+      ctx.lineTo(1.5, -8);
+      ctx.stroke();
+      ctx.fillStyle = "#f3d78a";
+      ctx.beginPath();
+      ctx.arc(0, -17.2, 1.8, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     };
@@ -181,8 +348,8 @@ export default function HeroGlobe({
       ctx.clearRect(0, 0, w, h);
       const wide = w > h * 1.08;
       const cx = wide ? w * 0.66 : w * 0.5;
-      const cy = wide ? h * 0.5 : h * 0.4;
-      const radius = wide ? Math.min(h * 0.5, w * 0.34) : Math.min(h * 0.36, w * 0.48);
+      const cy = wide ? h * 0.5 : h * 0.48;
+      const radius = wide ? Math.min(h * 0.48, w * 0.36) : Math.min(h * 0.46, w * 0.48);
       if (radius < 40) return;
 
       const rot = (reduce ? -52 : -52 + (time / 1000) * 2.15) * (Math.PI / 180);
@@ -190,74 +357,32 @@ export default function HeroGlobe({
       const sinR = Math.sin(rot);
 
       for (const star of stars) {
-        ctx.fillStyle = `rgba(198, 214, 226, ${star.a})`;
+        ctx.fillStyle = `rgba(210, 224, 236, ${star.a})`;
         ctx.fillRect(star.x * w, star.y * h, star.r, star.r);
       }
 
       const glow = ctx.createRadialGradient(cx, cy, radius * 0.82, cx, cy, radius * 1.35);
       glow.addColorStop(0, "rgba(18, 48, 82, 0)");
-      glow.addColorStop(0.72, "rgba(36, 92, 140, 0.16)");
+      glow.addColorStop(0.72, "rgba(36, 92, 140, 0.18)");
       glow.addColorStop(1, "rgba(7, 9, 12, 0)");
       ctx.fillStyle = glow;
       ctx.beginPath();
       ctx.arc(cx, cy, radius * 1.35, 0, Math.PI * 2);
       ctx.fill();
 
-      if (mask && bakeCtx) {
-        const size = Math.max(160, Math.min(420, Math.ceil(radius * 1.55)));
-        if (bake.width !== size || bake.height !== size || !image) {
+      if (kind && bakeCtx) {
+        const dpr = canvas.clientWidth > 0 ? canvas.width / canvas.clientWidth : 1;
+        const size = Math.max(480, Math.min(BAKE_CAP, Math.ceil(radius * 2 * dpr)));
+        if (!sphere || sphere.size !== size || !image) {
           bake.width = size;
           bake.height = size;
           image = bakeCtx.createImageData(size, size);
+          sphere = prepareSphere(size, cosT, sinT);
         }
-        const buf = image.data;
-        const rad = size / 2;
-        const inv = 1 / rad;
-        const lx = -0.35;
-        const ly = 0.55;
-        const lz = 0.76;
-        for (let py = 0; py < size; py++) {
-          const ny = -((py + 0.5) - rad) * inv;
-          const row = py * size;
-          for (let px = 0; px < size; px++) {
-            const nx = ((px + 0.5) - rad) * inv;
-            const rr = nx * nx + ny * ny;
-            const i = (row + px) * 4;
-            if (rr > 1) {
-              buf[i + 3] = 0;
-              continue;
-            }
-            const nz = Math.sqrt(1 - rr);
-            const yR = ny * cosT + nz * sinT;
-            const zR = -ny * sinT + nz * cosT;
-            const x = nx * cosR - zR * sinR;
-            const z = nx * sinR + zR * cosR;
-            const lat = Math.asin(Math.max(-1, Math.min(1, yR))) * (180 / Math.PI);
-            const lon = Math.atan2(x, z) * (180 / Math.PI);
-            const sample = maskPixel(lon, lat, MASK_W, MASK_H);
-            const land = mask[sample.y * MASK_W + sample.x] === 1;
-            const ndotl = Math.max(0, nx * lx + ny * ly + nz * lz);
-            const shade = 0.16 + 0.84 * ndotl;
-            if (land) {
-              buf[i] = 36 + 78 * shade;
-              buf[i + 1] = 58 + 70 * shade;
-              buf[i + 2] = 46 + 36 * shade;
-            } else {
-              buf[i] = 3 + 16 * shade;
-              buf[i + 1] = 16 + 42 * shade;
-              buf[i + 2] = 30 + 62 * shade;
-              const spec = ndotl * ndotl;
-              const hot = spec * spec * spec;
-              buf[i] = Math.min(255, buf[i] + hot * 160);
-              buf[i + 1] = Math.min(255, buf[i + 1] + hot * 190);
-              buf[i + 2] = Math.min(255, buf[i + 2] + hot * 210);
-            }
-            const edge = rr > 0.965 ? (1 - rr) / 0.035 : 1;
-            buf[i + 3] = Math.round(255 * edge);
-          }
-        }
+        paintSphere(image, sphere, kind, cosR, sinR);
         bakeCtx.putImageData(image, 0, 0);
         ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
         ctx.drawImage(bake, cx - radius, cy - radius, radius * 2, radius * 2);
       } else {
         const ocean = ctx.createRadialGradient(cx - radius * 0.28, cy - radius * 0.32, radius * 0.08, cx, cy, radius);
@@ -284,12 +409,12 @@ export default function HeroGlobe({
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
       ctx.clip();
 
-      ctx.lineWidth = 0.6;
-      ctx.strokeStyle = "rgba(150, 190, 210, 0.16)";
+      ctx.lineWidth = 0.7;
+      ctx.strokeStyle = "rgba(170, 205, 224, 0.2)";
       for (let lat = -60; lat <= 75; lat += 30) {
         ctx.beginPath();
         let started = false;
-        for (let lon = -180; lon <= 180; lon += 6) {
+        for (let lon = -180; lon <= 180; lon += 4) {
           const p = project(viewVec(toVec(lat, lon), cosR, sinR, cosT, sinT), cx, cy, radius);
           if (p.z <= 0.04) {
             started = false;
@@ -303,8 +428,28 @@ export default function HeroGlobe({
         ctx.stroke();
       }
 
-      ctx.lineWidth = 1.15;
-      ctx.strokeStyle = "rgba(236, 226, 198, 0.72)";
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.lineWidth = Math.max(2.2, radius / 180);
+      ctx.strokeStyle = "rgba(18, 22, 16, 0.8)";
+      for (const ring of coastVec) {
+        ctx.beginPath();
+        let started = false;
+        for (const base of ring) {
+          const p = project(viewVec(base, cosR, sinR, cosT, sinT), cx, cy, radius);
+          if (p.z <= 0.04) {
+            started = false;
+            continue;
+          }
+          if (!started) {
+            ctx.moveTo(p.sx, p.sy);
+            started = true;
+          } else ctx.lineTo(p.sx, p.sy);
+        }
+        ctx.stroke();
+      }
+      ctx.lineWidth = Math.max(1.15, radius / 320);
+      ctx.strokeStyle = "rgba(244, 236, 214, 0.92)";
       for (const ring of coastVec) {
         ctx.beginPath();
         let started = false;
@@ -322,7 +467,7 @@ export default function HeroGlobe({
         ctx.stroke();
       }
 
-      const samples = 28;
+      const samples = 36;
       for (const lane of lanes) {
         const rgb = lane.color === "gold" ? GOLD : CYAN;
         ctx.beginPath();
@@ -339,8 +484,8 @@ export default function HeroGlobe({
             started = true;
           } else ctx.lineTo(p.sx, p.sy);
         }
-        ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.42)`;
-        ctx.lineWidth = 1.15;
+        ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.55)`;
+        ctx.lineWidth = Math.max(1.4, radius / 260);
         ctx.stroke();
 
         for (let s = 0; s < lane.ships; s++) {
@@ -352,19 +497,25 @@ export default function HeroGlobe({
           const p0 = project(viewVec(head, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
           const p1 = project(viewVec(next, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
           if (p0.z < 0.08) continue;
-          for (let trail = 6; trail >= 1; trail--) {
+          for (let trail = 5; trail >= 1; trail--) {
             const back = lanePosition(lane.frame, t - trail * 0.012);
             const pb = project(viewVec(back, cosR, sinR, cosT, sinT), cx, cy, radius * 1.012);
             if (pb.z < 0.06) continue;
-            ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${0.28 * (1 - trail / 7)})`;
+            ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${0.32 * (1 - trail / 6)})`;
             ctx.beginPath();
-            ctx.arc(pb.sx, pb.sy, Math.max(0.8, (3.1 - trail * 0.32) * (radius / 280)), 0, Math.PI * 2);
+            ctx.arc(pb.sx, pb.sy, Math.max(1.1, (3.4 - trail * 0.35) * (radius / 240)), 0, Math.PI * 2);
             ctx.fill();
           }
           const ang = Math.atan2(p1.sy - p0.sy, p1.sx - p0.sx);
-          const scale = (radius / 230) * (0.78 + 0.35 * p0.z);
+          const scale = Math.max(0.95, radius / 165) * (0.72 + 0.4 * p0.z);
           drawShip(p0.sx, p0.sy, ang, rgb, lane.kind === "lng", scale);
         }
+      }
+
+      for (const rig of rigs) {
+        const p = project(viewVec(rig.vec, cosR, sinR, cosT, sinT), cx, cy, radius * 1.01);
+        if (p.z < 0.16) continue;
+        drawRig(p.sx, p.sy, Math.max(0.72, radius / 340) * (0.8 + 0.35 * p.z));
       }
 
       const tape = tapeRef.current;
@@ -445,16 +596,16 @@ export default function HeroGlobe({
           ctx.strokeStyle = "rgba(233, 205, 126, 0.95)";
           ctx.lineWidth = 1.4;
           ctx.beginPath();
-          ctx.arc(pos.sx, pos.sy, 9 * (radius / 280), 0, Math.PI * 2);
+          ctx.arc(pos.sx, pos.sy, 11 * (radius / 280), 0, Math.PI * 2);
           ctx.stroke();
-          drawShip(pos.sx, pos.sy, Math.atan2(p1.sy - pos.sy, p1.sx - pos.sx), GOLD, false, (radius / 250) * 1.2);
+          drawShip(pos.sx, pos.sy, Math.atan2(p1.sy - pos.sy, p1.sx - pos.sx), GOLD, false, Math.max(1.15, radius / 150));
           if (pos.z > 0.2) {
             ctx.font = "600 13px Inter, sans-serif";
             ctx.lineWidth = 3;
             ctx.strokeStyle = "rgba(7, 9, 12, 0.8)";
-            ctx.strokeText(watched.name, pos.sx + 12, pos.sy - 10);
+            ctx.strokeText(watched.name, pos.sx + 14, pos.sy - 12);
             ctx.fillStyle = "#e9cd7e";
-            ctx.fillText(watched.name, pos.sx + 12, pos.sy - 10);
+            ctx.fillText(watched.name, pos.sx + 14, pos.sy - 12);
           }
         }
       }
@@ -462,14 +613,14 @@ export default function HeroGlobe({
       ctx.restore();
 
       ctx.beginPath();
-      ctx.arc(cx, cy, radius + 0.6, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(201, 160, 56, 0.55)";
-      ctx.lineWidth = 1.25;
+      ctx.arc(cx, cy, radius + 0.8, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(201, 160, 56, 0.7)";
+      ctx.lineWidth = 1.4;
       ctx.stroke();
       ctx.beginPath();
       ctx.arc(cx, cy, radius + 8, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(120, 160, 190, 0.28)";
-      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = "rgba(150, 190, 214, 0.35)";
+      ctx.lineWidth = 0.8;
       ctx.stroke();
     };
 
