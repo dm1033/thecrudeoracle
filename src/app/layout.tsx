@@ -76,8 +76,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="/subscribe"
           className="block bg-gold-500 px-4 py-2 text-center text-xs font-semibold text-ink-950 hover:bg-gold-400"
         >
-          The Crude Oracle is now 100% FREE — every dashboard, briefing, tool and the $1M virtual
-          portfolio. No paywall, no card. Learn more →
+          The Crude Oracle is now 100% FREE — every dashboard, briefing, tool and the $10M paper
+          fund. No paywall, no card. Learn more →
         </a>
         <Header />
         <main id="main-content" className="flex-1">

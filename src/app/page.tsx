@@ -14,7 +14,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta(
   "Crude Oil Intelligence Without the Noise",
-  "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security, investor-focused research and a transparent $1M virtual portfolio.",
+  "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security, investor-focused research and a transparent $10M paper fund.",
   "/"
 );
 
@@ -39,7 +39,7 @@ const PRICING_FEATURES = [
   "Supply and demand alerts",
   "OPEC / geopolitical risk monitoring",
   "Research archive",
-  "$1M virtual portfolio with full trade journal",
+  "$10M paper fund with a permanent trade ledger",
 ];
 
 const FAQ_ITEMS = [
@@ -57,7 +57,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How much does it cost?",
-    a: "Nothing. The Crude Oracle is now completely free — the former £299.99/month subscription has been retired and the paywall removed. Every dashboard, briefing, watchlist, tool and the $1M virtual portfolio is open to everyone.",
+    a: "Nothing. The Crude Oracle is now completely free — the former £299.99/month subscription has been retired and the paywall removed. Every dashboard, briefing, watchlist, tool and the $10M paper fund is open to everyone.",
   },
   {
     q: "How often is the intelligence updated?",

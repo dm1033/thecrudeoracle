@@ -47,11 +47,18 @@ interface Rules {
 
 interface PortfolioFile {
   meta: { inception: string; last_published: string; status: string };
-  account: Account;
+  account: Account & { open_positions: number; closed_trades: number };
   rules: Rules;
   allocation: Allocation[];
   positions: Position[];
   closed_trades: ClosedTrade[];
+  equity_curve: { date: string; nav: number }[];
+  opportunities: {
+    market: string;
+    confidence: number;
+    status: string;
+    factors: { score: number; max: number }[];
+  }[];
 }
 
 describe("data/virtual-portfolio.json", () => {
@@ -192,6 +199,37 @@ describe("data/virtual-portfolio.json", () => {
     for (const p of data.positions) {
       assertValidPastDate(p.last_updated, `position ${p.id}.last_updated`);
     }
+  });
+
+  it("is the $10,000,000 fund opened on 5 October 2026, with the first NAV point at inception", () => {
+    expect(data.account.starting_value).toBe(10_000_000);
+    expect(data.meta.inception).toBe("2026-10-05");
+    expect(data.equity_curve[0].nav).toBe(10_000_000);
+    expect(data.equity_curve[0].date).toBe("2026-10-05");
+    expect(data.account.open_positions).toBe(data.positions.length);
+    expect(data.account.closed_trades).toBe(data.closed_trades.length);
+  });
+
+  it("does not open a trade whose confidence is below 60", () => {
+    for (const idea of data.opportunities) {
+      const scored = idea.factors.reduce((sum, factor) => sum + factor.score, 0);
+      expect(scored, idea.market).toBe(idea.confidence);
+      const cap = idea.factors.reduce((sum, factor) => sum + factor.max, 0);
+      expect(cap, idea.market).toBe(100);
+      if (idea.confidence < 60) {
+        expect(idea.status, idea.market).not.toBe("TRADE");
+        expect(idea.status, idea.market).not.toBe("SMALL POSITION");
+      }
+    }
+  });
+
+  it("keeps the retired $1M sample book archived and out of this NAV", () => {
+    const archived = loadJson<{ account: { starting_value: number }; trade_log: { trade_id: string }[] }>(
+      "archive/virtual-portfolio-1m-2026-07.json",
+    );
+    expect(archived.account.starting_value).toBe(1_000_000);
+    expect(archived.trade_log[0].trade_id).toBe("T-001");
+    expect(data.account.starting_value).not.toBe(archived.account.starting_value);
   });
 
   it("every position's capital_allocated and weight_pct are finite, non-negative numbers", () => {

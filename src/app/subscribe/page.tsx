@@ -8,7 +8,7 @@ import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
   "Free Access — The Crude Oracle is now 100% free",
-  "The Crude Oracle has removed its paywall. The full oil and gas intelligence dashboard, daily briefings, investment watchlist, company intelligence, analysis tools and the $1M virtual portfolio are free for everyone.",
+  "The Crude Oracle has removed its paywall. The full oil and gas intelligence dashboard, daily briefings, investment watchlist, company intelligence, analysis tools and the $10M paper fund are free for everyone.",
   "/subscribe"
 );
 
@@ -18,7 +18,7 @@ const INCLUDED = [
   ["Investment watchlist", "/watchlist", "Monitored names across 12 energy segments. Monitored, never recommended."],
   ["Company intelligence", "/company-intelligence", "Structured notes on production, reserves, balance sheets and catalysts."],
   ["Analysis tools", "/tools", "Balance engine, curve monitor, flow map, positioning, news-to-barrels and hypothesis builder."],
-  ["$1M virtual portfolio", "/portfolio/dashboard", "A transparent paper-trading account with full journal, risk rules and published performance — wins and losses both."],
+  ["$10M paper fund", "/portfolio/dashboard", "A simulated $10,000,000 book with a weekly committee, confidence scores and a permanent ledger — wins, losses and no-trade weeks."],
   ["Research library", "/research-library", "Deep-dive notes on supply, demand, LNG, shipping and UK energy security."],
   ["UK energy security", "/uk-energy-security", "Dedicated North Sea, UKCS fiscal and import-dependency coverage."],
 ] as const;
@@ -38,7 +38,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is this financial advice?",
-    a: "No. The Crude Oracle provides market commentary, research and education for information purposes only. It is not financial advice or a recommendation to transact. The $1M portfolio is paper trading with virtual capital. Capital at risk.",
+    a: "No. The Crude Oracle provides market commentary, research and education for information purposes only. It is not financial advice or a recommendation to transact. The $10M fund is paper trading with virtual capital. Capital at risk.",
   },
   {
     q: "How is the site funded if it's free?",

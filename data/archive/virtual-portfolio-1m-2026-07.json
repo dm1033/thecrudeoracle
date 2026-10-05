@@ -1,0 +1,256 @@
+{
+  "meta": {
+    "name": "The Crude Oracle $1,000,000 Oil Intelligence Portfolio",
+    "type": "PAPER TRADING — virtual capital only",
+    "description": "Educational paper-trading demonstration account. SAMPLE / ILLUSTRATIVE data throughout — all prices indicative, all positions virtual. Update per docs/PORTFOLIO_PLAYBOOK.md.",
+    "objective": "The objective is to test whether The Crude Oracle's daily intelligence process can outperform standard passive or generic oil-market tools over time through better data, risk control and decision discipline.",
+    "disclaimer": "This is a virtual paper-trading example for education and platform demonstration only. It is not financial advice, investment advice, trading advice or a recommendation to buy, sell or hold any security, commodity, derivative, ETF, fund or financial product. Trading and investing involve risk, including loss of capital. Past performance and simulated performance do not guarantee future results. Users must conduct their own research and consult a regulated financial adviser where appropriate.",
+    "inception": "2026-07-01",
+    "last_published": "2026-07-04T07:00:00Z",
+    "status": "published"
+  },
+  "account": {
+    "starting_value": 1000000,
+    "current_value": 1012015,
+    "return_pct": 1.2,
+    "cash_balance": 175400,
+    "cash_pct": 17.5,
+    "unrealised_pl": 10865,
+    "realised_pl": 1150,
+    "max_drawdown_pct": -0.4,
+    "current_drawdown_pct": 0.0,
+    "risk_level": "Moderate — within all limits",
+    "open_positions": 11,
+    "closed_trades": 1,
+    "currency": "USD (non-USD positions converted at indicative FX)",
+    "last_updated": "2026-07-04T07:00:00Z",
+    "data_type": "manual"
+  },
+  "rules": {
+    "position_limits": [
+      "Core position: maximum 15% of account",
+      "High-conviction position: maximum 20% — written justification required",
+      "Speculative position: maximum 5%",
+      "Single equity: maximum 10%",
+      "Futures exposure margin-adjusted, notional counted against limits, stop always defined"
+    ],
+    "cash_reserve": "Minimum 10% cash unless explicitly justified in writing",
+    "risk_per_trade": "Target maximum loss per trade 1–2% of account; any trade risking more than 2% carries a special risk warning",
+    "drawdown_ladder": [
+      { "level": "-5%", "action": "Review required", "status": "not triggered" },
+      { "level": "-10%", "action": "Reduce risk", "status": "not triggered" },
+      { "level": "-15%", "action": "Pause new trades, full review", "status": "not triggered" },
+      { "level": "-20%", "action": "Strategy failure review", "status": "not triggered" }
+    ],
+    "conduct": ["No excessive leverage", "No hidden losses", "No cherry-picked results", "Every trade recorded with thesis and risk before entry"]
+  },
+  "allocation": [
+    { "category": "Core Energy Positions", "target_pct": 25, "actual_pct": 25.5, "note": "Longer-term oil and gas equity exposure" },
+    { "category": "Tactical Oil Trades", "target_pct": 20, "actual_pct": 21.5, "note": "Brent futures + crude ETC (notional counted)" },
+    { "category": "Gas / LNG Opportunities", "target_pct": 15, "actual_pct": 15.0, "note": "LNG operator + natural gas ETC" },
+    { "category": "Services / Shipping / Infrastructure", "target_pct": 15, "actual_pct": 15.0, "note": "Oilfield services + tankers" },
+    { "category": "Speculative Opportunities", "target_pct": 10, "actual_pct": 5.5, "note": "Capped-risk positions only — under-deployed by choice" },
+    { "category": "Cash Reserve", "target_pct": 15, "actual_pct": 17.5, "note": "Risk control and opportunity reserve" }
+  ],
+  "positions": [
+    {
+      "id": "P-001", "category": "Core Energy Positions", "asset": "Global Upstream Major (Sample A)", "ticker": "SMPL-A", "exchange": "LSE", "currency": "GBP",
+      "direction": "long", "size": "3,650 shares", "entry_price": "£20.50", "current_price": "£20.89", "capital_allocated": 95000, "weight_pct": 9.5,
+      "unrealised_pl": 1805, "realised_pl": 0, "risk_level": "Low-Medium", "stop_loss": "£18.90 (-7.8%)", "target": "Re-rate to peer multiples; income while waiting",
+      "decision": "Hold", "source": "LSE delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-002", "category": "Core Energy Positions", "asset": "High-Dividend Integrated (Sample J)", "ticker": "SMPL-J", "exchange": "LSE", "currency": "GBP",
+      "direction": "long", "size": "5,200 shares", "entry_price": "£13.60", "current_price": "£13.76", "capital_allocated": 90000, "weight_pct": 9.0,
+      "unrealised_pl": 1080, "realised_pl": 0, "risk_level": "Low", "stop_loss": "£12.50 (-8.1%)", "target": "Income compounding; dividend covered at $60 Brent",
+      "decision": "Hold", "source": "LSE delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-003", "category": "Core Energy Positions", "asset": "Midstream Pipeline Operator (Sample D)", "ticker": "SMPL-D", "exchange": "NYSE", "currency": "USD",
+      "direction": "long", "size": "1,750 units", "entry_price": "$40.00", "current_price": "$40.16", "capital_allocated": 70000, "weight_pct": 7.0,
+      "unrealised_pl": 280, "realised_pl": 0, "risk_level": "Low", "stop_loss": "$36.80 (-8.0%)", "target": "Fee-based cash flows; ~7% distribution yield",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-004", "category": "Tactical Oil Trades", "asset": "ICE Brent Crude Futures (2 lots, 2,000 bbl notional)", "ticker": "BRN Sep-26", "exchange": "ICE", "currency": "USD",
+      "direction": "long", "size": "2 contracts (notional $154,600)", "entry_price": "$77.30", "current_price": "$78.42", "capital_allocated": 154600, "weight_pct": 15.5,
+      "unrealised_pl": 2240, "realised_pl": 0, "risk_level": "Medium — margin-adjusted, stop defined", "stop_loss": "$75.90 (risk $2,800 = 0.28% of account)", "target": "$81.50 (upper range)",
+      "decision": "Hold", "source": "ICE-style desk mark (indicative)", "source_url": "https://www.eia.gov/petroleum/", "last_updated": "2026-07-04", "data_type": "manual"
+    },
+    {
+      "id": "P-005", "category": "Tactical Oil Trades", "asset": "Brent Crude ETC (sample)", "ticker": "CRUD-ETC", "exchange": "LSE", "currency": "USD",
+      "direction": "long", "size": "1,200 units", "entry_price": "$50.00", "current_price": "$50.70", "capital_allocated": 60000, "weight_pct": 6.0,
+      "unrealised_pl": 840, "realised_pl": 0, "risk_level": "Medium", "stop_loss": "$47.50 (-5.0%)", "target": "Range trade with the inventory draw cycle",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-006", "category": "Gas / LNG Opportunities", "asset": "Global LNG Operator (Sample C)", "ticker": "SMPL-C", "exchange": "NYSE", "currency": "USD",
+      "direction": "long", "size": "540 shares", "entry_price": "$176.00", "current_price": "$180.05", "capital_allocated": 95000, "weight_pct": 9.5,
+      "unrealised_pl": 2185, "realised_pl": 0, "risk_level": "Medium", "stop_loss": "$161.90 (-8.0%)", "target": "Expansion FID + new SPAs as catalysts",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-007", "category": "Gas / LNG Opportunities", "asset": "Natural Gas ETC (sample)", "ticker": "NGAS-ETC", "exchange": "LSE", "currency": "USD",
+      "direction": "long", "size": "5,000 units", "entry_price": "$11.00", "current_price": "$10.84", "capital_allocated": 55000, "weight_pct": 5.5,
+      "unrealised_pl": -825, "realised_pl": 0, "risk_level": "Medium-High — contango decay risk noted", "stop_loss": "$10.12 (-8.0%)", "target": "Storage-refill tightening into winter",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-008", "category": "Services / Shipping / Infrastructure", "asset": "Oilfield Services Leader (Sample E)", "ticker": "SMPL-E", "exchange": "NYSE", "currency": "USD",
+      "direction": "long", "size": "1,560 shares", "entry_price": "$48.00", "current_price": "$48.87", "capital_allocated": 75000, "weight_pct": 7.5,
+      "unrealised_pl": 1350, "realised_pl": 0, "risk_level": "Medium", "stop_loss": "$44.20 (-7.9%)", "target": "International/offshore capex cycle",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-009", "category": "Services / Shipping / Infrastructure", "asset": "Crude Tanker Owner (Sample G)", "ticker": "SMPL-G", "exchange": "NYSE", "currency": "USD",
+      "direction": "long", "size": "3,000 shares", "entry_price": "$25.00", "current_price": "$25.85", "capital_allocated": 75000, "weight_pct": 7.5,
+      "unrealised_pl": 2550, "realised_pl": 0, "risk_level": "Medium-High — rate volatility", "stop_loss": "$22.80 (-8.8%)", "target": "Fleet-supply tightness thesis (Toolkit Hypothesis #3)",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-010", "category": "Speculative Opportunities", "asset": "Gasoil ETC (sample) — diesel crack research theme", "ticker": "GSOL-ETC", "exchange": "LSE", "currency": "USD",
+      "direction": "long", "size": "600 units", "entry_price": "$50.00", "current_price": "$49.60", "capital_allocated": 30000, "weight_pct": 3.0,
+      "unrealised_pl": -240, "realised_pl": 0, "risk_level": "HIGH — speculative, capped at 3%", "stop_loss": "$46.00 (-8.0%, risk 0.24% of account)", "target": "Crack repricing on outage risk (Toolkit Hypothesis #1, 68%)",
+      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
+    },
+    {
+      "id": "P-011", "category": "Speculative Opportunities", "asset": "North Sea Independent (Sample I)", "ticker": "SMPL-I", "exchange": "LSE / AIM", "currency": "GBP",
+      "direction": "long", "size": "16,000 shares", "entry_price": "£1.25", "current_price": "£1.23", "capital_allocated": 25000, "weight_pct": 2.5,
+      "unrealised_pl": -400, "realised_pl": 0, "risk_level": "HIGH — fiscal/policy risk, capped at 2.5%", "stop_loss": "£1.10 (-12%, risk 0.30% of account — wide stop justified by illiquidity)", "target": "UKCS fiscal clarity as re-rating catalyst",
+      "decision": "Hold", "source": "LSE delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/news", "last_updated": "2026-07-04", "data_type": "delayed"
+    }
+  ],
+  "closed_trades": [
+    {
+      "id": "T-000", "date_opened": "2026-07-01", "date_closed": "2026-07-03", "asset": "WTI Crude ETF (sample)", "ticker": "WTIF-ETF", "exchange": "NYSE Arca", "currency": "USD",
+      "direction": "long", "entry_price": "$68.20", "exit_price": "$69.77", "capital_allocated": 50000, "realised_pl": 1150, "return_pct": 2.3,
+      "reason_closed": "Target reached at range top ahead of the weekly EIA print — took the tactical gain rather than hold event risk. Decision label: Exit.",
+      "lesson": "The process worked: entry on inventory-draw signal (Module 1), exit at pre-defined target. Not holding through binary events is a rule, not a prediction.",
+      "source": "Public delayed quote (indicative)", "last_updated": "2026-07-03", "data_type": "delayed"
+    }
+  ],
+  "trade_log": [
+    {
+      "trade_id": "T-001", "date": "2026-07-01", "asset": "ICE Brent Crude Futures Sep-26", "ticker": "BRN", "decision": "Buy / Add", "direction": "long",
+      "entry_price": "$77.30", "position_size": "2 contracts (2,000 bbl, notional $154,600 = 15.5%)", "capital_allocated": "Margin ~$16,000; notional counted against limits",
+      "thesis": "Prompt physical market tighter than sentiment: fourth US inventory draw in five weeks, OECD stocks below 5-yr average, backwardation firming — while positioning in WTI (not Brent) is uncrowded. Structure and stocks agree (Curve Dashboard: supported).",
+      "catalyst": "Weekly EIA prints; OPEC+ compliance headlines.",
+      "supporting_data": "Balance Engine implied deficit -0.2 mb/d; Cushing draws; Brent M1/M2 tightening (Module 3).",
+      "risk": "OPEC+ signalling a faster unwind (News-to-Barrels event #2, low confidence but live); crowded Brent length (Module 5, 82nd percentile) means exits are busy.",
+      "invalidation": "Two consecutive US inventory builds, or Brent M1/M2 flipping toward flat.",
+      "stop_loss": "$75.90 — risk $2,800 = 0.28% of account (within 1–2% rule)",
+      "target": "$81.50", "holding_period": "2–6 weeks", "confidence": "Medium",
+      "sources": ["EIA Weekly Petroleum Status Report", "The Crude Oracle Balance Engine / Curve Dashboard"],
+      "strategy_fit": "High-conviction tactical trade (15.5% notional < 20% cap) with written justification: three intelligence pillars aligned (inventory, structure, supply). Justification recorded per rules.",
+      "special_risk_warning": null
+    },
+    {
+      "trade_id": "T-002", "date": "2026-07-01", "asset": "Crude Tanker Owner (Sample G)", "ticker": "SMPL-G", "decision": "Buy / Add", "direction": "long",
+      "entry_price": "$25.00", "position_size": "3,000 shares", "capital_allocated": "$75,000 (7.5%)",
+      "thesis": "Fleet-supply tightness is structural: ageing fleet, low orderbook, sanctioned-trade inefficiency and floating-storage absorption — freight strength without cargo strength (Flow Map anomaly, fleet-driven).",
+      "catalyst": "New designations shrinking the compliant fleet; seasonal rate strength.",
+      "supporting_data": "TD3C +1.2σ with flat cargo counts (Module 2); Toolkit Hypothesis #3 (55%, monitoring).",
+      "risk": "Rate volatility is extreme; a fast unwind of floating storage releases tonnage.",
+      "invalidation": "Enforcement visibly relaxes; floating storage draws two consecutive weeks; newbuild ordering accelerates.",
+      "stop_loss": "$22.80 (-8.8%) — risk $6,600 = 0.66% of account",
+      "target": "Re-rate on sustained rate strength", "holding_period": "1–2 quarters", "confidence": "Medium",
+      "sources": ["Public freight assessments", "Company filings", "The Crude Oracle Flow Map"],
+      "strategy_fit": "Services/shipping sleeve; expresses a flow-side insight equities haven't fully priced.",
+      "special_risk_warning": null
+    },
+    {
+      "trade_id": "T-003", "date": "2026-07-01", "asset": "Gasoil ETC (sample)", "ticker": "GSOL-ETC", "decision": "Buy / Add", "direction": "long",
+      "entry_price": "$50.00", "position_size": "600 units", "capital_allocated": "$30,000 (3.0% — speculative cap 5%)",
+      "thesis": "Diesel cracks undervalued relative to refinery outage risk: Rotterdam outage (400 kb/d), distillate stocks below seasonal average, clean freight tightening, crack not yet repriced — against a near-record managed-money short (squeeze fuel).",
+      "catalyst": "ARA distillate draws; Rotterdam restart guidance slipping.",
+      "supporting_data": "Toolkit Hypothesis #1 (confidence 68% — evidence weight, not probability of profit); Module 5 gasoil crowd-risk: elevated.",
+      "risk": "Diesel demand is genuinely weak; a fast restart kills the thesis. Timing risk high — squeezes are brief.",
+      "invalidation": "Refinery returns inside two weeks; distillate stocks build two consecutive weeks; freight normalises.",
+      "stop_loss": "$46.00 (-8.0%) — risk $2,400 = 0.24% of account",
+      "target": "Crack repricing toward seasonal norm", "holding_period": "2–4 weeks", "confidence": "Medium",
+      "sources": ["EIA weekly data", "ICE COT (public)", "The Crude Oracle Hypothesis Builder"],
+      "strategy_fit": "Speculative sleeve, capped and stop-defined — a hypothesis from Module 6 expressed with controlled risk. This is the platform loop: intelligence → hypothesis → journaled paper trade.",
+      "special_risk_warning": "Speculative instrument referencing a crowded-short squeeze scenario; risk of rapid reversal. Position deliberately capped at 3%."
+    }
+  ],
+  "exposure": {
+    "by_asset_type": [
+      { "label": "Oil & gas equities", "pct": 43.0 },
+      { "label": "Crude futures (notional)", "pct": 15.5 },
+      { "label": "ETC/ETF exposure", "pct": 14.5 },
+      { "label": "Speculative equities", "pct": 2.5 },
+      { "label": "Cash", "pct": 17.5 },
+      { "label": "Other", "pct": 7.0 }
+    ],
+    "by_region": [
+      { "label": "North America", "pct": 39.0 },
+      { "label": "UK / Europe", "pct": 27.5 },
+      { "label": "Global benchmarks (Brent complex)", "pct": 21.5 },
+      { "label": "Cash", "pct": 17.5 }
+    ],
+    "by_theme": [
+      { "label": "Prompt tightness / inventory draws", "pct": 21.5 },
+      { "label": "Income & capital discipline", "pct": 25.5 },
+      { "label": "LNG growth", "pct": 15.0 },
+      { "label": "Fleet-supply tightness (tankers/services)", "pct": 15.0 },
+      { "label": "Dislocation hypotheses (diesel, UKCS)", "pct": 5.5 },
+      { "label": "Cash / optionality", "pct": 17.5 }
+    ]
+  },
+  "contributors": [
+    { "asset": "Crude Tanker Owner (SMPL-G)", "pl": 2550 },
+    { "asset": "Brent futures (BRN Sep-26)", "pl": 2240 },
+    { "asset": "Global LNG Operator (SMPL-C)", "pl": 2185 }
+  ],
+  "detractors": [
+    { "asset": "Natural Gas ETC (NGAS-ETC)", "pl": -825 },
+    { "asset": "North Sea Independent (SMPL-I)", "pl": -400 },
+    { "asset": "Gasoil ETC (GSOL-ETC)", "pl": -240 }
+  ],
+  "benchmarks": {
+    "period": "July 2026 to date (3 trading days — far too short to judge; shown for format)",
+    "rows": [
+      { "metric": "Period return", "portfolio": "+1.20%", "brent": "+1.45%", "wti": "+1.31%", "energy_etf": "+0.92%", "notes": "Sample period; cash drag vs pure beta expected early" },
+      { "metric": "Year-to-date return", "portfolio": "+1.20%", "brent": "+1.45%", "wti": "+1.31%", "energy_etf": "+0.92%", "notes": "Inception 2026-07-01" },
+      { "metric": "Max drawdown", "portfolio": "-0.4%", "brent": "-0.8%", "wti": "-0.9%", "energy_etf": "-0.6%", "notes": "Risk control objective visible here" },
+      { "metric": "Win rate", "portfolio": "1/1 closed", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "One closed trade — no statistical meaning yet" },
+      { "metric": "Number of trades", "portfolio": "12 opened, 1 closed", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "" },
+      { "metric": "Best trade", "portfolio": "T-000 WTI ETF +2.3%", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "Exit at pre-defined target" },
+      { "metric": "Worst open position", "portfolio": "NGAS-ETC -1.5%", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "Within stop distance" }
+    ],
+    "note": "Benchmarks: cash (SONIA/T-bill proxy), Brent front month, WTI front month, broad energy ETF, S&P 500 energy sector where available. All benchmark values indicative/delayed. Simulated performance does not guarantee future results.",
+    "last_updated": "2026-07-04",
+    "data_type": "manual"
+  },
+  "daily_brief": {
+    "date": "2026-07-04",
+    "title": "The Crude Oracle Daily Trading Brief — 2026-07-04",
+    "sections": [
+      { "n": 1, "label": "Market summary", "text": "Crude firm on the inventory draw; both benchmarks backwardated. Physical tightness real at the prompt, suspect in the deferred (Brent 6-month rich vs Atlantic length)." },
+      { "n": 2, "label": "Brent / WTI price signal", "text": "Brent $78.42 (+1.4% w/w), WTI $74.18. Uptrend within range; resistance zone $79.80–80.50 Brent. Brent–WTI $4.24 keeps the US export arb working." },
+      { "n": 3, "label": "Gas / LNG signal", "text": "TTF eased on storage pace; NBP followed. NGAS-ETC position under water — thesis is winter tightening, stop distance intact." },
+      { "n": 4, "label": "Supply risk", "text": "OPEC+ unwind signalling is the live bear risk (low confidence). Rotterdam outage removes 400 kb/d of runs. Sanctions designations tightening effective supply." },
+      { "n": 5, "label": "Demand signal", "text": "US gasoline at 5-yr average; India structural growth intact; European diesel still the weak link — which is exactly why the crack hypothesis is capped at 3%." },
+      { "n": 6, "label": "Inventory signal", "text": "US commercial -2.1 mb; Cushing below 25 mb toward operational minimums. Draw cycle intact — supports T-001." },
+      { "n": 7, "label": "Geopolitical risk", "text": "Red Sea reroutings persist; hurricane watch on the US Gulf (two-sided for crude). No position action — monitoring per News-to-Barrels event cards." },
+      { "n": 8, "label": "Top opportunity today", "text": "Diesel crack dislocation (Hypothesis #1, 68% evidence weight) — already expressed via GSOL-ETC at capped size. No addition; let the thesis work or fail." },
+      { "n": 9, "label": "Top risk today", "text": "Crowded Brent length (82nd percentile) meeting an OPEC+ unwind headline. Mitigation: futures stop at $75.90, cash at 17.5%." },
+      { "n": 10, "label": "Existing positions review", "text": "11 open, all within limits. Tankers best (+3.4%); gas ETC worst (-1.5%), within stop distance. No stops threatened." },
+      { "n": 11, "label": "Proposed paper trades", "text": "No trade today. Watch only: refiner exposure if cracks reprice; UK gas ETC on storage data. Discipline over activity." },
+      { "n": 12, "label": "Stop-loss / risk levels", "text": "All stops verified. Aggregate theoretical loss if every stop hit simultaneously: ~4.1% of account — inside the 5% review threshold." },
+      { "n": 13, "label": "Portfolio exposure", "text": "82.5% deployed (43% equities, 15.5% futures notional, 14.5% ETC, 2.5% spec equity, 7% other), 17.5% cash." },
+      { "n": 14, "label": "Cash balance", "text": "$175,400 (17.5%) — above the 10% minimum; held for the hurricane window and OPEC+ event risk." },
+      { "n": 15, "label": "Watchlist changes", "text": "Added: US independent refiner (crack repricing play, watch only). No removals." },
+      { "n": 16, "label": "Bottom line", "text": "Positioned with the physical tightness, hedged by cash and stops against the two live event risks. The process, not the P&L, is today's product." }
+    ],
+    "source": "The Crude Oracle intelligence modules 1–6",
+    "last_updated": "2026-07-04T07:00:00Z",
+    "data_type": "manual"
+  },
+  "next_events": [
+    { "date": "2026-07-08", "event": "EIA Weekly Petroleum Status Report", "relevance": "Inventory signal — T-001 and P-005 sensitive" },
+    { "date": "2026-07-11", "event": "OPEC Monthly Oil Market Report", "relevance": "Supply/demand balance revisions" },
+    { "date": "2026-07-14", "event": "IEA Oil Market Report", "relevance": "IEA vs OPEC demand disagreement tracking" },
+    { "date": "2026-07-31", "event": "Month 1 portfolio report", "relevance": "First full monthly report published" }
+  ]
+}

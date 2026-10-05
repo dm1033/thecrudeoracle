@@ -1,256 +1,409 @@
 {
   "meta": {
-    "name": "The Crude Oracle $1,000,000 Oil Intelligence Portfolio",
+    "name": "The Crude Oracle $10,000,000 Quantitative Paper Fund",
     "type": "PAPER TRADING — virtual capital only",
-    "description": "Educational paper-trading demonstration account. SAMPLE / ILLUSTRATIVE data throughout — all prices indicative, all positions virtual. Update per docs/PORTFOLIO_PLAYBOOK.md.",
-    "objective": "The objective is to test whether The Crude Oracle's daily intelligence process can outperform standard passive or generic oil-market tools over time through better data, risk control and decision discipline.",
-    "disclaimer": "This is a virtual paper-trading example for education and platform demonstration only. It is not financial advice, investment advice, trading advice or a recommendation to buy, sell or hold any security, commodity, derivative, ETF, fund or financial product. Trading and investing involve risk, including loss of capital. Past performance and simulated performance do not guarantee future results. Users must conduct their own research and consult a regulated financial adviser where appropriate.",
-    "inception": "2026-07-01",
-    "last_published": "2026-07-04T07:00:00Z",
-    "status": "published"
+    "description": "Institutional-style simulated portfolio. Prices are delayed or indicative public marks frozen at the decision timestamp. The July 2026 $1,000,000 sample book is archived unchanged at data/archive/virtual-portfolio-1m-2026-07.json and is not part of this NAV.",
+    "objective": "Determine whether The Crude Oracle's combined energy, shipping, macroeconomic, geopolitical, quantitative and AI intelligence can generate persistent positive risk-adjusted returns from a simulated $10,000,000 portfolio.",
+    "disclaimer": "This is a virtual paper-trading record for education and platform demonstration only. No real capital is deployed. It is not financial advice, investment advice, trading advice or a recommendation to buy, sell or hold any security, commodity, derivative, ETF, fund or financial product. Trading and investing involve risk, including loss of capital. Past performance and simulated performance do not guarantee future results. Users must conduct their own research and consult a regulated financial adviser where appropriate.",
+    "inception": "2026-10-05",
+    "week": "2026-W41",
+    "last_published": "2026-10-05T11:21:23Z",
+    "status": "published",
+    "prior_fund_archive": "data/archive/virtual-portfolio-1m-2026-07.json"
   },
   "account": {
-    "starting_value": 1000000,
-    "current_value": 1012015,
-    "return_pct": 1.2,
-    "cash_balance": 175400,
-    "cash_pct": 17.5,
-    "unrealised_pl": 10865,
-    "realised_pl": 1150,
-    "max_drawdown_pct": -0.4,
-    "current_drawdown_pct": 0.0,
-    "risk_level": "Moderate — within all limits",
-    "open_positions": 11,
-    "closed_trades": 1,
-    "currency": "USD (non-USD positions converted at indicative FX)",
-    "last_updated": "2026-07-04T07:00:00Z",
-    "data_type": "manual"
+    "starting_value": 10000000,
+    "current_value": 10000000,
+    "return_pct": 0,
+    "weekly_pnl": 0,
+    "weekly_return_pct": 0,
+    "cash_balance": 10000000,
+    "cash_pct": 100,
+    "unrealised_pl": 0,
+    "realised_pl": 0,
+    "gross_exposure": 0,
+    "gross_exposure_pct": 0,
+    "net_exposure": 0,
+    "max_drawdown_pct": 0,
+    "current_drawdown_pct": 0,
+    "risk_level": "Flat — no open risk",
+    "open_positions": 0,
+    "closed_trades": 0,
+    "currency": "USD",
+    "last_updated": "2026-10-05T11:21:23Z",
+    "data_type": "manual",
+    "oracle_confidence_index": null,
+    "oracle_confidence_note": "The index is the exposure-weighted confidence of open positions. With no open risk it is not printed as a market view.",
+    "best_opportunity": "Brent–WTI spread compression",
+    "best_opportunity_confidence": 50,
+    "largest_risk": "No open position. The predefined risk in the book is $0. Opportunity cost of holding cash is not a stop-loss."
   },
   "rules": {
     "position_limits": [
-      "Core position: maximum 15% of account",
-      "High-conviction position: maximum 20% — written justification required",
-      "Speculative position: maximum 5%",
-      "Single equity: maximum 10%",
-      "Futures exposure margin-adjusted, notional counted against limits, stop always defined"
+      "Core position: maximum 15% of NAV, measured as notional exposure",
+      "High-conviction position: maximum 20% of NAV — written justification required",
+      "Speculative position: maximum 5% of NAV",
+      "Single equity: maximum 10% of NAV",
+      "Gross notional of a spread counts both legs; the stop is on the spread, not on each leg alone"
     ],
-    "cash_reserve": "Minimum 10% cash unless explicitly justified in writing",
-    "risk_per_trade": "Target maximum loss per trade 1–2% of account; any trade risking more than 2% carries a special risk warning",
+    "cash_reserve": "Cash is a residual, not a target to be filled. Capital stays in cash when no idea clears the confidence gate.",
+    "risk_per_trade": "Normal trade risk is 0.25%–1.0% of NAV. An exceptional multi-factor case may risk up to 1.5% of NAV. Capital allocated is not capital at risk. A stop is a plan, not a guarantee against a gap.",
+    "confidence_gate": "90–100 exceptional. 80–89 very strong. 70–79 normal size. 60–69 reduced size. Below 60 watchlist only.",
     "drawdown_ladder": [
       { "level": "-5%", "action": "Review required", "status": "not triggered" },
       { "level": "-10%", "action": "Reduce risk", "status": "not triggered" },
       { "level": "-15%", "action": "Pause new trades, full review", "status": "not triggered" },
       { "level": "-20%", "action": "Strategy failure review", "status": "not triggered" }
     ],
-    "conduct": ["No excessive leverage", "No hidden losses", "No cherry-picked results", "Every trade recorded with thesis and risk before entry"]
+    "conduct": [
+      "No excessive leverage",
+      "No hidden losses",
+      "No cherry-picked results",
+      "No rewritten entries after the market moves",
+      "Winning and losing trades stay in the archive",
+      "A quiet week is a valid decision"
+    ]
   },
   "allocation": [
-    { "category": "Core Energy Positions", "target_pct": 25, "actual_pct": 25.5, "note": "Longer-term oil and gas equity exposure" },
-    { "category": "Tactical Oil Trades", "target_pct": 20, "actual_pct": 21.5, "note": "Brent futures + crude ETC (notional counted)" },
-    { "category": "Gas / LNG Opportunities", "target_pct": 15, "actual_pct": 15.0, "note": "LNG operator + natural gas ETC" },
-    { "category": "Services / Shipping / Infrastructure", "target_pct": 15, "actual_pct": 15.0, "note": "Oilfield services + tankers" },
-    { "category": "Speculative Opportunities", "target_pct": 10, "actual_pct": 5.5, "note": "Capped-risk positions only — under-deployed by choice" },
-    { "category": "Cash Reserve", "target_pct": 15, "actual_pct": 17.5, "note": "Risk control and opportunity reserve" }
+    { "category": "Relative-Value Crude Spreads", "target_pct": 20, "actual_pct": 0, "note": "Top-ranked idea stayed on the watchlist. Confidence 50." },
+    { "category": "Tactical Outright Crude", "target_pct": 15, "actual_pct": 0, "note": "Long WTI and short Brent both failed the gate." },
+    { "category": "Products and Cracks", "target_pct": 10, "actual_pct": 0, "note": "Heating-oil crack watched, not traded." },
+    { "category": "Gas / LNG", "target_pct": 10, "actual_pct": 0, "note": "Henry Hub sat inside a narrow band with no fresh storage print." },
+    { "category": "Hedges", "target_pct": 5, "actual_pct": 0, "note": "No open commodity risk to hedge." },
+    { "category": "Cash Reserve", "target_pct": 40, "actual_pct": 100, "note": "Entire fund in cash after the week-41 committee. Cash above target is the decision, not a leftover." }
   ],
-  "positions": [
-    {
-      "id": "P-001", "category": "Core Energy Positions", "asset": "Global Upstream Major (Sample A)", "ticker": "SMPL-A", "exchange": "LSE", "currency": "GBP",
-      "direction": "long", "size": "3,650 shares", "entry_price": "£20.50", "current_price": "£20.89", "capital_allocated": 95000, "weight_pct": 9.5,
-      "unrealised_pl": 1805, "realised_pl": 0, "risk_level": "Low-Medium", "stop_loss": "£18.90 (-7.8%)", "target": "Re-rate to peer multiples; income while waiting",
-      "decision": "Hold", "source": "LSE delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-002", "category": "Core Energy Positions", "asset": "High-Dividend Integrated (Sample J)", "ticker": "SMPL-J", "exchange": "LSE", "currency": "GBP",
-      "direction": "long", "size": "5,200 shares", "entry_price": "£13.60", "current_price": "£13.76", "capital_allocated": 90000, "weight_pct": 9.0,
-      "unrealised_pl": 1080, "realised_pl": 0, "risk_level": "Low", "stop_loss": "£12.50 (-8.1%)", "target": "Income compounding; dividend covered at $60 Brent",
-      "decision": "Hold", "source": "LSE delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-003", "category": "Core Energy Positions", "asset": "Midstream Pipeline Operator (Sample D)", "ticker": "SMPL-D", "exchange": "NYSE", "currency": "USD",
-      "direction": "long", "size": "1,750 units", "entry_price": "$40.00", "current_price": "$40.16", "capital_allocated": 70000, "weight_pct": 7.0,
-      "unrealised_pl": 280, "realised_pl": 0, "risk_level": "Low", "stop_loss": "$36.80 (-8.0%)", "target": "Fee-based cash flows; ~7% distribution yield",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-004", "category": "Tactical Oil Trades", "asset": "ICE Brent Crude Futures (2 lots, 2,000 bbl notional)", "ticker": "BRN Sep-26", "exchange": "ICE", "currency": "USD",
-      "direction": "long", "size": "2 contracts (notional $154,600)", "entry_price": "$77.30", "current_price": "$78.42", "capital_allocated": 154600, "weight_pct": 15.5,
-      "unrealised_pl": 2240, "realised_pl": 0, "risk_level": "Medium — margin-adjusted, stop defined", "stop_loss": "$75.90 (risk $2,800 = 0.28% of account)", "target": "$81.50 (upper range)",
-      "decision": "Hold", "source": "ICE-style desk mark (indicative)", "source_url": "https://www.eia.gov/petroleum/", "last_updated": "2026-07-04", "data_type": "manual"
-    },
-    {
-      "id": "P-005", "category": "Tactical Oil Trades", "asset": "Brent Crude ETC (sample)", "ticker": "CRUD-ETC", "exchange": "LSE", "currency": "USD",
-      "direction": "long", "size": "1,200 units", "entry_price": "$50.00", "current_price": "$50.70", "capital_allocated": 60000, "weight_pct": 6.0,
-      "unrealised_pl": 840, "realised_pl": 0, "risk_level": "Medium", "stop_loss": "$47.50 (-5.0%)", "target": "Range trade with the inventory draw cycle",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-006", "category": "Gas / LNG Opportunities", "asset": "Global LNG Operator (Sample C)", "ticker": "SMPL-C", "exchange": "NYSE", "currency": "USD",
-      "direction": "long", "size": "540 shares", "entry_price": "$176.00", "current_price": "$180.05", "capital_allocated": 95000, "weight_pct": 9.5,
-      "unrealised_pl": 2185, "realised_pl": 0, "risk_level": "Medium", "stop_loss": "$161.90 (-8.0%)", "target": "Expansion FID + new SPAs as catalysts",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-007", "category": "Gas / LNG Opportunities", "asset": "Natural Gas ETC (sample)", "ticker": "NGAS-ETC", "exchange": "LSE", "currency": "USD",
-      "direction": "long", "size": "5,000 units", "entry_price": "$11.00", "current_price": "$10.84", "capital_allocated": 55000, "weight_pct": 5.5,
-      "unrealised_pl": -825, "realised_pl": 0, "risk_level": "Medium-High — contango decay risk noted", "stop_loss": "$10.12 (-8.0%)", "target": "Storage-refill tightening into winter",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-008", "category": "Services / Shipping / Infrastructure", "asset": "Oilfield Services Leader (Sample E)", "ticker": "SMPL-E", "exchange": "NYSE", "currency": "USD",
-      "direction": "long", "size": "1,560 shares", "entry_price": "$48.00", "current_price": "$48.87", "capital_allocated": 75000, "weight_pct": 7.5,
-      "unrealised_pl": 1350, "realised_pl": 0, "risk_level": "Medium", "stop_loss": "$44.20 (-7.9%)", "target": "International/offshore capex cycle",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-009", "category": "Services / Shipping / Infrastructure", "asset": "Crude Tanker Owner (Sample G)", "ticker": "SMPL-G", "exchange": "NYSE", "currency": "USD",
-      "direction": "long", "size": "3,000 shares", "entry_price": "$25.00", "current_price": "$25.85", "capital_allocated": 75000, "weight_pct": 7.5,
-      "unrealised_pl": 2550, "realised_pl": 0, "risk_level": "Medium-High — rate volatility", "stop_loss": "$22.80 (-8.8%)", "target": "Fleet-supply tightness thesis (Toolkit Hypothesis #3)",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.sec.gov/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-010", "category": "Speculative Opportunities", "asset": "Gasoil ETC (sample) — diesel crack research theme", "ticker": "GSOL-ETC", "exchange": "LSE", "currency": "USD",
-      "direction": "long", "size": "600 units", "entry_price": "$50.00", "current_price": "$49.60", "capital_allocated": 30000, "weight_pct": 3.0,
-      "unrealised_pl": -240, "realised_pl": 0, "risk_level": "HIGH — speculative, capped at 3%", "stop_loss": "$46.00 (-8.0%, risk 0.24% of account)", "target": "Crack repricing on outage risk (Toolkit Hypothesis #1, 68%)",
-      "decision": "Hold", "source": "Public delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/", "last_updated": "2026-07-04", "data_type": "delayed"
-    },
-    {
-      "id": "P-011", "category": "Speculative Opportunities", "asset": "North Sea Independent (Sample I)", "ticker": "SMPL-I", "exchange": "LSE / AIM", "currency": "GBP",
-      "direction": "long", "size": "16,000 shares", "entry_price": "£1.25", "current_price": "£1.23", "capital_allocated": 25000, "weight_pct": 2.5,
-      "unrealised_pl": -400, "realised_pl": 0, "risk_level": "HIGH — fiscal/policy risk, capped at 2.5%", "stop_loss": "£1.10 (-12%, risk 0.30% of account — wide stop justified by illiquidity)", "target": "UKCS fiscal clarity as re-rating catalyst",
-      "decision": "Hold", "source": "LSE delayed quote (indicative)", "source_url": "https://www.londonstockexchange.com/news", "last_updated": "2026-07-04", "data_type": "delayed"
-    }
-  ],
-  "closed_trades": [
-    {
-      "id": "T-000", "date_opened": "2026-07-01", "date_closed": "2026-07-03", "asset": "WTI Crude ETF (sample)", "ticker": "WTIF-ETF", "exchange": "NYSE Arca", "currency": "USD",
-      "direction": "long", "entry_price": "$68.20", "exit_price": "$69.77", "capital_allocated": 50000, "realised_pl": 1150, "return_pct": 2.3,
-      "reason_closed": "Target reached at range top ahead of the weekly EIA print — took the tactical gain rather than hold event risk. Decision label: Exit.",
-      "lesson": "The process worked: entry on inventory-draw signal (Module 1), exit at pre-defined target. Not holding through binary events is a rule, not a prediction.",
-      "source": "Public delayed quote (indicative)", "last_updated": "2026-07-03", "data_type": "delayed"
-    }
-  ],
+  "positions": [],
+  "closed_trades": [],
+  "post_trade_reviews": [],
   "trade_log": [
     {
-      "trade_id": "T-001", "date": "2026-07-01", "asset": "ICE Brent Crude Futures Sep-26", "ticker": "BRN", "decision": "Buy / Add", "direction": "long",
-      "entry_price": "$77.30", "position_size": "2 contracts (2,000 bbl, notional $154,600 = 15.5%)", "capital_allocated": "Margin ~$16,000; notional counted against limits",
-      "thesis": "Prompt physical market tighter than sentiment: fourth US inventory draw in five weeks, OECD stocks below 5-yr average, backwardation firming — while positioning in WTI (not Brent) is uncrowded. Structure and stocks agree (Curve Dashboard: supported).",
-      "catalyst": "Weekly EIA prints; OPEC+ compliance headlines.",
-      "supporting_data": "Balance Engine implied deficit -0.2 mb/d; Cushing draws; Brent M1/M2 tightening (Module 3).",
-      "risk": "OPEC+ signalling a faster unwind (News-to-Barrels event #2, low confidence but live); crowded Brent length (Module 5, 82nd percentile) means exits are busy.",
-      "invalidation": "Two consecutive US inventory builds, or Brent M1/M2 flipping toward flat.",
-      "stop_loss": "$75.90 — risk $2,800 = 0.28% of account (within 1–2% rule)",
-      "target": "$81.50", "holding_period": "2–6 weeks", "confidence": "Medium",
-      "sources": ["EIA Weekly Petroleum Status Report", "The Crude Oracle Balance Engine / Curve Dashboard"],
-      "strategy_fit": "High-conviction tactical trade (15.5% notional < 20% cap) with written justification: three intelligence pillars aligned (inventory, structure, supply). Justification recorded per rules.",
-      "special_risk_warning": null
-    },
-    {
-      "trade_id": "T-002", "date": "2026-07-01", "asset": "Crude Tanker Owner (Sample G)", "ticker": "SMPL-G", "decision": "Buy / Add", "direction": "long",
-      "entry_price": "$25.00", "position_size": "3,000 shares", "capital_allocated": "$75,000 (7.5%)",
-      "thesis": "Fleet-supply tightness is structural: ageing fleet, low orderbook, sanctioned-trade inefficiency and floating-storage absorption — freight strength without cargo strength (Flow Map anomaly, fleet-driven).",
-      "catalyst": "New designations shrinking the compliant fleet; seasonal rate strength.",
-      "supporting_data": "TD3C +1.2σ with flat cargo counts (Module 2); Toolkit Hypothesis #3 (55%, monitoring).",
-      "risk": "Rate volatility is extreme; a fast unwind of floating storage releases tonnage.",
-      "invalidation": "Enforcement visibly relaxes; floating storage draws two consecutive weeks; newbuild ordering accelerates.",
-      "stop_loss": "$22.80 (-8.8%) — risk $6,600 = 0.66% of account",
-      "target": "Re-rate on sustained rate strength", "holding_period": "1–2 quarters", "confidence": "Medium",
-      "sources": ["Public freight assessments", "Company filings", "The Crude Oracle Flow Map"],
-      "strategy_fit": "Services/shipping sleeve; expresses a flow-side insight equities haven't fully priced.",
-      "special_risk_warning": null
-    },
-    {
-      "trade_id": "T-003", "date": "2026-07-01", "asset": "Gasoil ETC (sample)", "ticker": "GSOL-ETC", "decision": "Buy / Add", "direction": "long",
-      "entry_price": "$50.00", "position_size": "600 units", "capital_allocated": "$30,000 (3.0% — speculative cap 5%)",
-      "thesis": "Diesel cracks undervalued relative to refinery outage risk: Rotterdam outage (400 kb/d), distillate stocks below seasonal average, clean freight tightening, crack not yet repriced — against a near-record managed-money short (squeeze fuel).",
-      "catalyst": "ARA distillate draws; Rotterdam restart guidance slipping.",
-      "supporting_data": "Toolkit Hypothesis #1 (confidence 68% — evidence weight, not probability of profit); Module 5 gasoil crowd-risk: elevated.",
-      "risk": "Diesel demand is genuinely weak; a fast restart kills the thesis. Timing risk high — squeezes are brief.",
-      "invalidation": "Refinery returns inside two weeks; distillate stocks build two consecutive weeks; freight normalises.",
-      "stop_loss": "$46.00 (-8.0%) — risk $2,400 = 0.24% of account",
-      "target": "Crack repricing toward seasonal norm", "holding_period": "2–4 weeks", "confidence": "Medium",
-      "sources": ["EIA weekly data", "ICE COT (public)", "The Crude Oracle Hypothesis Builder"],
-      "strategy_fit": "Speculative sleeve, capped and stop-defined — a hypothesis from Module 6 expressed with controlled risk. This is the platform loop: intelligence → hypothesis → journaled paper trade.",
-      "special_risk_warning": "Speculative instrument referencing a crowded-short squeeze scenario; risk of rapid reversal. Position deliberately capped at 3%."
+      "trade_id": "CO-2026-W41-000",
+      "date": "2026-10-05",
+      "timestamp": "2026-10-05T11:21:23Z",
+      "asset": "No new position — week 41 committee",
+      "ticker": "CASH",
+      "decision": "No trade",
+      "direction": "flat",
+      "entry_price": "n/a — no fill",
+      "position_size": "0",
+      "capital_allocated": "$0 allocated. Cash $10,000,000.",
+      "thesis": "Six independent ideas were ranked from public marks frozen at 11:21 UTC on 5 October 2026. The best, a short Brent–WTI spread, scored 50. The trade gate is 60. Nothing was opened.",
+      "catalyst": "EIA Weekly Petroleum Status Report on 7 October 2026, and a full-session settlement of the Brent–WTI spread, are the next facts that can change the ranking.",
+      "supporting_data": "See weekly report 2026-W41. Internal Oracle shipping, curve, positioning, balance and hypothesis files are the 15 July 2026 sample set and were excluded.",
+      "risk": "The risk of this decision is opportunity cost if the war premium collapses without the fund. That cost is not booked as a loss, and it is not a reason to invent a position.",
+      "invalidation": "A later week may trade the spread if confidence reaches 60 with a predefined stop still inside 1.0% of NAV. This record is not revised if that happens.",
+      "stop_loss": "No position, no stop.",
+      "target": "No position, no target.",
+      "holding_period": "Cash through the 7 October EIA print. Next formal cycle is week 42.",
+      "confidence": "50 on the best idea — below the trade gate",
+      "sources": [
+        "Yahoo Finance futures marks, 5 October 2026, 11:21 UTC",
+        "The Economic Times, 5 October 2026, oil price note citing a Reuters shipping tally",
+        "Secondary compilations of EIA weekly commercial crude stocks through the week ending 25 September 2026"
+      ],
+      "strategy_fit": "The fund is allowed to hold cash. Activity is not a substitute for a cleared signal.",
+      "special_risk_warning": null,
+      "why_it_could_be_wrong": "The war premium in Brent can compress before the next committee, and the cash book will not participate. That miss, if it happens, is recorded in the next weekly report. It is not backfilled into this one.",
+      "status": "recorded"
     }
   ],
   "exposure": {
     "by_asset_type": [
-      { "label": "Oil & gas equities", "pct": 43.0 },
-      { "label": "Crude futures (notional)", "pct": 15.5 },
-      { "label": "ETC/ETF exposure", "pct": 14.5 },
-      { "label": "Speculative equities", "pct": 2.5 },
-      { "label": "Cash", "pct": 17.5 },
-      { "label": "Other", "pct": 7.0 }
+      { "label": "Cash", "pct": 100 },
+      { "label": "Crude futures notional", "pct": 0 },
+      { "label": "Products", "pct": 0 },
+      { "label": "Natural gas", "pct": 0 },
+      { "label": "Equities and ETFs", "pct": 0 }
     ],
     "by_region": [
-      { "label": "North America", "pct": 39.0 },
-      { "label": "UK / Europe", "pct": 27.5 },
-      { "label": "Global benchmarks (Brent complex)", "pct": 21.5 },
-      { "label": "Cash", "pct": 17.5 }
+      { "label": "Cash", "pct": 100 },
+      { "label": "Atlantic basin benchmarks", "pct": 0 },
+      { "label": "US gas", "pct": 0 }
     ],
     "by_theme": [
-      { "label": "Prompt tightness / inventory draws", "pct": 21.5 },
-      { "label": "Income & capital discipline", "pct": 25.5 },
-      { "label": "LNG growth", "pct": 15.0 },
-      { "label": "Fleet-supply tightness (tankers/services)", "pct": 15.0 },
-      { "label": "Dislocation hypotheses (diesel, UKCS)", "pct": 5.5 },
-      { "label": "Cash / optionality", "pct": 17.5 }
+      { "label": "Undeployed — no idea cleared 60", "pct": 100 }
     ]
   },
-  "contributors": [
-    { "asset": "Crude Tanker Owner (SMPL-G)", "pl": 2550 },
-    { "asset": "Brent futures (BRN Sep-26)", "pl": 2240 },
-    { "asset": "Global LNG Operator (SMPL-C)", "pl": 2185 }
-  ],
-  "detractors": [
-    { "asset": "Natural Gas ETC (NGAS-ETC)", "pl": -825 },
-    { "asset": "North Sea Independent (SMPL-I)", "pl": -400 },
-    { "asset": "Gasoil ETC (GSOL-ETC)", "pl": -240 }
-  ],
+  "contributors": [],
+  "detractors": [],
   "benchmarks": {
-    "period": "July 2026 to date (3 trading days — far too short to judge; shown for format)",
+    "period": "Since inception on 5 October 2026, marked at the same timestamp as the decision. One print. Not a performance sample.",
     "rows": [
-      { "metric": "Period return", "portfolio": "+1.20%", "brent": "+1.45%", "wti": "+1.31%", "energy_etf": "+0.92%", "notes": "Sample period; cash drag vs pure beta expected early" },
-      { "metric": "Year-to-date return", "portfolio": "+1.20%", "brent": "+1.45%", "wti": "+1.31%", "energy_etf": "+0.92%", "notes": "Inception 2026-07-01" },
-      { "metric": "Max drawdown", "portfolio": "-0.4%", "brent": "-0.8%", "wti": "-0.9%", "energy_etf": "-0.6%", "notes": "Risk control objective visible here" },
-      { "metric": "Win rate", "portfolio": "1/1 closed", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "One closed trade — no statistical meaning yet" },
-      { "metric": "Number of trades", "portfolio": "12 opened, 1 closed", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "" },
-      { "metric": "Best trade", "portfolio": "T-000 WTI ETF +2.3%", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "Exit at pre-defined target" },
-      { "metric": "Worst open position", "portfolio": "NGAS-ETC -1.5%", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "Within stop distance" }
+      { "metric": "Return since inception", "portfolio": "0.00%", "brent": "0.00%", "wti": "0.00%", "energy_etf": "Not marked", "notes": "Fund inception equals the decision mark, so Brent and WTI are also unchanged versus that mark. This is not alpha." },
+      { "metric": "Week-41 context, Friday close to Monday decision", "portfolio": "0.00% (no position)", "brent": "+0.08%", "wti": "-1.05%", "energy_etf": "Cash session not open", "notes": "Context only. Brent 102.25 to 102.33. WTI 91.11 to 90.15. XLE last cash print was the prior session. Not a fund benchmark." },
+      { "metric": "Max drawdown", "portfolio": "0.0%", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "No NAV path yet beyond the inception point." },
+      { "metric": "Win rate", "portfolio": "No closed trades", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "A rate will not be shown until closed trades exist." },
+      { "metric": "Closed trades", "portfolio": "0", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "The archive is empty on purpose." },
+      { "metric": "Sharpe / Sortino", "portfolio": "Not computed", "brent": "—", "wti": "—", "energy_etf": "—", "notes": "One NAV point. A ratio here would be noise." }
     ],
-    "note": "Benchmarks: cash (SONIA/T-bill proxy), Brent front month, WTI front month, broad energy ETF, S&P 500 energy sector where available. All benchmark values indicative/delayed. Simulated performance does not guarantee future results.",
-    "last_updated": "2026-07-04",
+    "note": "Benchmarks use the same delayed futures marks as the decision. The energy-equity sleeve is withheld when the US cash session has not printed. Simulated performance does not guarantee future results.",
+    "last_updated": "2026-10-05",
     "data_type": "manual"
   },
+  "equity_curve": [
+    {
+      "date": "2026-10-05",
+      "nav": 10000000,
+      "weekly_pnl": 0,
+      "note": "Inception. Cash. No paper trade opened."
+    }
+  ],
+  "marks": {
+    "as_of": "2026-10-05T11:21:23Z",
+    "source": "Yahoo Finance futures chart, regularMarketPrice. Delayed and indicative, not a settlement and not a licensed real-time feed.",
+    "source_url": "https://finance.yahoo.com/quote/CL=F",
+    "wti_nov26": 90.15,
+    "wti_symbol": "CL=F",
+    "brent": 102.33,
+    "brent_symbol": "BZ=F",
+    "brent_wti_spread": 12.18,
+    "ho_nov26": 4.567,
+    "ho_symbol": "HO=F",
+    "ho_crack_vs_wti": 101.66,
+    "rbob_nov26": 3.0866,
+    "rbob_symbol": "RB=F",
+    "rbob_note": "Excluded from every score. The printed last was below the printed session low, and Monday volume was a small fraction of the prior three sessions.",
+    "henry_hub_nov26": 3.03,
+    "henry_hub_symbol": "NG=F",
+    "dxy": 102.254,
+    "dxy_prior_close": 101.45,
+    "wti_prior_session_close": 91.11,
+    "brent_prior_session_close": 102.25,
+    "spread_window": "127 daily closes, 6 April 2026 to 5 October 2026. Median spread $5.16. High $13.21 on 29 September. Since the 23 September break the spread has traded $9.44 to $13.21. The decision spread of $12.18 sits inside that war-regime range."
+  },
+  "opportunities": [
+    {
+      "rank": 1,
+      "market": "Brent–WTI spread",
+      "direction": "Short the spread",
+      "structure": "Long WTI Nov 26, short Brent, equal barrels",
+      "confidence": 50,
+      "risk_reward_ratio": 1.71,
+      "risk_reward": "1.7:1",
+      "status": "WATCH",
+      "entry": 12.18,
+      "stop": 15.5,
+      "target": 6.5,
+      "entry_label": "Spread $12.18 (Brent $102.33 minus WTI $90.15)",
+      "stop_label": "Spread $15.50",
+      "target_label": "Spread $6.50, still above the six-month median of $5.16",
+      "holding_period": "2–6 weeks, had it been opened",
+      "strategy": "relative-value",
+      "summary": "The spread is wide against the last six months and only ordinary inside the post-23 September range. Exports, an OSP cut and a planned G7 stock release lean toward compression. A live war leans the other way. Score 50. Not opened.",
+      "factors": [
+        { "family": "Market structure", "max": 25, "score": 14, "effect": "increased", "note": "About the 98th percentile of 127 sessions against a $5.16 median, but inside the $9.44–$13.21 range that has held since 23 September. Not a fresh extreme of the current regime." },
+        { "family": "Energy fundamentals", "max": 20, "score": 13, "effect": "increased", "note": "US commercial crude built +2.97 mb (week of 18 Sep) and +0.92 mb (week of 25 Sep) to about 427.3 mb in secondary EIA compilations. Aramco cut November official prices to Asia to six-year lows. Middle East exports were reported above pre-war levels on four of seven days in the last week of September." },
+        { "family": "Macro", "max": 15, "score": 8, "effect": "increased", "note": "ICE dollar index 102.254 versus a prior close of 101.45. A firmer dollar leans against flat-price crude. It says little about the spread itself." },
+        { "family": "Geopolitical alignment", "max": 15, "score": 4, "effect": "decreased", "note": "The trade needs the war premium to narrow. The Iran war, reported attacks on vessels in the Strait of Hormuz, and an unconfirmed Houthi claim of strikes on Aramco sites all point the other way." },
+        { "family": "Cross-market", "max": 15, "score": 7, "effect": "increased", "note": "Heating-oil crack still about $102, so the product premium has not collapsed. Settled gasoline cracks on 1–2 October were off the 30 September peak. Today's RBOB tick was discarded." },
+        { "family": "Data quality", "max": 10, "score": 4, "effect": "decreased", "note": "Oracle shipping, curve, positioning and balance files are the 15 July sample and were not used. Brent in the Economic Times note earlier on 5 October was $101.60, versus $102.33 on the later futures mark." }
+      ],
+      "why_it_could_be_wrong": "Hormuz disruption can widen Brent against WTI through any stop. The six-month percentile also mixes the pre-war market with the war market, so the spread can look 'extreme' while simply being the new price of the conflict.",
+      "invalidation": "A settlement above $13.21, a confirmed sustained halt of Middle East exports, or a fresh EIA crude draw large enough to make WTI the scarce barrel."
+    },
+    {
+      "rank": 2,
+      "market": "Heating-oil crack vs WTI",
+      "direction": "Short the crack",
+      "structure": "Short HO Nov 26 against long WTI Nov 26",
+      "confidence": 41,
+      "risk_reward_ratio": 1.46,
+      "risk_reward": "1.5:1",
+      "status": "WATCH",
+      "entry": 101.66,
+      "stop": 120,
+      "target": 75,
+      "entry_label": "Crack $101.66 (HO $4.567/gal × 42 minus WTI $90.15)",
+      "stop_label": "Crack $120",
+      "target_label": "Crack $75, still far above early July",
+      "holding_period": "2–6 weeks, had it been opened",
+      "strategy": "mean-reversion",
+      "summary": "The distillate crack is extremely wide versus July and has been stuck near $100–$118 for two weeks. Fading it is a bet that the war premium in diesel eases. Monday HO volume was too thin to treat the tick as a break.",
+      "factors": [
+        { "family": "Market structure", "max": 25, "score": 16, "effect": "increased", "note": "HO Nov was $3.30 on 6 July and $4.57 on the decision mark. The crack has held roughly $98–$118 since 24 September, so this is a regime, not a one-day spike." },
+        { "family": "Energy fundamentals", "max": 20, "score": 6, "effect": "decreased", "note": "No October refinery-run figure was available. A crack this wide can be the physical result of lost distillate supply rather than a mispricing." },
+        { "family": "Macro", "max": 15, "score": 5, "effect": "decreased", "note": "The dollar is not the driver of a $100 crack." },
+        { "family": "Geopolitical alignment", "max": 15, "score": 3, "effect": "decreased", "note": "Diesel and jet are the products most exposed to a Gulf infrastructure shock. Geopolitics opposes a short crack." },
+        { "family": "Cross-market", "max": 15, "score": 8, "effect": "increased", "note": "Settled RBOB cracks eased from about $54 on 30 September to about $48 on 2 October. That is partial confirmation, not a collapse." },
+        { "family": "Data quality", "max": 10, "score": 3, "effect": "decreased", "note": "Monday HO volume was about 5,000 contracts against roughly 52,000 on each of the prior three sessions. The RBOB print was unusable." }
+      ],
+      "why_it_could_be_wrong": "A refinery outage or a halt in distillate loadings can push the crack through $120 before a stop is tradable.",
+      "invalidation": "A full-session HO settlement that takes the crack above $118, or a confirmed loss of a major distillate export stream."
+    },
+    {
+      "rank": 3,
+      "market": "Brent",
+      "direction": "Short",
+      "structure": "Short Brent front futures",
+      "confidence": 41,
+      "risk_reward_ratio": 0.86,
+      "risk_reward": "0.9:1",
+      "status": "WATCH",
+      "entry": 102.33,
+      "stop": 112,
+      "target": 94,
+      "entry_label": "Brent $102.33",
+      "stop_label": "$112, beyond the 24 September high of $106.60",
+      "target_label": "$94, a partial give-back of the war premium",
+      "holding_period": "1–4 weeks, had it been opened",
+      "strategy": "outright-short",
+      "summary": "Supply additions are real. A naked short into an active war does not pay for the stop the risk manager would require. Reward to $94 is smaller than risk to $112.",
+      "factors": [
+        { "family": "Market structure", "max": 25, "score": 8, "effect": "decreased", "note": "Brent is below the 24 September high of $106.60 and is not a breakdown. No term structure was available, so backwardation or contango is unknown." },
+        { "family": "Energy fundamentals", "max": 20, "score": 12, "effect": "increased", "note": "G7 governments have plans to release stocks, the size of which was not stated in the article used. Exports recovered on several late-September days. OSPs to Asia were cut. US crude stocks built into 25 September." },
+        { "family": "Macro", "max": 15, "score": 9, "effect": "increased", "note": "A firmer dollar is a mild headwind for flat-price crude." },
+        { "family": "Geopolitical alignment", "max": 15, "score": 2, "effect": "decreased", "note": "Shorting Brent is shorting the instrument that reprices Hormuz first. The Economic Times quoted JPMorgan: the endgame is not something the street knows how to model." },
+        { "family": "Cross-market", "max": 15, "score": 6, "effect": "decreased", "note": "Products are off the 30 September extremes and the distillate crack is still near $102. The complex has not stood down." },
+        { "family": "Data quality", "max": 10, "score": 4, "effect": "decreased", "note": "Early-session futures mark. Internal curve module excluded as stale sample data. EIA's own site returned an error during this session, so stock levels are secondary compilations." }
+      ],
+      "why_it_could_be_wrong": "One credible infrastructure headline can gap Brent through $112. The stop is a plan, not a cap on loss.",
+      "invalidation": "Already fails the gate on risk/reward. A trade would also be invalidated by a confirmed export collapse through Hormuz."
+    },
+    {
+      "rank": 4,
+      "market": "WTI",
+      "direction": "Long",
+      "structure": "Long WTI Nov 26",
+      "confidence": 38,
+      "risk_reward_ratio": 1.28,
+      "risk_reward": "1.3:1",
+      "status": "WATCH",
+      "entry": 90.15,
+      "stop": 84,
+      "target": 98,
+      "entry_label": "WTI Nov 26 $90.15",
+      "stop_label": "$84",
+      "target_label": "$98",
+      "holding_period": "1–4 weeks, had it been opened",
+      "strategy": "outright-long",
+      "summary": "The war is the bull case. US stock builds, cheaper Asian official prices and a firmer dollar are the bear case. Geopolitics alone does not clear the gate.",
+      "factors": [
+        { "family": "Market structure", "max": 25, "score": 7, "effect": "decreased", "note": "$90.15 is inside the post-break range. The Monday low was already $89.31, so a tight stop is noise and a wide stop ruins the ratio." },
+        { "family": "Energy fundamentals", "max": 20, "score": 6, "effect": "decreased", "note": "Two consecutive US crude builds and an Aramco OSP cut oppose a new long." },
+        { "family": "Macro", "max": 15, "score": 5, "effect": "decreased", "note": "Firmer dollar." },
+        { "family": "Geopolitical alignment", "max": 15, "score": 11, "effect": "increased", "note": "An active Iran war and Hormuz risk are the reason a long WTI scores higher here than the shorts. The risk is already in the price." },
+        { "family": "Cross-market", "max": 15, "score": 5, "effect": "decreased", "note": "WTI is the lagging leg of a $12 spread. Owning it outright also takes the war premium without being paid the spread dislocation." },
+        { "family": "Data quality", "max": 10, "score": 4, "effect": "decreased", "note": "Same stale internal modules. WTI volume on the Monday mark was usable; the rest of the complex was not fully settled." }
+      ],
+      "why_it_could_be_wrong": "The premium can come out faster than the war ends, particularly if the G7 release and the export recovery continue together.",
+      "invalidation": "A weekly EIA build combined with Brent losing the $100 handle would remove the reason to be long the lagging leg."
+    },
+    {
+      "rank": 5,
+      "market": "Henry Hub natural gas",
+      "direction": "Long",
+      "structure": "Long NG Nov 26",
+      "confidence": 32,
+      "risk_reward_ratio": 2.06,
+      "risk_reward": "2.1:1",
+      "status": "WATCH",
+      "entry": 3.03,
+      "stop": 2.85,
+      "target": 3.4,
+      "entry_label": "Henry Hub Nov 26 $3.03/mmBtu",
+      "stop_label": "$2.85",
+      "target_label": "$3.40",
+      "holding_period": "Into the first winter storage prints, had it been opened",
+      "strategy": "outright-long",
+      "summary": "A 2:1 illustration is not a signal. November gas is inside a $2.91–$3.16 band. No October storage number was in the decision set. Calendar seasonality was not treated as evidence.",
+      "factors": [
+        { "family": "Market structure", "max": 25, "score": 6, "effect": "decreased", "note": "$3.03 is not a dislocation. The three-month range is tight and the Monday change was a cent." },
+        { "family": "Energy fundamentals", "max": 20, "score": 4, "effect": "decreased", "note": "No fresh US gas storage figure was used. LNG feedgas and a winter path were not verified this session." },
+        { "family": "Macro", "max": 15, "score": 5, "effect": "decreased", "note": "No power-demand or weather anomaly was established." },
+        { "family": "Geopolitical alignment", "max": 15, "score": 8, "effect": "increased", "note": "US gas has not repriced with the oil war. That supports independence from the crude book. It does not support a long." },
+        { "family": "Cross-market", "max": 15, "score": 4, "effect": "decreased", "note": "Crude is in a war regime and Henry Hub is not. There is no confirmed spillover to trade." },
+        { "family": "Data quality", "max": 10, "score": 5, "effect": "decreased", "note": "The futures mark is clean. The inventory side is missing, so the family cannot score higher." }
+      ],
+      "why_it_could_be_wrong": "A storage surprise or an early cold shot can still lift November gas. The fund will have missed it because the evidence was not in hand.",
+      "invalidation": "A verified storage deficit versus the five-year average, or a feedgas surge, would reopen the idea. Neither was in this file."
+    },
+    {
+      "rank": 6,
+      "market": "US energy equities",
+      "direction": "Long",
+      "structure": "Long a broad energy equity basket",
+      "confidence": 29,
+      "risk_reward_ratio": null,
+      "risk_reward": "Not priced",
+      "status": "WATCH",
+      "entry": null,
+      "stop": null,
+      "target": null,
+      "entry_label": "No decision mark. US cash equities were not in session at 11:21 UTC.",
+      "stop_label": "Not set",
+      "target_label": "Not set",
+      "holding_period": "n/a",
+      "strategy": "equity-beta",
+      "summary": "XLE's last Yahoo print was the prior cash close at $62.82. A paper equity trade was not priced off a closed market.",
+      "factors": [
+        { "family": "Market structure", "max": 25, "score": 4, "effect": "decreased", "note": "One stale cash print is not a trend, a reversal or a spread." },
+        { "family": "Energy fundamentals", "max": 20, "score": 5, "effect": "decreased", "note": "Equities would express the same unresolved crude argument at a lag, with company-level noise added." },
+        { "family": "Macro", "max": 15, "score": 6, "effect": "decreased", "note": "A firmer dollar and an unresolved war are not a clean equity setup." },
+        { "family": "Geopolitical alignment", "max": 15, "score": 8, "effect": "increased", "note": "Producers can benefit if the premium holds. That is already the unresolved flat-price question." },
+        { "family": "Cross-market", "max": 15, "score": 5, "effect": "decreased", "note": "Crude futures were live. The equity market was not. They cannot be combined into one timestamped trade." },
+        { "family": "Data quality", "max": 10, "score": 1, "effect": "decreased", "note": "No cash-session mark at the decision time. Score capped almost at zero for that reason." }
+      ],
+      "why_it_could_be_wrong": "Energy equities can re-rate on the open while this book is in cash. That is accepted.",
+      "invalidation": "Revisit only on a same-day cash print, and only if the crude decision itself has cleared the gate. Equities are not a way around a weak crude signal."
+    }
+  ],
+  "weekly_reports": [
+    {
+      "id": "2026-W41",
+      "title": "Week 41 — inception",
+      "week_start": "2026-10-05",
+      "week_end": "2026-10-05",
+      "published": "2026-10-05T11:21:23Z",
+      "decision": "No trade",
+      "starting_nav": 10000000,
+      "ending_nav": 10000000,
+      "weekly_pnl": 0,
+      "weekly_return_pct": 0,
+      "trades_opened": [],
+      "trades_closed": [],
+      "winners": [],
+      "losses": [],
+      "loss_analysis": "There is no losing trade to analyse. The committee's error, if it made one, will show up later as a missed move, and that miss will be written here in a later week without editing this report.",
+      "what_worked": "Nothing has been proven. The process held: conflicting news was separated from a tradable mark, the RBOB print was thrown out, and a wide spread was not promoted into a trade just because the fund was new.",
+      "process_review": "Signal families that were missing — live shipping, the forward curve, positioning and open interest — capped data quality and stopped every idea below 60. The 7 October EIA release is the next primary fundamental. A full-session Brent and WTI settlement is the next structure check. Internal Oracle modules dated 15 July 2026 stay excluded until they are refreshed with dated, sourced observations.",
+      "committee": [
+        { "role": "Energy analyst", "weight": 20, "view": "Physical crude is not showing a shortage that matches a $12 Brent premium over WTI. The latest public stock path into 25 September is two builds. Aramco's November Asia official prices were cut to six-year lows. Those are offers, not a stockout.", "lean": "No outright long. Mild lean to a narrower Brent premium, not strong enough alone." },
+        { "role": "Shipping analyst", "weight": 15, "view": "On-site tanker and LNG modules are the July sample and were ignored. The usable shipping line is second-hand: a Reuters tally, via The Economic Times, that Middle East exports beat pre-war levels on four of seven days late in September, even with attacks reported in the Strait of Hormuz. Mixed, and not a positionable series.", "lean": "No shipping trade." },
+        { "role": "Macro strategist", "weight": 15, "view": "The dollar index was 102.254 against a prior close of 101.45. That is a headwind for flat-price commodities and a poor reason, by itself, to short a war market.", "lean": "No macro hedge. Nothing is open to hedge." },
+        { "role": "Geopolitical analyst", "weight": 15, "view": "The Iran war is the dominant fact. Vessel attacks in Hormuz are reported. A Houthi claim of strikes on Aramco sites in Riyadh and Khurais was not confirmed by Saudi Arabia in the article. Confirmed and claimed events are not the same thing. Either can gap a stop.", "lean": "Veto on naked shorts. No confidence upgrade for longs, because the premium is already in the price." },
+        { "role": "Quant analyst", "weight": 20, "view": "Brent minus WTI at $12.18 is rare versus the last 127 sessions and ordinary versus the nine sessions since 23 September. Heating oil's crack near $102 is a regime. Henry Hub at $3.03 is not a signal. Monday product volume does not support a breakout call.", "lean": "Spread is the only quantitative candidate, and it is a regime observation rather than an entry." },
+        { "role": "Risk manager", "weight": 10, "view": "The spread's illustrative stop at $15.50 risks $3.32 a barrel. Eight contracts would have been about 0.27% of NAV, inside the 0.25–1.0% band, with a 1.7:1 payoff to $6.50. The war can gap through that stop. A 50 score does not get to use the risk budget.", "lean": "No trade. Cash is the risk position." },
+        { "role": "Portfolio manager", "weight": 5, "view": "Expected payoff is not sufficient for the tail. Opening a position to avoid a flat first week would be the failure mode this fund is built to refuse.", "lean": "Decision: no trade. NAV stays $10,000,000." }
+      ]
+    }
+  ],
   "daily_brief": {
-    "date": "2026-07-04",
-    "title": "The Crude Oracle Daily Trading Brief — 2026-07-04",
+    "date": "2026-10-05",
+    "title": "The Crude Oracle decision brief — 2026-10-05, week 41 inception",
     "sections": [
-      { "n": 1, "label": "Market summary", "text": "Crude firm on the inventory draw; both benchmarks backwardated. Physical tightness real at the prompt, suspect in the deferred (Brent 6-month rich vs Atlantic length)." },
-      { "n": 2, "label": "Brent / WTI price signal", "text": "Brent $78.42 (+1.4% w/w), WTI $74.18. Uptrend within range; resistance zone $79.80–80.50 Brent. Brent–WTI $4.24 keeps the US export arb working." },
-      { "n": 3, "label": "Gas / LNG signal", "text": "TTF eased on storage pace; NBP followed. NGAS-ETC position under water — thesis is winter tightening, stop distance intact." },
-      { "n": 4, "label": "Supply risk", "text": "OPEC+ unwind signalling is the live bear risk (low confidence). Rotterdam outage removes 400 kb/d of runs. Sanctions designations tightening effective supply." },
-      { "n": 5, "label": "Demand signal", "text": "US gasoline at 5-yr average; India structural growth intact; European diesel still the weak link — which is exactly why the crack hypothesis is capped at 3%." },
-      { "n": 6, "label": "Inventory signal", "text": "US commercial -2.1 mb; Cushing below 25 mb toward operational minimums. Draw cycle intact — supports T-001." },
-      { "n": 7, "label": "Geopolitical risk", "text": "Red Sea reroutings persist; hurricane watch on the US Gulf (two-sided for crude). No position action — monitoring per News-to-Barrels event cards." },
-      { "n": 8, "label": "Top opportunity today", "text": "Diesel crack dislocation (Hypothesis #1, 68% evidence weight) — already expressed via GSOL-ETC at capped size. No addition; let the thesis work or fail." },
-      { "n": 9, "label": "Top risk today", "text": "Crowded Brent length (82nd percentile) meeting an OPEC+ unwind headline. Mitigation: futures stop at $75.90, cash at 17.5%." },
-      { "n": 10, "label": "Existing positions review", "text": "11 open, all within limits. Tankers best (+3.4%); gas ETC worst (-1.5%), within stop distance. No stops threatened." },
-      { "n": 11, "label": "Proposed paper trades", "text": "No trade today. Watch only: refiner exposure if cracks reprice; UK gas ETC on storage data. Discipline over activity." },
-      { "n": 12, "label": "Stop-loss / risk levels", "text": "All stops verified. Aggregate theoretical loss if every stop hit simultaneously: ~4.1% of account — inside the 5% review threshold." },
-      { "n": 13, "label": "Portfolio exposure", "text": "82.5% deployed (43% equities, 15.5% futures notional, 14.5% ETC, 2.5% spec equity, 7% other), 17.5% cash." },
-      { "n": 14, "label": "Cash balance", "text": "$175,400 (17.5%) — above the 10% minimum; held for the hurricane window and OPEC+ event risk." },
-      { "n": 15, "label": "Watchlist changes", "text": "Added: US independent refiner (crack repricing play, watch only). No removals." },
-      { "n": 16, "label": "Bottom line", "text": "Positioned with the physical tightness, hedged by cash and stops against the two live event risks. The process, not the P&L, is today's product." }
+      { "n": 1, "label": "Market summary", "text": "Decision marks at 11:21 UTC: WTI Nov 26 $90.15, Brent $102.33, spread $12.18, Henry Hub Nov $3.03, dollar index 102.254. Heating-oil crack about $102. The RBOB last print was discarded." },
+      { "n": 2, "label": "Brent / WTI price signal", "text": "The spread is wide versus six months and mid-range versus the war window that started on 23 September. That distinction kept it on the watchlist at confidence 50." },
+      { "n": 3, "label": "Gas / LNG signal", "text": "Henry Hub is unchanged in any sense that matters, near $3.03. No storage figure was admitted. No LNG vessel series was fresh. No gas trade." },
+      { "n": 4, "label": "Supply risk", "text": "G7 stock-release plans are confirmed as a plan, not as a barrel count. Middle East exports were reported above pre-war levels on four of seven late-September days. Aramco cut November Asia official prices to six-year lows." },
+      { "n": 5, "label": "Demand signal", "text": "The OSP cut is the demand-side fact in hand: Asian official selling prices were lowered. It is not a global demand model." },
+      { "n": 6, "label": "Inventory signal", "text": "Secondary EIA compilations show US commercial crude at about 427.3 million barrels for the week of 25 September, after builds of 2.97 mb and 0.92 mb. The next weekly release is 7 October. EIA's own site did not answer this session." },
+      { "n": 7, "label": "Geopolitical risk", "text": "Iran war, reported Hormuz vessel attacks, and an unconfirmed claim of strikes on Aramco sites. Confirmed supply recovery and unconfirmed attacks are both in the file. Neither was promoted into a fill." },
+      { "n": 8, "label": "Top opportunity today", "text": "Short the Brent–WTI spread. Confidence 50. Illustrative entry $12.18, stop $15.50, target $6.50, about 1.7:1. Status: watch." },
+      { "n": 9, "label": "Top risk today", "text": "A Hormuz gap. Because the book is in cash, that risk does not hit NAV. The cost is missing a collapse in the premium." },
+      { "n": 10, "label": "Existing positions review", "text": "No open positions. This is inception. The retired $1,000,000 sample book is not in this NAV." },
+      { "n": 11, "label": "Proposed paper trades", "text": "None. Journal id CO-2026-W41-000 records the no-trade decision." },
+      { "n": 12, "label": "Stop-loss / risk levels", "text": "Nothing is open, so nothing can hit a stop. Illustrative stops are stored on the watchlist and were not executed." },
+      { "n": 13, "label": "Portfolio exposure", "text": "Gross exposure $0. Cash $10,000,000. 100% of NAV." },
+      { "n": 14, "label": "Cash balance", "text": "$10,000,000. Above any cash floor because the opportunity set failed, not because a quota was filled." },
+      { "n": 15, "label": "Watchlist changes", "text": "Added: Brent–WTI spread, heating-oil crack, Brent outright, WTI outright, Henry Hub, US energy equities. No removals. No promotions." },
+      { "n": 16, "label": "Bottom line", "text": "The fund exists as of today. It has no P&L, no closed trade and no claim to have called the war. The next committee is week 42, with the 7 October EIA print in between." }
     ],
-    "source": "The Crude Oracle intelligence modules 1–6",
-    "last_updated": "2026-07-04T07:00:00Z",
+    "source": "Week-41 investment committee, public marks only",
+    "last_updated": "2026-10-05T11:21:23Z",
     "data_type": "manual"
   },
   "next_events": [
-    { "date": "2026-07-08", "event": "EIA Weekly Petroleum Status Report", "relevance": "Inventory signal — T-001 and P-005 sensitive" },
-    { "date": "2026-07-11", "event": "OPEC Monthly Oil Market Report", "relevance": "Supply/demand balance revisions" },
-    { "date": "2026-07-14", "event": "IEA Oil Market Report", "relevance": "IEA vs OPEC demand disagreement tracking" },
-    { "date": "2026-07-31", "event": "Month 1 portfolio report", "relevance": "First full monthly report published" }
+    { "date": "2026-10-07", "event": "EIA Weekly Petroleum Status Report", "relevance": "First primary inventory print after inception. Can move the spread and both outright crude ideas." },
+    { "date": "2026-10-12", "event": "Week 42 committee", "relevance": "Next formal trading cycle. This week's watchlist is the starting agenda, not a commitment to trade." }
   ]
 }
