@@ -86,11 +86,11 @@ export default function DieselPage() {
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 Diesel is the short product.
               </h1>
-              <p className="mt-3 inline-flex rounded border border-gold-600/50 bg-ink-950 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-gold-300">
+              <p className="mt-3 inline-flex rounded border border-gold-600/50 bg-ink-950 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-gold-300">
                 Print, not a ticket. Delayed marks. Not for execution.
               </p>
               <p className={`mt-4 text-lg font-semibold ${biasClass}`}>
-                {bias}. {forecast.forecast.rule}
+                {forecast.forecast.rule}
               </p>
               <p className="mt-1 text-xs text-steel-500">
                 Model run {forecast.runAtUtc} · {forecast.runAtLondon}. Next EIA window {forecast.nextWindow}
@@ -99,7 +99,7 @@ export default function DieselPage() {
             </div>
             <section id="forecast" aria-labelledby="forecast-h" className="mt-6 rounded-lg border border-gold-600/40 bg-ink-950 p-4 lg:col-span-2 lg:mt-0">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gold-400">Model</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gold-400">MODEL</p>
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-steel-500">{forecast.forecast.confidence} confidence</p>
               </div>
               <h2 id="forecast-h" className={`mt-2 text-2xl font-bold ${biasClass}`}>
