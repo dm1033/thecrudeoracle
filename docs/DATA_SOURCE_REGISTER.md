@@ -22,6 +22,7 @@ Market values in the JSON files are **manual desk entries / indicative samples**
 | company-intelligence.json | Filings/RNS (anonymised samples) | Event-driven | Manual | 30d review | "Data unavailable or awaiting verification" |
 | research-library.json | Editorial index | On publish | Manual | n/a | — |
 | virtual-portfolio.json | Delayed/indicative quote marks | Daily | Manual | 48h | Stale badge |
+| diesel-cache.json / diesel-forecast.json | EIA public hist_xls (WPSR, spots, retail diesel). Confirmed series ids in `src/lib/diesel-series.ts` | Weekly WPSR Wednesday 10:30 ET; daily spots on the navigator file | `npm run diesel:forecast` (Python 3 + xlrd). Page reads the cache and does not call EIA | 8 days after the WPSR release date drops model confidence to low | Last good JSON. `meta.fail` visible. Missing series stay dark |
 
 ## Approved source hierarchy (for live-feed phase)
 EIA · IEA (public pages) · OPEC · Energy Institute · CFTC · Baker Hughes · UK DESNZ · NSTA · ONS · National Grid/NESO · SEC filings · RNS/LSE · company reports/presentations · licensed APIs (Alpha Vantage / Polygon / Nasdaq Data Link) — public data is never presented as matching licensed institutional feed speed or depth.

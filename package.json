@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "diesel:model": "node --experimental-strip-types --import ./scripts/register-ts.mjs scripts/build-diesel-forecast.mts",
+    "diesel:forecast": "python3 scripts/fetch-diesel.py && npm run diesel:model"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

@@ -20,7 +20,8 @@ export default function ChartDataTable({
   rows: Record<string, string | number>[];
 }) {
   return (
-    <table className="sr-only">
+    <div className="sr-only">
+    <table>
       <caption>{caption}</caption>
       <thead>
         <tr>
@@ -41,5 +42,6 @@ export default function ChartDataTable({
         ))}
       </tbody>
     </table>
+    </div>
   );
 }

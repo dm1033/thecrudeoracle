@@ -41,6 +41,10 @@ yarn-error.log*
 /logs/
 /run/
 
+# python cache from scripts/fetch-diesel.py
+__pycache__/
+*.pyc
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

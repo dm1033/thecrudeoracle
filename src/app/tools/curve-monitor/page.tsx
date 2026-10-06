@@ -101,7 +101,16 @@ function CurveContent() {
       <SpreadTable title="Flat price" accent="bg-gold-500" rows={flatPrice} />
       <SpreadTable title="Timespreads" accent="bg-gain" rows={timespreads} />
       <SpreadTable title="Quality & location differentials" accent="bg-risk" rows={differentials} />
-      <SpreadTable title="Product cracks" accent="bg-navy-700" rows={cracks} />
+      <div>
+        <SpreadTable title="Product cracks" accent="bg-navy-700" rows={cracks} />
+        <p className="mt-2 text-xs leading-relaxed text-steel-500">
+          <Link href="/diesel" className="font-semibold text-gold-400 hover:text-gold-300">
+            Diesel desk
+          </Link>{" "}
+          publishes the EIA ULSD spot crack and states the 3-2-1 as (2 × RBOB $/gal + 1 × ULSD $/gal) × 42 − 3 × WTI.
+          This board stays the indicative crack sample.
+        </p>
+      </div>
       <SpreadTable title="Freight-adjusted arbitrage" accent="bg-loss" rows={arbitrage} />
     </div>
   );
@@ -133,6 +142,9 @@ export default function CurveMonitorPage() {
             </Link>
             <Link href="/tools/flow-map" className="font-semibold text-gold-400 hover:text-gold-300">
               Flow Map →
+            </Link>
+            <Link href="/diesel" className="font-semibold text-gold-400 hover:text-gold-300">
+              Diesel desk →
             </Link>
             <Link href="/tools" className="font-semibold text-gold-400 hover:text-gold-300">
               All tools →

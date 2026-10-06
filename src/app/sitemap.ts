@@ -21,6 +21,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/portfolio/archive", priority: 0.6, changeFrequency: "weekly" },
   { path: "/crude-oil-prices", priority: 0.9, changeFrequency: "daily" },
   { path: "/gas-lng", priority: 0.8, changeFrequency: "daily" },
+  { path: "/diesel", priority: 0.8, changeFrequency: "daily" },
   { path: "/opec-supply-risk", priority: 0.8, changeFrequency: "daily" },
   { path: "/uk-energy-security", priority: 0.7, changeFrequency: "weekly" },
   { path: "/north-sea", priority: 0.7, changeFrequency: "weekly" },
