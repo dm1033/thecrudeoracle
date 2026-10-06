@@ -1,0 +1,50 @@
+{
+  "runAt": "2026-10-06T06:30:48Z",
+  "runAtUtc": "06 Oct 2026, 06:30 UTC",
+  "runAtLondon": "06 Oct 2026, 07:30 BST",
+  "nextWindow": "Wednesday 10:30 ET",
+  "cacheFetchedAt": "2026-10-06T06:18:07+00:00",
+  "staleDays": 6,
+  "pullFailed": false,
+  "sources": [
+    "WDISTUS1",
+    "WDIUPUS2",
+    "WDISTP11",
+    "WPULEUS3",
+    "WDIRPUS2",
+    "WGIRIUS2",
+    "EER_EPD2DXL0_PF4_Y35NY_DPG",
+    "RWTC"
+  ],
+  "input": {
+    "asOf": "2026-09-25",
+    "stocksMb": 105.18,
+    "fiveYearAvgMb": 120.85119999999999,
+    "belowBand": true,
+    "daysOfCover": 27.858561779896704,
+    "coverMedian": 30.214015398668927,
+    "padd1SeasonalLow": true,
+    "utilization": 92.5,
+    "yieldLatest": 0.30011997600479906,
+    "yieldPrior": 0.2902440405413057,
+    "crack": 113.798,
+    "crackMedian": 60.426,
+    "crackP90": 99.77,
+    "stocksDrawing": true,
+    "wpsrRelease": "2026-09-30",
+    "runAt": "2026-10-06T06:30:48Z",
+    "staleDays": 6,
+    "pullFailed": false
+  },
+  "forecast": {
+    "bias": "Tight",
+    "crackBias": "fading",
+    "confidence": "standard",
+    "rule": "Tight. Stocks are under the five-year average for this week and days of cover are under the trailing three-year median.",
+    "flip": "Flips if the next WPSR rebuilds stocks back through the five-year average, or days of cover rise through the median.",
+    "supply": "US distillate stocks 105.2 mb for the week ending 2026-09-25. Five-year average for this week 120.9 mb. Source WDISTUS1.",
+    "demand": "Days of cover 27.9. Ending stocks divided by the trailing four-week average of product supplied (WDIUPUS2). Product supplied is a proxy, not metered end-use.",
+    "refining": "Utilization 92.5% (WPULEUS3). Distillate yield 30.0%, production over gross inputs.",
+    "line": "Tight. Stocks 105.2 mb, under the five-year for this week. Days of cover 27.9. Crack 113.8 $/bbl, bias fading. PADD 1 is the stress book. Flips if the next WPSR rebuilds stocks back through the five-year average, or days of cover rise through the median. Model, not a ticket."
+  }
+}

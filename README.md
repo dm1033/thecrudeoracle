@@ -90,3 +90,26 @@ frontend code; the full Checkout/webhook setup uses env vars only (`.env.example
 - Every data card shows **source, last updated, and data type** (manual / delayed / indicative / API placeholder)
 - No unlicensed real-time exchange data; licensed-data placeholders only
 - Original design — no third-party terminal branding or trade dress
+
+## Diesel desk
+
+`/diesel` is the middle-distillate desk. `/distillate` redirects there. The page renders from `data/diesel-cache.json` and `data/diesel-forecast.json`. It does not call EIA during render. `EIA_API_KEY` is unused by this desk. The loader is the public hist_xls workbook, and the Sourcekey cell has to match the id in `src/lib/diesel-series.ts`.
+
+Refresh, with Python 3 and `xlrd` installed (`pip install xlrd`):
+
+```bash
+npm run diesel:forecast
+```
+
+That downloads the workbooks, then rebuilds the forecast. If a pull fails, the previous series stays in the cache and `fail` is set. The page keeps the last good print. `npm run diesel:model` rebuilds the forecast from the cache already on disk.
+
+Crack formulas, in dollars per barrel:
+
+- US diesel spot crack versus WTI: `(NYH ULSD $/gal × 42) − WTI $/bbl`
+- Same crack versus Brent: `(NYH ULSD $/gal × 42) − Brent $/bbl`
+- Gasoil crack, only when both legs exist: `(ICE LS gasoil $/t ÷ 7.45) − Brent $/bbl`
+- 3-2-1, stated on the page and left on the curve monitor: `(2 × RBOB $/gal + 1 × ULSD $/gal) × 42 − 3 × WTI`
+
+The forecast is a disclosed rule, labelled MODEL. Tight if stocks are under the five-year average for that ISO week and days of cover are under the trailing three-year median, or PADD 1 is at a seasonal low. Loose if stocks are above that average, cover is above the median, and utilization is above 90% with distillate yield not rising. Balanced otherwise. Crack bias fades first when the book is loose, or when it is tight and the spot crack is at or above its one-year 90th percentile. It is supported when the book is tight and the crack is under its one-year median, or tight with stocks still drawing and the crack under that 90th percentile. Otherwise two-way. Confidence is low when the WPSR release is more than 8 days before the run, or the pull failed.
+
+Days of cover = ending stocks in thousand barrels ÷ the trailing four-week average of product supplied. Stocks on the page are those thousand barrels ÷ 1,000. HO, ICE gasoil, ARA, Singapore, STEO and the IEA world balance stay dark until a free series is confirmed. The copy is a template from the rule. It is not a ticket.

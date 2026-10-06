@@ -37,6 +37,7 @@ export const NAV_MAIN: NavItem[] = [
   { label: "$10M Fund", href: "/portfolio" },
   { label: "Crude Prices", href: "/crude-oil-prices" },
   { label: "Gas / LNG", href: "/gas-lng" },
+  { label: "Diesel", href: "/diesel" },
   { label: "OPEC / Supply Risk", href: "/opec-supply-risk" },
   { label: "UK Energy Security", href: "/uk-energy-security" },
   { label: "North Sea", href: "/north-sea" },

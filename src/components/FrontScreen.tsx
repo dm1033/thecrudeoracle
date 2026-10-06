@@ -50,6 +50,12 @@ export default function FrontScreen() {
             replay the published price path, in dollars per barrel.
           </p>
           <DeskTape tapeRef={tapeRef} />
+          <p className="mt-2 text-[11px] text-steel-500">
+            <Link href="/diesel" className="font-semibold text-gold-400 hover:text-gold-300">
+              Diesel desk
+            </Link>{" "}
+            holds the ULSD spot and the crack. This tape is Brent and WTI.
+          </p>
           <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-steel-400">
             <li className="flex items-center gap-2">
               <span aria-hidden className="h-1.5 w-6 rounded-full bg-gold-400" />
