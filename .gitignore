@@ -52,3 +52,4 @@ next-env.d.ts
 /paper-book/report/tearsheet.html
 __pycache__/
 .pytest_cache/
+/paper-book/report/weekly_chart.png
