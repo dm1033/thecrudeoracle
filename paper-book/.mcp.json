@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "ibkr":   { "command": "npx", "args": ["-y", "interactive-brokers-mcp"], "env": { "IB_PAPER_TRADING": "true" } },
+    "openbb": { "type": "http", "url": "http://127.0.0.1:8001/mcp" },
+    "alpaca": { "command": "uvx", "args": ["alpaca-mcp-server"], "env": { "ALPACA_API_KEY": "${ALPACA_API_KEY}", "ALPACA_SECRET_KEY": "${ALPACA_SECRET_KEY}" } }
+  }
+}

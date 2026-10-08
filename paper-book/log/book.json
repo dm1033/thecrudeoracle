@@ -1,0 +1,13 @@
+{
+  "cash": 1000000.0,
+  "daily_returns": [],
+  "halt": {
+    "ai_flattened_on": null,
+    "review_until": null
+  },
+  "nav": 1000000.0,
+  "peak_nav": 1000000.0,
+  "positions": [],
+  "starting_nav": 1000000.0,
+  "trade_seq": 0
+}

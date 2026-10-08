@@ -1,0 +1,19 @@
+# Hard limits enforced by risk/check.py. Pre-registered in RULES.md section 6.
+# Values are starting points for a paper book, chosen to be defensible, not optimal.
+risk_per_trade_pct_nav: 0.5
+risk_per_trade_pct_nav_max: 1.0       # only at confidence 5
+vol_target_annual_pct: 10
+vol_ceiling_annual_pct: 12
+vol_lookback_days: 60
+vol_min_observations: 20              # below this, no vol scaling is applied
+gross_exposure_max_x_nav: 4
+per_product_max_pct_book_risk: 40     # of book risk capacity = max_open_ai_trades x risk_per_trade
+max_open_ai_trades: 6
+drawdown_stepdown_pct: -6
+drawdown_stop_pct: -10
+drawdown_stop_review_days: 5
+eia_blackout_start_ny: "10:00"
+eia_blackout_end_ny: "11:00"
+roll_business_days_before_ltd: 5
+slippage_ticks_per_side: 1
+commission_usd_per_side: 2.50         # placeholder; replace with the IBKR paper rate card figure

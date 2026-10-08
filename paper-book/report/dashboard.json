@@ -1,0 +1,26 @@
+{
+  "book_name": "Crude Oracle Paper Book",
+  "calls_vs_prints": [],
+  "costs_note": "Net figures subtract 1 tick slippage per side plus USD 2.5 commission per side.",
+  "curve": [],
+  "decision_log": [],
+  "disclaimer": "Simulated paper trading. No client money. Not investment advice. Past performance, actual or simulated, is not a reliable indicator of future results.",
+  "generated_at": "2026-10-08T06:18:54.557178+00:00",
+  "inception": null,
+  "min_days_for_stats": 60,
+  "model_pinned": "claude-sonnet-5-5",
+  "open_positions": [],
+  "risk_used": {
+    "drawdown_pct": 0.0,
+    "drawdown_stepdown_pct": -6,
+    "drawdown_stop_pct": -10,
+    "gross_exposure_max_x_nav": 4,
+    "gross_exposure_x_nav": 0.0,
+    "max_open_ai_trades": 6,
+    "open_ai_trades": 0
+  },
+  "show_performance": false,
+  "stats": {},
+  "trades": [],
+  "trading_days": 0
+}

@@ -1,0 +1,88 @@
+# Crude Oracle Paper Book — run configuration.
+# Everything here is logged with each decision. Change at a dated revision only (see RULES.md).
+
+book_name: "Crude Oracle Paper Book"
+timezone: "America/New_York"
+starting_nav_usd: 1000000      # paper account size; reporting is in % so this does not matter
+
+model:
+  id: "claude-sonnet-5-5"       # pinned per the playbook; logged with every decision
+  effort: "high"                # output_config.effort for the analyst and PM calls
+  max_tokens_analyst: 4000
+  max_tokens_pm: 2500
+  # Server-side refusal fallbacks are deliberately OFF: a fallback would silently serve a
+  # different model from the one pinned above. A refusal is recorded as "no trade".
+  fallbacks: false
+
+ib:
+  host: "127.0.0.1"
+  port: 4002                    # IB Gateway paper
+  client_id: 7
+  exchange: "NYMEX"
+  fill_wait_seconds: 90
+
+products:
+  CL:  { exchange: NYMEX, multiplier: 1000,  tick: 0.01,   micro: MCL, expiry_rule: cl }
+  MCL: { exchange: NYMEX, multiplier: 100,   tick: 0.01,   expiry_rule: cl }
+  BZ:  { exchange: NYMEX, multiplier: 1000,  tick: 0.01,   expiry_rule: bz }
+  RB:  { exchange: NYMEX, multiplier: 42000, tick: 0.0001, expiry_rule: rb_ho }
+  HO:  { exchange: NYMEX, multiplier: 42000, tick: 0.0001, expiry_rule: rb_ho }
+
+eia:
+  base_url: "https://api.eia.gov/v2"
+  # Series IDs taken from the site's existing EIA integration plus the standard WPSR tables.
+  # Run `python data/collect_eia.py --verify` once with a key to confirm every ID resolves
+  # before go-live (RULES.md step 5 of the setup).
+  weekly_series:
+    crude_ex_spr:     WCESTUS1   # US commercial crude stocks ex-SPR, kbbl
+    cushing:          WCESTOK1   # Cushing, OK crude stocks, kbbl
+    gasoline:         WGTSTUS1   # Total motor gasoline stocks, kbbl
+    distillate:       WDISTUS1   # Distillate fuel oil stocks, kbbl
+    refinery_util:    WPULEUS3   # Refinery utilisation, %
+    crude_imports:    WCRIMUS2   # Crude imports, kb/d
+    crude_exports:    WCREXUS2   # Crude exports, kb/d
+    product_supplied: WRPUPUS2   # Total petroleum products supplied (implied demand), kb/d
+  daily_spot:
+    wti:   RWTC
+    brent: RBRTE
+  weeks_of_history: 270          # ~5 years for the 5-year range
+  release_time_ny: "10:30"
+  release_weekday: 2             # Wednesday (Mon=0); holidays shift it, set via --eia-date
+
+cot:
+  report_type: "disaggregated_fut"
+  years_of_history: 3
+  # CFTC contract market codes. Confirm once with `python data/collect_cot.py --discover`
+  # and lock them here; the name patterns are the fallback used by --discover.
+  codes:
+    CL: "067651"
+    RB: "111659"
+    HO: "022651"
+    BZ: "06765T"
+  name_patterns:
+    CL: "CRUDE OIL, LIGHT SWEET"
+    RB: "GASOLINE"
+    HO: "ULSD|HEATING OIL"
+    BZ: "BRENT"
+  crowded_high_pct: 85
+  crowded_low_pct: 15
+
+news:
+  window_hours: 24
+  max_items: 60
+  # Public RSS feeds only. Items without a timestamp are discarded. Edit freely; the list is
+  # logged with each run so a change is visible.
+  feeds:
+    - "https://www.eia.gov/rss/todayinenergy.xml"
+    - "https://oilprice.com/rss/main"
+    - "https://www.opec.org/opec_web/en/pressreleases.rss"
+
+baseline:
+  trend_fast: 50
+  trend_slow: 200
+  atr_days: 20
+  stop_atr_multiple: 2.0
+
+proof:
+  git_push: true
+  ots: true

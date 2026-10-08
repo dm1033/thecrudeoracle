@@ -1,0 +1,11 @@
+# Crude Oracle Paper Book — pinned to New York so DST gaps cannot shift runs.
+# Install with:  crontab schedule/crontab   (on the pipeline server, as the pipeline user)
+CRON_TZ=America/New_York
+SHELL=/bin/bash
+PB=/opt/crude-oracle-paper-book/paper-book
+0 8  * * 1-5   cd $PB && ./run.sh daily        >> logs/cron.log 2>&1   # 13:00 London most of the year
+0 11 * * 3     cd $PB && ./run.sh eia          >> logs/cron.log 2>&1   # after the 10:30 ET EIA release
+0 16 * * 5     cd $PB && ./run.sh cot          >> logs/cron.log 2>&1   # after the Friday COT publication
+30 17 * * 1-5  cd $PB && ./run.sh mark         >> logs/cron.log 2>&1   # settlement mark
+0 18 * * 0     cd $PB && ./run.sh postmortem   >> logs/cron.log 2>&1   # weekly tear sheet + dashboard
+0 6  * * *     cd $PB && ./proof/upgrade.sh    >> logs/cron.log 2>&1   # upgrade yesterday's OTS proofs

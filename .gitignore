@@ -44,3 +44,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Crude Oracle Paper Book — runtime state & secrets (never commit)
+/paper-book/.env
+/paper-book/.venv/
+/paper-book/logs/
+/paper-book/report/tearsheet.html
+__pycache__/
+.pytest_cache/
