@@ -9,3 +9,5 @@ tearsheet:
 	python report/tearsheet.py
 chart:
 	python report/weekly_chart.py
+issue:
+	python report/sunday_issue.py
