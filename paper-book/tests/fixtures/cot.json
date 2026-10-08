@@ -1,0 +1,1931 @@
+{
+ "as_of_note": "COT positions are as of Tuesday and published Friday.",
+ "crowded_rule": "managed-money net above p85 or below p15 of 3 years",
+ "products": {
+  "BZ": {
+   "cftc_code": "06765T",
+   "crowded": "long",
+   "latest_date": "2026-11-03",
+   "market_name": "SYNTHETIC BZ",
+   "mm_net_3y_max": 240000,
+   "mm_net_3y_min": 60000,
+   "mm_net_3y_percentile": 88.0,
+   "mm_net_change_1w": 29211,
+   "mm_net_latest": 149790,
+   "weekly": [
+    {
+     "date": "2025-11-11",
+     "mm_long": 211965,
+     "mm_net": 121965,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60983,
+     "swap_dealer_net": -40655
+    },
+    {
+     "date": "2025-11-18",
+     "mm_long": 210640,
+     "mm_net": 120640,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60320,
+     "swap_dealer_net": -40214
+    },
+    {
+     "date": "2025-11-25",
+     "mm_long": 213421,
+     "mm_net": 123421,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -61711,
+     "swap_dealer_net": -41141
+    },
+    {
+     "date": "2025-12-02",
+     "mm_long": 236981,
+     "mm_net": 146981,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -73491,
+     "swap_dealer_net": -48994
+    },
+    {
+     "date": "2025-12-09",
+     "mm_long": 224440,
+     "mm_net": 134440,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -67220,
+     "swap_dealer_net": -44814
+    },
+    {
+     "date": "2025-12-16",
+     "mm_long": 246356,
+     "mm_net": 156356,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -78178,
+     "swap_dealer_net": -52119
+    },
+    {
+     "date": "2025-12-23",
+     "mm_long": 231232,
+     "mm_net": 141232,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -70616,
+     "swap_dealer_net": -47078
+    },
+    {
+     "date": "2025-12-30",
+     "mm_long": 210303,
+     "mm_net": 120303,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60152,
+     "swap_dealer_net": -40101
+    },
+    {
+     "date": "2026-01-06",
+     "mm_long": 230060,
+     "mm_net": 140060,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -70030,
+     "swap_dealer_net": -46687
+    },
+    {
+     "date": "2026-01-13",
+     "mm_long": 221991,
+     "mm_net": 131991,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -65996,
+     "swap_dealer_net": -43997
+    },
+    {
+     "date": "2026-01-20",
+     "mm_long": 198912,
+     "mm_net": 108912,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -54456,
+     "swap_dealer_net": -36304
+    },
+    {
+     "date": "2026-01-27",
+     "mm_long": 210904,
+     "mm_net": 120904,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60452,
+     "swap_dealer_net": -40302
+    },
+    {
+     "date": "2026-02-03",
+     "mm_long": 216257,
+     "mm_net": 126257,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -63129,
+     "swap_dealer_net": -42086
+    },
+    {
+     "date": "2026-02-10",
+     "mm_long": 210736,
+     "mm_net": 120736,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60368,
+     "swap_dealer_net": -40246
+    },
+    {
+     "date": "2026-02-17",
+     "mm_long": 206648,
+     "mm_net": 116648,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -58324,
+     "swap_dealer_net": -38883
+    },
+    {
+     "date": "2026-02-24",
+     "mm_long": 221892,
+     "mm_net": 131892,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -65946,
+     "swap_dealer_net": -43964
+    },
+    {
+     "date": "2026-03-03",
+     "mm_long": 226173,
+     "mm_net": 136173,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -68087,
+     "swap_dealer_net": -45391
+    },
+    {
+     "date": "2026-03-10",
+     "mm_long": 214156,
+     "mm_net": 124156,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -62078,
+     "swap_dealer_net": -41386
+    },
+    {
+     "date": "2026-03-17",
+     "mm_long": 219769,
+     "mm_net": 129769,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -64885,
+     "swap_dealer_net": -43257
+    },
+    {
+     "date": "2026-03-24",
+     "mm_long": 251195,
+     "mm_net": 161195,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -80598,
+     "swap_dealer_net": -53732
+    },
+    {
+     "date": "2026-03-31",
+     "mm_long": 192343,
+     "mm_net": 102343,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -51172,
+     "swap_dealer_net": -34115
+    },
+    {
+     "date": "2026-04-07",
+     "mm_long": 211343,
+     "mm_net": 121343,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60672,
+     "swap_dealer_net": -40448
+    },
+    {
+     "date": "2026-04-14",
+     "mm_long": 231590,
+     "mm_net": 141590,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -70795,
+     "swap_dealer_net": -47197
+    },
+    {
+     "date": "2026-04-21",
+     "mm_long": 237018,
+     "mm_net": 147018,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -73509,
+     "swap_dealer_net": -49006
+    },
+    {
+     "date": "2026-04-28",
+     "mm_long": 229467,
+     "mm_net": 139467,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -69734,
+     "swap_dealer_net": -46489
+    },
+    {
+     "date": "2026-05-05",
+     "mm_long": 229430,
+     "mm_net": 139430,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -69715,
+     "swap_dealer_net": -46477
+    },
+    {
+     "date": "2026-05-12",
+     "mm_long": 234811,
+     "mm_net": 144811,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -72406,
+     "swap_dealer_net": -48271
+    },
+    {
+     "date": "2026-05-19",
+     "mm_long": 200738,
+     "mm_net": 110738,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -55369,
+     "swap_dealer_net": -36913
+    },
+    {
+     "date": "2026-05-26",
+     "mm_long": 238704,
+     "mm_net": 148704,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -74352,
+     "swap_dealer_net": -49568
+    },
+    {
+     "date": "2026-06-02",
+     "mm_long": 234459,
+     "mm_net": 144459,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -72230,
+     "swap_dealer_net": -48153
+    },
+    {
+     "date": "2026-06-09",
+     "mm_long": 236619,
+     "mm_net": 146619,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -73310,
+     "swap_dealer_net": -48873
+    },
+    {
+     "date": "2026-06-16",
+     "mm_long": 242505,
+     "mm_net": 152505,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -76253,
+     "swap_dealer_net": -50835
+    },
+    {
+     "date": "2026-06-23",
+     "mm_long": 233691,
+     "mm_net": 143691,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -71846,
+     "swap_dealer_net": -47897
+    },
+    {
+     "date": "2026-06-30",
+     "mm_long": 212749,
+     "mm_net": 122749,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -61375,
+     "swap_dealer_net": -40917
+    },
+    {
+     "date": "2026-07-07",
+     "mm_long": 230919,
+     "mm_net": 140919,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -70460,
+     "swap_dealer_net": -46973
+    },
+    {
+     "date": "2026-07-14",
+     "mm_long": 232584,
+     "mm_net": 142584,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -71292,
+     "swap_dealer_net": -47528
+    },
+    {
+     "date": "2026-07-21",
+     "mm_long": 224437,
+     "mm_net": 134437,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -67219,
+     "swap_dealer_net": -44813
+    },
+    {
+     "date": "2026-07-28",
+     "mm_long": 238773,
+     "mm_net": 148773,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -74387,
+     "swap_dealer_net": -49591
+    },
+    {
+     "date": "2026-08-04",
+     "mm_long": 220072,
+     "mm_net": 130072,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -65036,
+     "swap_dealer_net": -43358
+    },
+    {
+     "date": "2026-08-11",
+     "mm_long": 241881,
+     "mm_net": 151881,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -75941,
+     "swap_dealer_net": -50627
+    },
+    {
+     "date": "2026-08-18",
+     "mm_long": 238430,
+     "mm_net": 148430,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -74215,
+     "swap_dealer_net": -49477
+    },
+    {
+     "date": "2026-08-25",
+     "mm_long": 241875,
+     "mm_net": 151875,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -75938,
+     "swap_dealer_net": -50625
+    },
+    {
+     "date": "2026-09-01",
+     "mm_long": 224916,
+     "mm_net": 134916,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -67458,
+     "swap_dealer_net": -44972
+    },
+    {
+     "date": "2026-09-08",
+     "mm_long": 242487,
+     "mm_net": 152487,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -76244,
+     "swap_dealer_net": -50829
+    },
+    {
+     "date": "2026-09-15",
+     "mm_long": 211416,
+     "mm_net": 121416,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60708,
+     "swap_dealer_net": -40472
+    },
+    {
+     "date": "2026-09-22",
+     "mm_long": 243273,
+     "mm_net": 153273,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -76637,
+     "swap_dealer_net": -51091
+    },
+    {
+     "date": "2026-09-29",
+     "mm_long": 245635,
+     "mm_net": 155635,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -77818,
+     "swap_dealer_net": -51879
+    },
+    {
+     "date": "2026-10-06",
+     "mm_long": 270662,
+     "mm_net": 180662,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -90331,
+     "swap_dealer_net": -60221
+    },
+    {
+     "date": "2026-10-13",
+     "mm_long": 236895,
+     "mm_net": 146895,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -73448,
+     "swap_dealer_net": -48965
+    },
+    {
+     "date": "2026-10-20",
+     "mm_long": 237928,
+     "mm_net": 147928,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -73964,
+     "swap_dealer_net": -49310
+    },
+    {
+     "date": "2026-10-27",
+     "mm_long": 210579,
+     "mm_net": 120579,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -60290,
+     "swap_dealer_net": -40193
+    },
+    {
+     "date": "2026-11-03",
+     "mm_long": 239790,
+     "mm_net": 149790,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -74895,
+     "swap_dealer_net": -49930
+    }
+   ]
+  },
+  "CL": {
+   "cftc_code": "067651",
+   "crowded": "no",
+   "latest_date": "2026-11-03",
+   "market_name": "SYNTHETIC CL",
+   "mm_net_3y_max": 270000,
+   "mm_net_3y_min": 90000,
+   "mm_net_3y_percentile": 62.0,
+   "mm_net_change_1w": -20996,
+   "mm_net_latest": 172317,
+   "weekly": [
+    {
+     "date": "2025-11-11",
+     "mm_long": 233524,
+     "mm_net": 143524,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -71762,
+     "swap_dealer_net": -47842
+    },
+    {
+     "date": "2025-11-18",
+     "mm_long": 235396,
+     "mm_net": 145396,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -72698,
+     "swap_dealer_net": -48466
+    },
+    {
+     "date": "2025-11-25",
+     "mm_long": 229237,
+     "mm_net": 139237,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -69619,
+     "swap_dealer_net": -46413
+    },
+    {
+     "date": "2025-12-02",
+     "mm_long": 243191,
+     "mm_net": 153191,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -76596,
+     "swap_dealer_net": -51064
+    },
+    {
+     "date": "2025-12-09",
+     "mm_long": 232879,
+     "mm_net": 142879,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -71440,
+     "swap_dealer_net": -47627
+    },
+    {
+     "date": "2025-12-16",
+     "mm_long": 262930,
+     "mm_net": 172930,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -86465,
+     "swap_dealer_net": -57644
+    },
+    {
+     "date": "2025-12-23",
+     "mm_long": 261334,
+     "mm_net": 171334,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -85667,
+     "swap_dealer_net": -57112
+    },
+    {
+     "date": "2025-12-30",
+     "mm_long": 249323,
+     "mm_net": 159323,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -79662,
+     "swap_dealer_net": -53108
+    },
+    {
+     "date": "2026-01-06",
+     "mm_long": 250561,
+     "mm_net": 160561,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -80281,
+     "swap_dealer_net": -53521
+    },
+    {
+     "date": "2026-01-13",
+     "mm_long": 233900,
+     "mm_net": 143900,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -71950,
+     "swap_dealer_net": -47967
+    },
+    {
+     "date": "2026-01-20",
+     "mm_long": 236403,
+     "mm_net": 146403,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -73202,
+     "swap_dealer_net": -48801
+    },
+    {
+     "date": "2026-01-27",
+     "mm_long": 260229,
+     "mm_net": 170229,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -85115,
+     "swap_dealer_net": -56743
+    },
+    {
+     "date": "2026-02-03",
+     "mm_long": 272853,
+     "mm_net": 182853,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -91427,
+     "swap_dealer_net": -60951
+    },
+    {
+     "date": "2026-02-10",
+     "mm_long": 243222,
+     "mm_net": 153222,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -76611,
+     "swap_dealer_net": -51074
+    },
+    {
+     "date": "2026-02-17",
+     "mm_long": 250686,
+     "mm_net": 160686,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -80343,
+     "swap_dealer_net": -53562
+    },
+    {
+     "date": "2026-02-24",
+     "mm_long": 254775,
+     "mm_net": 164775,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -82388,
+     "swap_dealer_net": -54925
+    },
+    {
+     "date": "2026-03-03",
+     "mm_long": 248372,
+     "mm_net": 158372,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -79186,
+     "swap_dealer_net": -52791
+    },
+    {
+     "date": "2026-03-10",
+     "mm_long": 261870,
+     "mm_net": 171870,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -85935,
+     "swap_dealer_net": -57290
+    },
+    {
+     "date": "2026-03-17",
+     "mm_long": 228628,
+     "mm_net": 138628,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -69314,
+     "swap_dealer_net": -46210
+    },
+    {
+     "date": "2026-03-24",
+     "mm_long": 262203,
+     "mm_net": 172203,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -86102,
+     "swap_dealer_net": -57401
+    },
+    {
+     "date": "2026-03-31",
+     "mm_long": 271894,
+     "mm_net": 181894,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -90947,
+     "swap_dealer_net": -60632
+    },
+    {
+     "date": "2026-04-07",
+     "mm_long": 248482,
+     "mm_net": 158482,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -79241,
+     "swap_dealer_net": -52828
+    },
+    {
+     "date": "2026-04-14",
+     "mm_long": 263130,
+     "mm_net": 173130,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -86565,
+     "swap_dealer_net": -57710
+    },
+    {
+     "date": "2026-04-21",
+     "mm_long": 260438,
+     "mm_net": 170438,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -85219,
+     "swap_dealer_net": -56813
+    },
+    {
+     "date": "2026-04-28",
+     "mm_long": 280859,
+     "mm_net": 190859,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -95430,
+     "swap_dealer_net": -63620
+    },
+    {
+     "date": "2026-05-05",
+     "mm_long": 259057,
+     "mm_net": 169057,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -84529,
+     "swap_dealer_net": -56353
+    },
+    {
+     "date": "2026-05-12",
+     "mm_long": 246931,
+     "mm_net": 156931,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -78466,
+     "swap_dealer_net": -52311
+    },
+    {
+     "date": "2026-05-19",
+     "mm_long": 259353,
+     "mm_net": 169353,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -84677,
+     "swap_dealer_net": -56451
+    },
+    {
+     "date": "2026-05-26",
+     "mm_long": 248634,
+     "mm_net": 158634,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -79317,
+     "swap_dealer_net": -52878
+    },
+    {
+     "date": "2026-06-02",
+     "mm_long": 232509,
+     "mm_net": 142509,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -71255,
+     "swap_dealer_net": -47503
+    },
+    {
+     "date": "2026-06-09",
+     "mm_long": 252929,
+     "mm_net": 162929,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -81465,
+     "swap_dealer_net": -54310
+    },
+    {
+     "date": "2026-06-16",
+     "mm_long": 250255,
+     "mm_net": 160255,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -80128,
+     "swap_dealer_net": -53419
+    },
+    {
+     "date": "2026-06-23",
+     "mm_long": 259199,
+     "mm_net": 169199,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -84600,
+     "swap_dealer_net": -56400
+    },
+    {
+     "date": "2026-06-30",
+     "mm_long": 241570,
+     "mm_net": 151570,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -75785,
+     "swap_dealer_net": -50524
+    },
+    {
+     "date": "2026-07-07",
+     "mm_long": 257503,
+     "mm_net": 167503,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -83752,
+     "swap_dealer_net": -55835
+    },
+    {
+     "date": "2026-07-14",
+     "mm_long": 258607,
+     "mm_net": 168607,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -84304,
+     "swap_dealer_net": -56203
+    },
+    {
+     "date": "2026-07-21",
+     "mm_long": 250578,
+     "mm_net": 160578,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -80289,
+     "swap_dealer_net": -53526
+    },
+    {
+     "date": "2026-07-28",
+     "mm_long": 264484,
+     "mm_net": 174484,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -87242,
+     "swap_dealer_net": -58162
+    },
+    {
+     "date": "2026-08-04",
+     "mm_long": 241397,
+     "mm_net": 151397,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -75699,
+     "swap_dealer_net": -50466
+    },
+    {
+     "date": "2026-08-11",
+     "mm_long": 254100,
+     "mm_net": 164100,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -82050,
+     "swap_dealer_net": -54700
+    },
+    {
+     "date": "2026-08-18",
+     "mm_long": 247896,
+     "mm_net": 157896,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -78948,
+     "swap_dealer_net": -52632
+    },
+    {
+     "date": "2026-08-25",
+     "mm_long": 271981,
+     "mm_net": 181981,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -90991,
+     "swap_dealer_net": -60661
+    },
+    {
+     "date": "2026-09-01",
+     "mm_long": 279346,
+     "mm_net": 189346,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -94673,
+     "swap_dealer_net": -63116
+    },
+    {
+     "date": "2026-09-08",
+     "mm_long": 253003,
+     "mm_net": 163003,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -81502,
+     "swap_dealer_net": -54335
+    },
+    {
+     "date": "2026-09-15",
+     "mm_long": 260542,
+     "mm_net": 170542,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -85271,
+     "swap_dealer_net": -56848
+    },
+    {
+     "date": "2026-09-22",
+     "mm_long": 258430,
+     "mm_net": 168430,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -84215,
+     "swap_dealer_net": -56144
+    },
+    {
+     "date": "2026-09-29",
+     "mm_long": 281050,
+     "mm_net": 191050,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -95525,
+     "swap_dealer_net": -63684
+    },
+    {
+     "date": "2026-10-06",
+     "mm_long": 255462,
+     "mm_net": 165462,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -82731,
+     "swap_dealer_net": -55154
+    },
+    {
+     "date": "2026-10-13",
+     "mm_long": 268610,
+     "mm_net": 178610,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -89305,
+     "swap_dealer_net": -59537
+    },
+    {
+     "date": "2026-10-20",
+     "mm_long": 257052,
+     "mm_net": 167052,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -83526,
+     "swap_dealer_net": -55684
+    },
+    {
+     "date": "2026-10-27",
+     "mm_long": 283313,
+     "mm_net": 193313,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -96657,
+     "swap_dealer_net": -64438
+    },
+    {
+     "date": "2026-11-03",
+     "mm_long": 262317,
+     "mm_net": 172317,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -86159,
+     "swap_dealer_net": -57439
+    }
+   ]
+  },
+  "HO": {
+   "cftc_code": "022651",
+   "crowded": "short",
+   "latest_date": "2026-11-03",
+   "market_name": "SYNTHETIC HO",
+   "mm_net_3y_max": 102000,
+   "mm_net_3y_min": -78000,
+   "mm_net_3y_percentile": 12.0,
+   "mm_net_change_1w": 6671,
+   "mm_net_latest": 23339,
+   "weekly": [
+    {
+     "date": "2025-11-11",
+     "mm_long": 61737,
+     "mm_net": -28263,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 14131,
+     "swap_dealer_net": 9421
+    },
+    {
+     "date": "2025-11-18",
+     "mm_long": 91414,
+     "mm_net": 1414,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -707,
+     "swap_dealer_net": -472
+    },
+    {
+     "date": "2025-11-25",
+     "mm_long": 97253,
+     "mm_net": 7253,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -3627,
+     "swap_dealer_net": -2418
+    },
+    {
+     "date": "2025-12-02",
+     "mm_long": 78994,
+     "mm_net": -11006,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 5503,
+     "swap_dealer_net": 3668
+    },
+    {
+     "date": "2025-12-09",
+     "mm_long": 54625,
+     "mm_net": -35375,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 17687,
+     "swap_dealer_net": 11791
+    },
+    {
+     "date": "2025-12-16",
+     "mm_long": 88258,
+     "mm_net": -1742,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 871,
+     "swap_dealer_net": 580
+    },
+    {
+     "date": "2025-12-23",
+     "mm_long": 91763,
+     "mm_net": 1763,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -882,
+     "swap_dealer_net": -588
+    },
+    {
+     "date": "2025-12-30",
+     "mm_long": 81519,
+     "mm_net": -8481,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 4240,
+     "swap_dealer_net": 2827
+    },
+    {
+     "date": "2026-01-06",
+     "mm_long": 65697,
+     "mm_net": -24303,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 12151,
+     "swap_dealer_net": 8101
+    },
+    {
+     "date": "2026-01-13",
+     "mm_long": 78464,
+     "mm_net": -11536,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 5768,
+     "swap_dealer_net": 3845
+    },
+    {
+     "date": "2026-01-20",
+     "mm_long": 70427,
+     "mm_net": -19573,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 9786,
+     "swap_dealer_net": 6524
+    },
+    {
+     "date": "2026-01-27",
+     "mm_long": 73690,
+     "mm_net": -16310,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 8155,
+     "swap_dealer_net": 5436
+    },
+    {
+     "date": "2026-02-03",
+     "mm_long": 86567,
+     "mm_net": -3433,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 1716,
+     "swap_dealer_net": 1144
+    },
+    {
+     "date": "2026-02-10",
+     "mm_long": 75497,
+     "mm_net": -14503,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 7251,
+     "swap_dealer_net": 4834
+    },
+    {
+     "date": "2026-02-17",
+     "mm_long": 104690,
+     "mm_net": 14690,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -7345,
+     "swap_dealer_net": -4897
+    },
+    {
+     "date": "2026-02-24",
+     "mm_long": 87692,
+     "mm_net": -2308,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 1154,
+     "swap_dealer_net": 769
+    },
+    {
+     "date": "2026-03-03",
+     "mm_long": 104600,
+     "mm_net": 14600,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -7300,
+     "swap_dealer_net": -4867
+    },
+    {
+     "date": "2026-03-10",
+     "mm_long": 97924,
+     "mm_net": 7924,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -3962,
+     "swap_dealer_net": -2642
+    },
+    {
+     "date": "2026-03-17",
+     "mm_long": 82204,
+     "mm_net": -7796,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 3898,
+     "swap_dealer_net": 2598
+    },
+    {
+     "date": "2026-03-24",
+     "mm_long": 71504,
+     "mm_net": -18496,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 9248,
+     "swap_dealer_net": 6165
+    },
+    {
+     "date": "2026-03-31",
+     "mm_long": 85735,
+     "mm_net": -4265,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 2132,
+     "swap_dealer_net": 1421
+    },
+    {
+     "date": "2026-04-07",
+     "mm_long": 81280,
+     "mm_net": -8720,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 4360,
+     "swap_dealer_net": 2906
+    },
+    {
+     "date": "2026-04-14",
+     "mm_long": 50722,
+     "mm_net": -39278,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 19639,
+     "swap_dealer_net": 13092
+    },
+    {
+     "date": "2026-04-21",
+     "mm_long": 84444,
+     "mm_net": -5556,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 2778,
+     "swap_dealer_net": 1852
+    },
+    {
+     "date": "2026-04-28",
+     "mm_long": 87040,
+     "mm_net": -2960,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 1480,
+     "swap_dealer_net": 986
+    },
+    {
+     "date": "2026-05-05",
+     "mm_long": 94713,
+     "mm_net": 4713,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -2357,
+     "swap_dealer_net": -1571
+    },
+    {
+     "date": "2026-05-12",
+     "mm_long": 73327,
+     "mm_net": -16673,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 8336,
+     "swap_dealer_net": 5557
+    },
+    {
+     "date": "2026-05-19",
+     "mm_long": 95731,
+     "mm_net": 5731,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -2866,
+     "swap_dealer_net": -1911
+    },
+    {
+     "date": "2026-05-26",
+     "mm_long": 86018,
+     "mm_net": -3982,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 1991,
+     "swap_dealer_net": 1327
+    },
+    {
+     "date": "2026-06-02",
+     "mm_long": 91218,
+     "mm_net": 1218,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -609,
+     "swap_dealer_net": -406
+    },
+    {
+     "date": "2026-06-09",
+     "mm_long": 116756,
+     "mm_net": 26756,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -13378,
+     "swap_dealer_net": -8919
+    },
+    {
+     "date": "2026-06-16",
+     "mm_long": 88654,
+     "mm_net": -1346,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 673,
+     "swap_dealer_net": 448
+    },
+    {
+     "date": "2026-06-23",
+     "mm_long": 99978,
+     "mm_net": 9978,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -4989,
+     "swap_dealer_net": -3326
+    },
+    {
+     "date": "2026-06-30",
+     "mm_long": 95005,
+     "mm_net": 5005,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -2503,
+     "swap_dealer_net": -1669
+    },
+    {
+     "date": "2026-07-07",
+     "mm_long": 82371,
+     "mm_net": -7629,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 3814,
+     "swap_dealer_net": 2543
+    },
+    {
+     "date": "2026-07-14",
+     "mm_long": 107743,
+     "mm_net": 17743,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -8872,
+     "swap_dealer_net": -5915
+    },
+    {
+     "date": "2026-07-21",
+     "mm_long": 95975,
+     "mm_net": 5975,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -2988,
+     "swap_dealer_net": -1992
+    },
+    {
+     "date": "2026-07-28",
+     "mm_long": 118660,
+     "mm_net": 28660,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -14330,
+     "swap_dealer_net": -9554
+    },
+    {
+     "date": "2026-08-04",
+     "mm_long": 107729,
+     "mm_net": 17729,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -8865,
+     "swap_dealer_net": -5910
+    },
+    {
+     "date": "2026-08-11",
+     "mm_long": 101875,
+     "mm_net": 11875,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -5938,
+     "swap_dealer_net": -3959
+    },
+    {
+     "date": "2026-08-18",
+     "mm_long": 77057,
+     "mm_net": -12943,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 6471,
+     "swap_dealer_net": 4314
+    },
+    {
+     "date": "2026-08-25",
+     "mm_long": 94978,
+     "mm_net": 4978,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -2489,
+     "swap_dealer_net": -1660
+    },
+    {
+     "date": "2026-09-01",
+     "mm_long": 103967,
+     "mm_net": 13967,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -6984,
+     "swap_dealer_net": -4656
+    },
+    {
+     "date": "2026-09-08",
+     "mm_long": 104241,
+     "mm_net": 14241,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -7121,
+     "swap_dealer_net": -4747
+    },
+    {
+     "date": "2026-09-15",
+     "mm_long": 87426,
+     "mm_net": -2574,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 1287,
+     "swap_dealer_net": 858
+    },
+    {
+     "date": "2026-09-22",
+     "mm_long": 97273,
+     "mm_net": 7273,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -3637,
+     "swap_dealer_net": -2425
+    },
+    {
+     "date": "2026-09-29",
+     "mm_long": 101730,
+     "mm_net": 11730,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -5865,
+     "swap_dealer_net": -3910
+    },
+    {
+     "date": "2026-10-06",
+     "mm_long": 119488,
+     "mm_net": 29488,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -14744,
+     "swap_dealer_net": -9830
+    },
+    {
+     "date": "2026-10-13",
+     "mm_long": 65652,
+     "mm_net": -24348,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 12174,
+     "swap_dealer_net": 8116
+    },
+    {
+     "date": "2026-10-20",
+     "mm_long": 73945,
+     "mm_net": -16055,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 8027,
+     "swap_dealer_net": 5351
+    },
+    {
+     "date": "2026-10-27",
+     "mm_long": 106668,
+     "mm_net": 16668,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -8334,
+     "swap_dealer_net": -5556
+    },
+    {
+     "date": "2026-11-03",
+     "mm_long": 113339,
+     "mm_net": 23339,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -11670,
+     "swap_dealer_net": -7780
+    }
+   ]
+  },
+  "RB": {
+   "cftc_code": "111659",
+   "crowded": "no",
+   "latest_date": "2026-11-03",
+   "market_name": "SYNTHETIC RB",
+   "mm_net_3y_max": 135000,
+   "mm_net_3y_min": -45000,
+   "mm_net_3y_percentile": 40.0,
+   "mm_net_change_1w": -3584,
+   "mm_net_latest": 39779,
+   "weekly": [
+    {
+     "date": "2025-11-11",
+     "mm_long": 113957,
+     "mm_net": 23957,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -11979,
+     "swap_dealer_net": -7986
+    },
+    {
+     "date": "2025-11-18",
+     "mm_long": 124926,
+     "mm_net": 34926,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -17463,
+     "swap_dealer_net": -11642
+    },
+    {
+     "date": "2025-11-25",
+     "mm_long": 122062,
+     "mm_net": 32062,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -16031,
+     "swap_dealer_net": -10688
+    },
+    {
+     "date": "2025-12-02",
+     "mm_long": 87634,
+     "mm_net": -2366,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 1183,
+     "swap_dealer_net": 788
+    },
+    {
+     "date": "2025-12-09",
+     "mm_long": 91525,
+     "mm_net": 1525,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -763,
+     "swap_dealer_net": -509
+    },
+    {
+     "date": "2025-12-16",
+     "mm_long": 103873,
+     "mm_net": 13873,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -6937,
+     "swap_dealer_net": -4625
+    },
+    {
+     "date": "2025-12-23",
+     "mm_long": 85973,
+     "mm_net": -4027,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": 2013,
+     "swap_dealer_net": 1342
+    },
+    {
+     "date": "2025-12-30",
+     "mm_long": 99867,
+     "mm_net": 9867,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -4934,
+     "swap_dealer_net": -3289
+    },
+    {
+     "date": "2026-01-06",
+     "mm_long": 96494,
+     "mm_net": 6494,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -3247,
+     "swap_dealer_net": -2165
+    },
+    {
+     "date": "2026-01-13",
+     "mm_long": 115755,
+     "mm_net": 25755,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -12878,
+     "swap_dealer_net": -8585
+    },
+    {
+     "date": "2026-01-20",
+     "mm_long": 119533,
+     "mm_net": 29533,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -14767,
+     "swap_dealer_net": -9845
+    },
+    {
+     "date": "2026-01-27",
+     "mm_long": 108936,
+     "mm_net": 18936,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -9468,
+     "swap_dealer_net": -6312
+    },
+    {
+     "date": "2026-02-03",
+     "mm_long": 108781,
+     "mm_net": 18781,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -9391,
+     "swap_dealer_net": -6261
+    },
+    {
+     "date": "2026-02-10",
+     "mm_long": 114796,
+     "mm_net": 24796,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -12398,
+     "swap_dealer_net": -8266
+    },
+    {
+     "date": "2026-02-17",
+     "mm_long": 118203,
+     "mm_net": 28203,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -14102,
+     "swap_dealer_net": -9401
+    },
+    {
+     "date": "2026-02-24",
+     "mm_long": 106405,
+     "mm_net": 16405,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -8203,
+     "swap_dealer_net": -5469
+    },
+    {
+     "date": "2026-03-03",
+     "mm_long": 98170,
+     "mm_net": 8170,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -4085,
+     "swap_dealer_net": -2724
+    },
+    {
+     "date": "2026-03-10",
+     "mm_long": 121233,
+     "mm_net": 31233,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -15617,
+     "swap_dealer_net": -10411
+    },
+    {
+     "date": "2026-03-17",
+     "mm_long": 121657,
+     "mm_net": 31657,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -15829,
+     "swap_dealer_net": -10553
+    },
+    {
+     "date": "2026-03-24",
+     "mm_long": 125050,
+     "mm_net": 35050,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -17525,
+     "swap_dealer_net": -11684
+    },
+    {
+     "date": "2026-03-31",
+     "mm_long": 114336,
+     "mm_net": 24336,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -12168,
+     "swap_dealer_net": -8112
+    },
+    {
+     "date": "2026-04-07",
+     "mm_long": 113709,
+     "mm_net": 23709,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -11855,
+     "swap_dealer_net": -7903
+    },
+    {
+     "date": "2026-04-14",
+     "mm_long": 110030,
+     "mm_net": 20030,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -10015,
+     "swap_dealer_net": -6677
+    },
+    {
+     "date": "2026-04-21",
+     "mm_long": 115854,
+     "mm_net": 25854,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -12927,
+     "swap_dealer_net": -8618
+    },
+    {
+     "date": "2026-04-28",
+     "mm_long": 112594,
+     "mm_net": 22594,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -11297,
+     "swap_dealer_net": -7532
+    },
+    {
+     "date": "2026-05-05",
+     "mm_long": 125130,
+     "mm_net": 35130,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -17565,
+     "swap_dealer_net": -11710
+    },
+    {
+     "date": "2026-05-12",
+     "mm_long": 136646,
+     "mm_net": 46646,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -23323,
+     "swap_dealer_net": -15549
+    },
+    {
+     "date": "2026-05-19",
+     "mm_long": 111736,
+     "mm_net": 21736,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -10868,
+     "swap_dealer_net": -7246
+    },
+    {
+     "date": "2026-05-26",
+     "mm_long": 120762,
+     "mm_net": 30762,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -15381,
+     "swap_dealer_net": -10254
+    },
+    {
+     "date": "2026-06-02",
+     "mm_long": 123043,
+     "mm_net": 33043,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -16522,
+     "swap_dealer_net": -11015
+    },
+    {
+     "date": "2026-06-09",
+     "mm_long": 110329,
+     "mm_net": 20329,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -10165,
+     "swap_dealer_net": -6777
+    },
+    {
+     "date": "2026-06-16",
+     "mm_long": 133984,
+     "mm_net": 43984,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -21992,
+     "swap_dealer_net": -14662
+    },
+    {
+     "date": "2026-06-23",
+     "mm_long": 142440,
+     "mm_net": 52440,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -26220,
+     "swap_dealer_net": -17480
+    },
+    {
+     "date": "2026-06-30",
+     "mm_long": 140037,
+     "mm_net": 50037,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -25019,
+     "swap_dealer_net": -16679
+    },
+    {
+     "date": "2026-07-07",
+     "mm_long": 113962,
+     "mm_net": 23962,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -11981,
+     "swap_dealer_net": -7988
+    },
+    {
+     "date": "2026-07-14",
+     "mm_long": 138360,
+     "mm_net": 48360,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -24180,
+     "swap_dealer_net": -16120
+    },
+    {
+     "date": "2026-07-21",
+     "mm_long": 134897,
+     "mm_net": 44897,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -22449,
+     "swap_dealer_net": -14966
+    },
+    {
+     "date": "2026-07-28",
+     "mm_long": 129755,
+     "mm_net": 39755,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -19878,
+     "swap_dealer_net": -13252
+    },
+    {
+     "date": "2026-08-04",
+     "mm_long": 144122,
+     "mm_net": 54122,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -27061,
+     "swap_dealer_net": -18041
+    },
+    {
+     "date": "2026-08-11",
+     "mm_long": 128196,
+     "mm_net": 38196,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -19098,
+     "swap_dealer_net": -12732
+    },
+    {
+     "date": "2026-08-18",
+     "mm_long": 164600,
+     "mm_net": 74600,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -37300,
+     "swap_dealer_net": -24867
+    },
+    {
+     "date": "2026-08-25",
+     "mm_long": 131216,
+     "mm_net": 41216,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -20608,
+     "swap_dealer_net": -13739
+    },
+    {
+     "date": "2026-09-01",
+     "mm_long": 121656,
+     "mm_net": 31656,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -15828,
+     "swap_dealer_net": -10552
+    },
+    {
+     "date": "2026-09-08",
+     "mm_long": 129938,
+     "mm_net": 39938,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -19969,
+     "swap_dealer_net": -13313
+    },
+    {
+     "date": "2026-09-15",
+     "mm_long": 121949,
+     "mm_net": 31949,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -15975,
+     "swap_dealer_net": -10650
+    },
+    {
+     "date": "2026-09-22",
+     "mm_long": 130538,
+     "mm_net": 40538,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -20269,
+     "swap_dealer_net": -13513
+    },
+    {
+     "date": "2026-09-29",
+     "mm_long": 146466,
+     "mm_net": 56466,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -28233,
+     "swap_dealer_net": -18822
+    },
+    {
+     "date": "2026-10-06",
+     "mm_long": 137357,
+     "mm_net": 47357,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -23679,
+     "swap_dealer_net": -15786
+    },
+    {
+     "date": "2026-10-13",
+     "mm_long": 122407,
+     "mm_net": 32407,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -16204,
+     "swap_dealer_net": -10803
+    },
+    {
+     "date": "2026-10-20",
+     "mm_long": 109969,
+     "mm_net": 19969,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -9985,
+     "swap_dealer_net": -6657
+    },
+    {
+     "date": "2026-10-27",
+     "mm_long": 133363,
+     "mm_net": 43363,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -21682,
+     "swap_dealer_net": -14455
+    },
+    {
+     "date": "2026-11-03",
+     "mm_long": 129779,
+     "mm_net": 39779,
+     "mm_short": 90000,
+     "open_interest": 1800000,
+     "prod_merc_net": -19890,
+     "swap_dealer_net": -13260
+    }
+   ]
+  }
+ },
+ "source": "SYNTHETIC FIXTURE \u2014 not CFTC data"
+}

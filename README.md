@@ -28,6 +28,7 @@ npm run build      # production build
 | Daily briefing (11-section template + archive) | `/daily-briefing` |
 | Investment watchlist (12 segments) | `/watchlist` |
 | Company intelligence notes | `/company-intelligence` |
+| Crude Oracle Paper Book (AI crude desk, timestamped decision log, no-AI baseline) | `/paper-book` — pipeline in [`paper-book/`](paper-book/README.md) |
 | Market pages | `/crude-oil-prices`, `/gas-lng`, `/opec-supply-risk` |
 | UK coverage | `/uk-energy-security`, `/north-sea` |
 | Education | `/oil-truth`, `/research-library` |

@@ -1,0 +1,14 @@
+{
+ "crude_ex_spr": {
+  "period": "2026-11-04",
+  "change_kbbl": -2100.0
+ },
+ "gasoline": {
+  "period": "2026-11-04",
+  "change_kbbl": 900.0
+ },
+ "distillate": {
+  "period": "2026-11-04",
+  "change_kbbl": -1400.0
+ }
+}

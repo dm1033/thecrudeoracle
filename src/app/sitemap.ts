@@ -17,6 +17,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/tools/hypothesis-builder", priority: 0.8, changeFrequency: "daily" },
   { path: "/portfolio", priority: 0.9, changeFrequency: "daily" },
   { path: "/portfolio/dashboard", priority: 0.8, changeFrequency: "daily" },
+  { path: "/paper-book", priority: 0.9, changeFrequency: "daily" },
   { path: "/crude-oil-prices", priority: 0.9, changeFrequency: "daily" },
   { path: "/gas-lng", priority: 0.8, changeFrequency: "daily" },
   { path: "/opec-supply-risk", priority: 0.8, changeFrequency: "daily" },
