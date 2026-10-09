@@ -3,7 +3,8 @@
  * Non-text Content). The Recharts SVG next to it is marked aria-hidden in
  * ChartFrame — it carries no accessible name or per-point text, so without
  * this table the chart's data is invisible to assistive technology. Visually
- * hidden via the `sr-only` utility; the data itself is unchanged.
+ * hidden via the `sr-only` utility on a wrapper. A table ignores that
+ * utility's width clip and would widen the page on a phone.
  */
 export interface ChartTableColumn {
   key: string;
@@ -20,26 +21,28 @@ export default function ChartDataTable({
   rows: Record<string, string | number>[];
 }) {
   return (
-    <table className="sr-only">
-      <caption>{caption}</caption>
-      <thead>
-        <tr>
-          {columns.map((c) => (
-            <th key={c.key} scope="col">
-              {c.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => (
-          <tr key={i}>
+    <div className="sr-only">
+      <table>
+        <caption>{caption}</caption>
+        <thead>
+          <tr>
             {columns.map((c) => (
-              <td key={c.key}>{row[c.key]}</td>
+              <th key={c.key} scope="col">
+                {c.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i}>
+              {columns.map((c) => (
+                <td key={c.key}>{row[c.key]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

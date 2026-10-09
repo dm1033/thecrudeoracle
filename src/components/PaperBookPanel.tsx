@@ -134,6 +134,17 @@ function GrowthChart() {
   );
 }
 
+function profitBar(props: { x?: number; y?: number; width?: number; height?: number; fill?: string }) {
+  const x = props.x ?? 0;
+  const y = props.y ?? 0;
+  const width = props.width ?? 0;
+  const height = props.height ?? 0;
+  const w = Math.abs(width);
+  const left = width < 0 ? x + width : x;
+  if (w < 0.5 || height <= 0) return <g />;
+  return <rect x={left} y={y} width={w} height={height} fill={props.fill} rx={2} />;
+}
+
 function EarningsChart({ title, note }: { title: string; note: string }) {
   return (
     <figure className="card">
@@ -141,14 +152,14 @@ function EarningsChart({ title, note }: { title: string; note: string }) {
         <span className="text-sm font-semibold text-white">{title}</span>
         <span className="text-[10px] uppercase tracking-wide text-steel-500">{note}</span>
       </figcaption>
-      <div aria-hidden className="h-72 w-full">
+      <div aria-hidden className="h-[420px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={earnings} layout="vertical" margin={{ top: 4, right: 12, left: 4, bottom: 0 }}>
+          <BarChart data={earnings} layout="vertical" margin={{ top: 4, right: 16, left: 4, bottom: 0 }}>
             <CartesianGrid stroke={GRID} horizontal={false} />
             <XAxis type="number" tick={AXIS} tickLine={false} axisLine={{ stroke: GRID }} tickFormatter={(v: number) => axisUsd(v)} />
-            <YAxis type="category" dataKey="name" width={92} tick={AXIS} tickLine={false} axisLine={false} />
+            <YAxis type="category" dataKey="name" width={118} interval={0} tick={AXIS} tickLine={false} axisLine={false} />
             <Tooltip {...tooltipStyle} formatter={(v: number) => [usd(v, true), "P&L"]} />
-            <Bar dataKey="pl" radius={[0, 3, 3, 0]}>
+            <Bar dataKey="pl" shape={profitBar}>
               {earnings.map((row) => (
                 <Cell key={row.name} fill={row.pl >= 0 ? GAIN : LOSS} />
               ))}
