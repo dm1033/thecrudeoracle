@@ -9,7 +9,7 @@ import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
   "Virtual Portfolio Dashboard — Positions, Journal, Risk & Benchmarks",
-  "The free dashboard for The Crude Oracle $1,000,000 Oil Intelligence Portfolio: open paper positions with sources and risk levels, full trade journal, exposure, drawdown ladder, benchmarks and the daily trading brief.",
+  "The live dashboard for The Crude Oracle $100,000,000 paper fund: every open line with its profit, the closed trade, full journal, exposure, drawdown ladder, benchmarks and the daily trading brief. Virtual capital.",
   "/portfolio/dashboard"
 );
 
@@ -366,7 +366,7 @@ function DashboardContent() {
             ))}
           </ul>
           <p className="mt-4 text-xs text-steel-500">
-            Monthly report format: &ldquo;The Crude Oracle $1,000,000 Virtual Portfolio Report —
+            Monthly report format: &ldquo;The Crude Oracle $100,000,000 Paper Fund Report —
             [Month]&rdquo; — 14 sections from starting balance to risk warning, first edition due{" "}
             {next_events[next_events.length - 1].date}. Template in docs/PORTFOLIO_PLAYBOOK.md.
           </p>

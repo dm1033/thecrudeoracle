@@ -24,10 +24,32 @@ const AXIS = { fill: "#8b98a9", fontSize: 11 };
 
 const { account, meta, positions, closed_trades, benchmarks } = portfolioData;
 
+function shortMark(iso: string) {
+  return new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+  });
+}
+
+function longMark(iso: string) {
+  return new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 const marks = [
-  { date: "1 Jul", value: account.starting_value },
-  { date: "4 Jul", value: account.current_value },
+  { date: shortMark(meta.inception), value: account.starting_value },
+  { date: shortMark(account.last_updated), value: account.current_value },
 ];
+
+const valueLow = Math.min(account.starting_value, account.current_value);
+const valueHigh = Math.max(account.starting_value, account.current_value);
+const valuePad = Math.max((valueHigh - valueLow) * 0.6, account.starting_value * 0.002);
+const valueDomain: [number, number] = [valueLow - valuePad, valueHigh + valuePad];
 
 const earnings = [
   ...closed_trades.map((t) => ({
@@ -48,6 +70,14 @@ function usd(n: number, signed = false) {
   if (n > 0) return `+$${abs}`;
   if (n < 0) return `−$${abs}`;
   return `$${abs}`;
+}
+
+function axisUsd(n: number) {
+  const sign = n < 0 ? "−" : "";
+  const abs = Math.abs(n);
+  if (abs >= 1_000_000) return `${sign}$${(abs / 1_000_000).toFixed(1)}M`;
+  if (abs >= 1_000) return `${sign}$${(abs / 1_000).toFixed(0)}k`;
+  return `${sign}$${abs.toFixed(0)}`;
 }
 
 const tooltipStyle = {
@@ -73,12 +103,12 @@ function GrowthChart() {
             <CartesianGrid stroke={GRID} vertical={false} />
             <XAxis dataKey="date" tick={AXIS} tickLine={false} axisLine={{ stroke: GRID }} />
             <YAxis
-              domain={[998000, 1014000]}
+              domain={valueDomain}
               tick={AXIS}
               tickLine={false}
               axisLine={false}
-              width={52}
-              tickFormatter={(v: number) => `$${(v / 1000).toFixed(0)}k`}
+              width={64}
+              tickFormatter={(v: number) => axisUsd(v)}
             />
             <Tooltip
               {...tooltipStyle}
@@ -97,7 +127,7 @@ function GrowthChart() {
         rows={marks}
       />
       <p className="mt-2 text-[11px] text-steel-500">
-        Axis starts at $998,000 so the move is readable. Change {usd(totalPl, true)} ({account.return_pct >= 0 ? "+" : ""}
+        Axis runs from {axisUsd(valueDomain[0])} to {axisUsd(valueDomain[1])} so the move is readable. Change {usd(totalPl, true)} ({account.return_pct >= 0 ? "+" : ""}
         {account.return_pct}%).
       </p>
     </figure>
@@ -115,7 +145,7 @@ function EarningsChart({ title, note }: { title: string; note: string }) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={earnings} layout="vertical" margin={{ top: 4, right: 12, left: 4, bottom: 0 }}>
             <CartesianGrid stroke={GRID} horizontal={false} />
-            <XAxis type="number" tick={AXIS} tickLine={false} axisLine={{ stroke: GRID }} tickFormatter={(v: number) => usd(v, true)} />
+            <XAxis type="number" tick={AXIS} tickLine={false} axisLine={{ stroke: GRID }} tickFormatter={(v: number) => axisUsd(v)} />
             <YAxis type="category" dataKey="name" width={92} tick={AXIS} tickLine={false} axisLine={false} />
             <Tooltip {...tooltipStyle} formatter={(v: number) => [usd(v, true), "P&L"]} />
             <Bar dataKey="pl" radius={[0, 3, 3, 0]}>
@@ -139,10 +169,10 @@ function EarningsChart({ title, note }: { title: string; note: string }) {
 }
 
 const statement = [
-  ["Opening value", usd(account.starting_value), "1 July 2026"],
+  ["Opening value", usd(account.starting_value), longMark(meta.inception)],
   ["Realised P&L", usd(account.realised_pl, true), closed_trades.map((t) => `${t.ticker} ${usd(t.realised_pl, true)}`).join("; ")],
   ["Open P&L", usd(account.unrealised_pl, true), `${account.open_positions} positions still open`],
-  ["Closing value", usd(account.current_value), "4 July 2026"],
+  ["Closing value", usd(account.current_value), longMark(account.last_updated)],
   ["Cash", usd(account.cash_balance), `${account.cash_pct}% of the account`],
 ] as const;
 
@@ -152,8 +182,8 @@ export default function PaperBookPanel() {
       <div className="container-site py-12">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="eyebrow">Paper trading · USD · virtual capital</p>
-            <h2 className="h2 mt-1">The $1,000,000 account, and how the result is made</h2>
+            <p className="eyebrow">Live paper fund · USD · virtual capital</p>
+            <h2 className="h2 mt-1">The $100,000,000 fund, and how the result is made</h2>
           </div>
           <div className="text-right">
             <p className="text-xs text-steel-500">{benchmarks.period}</p>
@@ -204,7 +234,7 @@ export default function PaperBookPanel() {
             <p className="text-sm font-semibold text-white">Client statement</p>
             <p className="mt-1 text-[11px] uppercase tracking-wide text-steel-500">Same virtual account</p>
             <table className="mt-3 w-full text-sm">
-              <caption className="sr-only">Illustrative client statement of the virtual USD account</caption>
+              <caption className="sr-only">Published statement of the live $100,000,000 paper fund</caption>
               <tbody>
                 {statement.map(([label, value, detail]) => (
                   <tr key={label} className="border-t border-ink-700">
@@ -218,8 +248,8 @@ export default function PaperBookPanel() {
               </tbody>
             </table>
             <p className="mt-3 text-[11px] leading-relaxed text-steel-500">
-              Sample statement for this paper account. Marked {account.last_updated.slice(0, 10)}. Simulated
-              performance is educational and is not a promise of future results.
+              Published statement of the live paper fund. Marked {account.last_updated.slice(0, 10)}. Virtual
+              capital. Simulated performance is not a promise of future results.
             </p>
           </div>
           <EarningsChart title="Client view of the same lines" note="Same P&L, statement view" />

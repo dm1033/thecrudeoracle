@@ -14,7 +14,7 @@ export default function SubscribeCTA(_props: { heading?: string; body?: string }
       </h2>
       <p className="mx-auto mt-3 max-w-2xl text-sm text-steel-400">
         The paywall has been removed. The full dashboard, daily briefings, investment watchlist,
-        company intelligence, every analysis tool and the $1,000,000 virtual portfolio are open to
+        company intelligence, every analysis tool and the $100,000,000 paper fund are open to
         everyone — no card, no account required.
       </p>
       <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -22,7 +22,7 @@ export default function SubscribeCTA(_props: { heading?: string; body?: string }
           Open the Full Dashboard — Free
         </Link>
         <Link href="/portfolio/dashboard" className="btn-secondary">
-          See the $1M Portfolio Performance
+          See the $100M fund, every trade
         </Link>
       </div>
       <p className="mt-4 text-xs text-steel-500">
