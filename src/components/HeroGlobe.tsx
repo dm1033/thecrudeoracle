@@ -276,33 +276,71 @@ export default function HeroGlobe({
       ctx.translate(sx, sy);
       ctx.rotate(angle);
       ctx.scale(scale, scale);
-      ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      const stroke = Math.max(0.45, 1.05 / scale);
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.32)";
       ctx.beginPath();
-      ctx.ellipse(1, 4.2, 15, 3.2, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 1.7, 7.6, 1.35, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.98)`;
+
       ctx.beginPath();
-      ctx.moveTo(18, 0);
-      ctx.lineTo(11, 5.2);
-      ctx.lineTo(-13, 5.2);
-      ctx.lineTo(-16, 2.2);
-      ctx.lineTo(-16, -2.2);
-      ctx.lineTo(-13, -5.2);
-      ctx.lineTo(11, -5.2);
+      ctx.moveTo(10.6, 0);
+      ctx.lineTo(7.7, 2.05);
+      ctx.lineTo(3.4, 2.72);
+      ctx.lineTo(-5.5, 2.72);
+      ctx.lineTo(-7.7, 2.05);
+      ctx.lineTo(-8.7, 1.15);
+      ctx.lineTo(-9.45, 1.15);
+      ctx.lineTo(-9.45, -1.15);
+      ctx.lineTo(-8.7, -1.15);
+      ctx.lineTo(-7.7, -2.05);
+      ctx.lineTo(-5.5, -2.72);
+      ctx.lineTo(3.4, -2.72);
+      ctx.lineTo(7.7, -2.05);
       ctx.closePath();
+      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.98)`;
       ctx.fill();
-      ctx.fillStyle = "rgba(255, 248, 230, 0.92)";
-      ctx.fillRect(-12.5, -3.4, 6.2, 6.8);
+      ctx.lineWidth = stroke;
+      ctx.strokeStyle = "rgba(18, 14, 8, 0.88)";
+      ctx.stroke();
+
       if (lng) {
-        ctx.fillStyle = "rgba(210, 236, 240, 0.95)";
-        ctx.beginPath();
-        ctx.arc(-1, -0.4, 2.5, 0, Math.PI * 2);
-        ctx.arc(5.2, -0.4, 2.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = "rgba(244, 252, 253, 0.96)";
+        ctx.strokeStyle = "rgba(12, 32, 38, 0.8)";
+        ctx.lineWidth = stroke * 0.75;
+        for (const tank of [4.15, 0.85, -2.45]) {
+          ctx.beginPath();
+          ctx.arc(tank, 0, 1.42, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
       } else {
-        ctx.fillStyle = "rgba(20, 16, 8, 0.35)";
-        ctx.fillRect(-2, -1.3, 10, 2.6);
+        ctx.fillStyle = "rgba(28, 18, 6, 0.55)";
+        for (const bay of [-4.15, -0.85, 2.45]) {
+          ctx.fillRect(bay, -1.72, 2.35, 3.44);
+        }
+        ctx.fillStyle = "rgba(8, 6, 4, 0.8)";
+        ctx.fillRect(1.05, -0.55, 1.15, 1.1);
       }
+
+      ctx.fillStyle = "rgba(255, 250, 236, 0.97)";
+      ctx.fillRect(-8.15, -1.85, 2.55, 3.7);
+      ctx.strokeStyle = "rgba(28, 22, 12, 0.8)";
+      ctx.lineWidth = stroke * 0.7;
+      ctx.strokeRect(-8.15, -1.85, 2.55, 3.7);
+      ctx.fillStyle = "rgba(16, 14, 10, 0.9)";
+      ctx.fillRect(-7.55, -0.95, 0.55, 0.7);
+      ctx.fillRect(-6.55, -0.95, 0.55, 0.7);
+      ctx.fillRect(-7.55, 0.4, 0.55, 0.7);
+      ctx.fillRect(-6.55, 0.4, 0.55, 0.7);
+
+      ctx.fillStyle = "rgba(10, 8, 6, 0.94)";
+      ctx.fillRect(-5.35, -0.48, 0.95, 0.96);
+      ctx.fillStyle = lng ? "rgba(170, 236, 244, 1)" : "rgba(255, 214, 110, 1)";
+      ctx.fillRect(-5.35, -0.48, 0.28, 0.96);
+
       ctx.restore();
     };
 
@@ -503,11 +541,11 @@ export default function HeroGlobe({
             if (pb.z < 0.06) continue;
             ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${0.32 * (1 - trail / 6)})`;
             ctx.beginPath();
-            ctx.arc(pb.sx, pb.sy, Math.max(1.1, (3.4 - trail * 0.35) * (radius / 240)), 0, Math.PI * 2);
+            ctx.arc(pb.sx, pb.sy, Math.max(0.55, (1.55 - trail * 0.16) * (radius / 340)), 0, Math.PI * 2);
             ctx.fill();
           }
           const ang = Math.atan2(p1.sy - p0.sy, p1.sx - p0.sx);
-          const scale = Math.max(0.95, radius / 165) * (0.72 + 0.4 * p0.z);
+          const scale = Math.max(0.82, radius / 168) * (0.8 + 0.26 * p0.z);
           drawShip(p0.sx, p0.sy, ang, rgb, lane.kind === "lng", scale);
         }
       }
@@ -596,16 +634,16 @@ export default function HeroGlobe({
           ctx.strokeStyle = "rgba(233, 205, 126, 0.95)";
           ctx.lineWidth = 1.4;
           ctx.beginPath();
-          ctx.arc(pos.sx, pos.sy, 11 * (radius / 280), 0, Math.PI * 2);
+          ctx.arc(pos.sx, pos.sy, Math.max(7, radius / 42), 0, Math.PI * 2);
           ctx.stroke();
-          drawShip(pos.sx, pos.sy, Math.atan2(p1.sy - pos.sy, p1.sx - pos.sx), GOLD, false, Math.max(1.15, radius / 150));
+          drawShip(pos.sx, pos.sy, Math.atan2(p1.sy - pos.sy, p1.sx - pos.sx), GOLD, false, Math.max(0.95, radius / 142));
           if (pos.z > 0.2) {
-            ctx.font = "600 13px Inter, sans-serif";
+            ctx.font = "600 12px Inter, sans-serif";
             ctx.lineWidth = 3;
             ctx.strokeStyle = "rgba(7, 9, 12, 0.8)";
-            ctx.strokeText(watched.name, pos.sx + 14, pos.sy - 12);
+            ctx.strokeText(watched.name, pos.sx + 11, pos.sy - 9);
             ctx.fillStyle = "#e9cd7e";
-            ctx.fillText(watched.name, pos.sx + 14, pos.sy - 12);
+            ctx.fillText(watched.name, pos.sx + 11, pos.sy - 9);
           }
         }
       }
