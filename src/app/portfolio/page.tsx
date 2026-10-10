@@ -8,13 +8,24 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
-  "Follow The Crude Oracle $1,000,000 Virtual Oil Portfolio",
-  "A transparent paper-trading demonstration showing how daily oil, gas and energy intelligence can be turned into a disciplined investment process. Virtual capital only — not financial advice.",
+  "The Crude Oracle $100,000,000 Paper Fund",
+  "The live published paper fund: every open line, the closed trade, and the profit on each. Virtual capital only. Last published desk marks. Not financial advice.",
   "/portfolio"
 );
 
 const account = portfolioData.account;
 const meta = portfolioData.meta;
+const positions = portfolioData.positions;
+const closed = portfolioData.closed_trades;
+const journal = portfolioData.trade_log;
+
+function usd(n: number, signed = false) {
+  const abs = Math.abs(Math.round(n)).toLocaleString("en-US");
+  if (!signed) return `$${abs}`;
+  if (n > 0) return `+$${abs}`;
+  if (n < 0) return `−$${abs}`;
+  return `$${abs}`;
+}
 
 const VALUE_POINTS = [
   ["Structured daily oil intelligence", "One process every trading day: prices, supply, demand, inventories, risk — then decisions."],
@@ -35,15 +46,14 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 }
 
 export default function PortfolioPublicPage() {
-  const example = portfolioData.trade_log[2]; // the capped speculative example
-  const closed = portfolioData.closed_trades[0];
+  const totalPl = account.unrealised_pl + account.realised_pl;
 
   return (
     <>
       <PageHeader
-        eyebrow="Paper Trading Demonstration · Virtual Capital Only"
-        title="Follow The Crude Oracle $1,000,000 Virtual Oil Portfolio"
-        intro="A transparent paper-trading demonstration showing how daily oil, gas and energy intelligence can be turned into a disciplined investment process."
+        eyebrow="Live paper fund · Virtual capital only"
+        title={meta.name}
+        intro="Every open line, the closed trade, and the profit on each. Marks are the last published desk print — delayed and indicative. Virtual capital. Not an exchange feed and not financial advice."
       />
       <div className="container-site space-y-10 py-10">
         <PaperTradingDisclaimer />
@@ -52,11 +62,13 @@ export default function PortfolioPublicPage() {
           <h2 id="snap-h" className="sr-only">
             Portfolio snapshot
           </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Stat label="Virtual starting capital" value="$1,000,000" />
-            <Stat label="Current value (sample)" value={`$${account.current_value.toLocaleString("en-US")}`} />
-            <Stat label="Return since inception" value={`+${account.return_pct.toFixed(2)}%`} accent="text-gain" />
-            <Stat label="Max drawdown" value={`${account.max_drawdown_pct.toFixed(1)}%`} accent="text-risk" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Stat label="Starting capital" value={usd(account.starting_value)} />
+            <Stat label="Current value" value={usd(account.current_value)} />
+            <Stat label="Total profit" value={usd(totalPl, true)} accent={totalPl >= 0 ? "text-gain" : "text-loss"} />
+            <Stat label="Open profit" value={usd(account.unrealised_pl, true)} accent={account.unrealised_pl >= 0 ? "text-gain" : "text-loss"} />
+            <Stat label="Realised profit" value={usd(account.realised_pl, true)} accent={account.realised_pl >= 0 ? "text-gain" : "text-loss"} />
+            <Stat label="Return since inception" value={`${account.return_pct >= 0 ? "+" : ""}${account.return_pct.toFixed(2)}%`} accent="text-gain" />
           </div>
           <p className="mt-2 text-[11px] text-steel-500">
             Inception {meta.inception} · Updated {account.last_updated.slice(0, 10)} · All values
@@ -92,47 +104,129 @@ export default function PortfolioPublicPage() {
           </div>
         </section>
 
-        <section aria-labelledby="extrade-h">
-          <h2 id="extrade-h" className="h2">
-            Example journaled decisions
+        <section aria-labelledby="book-h">
+          <h2 id="book-h" className="h2">
+            Every open line
           </h2>
           <p className="mt-1 text-sm text-steel-500">
-            Two entries from the public journal — one open hypothesis trade, one closed trade with
-            its lesson. Full rationale, sizing and risk levels are in the portfolio dashboard — free.
+            {account.open_positions} positions still open. Profit is unrealised until the line is
+            closed. Weights are percent of the {usd(account.starting_value)} starting capital.
           </p>
-          <div className="mt-4 grid gap-4 lg:grid-cols-2">
-            <article className="card">
-              <div className="flex items-center justify-between gap-2">
-                <span className="rounded bg-navy-800 px-2 py-0.5 text-[10px] font-bold uppercase text-steel-300">
-                  Open · {example.trade_id}
-                </span>
-                <span className="rounded bg-risk/15 px-2 py-0.5 text-[10px] font-bold uppercase text-risk">
-                  Speculative — capped at 3%
-                </span>
-              </div>
-              <h3 className="mt-2 text-sm font-semibold text-white">{example.asset}</h3>
-              <p className="mt-2 text-xs leading-relaxed text-steel-400">{example.thesis}</p>
-              <p className="mt-2 text-xs text-steel-500">
-                <span className="font-semibold text-loss">Invalidation: </span>
-                {example.invalidation}
-              </p>
-            </article>
-            <article className="card">
-              <div className="flex items-center justify-between gap-2">
-                <span className="rounded bg-navy-800 px-2 py-0.5 text-[10px] font-bold uppercase text-steel-300">
-                  Closed · {closed.id}
-                </span>
-                <span className="rounded bg-gain/15 px-2 py-0.5 text-[10px] font-bold uppercase text-gain">
-                  +{closed.return_pct}% realised (simulated)
-                </span>
-              </div>
-              <h3 className="mt-2 text-sm font-semibold text-white">{closed.asset}</h3>
-              <p className="mt-2 text-xs leading-relaxed text-steel-400">{closed.reason_closed}</p>
-              <p className="mt-2 text-xs text-steel-500">
-                <span className="font-semibold text-gold-500">Lesson: </span>
-                {closed.lesson}
-              </p>
-            </article>
+          <ul className="mt-4 space-y-3 md:hidden">
+            {positions.map((p) => (
+              <li key={p.id} className="card">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-wide text-steel-500">{p.id} · {p.ticker}</p>
+                    <h3 className="mt-1 text-sm font-semibold text-white">{p.asset}</h3>
+                  </div>
+                  <p className={`num text-sm font-bold ${p.unrealised_pl >= 0 ? "text-gain" : "text-loss"}`}>
+                    {usd(p.unrealised_pl, true)}
+                  </p>
+                </div>
+                <p className="mt-2 text-xs text-steel-400">
+                  {p.size} · {usd(p.capital_allocated)} allocated ({p.weight_pct}%)
+                </p>
+                <p className="mt-1 text-xs text-steel-500">
+                  Entry {p.entry_price} · Mark {p.current_price} · {p.decision}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-4 hidden overflow-x-auto rounded-lg border border-ink-700 md:block">
+            <table className="table-dark min-w-[760px]">
+              <caption className="sr-only">Open paper positions with capital and unrealised profit</caption>
+              <thead className="bg-ink-900">
+                <tr>
+                  <th scope="col">Line</th>
+                  <th scope="col">Size</th>
+                  <th scope="col" className="text-right">Allocated</th>
+                  <th scope="col" className="text-right">Weight</th>
+                  <th scope="col" className="text-right">Entry</th>
+                  <th scope="col" className="text-right">Mark</th>
+                  <th scope="col" className="text-right">Open profit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((p) => (
+                  <tr key={p.id}>
+                    <td>
+                      <span className="font-mono text-xs text-steel-500">{p.id}</span>
+                      <div className="font-medium text-steel-300">{p.asset}</div>
+                      <div className="text-[10px] uppercase tracking-wide text-steel-500">{p.ticker}</div>
+                    </td>
+                    <td className="text-xs">{p.size}</td>
+                    <td className="num text-right">{usd(p.capital_allocated)}</td>
+                    <td className="num text-right">{p.weight_pct}%</td>
+                    <td className="num text-right">{p.entry_price}</td>
+                    <td className="num text-right text-white">{p.current_price}</td>
+                    <td className={`num text-right font-semibold ${p.unrealised_pl >= 0 ? "text-gain" : "text-loss"}`}>
+                      {usd(p.unrealised_pl, true)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="closed-h">
+          <h2 id="closed-h" className="h2">
+            Closed trades
+          </h2>
+          <p className="mt-1 text-sm text-steel-500">
+            {account.closed_trades} closed. Realised profit {usd(account.realised_pl, true)}.
+          </p>
+          <div className="mt-4 space-y-3">
+            {closed.map((t) => (
+              <article key={t.id} className="card">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-xs text-steel-500">{t.id}</span>
+                  <h3 className="text-sm font-semibold text-white">{t.asset}</h3>
+                  <span className="font-mono text-xs text-steel-500">{t.ticker}</span>
+                  <span className={`ml-auto rounded px-2 py-0.5 text-xs font-bold ${t.realised_pl >= 0 ? "bg-gain/15 text-gain" : "bg-loss/15 text-loss"}`}>
+                    {usd(t.realised_pl, true)} ({t.return_pct}%)
+                  </span>
+                </div>
+                <p className="mt-2 text-xs text-steel-400">
+                  {t.date_opened} → {t.date_closed} · Entry {t.entry_price} · Exit {t.exit_price} · {usd(t.capital_allocated)} allocated
+                </p>
+                <p className="mt-2 text-sm text-steel-300">{t.reason_closed}</p>
+                <p className="mt-1 text-xs text-steel-500">
+                  <span className="font-semibold text-gold-500">Lesson: </span>
+                  {t.lesson}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="journal-h">
+          <h2 id="journal-h" className="h2">
+            Journal — every decision on the book
+          </h2>
+          <p className="mt-1 text-sm text-steel-500">
+            {journal.length} recorded decisions. Thesis, size and invalidation stay with the trade.
+          </p>
+          <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            {journal.map((entry) => (
+              <article key={entry.trade_id} className="card">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="rounded bg-navy-800 px-2 py-0.5 text-[10px] font-bold uppercase text-steel-300">
+                    {entry.trade_id} · {entry.decision}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-wide text-steel-500">{entry.date}</span>
+                </div>
+                <h3 className="mt-2 text-sm font-semibold text-white">{entry.asset}</h3>
+                <p className="mt-2 text-xs text-steel-400">{entry.position_size}</p>
+                <p className="mt-1 text-xs text-steel-500">{entry.capital_allocated}</p>
+                <p className="mt-2 text-xs leading-relaxed text-steel-400">{entry.thesis}</p>
+                <p className="mt-2 text-xs text-steel-500">
+                  <span className="font-semibold text-loss">Invalidation: </span>
+                  {entry.invalidation}
+                </p>
+              </article>
+            ))}
           </div>
         </section>
 

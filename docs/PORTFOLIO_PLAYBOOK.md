@@ -1,4 +1,4 @@
-# The Crude Oracle $1,000,000 Oil Intelligence Portfolio — Playbook
+# The Crude Oracle $100,000,000 Oil Intelligence Portfolio — Playbook
 
 PAPER TRADING ONLY. Virtual capital. Education and platform demonstration.
 Every published report must carry the full disclaimer stored in
@@ -21,12 +21,13 @@ Everything renders from `data/virtual-portfolio.json`:
 `closed_trades` · `trade_log` · `exposure` · `contributors/detractors` ·
 `benchmarks` · `daily_brief` · `next_events`.
 
-Pages: `/portfolio` (public marketing version) and `/portfolio/dashboard`
-(premium, gated). Edit JSON → commit → push → live.
+Pages: `/portfolio` (live public book — every line and its profit) and
+`/portfolio/dashboard` (same book, with sources, rules and the daily brief).
+Both are public. Edit JSON → commit → push → live.
 
 ## 2. Portfolio rules (enforced in writing)
 
-- Starting capital $1,000,000 (virtual)
+- Starting capital $100,000,000 (virtual)
 - Core position ≤15% · high-conviction ≤20% with written justification ·
   speculative ≤5% · single equity ≤10%
 - Futures margin-adjusted; notional counted against limits; stop always set
@@ -75,14 +76,14 @@ trade, lessons learned. Store in `benchmarks.rows`.
 
 ## 7. Monthly report format
 
-Title: **The Crude Oracle $1,000,000 Virtual Portfolio Report — [Month]**
+Title: **The Crude Oracle $100,000,000 Paper Fund Report — [Month]**
 Sections: 1 Starting balance · 2 Ending balance · 3 Monthly return ·
 4 Benchmark comparison · 5 Best decisions · 6 Worst decisions · 7 Trades
 opened · 8 Trades closed · 9 Current positions · 10 Watchlist changes ·
 11 Market lessons · 12 Strategy changes · 13 Next month's focus ·
 14 Risk warning (full disclaimer).
-Publish both versions: public summary on `/portfolio`, full detail on the
-premium dashboard.
+Publish the full book on `/portfolio` and the same book with sources on
+`/portfolio/dashboard`.
 
 ## 8. Data source requirements
 

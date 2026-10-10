@@ -19,7 +19,7 @@ Welcome. Everything below is free. Not financial advice; data may be delayed, in
 - **News-to-Barrels** — events sized in barrels with confidence grades
 - **Positioning** — where the crowd is, and when it's stretched
 - **Hypothesis Builder** — falsifiable scenarios with invalidation conditions (never buy/sell calls)
-- **$1M Virtual Portfolio** (/portfolio/dashboard) — the whole process demonstrated with paper money, losses included
+- **$100,000,000 paper fund** (/portfolio) — every published line and its profit, virtual capital, losses included
 - **Watchlist / Company Intelligence / Research Library / UK & North Sea coverage**
 
 ## Account

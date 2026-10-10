@@ -68,7 +68,7 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Add hypotheses when modules disagree; each needs title, evidence with module_ref + strength, explicit invalidation conditions, confidence_pct (evidence weight, NOT probability of profit), instruments_to_research and a risk_note. When an invalidation triggers, set status to `invalidated` and keep it visible for a week — the track record is the product. NEVER write buy/sell language.",
   },
   {
-    title: "Update the $1M virtual portfolio",
+    title: "Update the $100,000,000 paper fund",
     file: "data/virtual-portfolio.json",
     what: "Daily: refresh position current prices + unrealised P/L, recompute `account`, write the 16-section `daily_brief`, check the drawdown ladder. Every new trade needs a full `trade_log` record BEFORE entry (thesis, risk, invalidation, stop). Losses published like gains — no cherry-picking. Full workflow in docs/PORTFOLIO_PLAYBOOK.md.",
   },

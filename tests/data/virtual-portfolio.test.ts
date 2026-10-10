@@ -57,6 +57,13 @@ interface PortfolioFile {
 describe("data/virtual-portfolio.json", () => {
   const data = loadJson<PortfolioFile>("virtual-portfolio.json");
 
+  it("is the published $100,000,000 paper fund", () => {
+    expect(data.account.starting_value).toBe(100_000_000);
+    expect(data.meta.status).toBe("published");
+    expect(data.positions).toHaveLength(11);
+    expect(data.closed_trades).toHaveLength(1);
+  });
+
   it("parses and has the expected top-level shape", () => {
     expect(data.account).toBeTypeOf("object");
     expect(Array.isArray(data.positions)).toBe(true);
