@@ -586,7 +586,7 @@ export default function HeroGlobe({
             ctx.fill();
           }
           const ang = Math.atan2(p1.sy - p0.sy, p1.sx - p0.sx);
-          const scale = Math.max(0.95, radius / 165) * (0.72 + 0.4 * p0.z);
+          const scale = Math.max(0.71, radius / 220) * (0.72 + 0.4 * p0.z);
           drawShip(p0.sx, p0.sy, ang, rgb, lane.kind === "lng", scale);
         }
       }
