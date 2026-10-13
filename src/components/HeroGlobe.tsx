@@ -399,7 +399,7 @@ export default function HeroGlobe({
       const gold = "rgba(233, 205, 126, 0.95)";
       const brace = "rgba(203, 178, 116, 0.68)";
       const dark = "rgba(12, 14, 18, 0.94)";
-      const detailed = scale >= 1.1;
+      const detailed = scale >= 0.95;
 
       ctx.save();
       ctx.translate(sx, sy);
@@ -681,7 +681,7 @@ export default function HeroGlobe({
       for (const rig of rigs) {
         const p = project(viewVec(rig.vec, cosR, sinR, cosT, sinT), cx, cy, radius * 1.01);
         if (p.z < 0.16) continue;
-        drawRig(p.sx, p.sy, Math.max(0.72, radius / 340) * (0.8 + 0.35 * p.z));
+        drawRig(p.sx, p.sy, Math.max(0.54, radius / 453.33) * (0.8 + 0.35 * p.z));
       }
 
       const tape = tapeRef.current;
