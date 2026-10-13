@@ -385,35 +385,122 @@ export default function HeroGlobe({
       ctx.restore();
     };
 
+    /**
+     * Offshore rig in side elevation (these are drawn upright, not rotated
+     * onto a course like the vessels).
+     *
+     * Built as a jack-up: three lattice legs running from below the waterline
+     * to well above the hull, a trapezoidal hull slung between them, a braced
+     * derrick and a flare boom. The leg standing proud of the deck is what
+     * separates a rig from a platform at a glance, so it is the one feature
+     * drawn at every size.
+     */
     const drawRig = (sx: number, sy: number, scale: number) => {
+      const gold = "rgba(233, 205, 126, 0.95)";
+      const brace = "rgba(203, 178, 116, 0.68)";
+      const dark = "rgba(12, 14, 18, 0.94)";
+      const detailed = scale >= 1.1;
+
       ctx.save();
       ctx.translate(sx, sy);
       ctx.scale(scale, scale);
       ctx.lineCap = "round";
-      ctx.strokeStyle = "rgba(233, 205, 126, 0.95)";
-      ctx.fillStyle = "rgba(12, 14, 18, 0.94)";
-      ctx.lineWidth = 1.35;
+      ctx.lineJoin = "round";
+
+      // Disturbed water where the legs pierce the surface.
+      ctx.fillStyle = "rgba(8, 20, 34, 0.5)";
       ctx.beginPath();
-      ctx.moveTo(-7, 8);
-      ctx.lineTo(-4.5, 1);
-      ctx.moveTo(0, 9);
-      ctx.lineTo(0, 1);
-      ctx.moveTo(7, 8);
-      ctx.lineTo(4.5, 1);
-      ctx.stroke();
-      ctx.fillRect(-9, -3.5, 18, 6);
-      ctx.strokeRect(-9, -3.5, 18, 6);
-      ctx.beginPath();
-      ctx.moveTo(-3.2, -3.5);
-      ctx.lineTo(0, -16);
-      ctx.lineTo(3.2, -3.5);
-      ctx.moveTo(-1.5, -8);
-      ctx.lineTo(1.5, -8);
-      ctx.stroke();
-      ctx.fillStyle = "#f3d78a";
-      ctx.beginPath();
-      ctx.arc(0, -17.2, 1.8, 0, Math.PI * 2);
+      ctx.ellipse(0, 8.6, 12, 2.4, 0, 0, Math.PI * 2);
       ctx.fill();
+
+      // Lattice legs, drawn full height; the hull is laid over them after.
+      for (const x of [-7.6, 0, 7.6]) {
+        ctx.strokeStyle = gold;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x - 1.45, -11);
+        ctx.lineTo(x - 1.45, 9.2);
+        ctx.moveTo(x + 1.45, -11);
+        ctx.lineTo(x + 1.45, 9.2);
+        ctx.stroke();
+        if (detailed) {
+          ctx.strokeStyle = brace;
+          ctx.lineWidth = 0.55;
+          ctx.beginPath();
+          for (let y = -11; y < 8.6; y += 3.3) {
+            const y2 = Math.min(y + 3.3, 9.2);
+            ctx.moveTo(x - 1.45, y);
+            ctx.lineTo(x + 1.45, y2);
+            ctx.moveTo(x + 1.45, y);
+            ctx.lineTo(x - 1.45, y2);
+          }
+          ctx.stroke();
+        }
+        // Spudcan at the seabed end of each leg.
+        ctx.fillStyle = gold;
+        ctx.fillRect(x - 2.1, 8.6, 4.2, 1.5);
+      }
+
+      // Flare boom, cantilevered off the hull with the flame at its tip.
+      ctx.strokeStyle = gold;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(-10.6, -4.6);
+      ctx.lineTo(-16.8, -9.6);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(246, 162, 62, 0.95)";
+      ctx.beginPath();
+      ctx.moveTo(-16.9, -9.9);
+      ctx.quadraticCurveTo(-19.4, -12.6, -17.6, -15.2);
+      ctx.quadraticCurveTo(-17.8, -12.2, -15.4, -11.4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Hull: trapezoidal, wider at deck level.
+      ctx.fillStyle = dark;
+      ctx.strokeStyle = gold;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(-11.4, -5.6);
+      ctx.lineTo(11.4, -5.6);
+      ctx.lineTo(9.6, -0.8);
+      ctx.lineTo(-9.6, -0.8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Derrick, braced, set between the centre and after legs.
+      const dx = 3.9;
+      ctx.strokeStyle = gold;
+      ctx.lineWidth = 0.95;
+      ctx.beginPath();
+      ctx.moveTo(dx - 2.8, -5.8);
+      ctx.lineTo(dx - 1.1, -17.6);
+      ctx.moveTo(dx + 2.8, -5.8);
+      ctx.lineTo(dx + 1.1, -17.6);
+      ctx.stroke();
+      if (detailed) {
+        ctx.strokeStyle = brace;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        for (let k = 0; k < 4; k++) {
+          const t0 = k / 4;
+          const t1 = (k + 1) / 4;
+          const y0 = -5.8 + (-17.6 + 5.8) * t0;
+          const y1 = -5.8 + (-17.6 + 5.8) * t1;
+          const w0 = 2.8 + (1.1 - 2.8) * t0;
+          const w1 = 2.8 + (1.1 - 2.8) * t1;
+          ctx.moveTo(dx - w0, y0);
+          ctx.lineTo(dx + w1, y1);
+          ctx.moveTo(dx + w0, y0);
+          ctx.lineTo(dx - w1, y1);
+        }
+        ctx.stroke();
+      }
+      // Crown block atop the derrick.
+      ctx.fillStyle = gold;
+      ctx.fillRect(dx - 1.55, -18.8, 3.1, 1.3);
+
       ctx.restore();
     };
 
