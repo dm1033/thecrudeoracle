@@ -271,38 +271,117 @@ export default function HeroGlobe({
     });
     io.observe(canvas);
 
+    /**
+     * Plan-view vessel, drawn bow-first along +x and rotated onto its course.
+     *
+     * Two silhouettes, each built from the features that actually identify the
+     * type from above: a crude tanker reads from its long parallel midbody,
+     * centreline manifold and paired cargo hatches; an LNG carrier reads from
+     * the row of Moss-type spherical tanks standing proud of the deck. Both
+     * carry the superstructure aft with a funnel behind it, and a bow wake so
+     * heading is legible at small scale.
+     */
     const drawShip = (sx: number, sy: number, angle: number, rgb: number[], lng: boolean, scale: number) => {
+      const [r, g, b] = rgb;
+      const deck = `rgba(${Math.min(255, r + 30)}, ${Math.min(255, g + 28)}, ${Math.min(255, b + 22)}, 0.96)`;
+
       ctx.save();
       ctx.translate(sx, sy);
       ctx.rotate(angle);
       ctx.scale(scale, scale);
-      ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+
+      // Shadow cast on the water.
+      ctx.fillStyle = "rgba(0, 0, 0, 0.32)";
       ctx.beginPath();
-      ctx.ellipse(1, 4.2, 15, 3.2, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 4.6, 16.5, 3.4, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.98)`;
+
+      // Hull: full rounded bow over a long parallel midbody to a transom
+      // stern. The bow is deliberately blunt — a laden tanker is full-bodied
+      // forward, and a sharp taper reads as a pencil or an arrow at this size.
       ctx.beginPath();
-      ctx.moveTo(18, 0);
-      ctx.lineTo(11, 5.2);
-      ctx.lineTo(-13, 5.2);
-      ctx.lineTo(-16, 2.2);
-      ctx.lineTo(-16, -2.2);
-      ctx.lineTo(-13, -5.2);
-      ctx.lineTo(11, -5.2);
+      ctx.moveTo(-16, -3);
+      ctx.lineTo(-16, 3);
+      ctx.quadraticCurveTo(-15.6, 4.9, -13.2, 4.9);
+      ctx.lineTo(11.6, 4.9);
+      ctx.bezierCurveTo(15.4, 4.6, 17.2, 2.8, 17.5, 0);
+      ctx.bezierCurveTo(17.2, -2.8, 15.4, -4.6, 11.6, -4.9);
+      ctx.lineTo(-13.2, -4.9);
+      ctx.quadraticCurveTo(-15.6, -4.9, -16, -3);
       ctx.closePath();
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.98)`;
       ctx.fill();
-      ctx.fillStyle = "rgba(255, 248, 230, 0.92)";
-      ctx.fillRect(-12.5, -3.4, 6.2, 6.8);
+      ctx.strokeStyle = "rgba(8, 10, 14, 0.5)";
+      ctx.lineWidth = 0.85;
+      ctx.stroke();
+
+      // Inset deck plate, so the hull sides catch an edge of shadow.
+      ctx.beginPath();
+      ctx.moveTo(-14.2, -2.1);
+      ctx.lineTo(-14.2, 2.1);
+      ctx.lineTo(-12.8, 3.2);
+      ctx.lineTo(11, 3.2);
+      ctx.bezierCurveTo(13.4, 3, 14.8, 1.8, 15, 0);
+      ctx.bezierCurveTo(14.8, -1.8, 13.4, -3, 11, -3.2);
+      ctx.lineTo(-12.8, -3.2);
+      ctx.closePath();
+      ctx.fillStyle = deck;
+      ctx.fill();
+
+      // Deck detail is dropped on distant/small vessels: below this scale the
+      // hatches and manifold collapse into noise and muddy the silhouette.
+      const detailed = scale >= 1.4;
+
       if (lng) {
-        ctx.fillStyle = "rgba(210, 236, 240, 0.95)";
-        ctx.beginPath();
-        ctx.arc(-1, -0.4, 2.5, 0, Math.PI * 2);
-        ctx.arc(5.2, -0.4, 2.5, 0, Math.PI * 2);
-        ctx.fill();
+        // Four Moss spheres on the centreline — the LNG carrier's signature,
+        // and the one feature that must survive at the smallest size.
+        ctx.strokeStyle = "rgba(104, 140, 158, 0.7)";
+        ctx.lineWidth = 0.5;
+        for (const x of [9.4, 3.7, -2, -7.7]) {
+          ctx.beginPath();
+          ctx.arc(x, 0, 2.85, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(232, 246, 249, 0.98)";
+          ctx.fill();
+          ctx.stroke();
+          if (detailed) {
+            ctx.beginPath();
+            ctx.arc(x - 0.9, -0.95, 0.85, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.82)";
+            ctx.fill();
+          }
+        }
       } else {
-        ctx.fillStyle = "rgba(20, 16, 8, 0.35)";
-        ctx.fillRect(-2, -1.3, 10, 2.6);
+        // Crude tanker: the centreline manifold run reads at any size; the
+        // paired cargo hatches only when there are pixels to carry them.
+        ctx.fillStyle = "rgba(18, 15, 9, 0.46)";
+        ctx.fillRect(-8.6, -0.55, 20.4, 1.1);
+        if (detailed) {
+          ctx.fillStyle = "rgba(18, 15, 9, 0.3)";
+          for (const x of [9.2, 4.6, 0, -4.6]) {
+            ctx.fillRect(x - 1.1, -2.4, 2.2, 1.3);
+            ctx.fillRect(x - 1.1, 1.1, 2.2, 1.3);
+          }
+          // Midships manifold crossing — where the cargo hoses land.
+          ctx.fillStyle = "rgba(245, 222, 150, 0.6)";
+          ctx.fillRect(1.6, -3, 1.3, 6);
+        }
       }
+
+      // Accommodation block aft, with the funnel stacked behind it. This is
+      // what tells bow from stern once the vessel is too small for anything else.
+      ctx.fillStyle = "rgba(255, 250, 236, 0.96)";
+      ctx.fillRect(-13.6, -3, 5, 6);
+      ctx.fillStyle = "rgba(24, 22, 18, 0.6)";
+      ctx.fillRect(-15.4, -1.7, 1.8, 3.4);
+
+      if (detailed) {
+        // Bow mast.
+        ctx.fillStyle = "rgba(255, 249, 233, 0.8)";
+        ctx.beginPath();
+        ctx.arc(12.4, 0, 0.75, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       ctx.restore();
     };
 
