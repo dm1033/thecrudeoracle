@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
+import { ROUTE_LASTMOD } from "@/lib/content-dates";
 import { SITE } from "@/lib/site";
 
 const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }[] = [
   { path: "/", priority: 1.0, changeFrequency: "daily" },
   { path: "/dashboard", priority: 0.9, changeFrequency: "daily" },
-  { path: "/premium-dashboard", priority: 0.8, changeFrequency: "daily" },
   { path: "/daily-briefing", priority: 0.9, changeFrequency: "daily" },
   { path: "/watchlist", priority: 0.8, changeFrequency: "weekly" },
   { path: "/company-intelligence", priority: 0.8, changeFrequency: "weekly" },
@@ -29,19 +29,20 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/about", priority: 0.5, changeFrequency: "monthly" },
   { path: "/offshore", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "monthly" },
-  { path: "/login", priority: 0.3, changeFrequency: "yearly" },
   { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly" },
   { path: "/terms-of-use", priority: 0.2, changeFrequency: "yearly" },
   { path: "/financial-disclaimer", priority: 0.2, changeFrequency: "yearly" },
   { path: "/data-disclaimer", priority: 0.2, changeFrequency: "yearly" },
-  { path: "/subscription-terms", priority: 0.2, changeFrequency: "yearly" },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ROUTES.map((r) => ({
-    url: `${SITE.url}${r.path === "/" ? "" : r.path}`,
-    lastModified: new Date(),
-    changeFrequency: r.changeFrequency,
-    priority: r.priority,
-  }));
+  return ROUTES.map((route) => {
+    const stamp = ROUTE_LASTMOD[route.path];
+    return {
+      url: `${SITE.url}${route.path === "/" ? "" : route.path}`,
+      ...(stamp ? { lastModified: new Date(stamp) } : {}),
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+    };
+  });
 }

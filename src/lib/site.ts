@@ -29,7 +29,6 @@ export interface NavItem {
 
 export const NAV_MAIN: NavItem[] = [
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Premium Dashboard", href: "/premium-dashboard" },
   { label: "Daily Briefing", href: "/daily-briefing" },
   { label: "Watchlist", href: "/watchlist" },
   { label: "Company Intel", href: "/company-intelligence" },
@@ -49,14 +48,12 @@ export const NAV_FOOTER_LEGAL: NavItem[] = [
   { label: "Terms of Use", href: "/terms-of-use" },
   { label: "Financial Disclaimer", href: "/financial-disclaimer" },
   { label: "Data Disclaimer", href: "/data-disclaimer" },
-  { label: "Subscription Terms", href: "/subscription-terms" },
 ];
 
 export const NAV_FOOTER_COMPANY: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Offshore hire", href: "/offshore" },
   { label: "Free Access", href: "/subscribe" },
-  { label: "Login", href: "/login" },
   { label: "Account", href: "/account" },
   { label: "Contact", href: "/contact" },
 ];

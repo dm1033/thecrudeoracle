@@ -18,7 +18,7 @@ export default function SubscribeCTA(_props: { heading?: string; body?: string }
         everyone — no card, no account required.
       </p>
       <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <Link href="/premium-dashboard" className="btn-primary">
+        <Link href="/dashboard" className="btn-primary">
           Open the Full Dashboard — Free
         </Link>
         <Link href="/portfolio/dashboard" className="btn-secondary">

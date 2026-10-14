@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAccess, signOutEverywhere } from "@/lib/access";
 
-export default function AccountPanel() {
+export default function AccountPanel({ authError = false }: { authError?: boolean }) {
   const { level, email, mode, ready } = useAccess();
 
   if (!ready) {
@@ -15,13 +15,18 @@ export default function AccountPanel() {
       <div className="card mx-auto max-w-lg p-8 text-center">
         <h2 className="text-lg font-semibold text-white">You are not signed in</h2>
         <p className="mt-2 text-sm text-steel-400">
-          The Crude Oracle is now 100% free — a login is optional and no longer unlocks anything extra.
+          The Crude Oracle is now 100% free. No account is required.
         </p>
+        {authError && (
+          <p className="mt-3 text-sm text-steel-300" role="status">
+            That sign-in link could not be completed. The site is open without an account.
+          </p>
+        )}
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link href="/login" className="btn-secondary">
-            Log in
+          <Link href="/dashboard" className="btn-primary">
+            Open the dashboard
           </Link>
-          <Link href="/subscribe" className="btn-primary">
+          <Link href="/subscribe" className="btn-secondary">
             See What&apos;s Free (Everything)
           </Link>
         </div>

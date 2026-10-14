@@ -4,6 +4,9 @@ import { briefings, latestBriefing, type Briefing } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
+import JsonLd from "@/components/JsonLd";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { SITE } from "@/lib/site";
 import { BrentWtiChart } from "@/components/charts/Charts";
 
 export const metadata: Metadata = pageMeta(
@@ -75,8 +78,24 @@ function BriefingArticle({ briefing, latest }: { briefing: Briefing; latest?: bo
 
 export default function DailyBriefingPage() {
   const archive = briefings.slice(1);
+  const articles = briefings
+    .filter((briefing) => briefing.status === "published")
+    .map((briefing) => ({
+      "@type": "Article",
+      headline: briefing.headline,
+      datePublished: briefing.date,
+      dateModified: briefing.last_updated,
+      description: briefing.oil_summary,
+      articleSection: "Daily Briefing",
+      inLanguage: "en-GB",
+      isAccessibleForFree: true,
+      author: { "@type": "Organization", name: SITE.name, url: SITE.url },
+      publisher: { "@id": `${SITE.url}/#organization` },
+      mainEntityOfPage: `${SITE.url}/daily-briefing`,
+    }));
   return (
     <>
+      <JsonLd data={{ "@context": "https://schema.org", "@graph": articles }} />
       <PageHeader
         eyebrow="Updated Every Trading Day"
         title="The Crude Oracle Daily Briefing"
@@ -108,6 +127,7 @@ export default function DailyBriefingPage() {
             )}
           </div>
         </PremiumGate>
+        <NewsletterSignup />
         <DisclaimerBlock />
       </div>
     </>

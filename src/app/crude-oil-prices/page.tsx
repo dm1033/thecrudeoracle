@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
-import { marketPrices } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import MarketCard from "@/components/MarketCard";
 import FAQ from "@/components/FAQ";
+import JsonLd from "@/components/JsonLd";
+import PriceFreshness from "@/components/PriceFreshness";
+import { getPublishedPrices } from "@/lib/published-prices";
+import { SITE } from "@/lib/site";
 import { BrentWtiChart, InventoriesChart } from "@/components/charts/Charts";
 
 export const metadata: Metadata = pageMeta(
@@ -21,7 +24,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Are these live prices?",
-    a: "No. Prices on this page are indicative and manually updated, with the source and last-updated time shown on every card. We do not display unlicensed real-time exchange data. Always verify with primary sources before trading.",
+    a: "No. Prices on this page are indicative, with the source and last-updated time shown on every card. Brent and WTI are delayed public EIA spot prints when that feed is connected, and manual desk marks otherwise. We do not display unlicensed real-time exchange data. Always verify with primary sources before trading.",
   },
   {
     q: "What moves crude oil prices?",
@@ -29,12 +32,30 @@ const FAQ_ITEMS = [
   },
 ];
 
-export default function CrudeOilPricesPage() {
-  const crude = marketPrices.filter((p) => ["BRN", "WTI", "DUB"].includes(p.ticker));
-  const dxy = marketPrices.find((p) => p.ticker === "DXY*");
+export const revalidate = 21600;
+
+export default async function CrudeOilPricesPage() {
+  const feed = await getPublishedPrices();
+  const crude = feed.prices.filter((p) => ["BRN", "WTI", "DUB"].includes(p.ticker));
+  const dxy = feed.prices.find((p) => p.ticker === "DXY*");
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Dataset",
+          name: "Indicative Brent, WTI and Dubai crude prices",
+          description:
+            "Indicative crude benchmark prices published by The Crude Oracle. Each series is labelled with its source, timestamp and whether it is a manual desk mark or a delayed public print. Not a live exchange feed and not financial advice.",
+          url: `${SITE.url}/crude-oil-prices`,
+          creator: { "@id": `${SITE.url}/#organization` },
+          dateModified: feed.eiaUpdated ?? feed.manualUpdated,
+          isAccessibleForFree: true,
+          license: `${SITE.url}/data-disclaimer`,
+          variableMeasured: ["Brent crude", "WTI crude", "Dubai crude"],
+        }}
+      />
       <PageHeader
         eyebrow="Market Data · Indicative"
         title="Crude Oil Prices"
@@ -45,6 +66,7 @@ export default function CrudeOilPricesPage() {
           <h2 id="benchmarks-h" className="h2">
             Benchmark prices
           </h2>
+          <PriceFreshness feed={feed} />
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {crude.map((p) => (
               <MarketCard key={p.ticker} price={p} />

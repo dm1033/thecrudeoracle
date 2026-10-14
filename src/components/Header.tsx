@@ -14,7 +14,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-ink-700 bg-ink-950/95 backdrop-blur">
       <div className="container-site flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <BrandMark priority className="h-14 w-auto" />
+          <BrandMark priority className="h-14 w-auto" sizes="64px" />
         </Link>
 
         <nav className="hidden items-center gap-1 xl:flex" aria-label="Main navigation">
@@ -41,9 +41,6 @@ export default function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 xl:flex">
-          <Link href="/login" className="px-3 py-1.5 text-xs font-medium text-steel-400 hover:text-white">
-            Login
-          </Link>
           <Link
             href="/subscribe"
             className="rounded-md bg-gold-500 px-4 py-2 text-xs font-semibold text-ink-950 transition-colors hover:bg-gold-400"
@@ -88,11 +85,6 @@ export default function Header() {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href="/login" onClick={() => setOpen(false)} className="block rounded px-3 py-2 text-sm text-steel-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-ink-900">
-                Login
-              </Link>
-            </li>
             <li>
               <Link href="/account" onClick={() => setOpen(false)} className="block rounded px-3 py-2 text-sm text-steel-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-ink-900">
                 Account

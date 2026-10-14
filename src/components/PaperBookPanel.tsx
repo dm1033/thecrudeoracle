@@ -208,6 +208,10 @@ export default function PaperBookPanel() {
           {usd(account.current_value)} ({account.return_pct >= 0 ? "+" : ""}
           {account.return_pct}%). {account.currency}. The client statement uses these same lines.
         </p>
+        <p className="mt-3 max-w-3xl rounded-md border border-ink-700 bg-ink-950/70 px-4 py-3 text-sm text-steel-200">
+          Last marked <time dateTime={account.last_updated}>{longMark(account.last_updated)}</time>. Manual desk
+          print of the published book.
+        </p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card text-center">

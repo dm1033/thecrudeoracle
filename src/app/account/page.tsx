@@ -9,7 +9,7 @@ export const metadata: Metadata = pageMeta(
   "/account"
 );
 
-export default function AccountPage() {
+export default function AccountPage({ searchParams }: { searchParams: { error?: string } }) {
   return (
     <>
       <PageHeader
@@ -18,7 +18,7 @@ export default function AccountPage() {
         intro="Your membership status. The Crude Oracle is 100% free, so there is no billing to manage."
       />
       <div className="container-site py-10">
-        <AccountPanel />
+        <AccountPanel authError={searchParams.error === "auth"} />
       </div>
     </>
   );

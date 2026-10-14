@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,21 +12,6 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
-  keywords: [
-    "crude oil investment intelligence",
-    "oil trading dashboard",
-    "oil market daily briefing",
-    "Brent crude analysis",
-    "WTI crude analysis",
-    "oil and gas investment watchlist",
-    "energy security UK",
-    "North Sea oil and gas",
-    "crude oil investor research",
-    "oil price dashboard",
-    "OPEC supply risk",
-    "gas market intelligence",
-    "LNG investment intelligence",
-  ],
   openGraph: {
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.description,
@@ -45,6 +31,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
@@ -52,14 +39,35 @@ export const metadata: Metadata = {
   },
 };
 
-const orgSchema = {
+const orgId = `${SITE.url}/#organization`;
+
+const siteSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: SITE.name,
-  url: SITE.url,
-  logo: `${SITE.url}/logo.png`,
-  description: SITE.description,
-  email: SITE.contactEmail,
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": orgId,
+      name: SITE.name,
+      url: SITE.url,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE.url}/icon-192.png`,
+        width: 192,
+        height: 192,
+      },
+      description: SITE.description,
+      email: SITE.contactEmail,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      name: SITE.name,
+      url: SITE.url,
+      description: SITE.description,
+      inLanguage: "en-GB",
+      publisher: { "@id": orgId },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -84,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+        <JsonLd data={siteSchema} />
       </body>
     </html>
   );

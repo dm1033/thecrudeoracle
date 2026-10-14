@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
-import { marketPrices, riskSignals } from "@/lib/data";
+import { formatUpdated, riskSignals } from "@/lib/data";
+import { getPublishedPrices } from "@/lib/published-prices";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
@@ -30,8 +31,12 @@ const FAQ_ITEMS = [
   },
 ];
 
-export default function GasLngPage() {
-  const gas = marketPrices.filter((p) => ["NBP", "TTF", "HH", "JKM*"].includes(p.ticker));
+export const revalidate = 21600;
+
+export default async function GasLngPage() {
+  const feed = await getPublishedPrices();
+  const gas = feed.prices.filter((p) => ["NBP", "TTF", "HH", "JKM*"].includes(p.ticker));
+  const gasUpdated = gas.reduce((best, price) => (price.last_updated > best ? price.last_updated : best), gas[0]?.last_updated ?? "");
   const lngSignal = riskSignals.find((s) => s.id === "lng-signal");
 
   return (
@@ -46,6 +51,12 @@ export default function GasLngPage() {
           <h2 id="gas-h" className="h2">
             Hub prices
           </h2>
+          {gasUpdated && (
+            <p className="mt-2 text-sm text-steel-300">
+              Last updated <time dateTime={gasUpdated}>{formatUpdated(gasUpdated)}</time>. Manual desk marks. This is
+              not a live exchange feed.
+            </p>
+          )}
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {gas.map((p) => (
               <MarketCard key={p.ticker} price={p} />

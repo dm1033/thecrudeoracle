@@ -1,0 +1,29 @@
+# The Crude Oracle
+
+> Daily Brent and WTI oil intelligence for investors, traders and energy professionals. 100% free. Market commentary and education only.
+
+The Crude Oracle publishes a daily crude and gas briefing, indicative benchmark prices, supply and demand signals, a research library and a transparent $100,000,000 paper fund. Figures are manual desk marks or delayed public prints. They are labelled with a source and a last-updated time. The site does not show unlicensed real-time exchange data.
+
+## Not financial advice
+
+The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital. Data shown may be delayed, indicative, manually updated or provided via API placeholders. Verify all figures with primary sources before making any trading or investment decision.
+
+## Key pages
+
+- [Home](https://www.thecrudeoracle.com/): Daily Brent and WTI oil intelligence, the paper fund and the bottom line
+- [Dashboard](https://www.thecrudeoracle.com/dashboard): Full price complex, supply, demand, risk and charts
+- [Daily Briefing](https://www.thecrudeoracle.com/daily-briefing): Trading-day briefing and archive
+- [Crude Oil Prices](https://www.thecrudeoracle.com/crude-oil-prices): Indicative Brent, WTI and Dubai
+- [Gas / LNG](https://www.thecrudeoracle.com/gas-lng): NBP, TTF, Henry Hub and the LNG marker
+- [OPEC / Supply Risk](https://www.thecrudeoracle.com/opec-supply-risk): Producer and supply-risk monitor
+- [Paper fund](https://www.thecrudeoracle.com/portfolio): $100,000,000 virtual paper fund
+- [Watchlist](https://www.thecrudeoracle.com/watchlist): Monitored energy names, not recommendations
+- [Company intelligence](https://www.thecrudeoracle.com/company-intelligence): Structured company notes
+- [Trader toolkit](https://www.thecrudeoracle.com/tools): Balance, flows, curve, positioning, news and hypotheses
+- [Research library](https://www.thecrudeoracle.com/research-library): Deep-dive notes
+- [Oil Truth](https://www.thecrudeoracle.com/oil-truth): What crude oil is and why it still matters
+- [UK energy security](https://www.thecrudeoracle.com/uk-energy-security): UK and North Sea context
+- [North Sea](https://www.thecrudeoracle.com/north-sea): UKCS basin intelligence
+- [About](https://www.thecrudeoracle.com/about): What the desk is
+- [Financial disclaimer](https://www.thecrudeoracle.com/financial-disclaimer): Not-financial-advice notice in full
+- [Data disclaimer](https://www.thecrudeoracle.com/data-disclaimer): How figures are labelled

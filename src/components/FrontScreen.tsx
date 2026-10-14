@@ -89,7 +89,7 @@ export default function FrontScreen() {
             </p>
           )}
           <div className="mt-4 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <Link href="/premium-dashboard" className="btn-primary">
+            <Link href="/dashboard" className="btn-primary">
               Open the Full Dashboard — 100% Free
             </Link>
             <Link href="/crude-oil-prices" className="btn-secondary">

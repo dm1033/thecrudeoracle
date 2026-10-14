@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMeta(
 );
 
 const INCLUDED = [
-  ["Full terminal-grade dashboard", "/premium-dashboard", "The complete price complex — Brent, WTI, Dubai, NBP, TTF, Henry Hub, LNG marker — with supply, demand and risk signal grids."],
+  ["Full terminal-grade dashboard", "/dashboard", "The complete price complex — Brent, WTI, Dubai, NBP, TTF, Henry Hub, LNG marker — with supply, demand and risk signal grids."],
   ["Daily crude oil briefing", "/daily-briefing", "What moved, why, and what matters next — every trading day, source-backed."],
   ["Investment watchlist", "/watchlist", "Monitored names across 12 energy segments. Monitored, never recommended."],
   ["Company intelligence", "/company-intelligence", "Structured notes on production, reserves, balance sheets and catalysts."],
@@ -34,7 +34,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Do I still need to log in?",
-    a: "No. Content is no longer gated. The login remains only as an optional way to keep an account identity for future features.",
+    a: "No. Content is not gated and no account is required.",
   },
   {
     q: "Is this financial advice?",
@@ -67,7 +67,7 @@ export default function FreeAccessPage() {
               The former £299.99/month subscription has been retired. There is nothing to buy,
               nothing to unlock and nothing to cancel.
             </p>
-            <Link href="/premium-dashboard" className="btn-primary mt-6 w-full">
+            <Link href="/dashboard" className="btn-primary mt-6 w-full">
               Open the Full Dashboard — Free
             </Link>
           </div>
