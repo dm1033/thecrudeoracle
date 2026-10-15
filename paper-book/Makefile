@@ -11,3 +11,5 @@ chart:
 	python report/weekly_chart.py
 issue:
 	python report/sunday_issue.py
+eia-post:
+	python report/eia_post.py

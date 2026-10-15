@@ -54,3 +54,4 @@ __pycache__/
 .pytest_cache/
 /paper-book/report/weekly_chart.png
 /paper-book/report/sunday_issue_draft.md
+/paper-book/report/eia_post_*.md
