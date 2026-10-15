@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 620" fill="none">
+  <title>Illustrative domestic structural concept</title>
+  <desc>
+    A dimensionless architectural house cutaway and rear extension. Not a
+    project design.
+  </desc>
+  <defs>
+    <pattern
+      id="grid"
+      width="36"
+      height="36"
+      patternUnits="userSpaceOnUse"
+      patternTransform="matrix(1 .34 -1 .34 355 365)"
+    >
+      <path d="M36 0H0V36" stroke="#819295" stroke-opacity=".12" />
+    </pattern>
+  </defs>
+  <path fill="url(#grid)" d="M15 260H705V600H15z" />
+  <path d="M65 439L365 545 665 390 358 286Z" fill="#151f28" stroke="#52616b" />
+  <path
+    d="M121 406L355 485 568 376 333 299Z"
+    fill="#25313b"
+    stroke="#aeb7bb"
+    stroke-width="1.5"
+  />
+  <!-- Existing house, cut away along the front -->
+  <path
+    d="M165 378V216L322 270V432Z"
+    fill="#18232d"
+    stroke="#d2d5d4"
+    stroke-width="1.6"
+  />
+  <path
+    d="M322 432V270L505 175V338Z"
+    fill="#202b35"
+    stroke="#d2d5d4"
+    stroke-width="1.6"
+  />
+  <path
+    d="M165 216L263 104 420 158 322 270Z"
+    fill="#25323d"
+    stroke="#d2d5d4"
+    stroke-width="1.6"
+  />
+  <path
+    d="M263 104L445 50 505 175 420 158Z"
+    fill="#161f29"
+    stroke="#d2d5d4"
+    stroke-width="1.6"
+  />
+  <path d="M263 104L420 158 505 175" stroke="#c6a15b" stroke-width="2" />
+  <path
+    d="M322 270L420 158V382"
+    stroke="#aeb7bb"
+    stroke-width="1.5"
+    stroke-dasharray="5 6"
+  />
+  <!-- Exposed intermediate floor and joists (no member specifications) -->
+  <path
+    d="M165 296L322 350 505 255"
+    fill="#303a40"
+    stroke="#d2d5d4"
+    stroke-width="1.5"
+  />
+  <g stroke="#8b989d" stroke-width="2">
+    <path
+      d="M186 303L369 208M215 313L398 218M244 323L427 228M273 333L456 238M302 343L485 248"
+    />
+  </g>
+  <!-- Domestic glazing -->
+  <path d="M192 237L239 253V289L192 273Z" fill="#09131b" stroke="#89999e" />
+  <path d="M257 260L296 273V309L257 296Z" fill="#09131b" stroke="#89999e" />
+  <path d="M360 277L399 257V306L360 326Z" fill="#09131b" stroke="#89999e" />
+  <!-- New extension volume and highlighted opening -->
+  <path
+    d="M176 378L322 428 446 365V454L322 518 176 468Z"
+    fill="#0d151e"
+    fill-opacity=".8"
+    stroke="#d2d5d4"
+    stroke-width="1.6"
+  />
+  <path
+    d="M176 378L322 428 446 365 300 315Z"
+    fill="#28343d"
+    stroke="#d2d5d4"
+    stroke-width="1.6"
+  />
+  <path
+    d="M195 385V461M195 385L322 429 427 375M322 429V507M427 375V447"
+    stroke="#c6a15b"
+    stroke-width="6"
+  />
+  <path d="M202 394L315 433V494L202 456Z" stroke="#73868e" />
+  <path d="M237 407V468M275 420V481" stroke="#73868e" />
+  <path d="M333 433L419 389V442L333 486Z" stroke="#73868e" />
+  <path d="M374 411V465" stroke="#73868e" />
+  <!-- Garden / context geometry -->
+  <path d="M447 457L543 408 605 428 510 477Z" stroke="#637b7b" />
+  <path d="M130 428L102 444 248 496M472 481L531 501 633 448" stroke="#53616b" />
+  <circle cx="555" cy="342" r="15" stroke="#7e9894" />
+  <circle cx="555" cy="342" r="8" stroke="#536f6b" />
+  <path d="M555 357V380" stroke="#7e9894" />
+  <!-- Editorial callout pointers: no quantities or construction instructions -->
+  <path
+    d="M426 379L553 297H657M268 323L139 314H49M445 50L515 42H657"
+    stroke="#c6a15b"
+    stroke-opacity=".7"
+  />
+  <g fill="#c6a15b">
+    <circle cx="426" cy="379" r="4" />
+    <circle cx="268" cy="323" r="4" />
+    <circle cx="445" cy="50" r="4" />
+  </g>
+  <g
+    fill="#d2d5d4"
+    font-family="Arial,sans-serif"
+    font-size="11"
+    letter-spacing="1.2"
+  >
+    <text x="554" y="286">NEW OPENINGS</text>
+    <text x="49" y="303">LOAD PATHS</text>
+    <text x="525" y="32">EXISTING STRUCTURE</text>
+  </g>
+</svg>

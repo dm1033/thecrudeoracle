@@ -195,7 +195,7 @@
         applyBtn.onclick = function () {
           applyToQuoteForm({
             serviceLabel: info.label,
-            summary: `Estimated Scope: ${info.label} (${countSelect.value} member(s), ~${spanM.toFixed(1)}m clear span, ${isExpress ? "Express 24-48hr" : "Standard 2-3 day"} turnaround, indicative fee £${fee}).`
+            summary: `Estimated Scope: ${info.label} (${countSelect.value} member(s), ~${spanM.toFixed(1)}m clear span, ${isExpress ? "Priority programme to be agreed" : "Standard programme to be agreed"} turnaround, indicative fee £${fee}).`
           });
         };
       }
@@ -533,7 +533,7 @@
         clearTimeout(timeout);
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Get Fixed-Fee Structural Quote ↗";
+          submitBtn.textContent = "Get My Free Quote ↗";
         }
       }
     });
