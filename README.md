@@ -1,10 +1,10 @@
 # The Crude Oracle
 
-**Crude Oil Intelligence Without the Noise** — a premium subscription oil and gas
-intelligence platform for investors, traders and energy professionals.
+**Crude Oil Intelligence Without the Noise** — oil and gas intelligence for
+investors, traders and energy professionals.
 
 - **Domain:** www.thecrudeoracle.com
-- **Plan:** The Crude Oracle Premium — **£299.99/month** via Stripe
+- **Plan:** 100% free. The paid subscription has been retired.
 - **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Recharts · JSON data layer
 
 > The Crude Oracle provides market commentary, educational content and investment
@@ -23,8 +23,7 @@ npm run build      # production build
 | Area | Route(s) |
 |---|---|
 | Home (hero, dashboard preview, pricing, FAQ) | `/` |
-| Free daily snapshot | `/dashboard` |
-| Premium dashboard (prices, supply, demand, risk, charts, intel, bottom line) | `/premium-dashboard` |
+| Dashboard (prices, supply, demand, risk, charts, intel, bottom line) | `/dashboard` |
 | Daily briefing (11-section template + archive) | `/daily-briefing` |
 | Investment watchlist (12 segments) | `/watchlist` |
 | Company intelligence notes | `/company-intelligence` |
@@ -33,11 +32,11 @@ npm run build      # production build
 | UK coverage | `/uk-energy-security`, `/north-sea` |
 | Education | `/oil-truth`, `/research-library` |
 | Commerce | `/subscribe`, `/payment/success`, `/payment/cancelled` |
-| Membership | `/login`, `/account` |
+| Account | `/account` |
 | Company | `/about`, `/contact` |
-| Legal | `/privacy-policy`, `/terms-of-use`, `/financial-disclaimer`, `/data-disclaimer`, `/subscription-terms` |
+| Legal | `/privacy-policy`, `/terms-of-use`, `/financial-disclaimer`, `/data-disclaimer` |
 | Admin instructions | `/admin` (noindex, not linked publicly) |
-| SEO | `/sitemap.xml`, `/robots.txt`, `/manifest.json` (generated) |
+| SEO | `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/manifest.json` |
 
 ## Data-driven content
 

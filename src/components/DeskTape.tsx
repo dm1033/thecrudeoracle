@@ -141,7 +141,7 @@ export default function DeskTape({ tapeRef }: { tapeRef: { current: TapePlayhead
           <line x1={reveal} x2={reveal} y1="0" y2="96" stroke="#e9cd7e" strokeOpacity="0.7" strokeWidth="1" />
         </svg>
         <p className="mt-1 text-[10px] leading-relaxed text-steel-500">
-          {chartData.meta.source} · {chartData.meta.last_published.slice(0, 10)} · {chartData.meta.data_type} ·
+          Last published {chartData.meta.last_published.slice(0, 10)} · {chartData.meta.data_type} · {chartData.meta.source} ·
           replay of the published prints
         </p>
       </figure>

@@ -70,9 +70,10 @@ export default function PortfolioPublicPage() {
             <Stat label="Realised profit" value={usd(account.realised_pl, true)} accent={account.realised_pl >= 0 ? "text-gain" : "text-loss"} />
             <Stat label="Return since inception" value={`${account.return_pct >= 0 ? "+" : ""}${account.return_pct.toFixed(2)}%`} accent="text-gain" />
           </div>
-          <p className="mt-2 text-[11px] text-steel-500">
-            Inception {meta.inception} · Updated {account.last_updated.slice(0, 10)} · All values
-            simulated and indicative. Simulated performance does not guarantee future results.
+          <p className="mt-4 rounded-md border border-ink-700 bg-ink-950/70 px-4 py-3 text-sm text-steel-200">
+            Last marked <time dateTime={account.last_updated}>{account.last_updated.slice(0, 10)}</time>. Manual
+            desk print. Inception {meta.inception}. All values are simulated and indicative. Simulated
+            performance does not guarantee future results.
           </p>
         </section>
 

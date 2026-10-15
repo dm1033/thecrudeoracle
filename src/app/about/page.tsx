@@ -24,7 +24,7 @@ export default function AboutPage() {
         <figure className="overflow-hidden rounded-lg border border-ink-700">
           <div className="relative aspect-[21/9]">
             <Image
-              src="/images/brand-compass.png"
+              src="/images/brand-compass.jpg"
               alt="Navigator's compass and sextant in front of a market screen showing TheCrudeOracle.com"
               fill
               priority

@@ -1,0 +1,40 @@
+name: EIA price refresh
+
+# Runs the existing EIA update script (scripts/update-eia-data.mjs) on
+# weekday mornings. Brent, WTI and the two crude-stock rows are written into
+# data/*.json and committed only when EIA_API_KEY is set as a repository
+# secret. Without that secret the job exits cleanly and the published desk
+# marks stay as they are.
+on:
+  schedule:
+    - cron: "15 13 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Pull Brent, WTI and crude stocks
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: |
+          if [ -z "$EIA_API_KEY" ]; then
+            echo "EIA_API_KEY secret is not set. Leaving the published JSON marks unchanged."
+            exit 0
+          fi
+          node scripts/update-eia-data.mjs
+      - name: Commit updated data files
+        run: |
+          git diff --quiet -- data/market-prices.json data/balance-engine.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/market-prices.json data/balance-engine.json
+          git commit -m "chore: refresh EIA Brent, WTI and crude stocks"
+          git push

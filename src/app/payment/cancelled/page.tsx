@@ -35,7 +35,7 @@ export default function PaymentRetiredPage() {
           the subscription was active, please contact us and we will resolve it directly.
         </p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link href="/premium-dashboard" className="btn-primary">
+          <Link href="/dashboard" className="btn-primary">
             Open the Full Dashboard — Free
           </Link>
           <Link href="/contact" className="btn-secondary">

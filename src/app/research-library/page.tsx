@@ -6,6 +6,8 @@ import { researchNotes } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
+import JsonLd from "@/components/JsonLd";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
   "Research Library — Oil & Gas Deep Dives",
@@ -17,9 +19,22 @@ export default function ResearchLibraryPage() {
   const published = researchNotes.filter((n) => n.status === "published");
   const free = published.filter((n) => n.access === "free");
   const premium = published.filter((n) => n.access === "premium");
+  const articles = published.map((note) => ({
+    "@type": "Article",
+    headline: note.title,
+    datePublished: note.date,
+    description: note.summary,
+    articleSection: note.category,
+    inLanguage: "en-GB",
+    isAccessibleForFree: true,
+    author: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: { "@id": `${SITE.url}/#organization` },
+    mainEntityOfPage: `${SITE.url}/research-library`,
+  }));
 
   return (
     <>
+      <JsonLd data={{ "@context": "https://schema.org", "@graph": articles }} />
       <PageHeader
         eyebrow="Research Archive"
         title="Research Library"

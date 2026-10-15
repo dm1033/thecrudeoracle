@@ -258,6 +258,9 @@ async function attemptFetchOnce(url: string, timeoutMs: number): Promise<unknown
     const res = await fetch(url, {
       signal: controller.signal,
       headers: { Accept: "application/json" },
+      // Don't let Next's default fetch cache freeze a spot print forever.
+      // Page-level revalidate controls how often a render refetches.
+      cache: "no-store",
     });
 
     if (res.ok) {

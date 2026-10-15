@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import FrontScreen from "@/components/FrontScreen";
-import { marketPrices, riskSignals, supplySignals } from "@/lib/data";
+import { riskSignals, supplySignals } from "@/lib/data";
 import MarketCard from "@/components/MarketCard";
 import SignalCardView from "@/components/SignalCardView";
 import BottomLineCard from "@/components/BottomLineCard";
@@ -10,10 +10,15 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
 import PaperBookPanel from "@/components/PaperBookPanel";
+import PriceFreshness from "@/components/PriceFreshness";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { getPublishedPrices } from "@/lib/published-prices";
 import { pageMeta } from "@/lib/seo";
 
+export const revalidate = 21600;
+
 export const metadata: Metadata = pageMeta(
-  "Crude Oil Intelligence Without the Noise",
+  "The Crude Oracle — Daily Brent & WTI Oil Intelligence (Free)",
   "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security, investor-focused research and a transparent $100,000,000 paper fund.",
   "/"
 );
@@ -65,8 +70,9 @@ const FAQ_ITEMS = [
   },
 ];
 
-export default function HomePage() {
-  const heroPrices = marketPrices.slice(0, 6);
+export default async function HomePage() {
+  const feed = await getPublishedPrices();
+  const heroPrices = feed.prices.slice(0, 6);
   const previewSignals = [...riskSignals.slice(0, 2), supplySignals[1], supplySignals[2]];
 
   return (
@@ -81,6 +87,7 @@ export default function HomePage() {
           <div>
             <p className="eyebrow">Terminal-Grade Market Dashboard</p>
             <h2 className="h2 mt-1">Today&apos;s market picture, at a glance</h2>
+            <PriceFreshness feed={feed} />
           </div>
           <Link href="/dashboard" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
             Full free snapshot →
@@ -113,7 +120,7 @@ export default function HomePage() {
                 <li>· Research archive and charts</li>
               </ul>
             </div>
-            <Link href="/premium-dashboard" className="btn-primary mt-6 w-full">
+            <Link href="/dashboard" className="btn-primary mt-6 w-full">
               Open the Full Dashboard
             </Link>
           </div>
@@ -198,7 +205,7 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <Link href="/premium-dashboard" className="btn-primary mt-8 w-full">
+            <Link href="/dashboard" className="btn-primary mt-8 w-full">
               Open the Full Dashboard — Free
             </Link>
             <p className="mt-4 text-xs text-steel-500">
@@ -225,8 +232,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="container-site py-14">
+        <NewsletterSignup />
+      </section>
+
+      {/* FAQ */}
+      <section className="container-site pb-14">
         <FAQ items={FAQ_ITEMS} />
       </section>
 
