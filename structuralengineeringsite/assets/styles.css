@@ -1553,3 +1553,7 @@ button, input, select, textarea {
     display: grid;
   }
 }
+
+/* Safety status must survive copying, screenshots and printing. */
+.design-warning { padding: 14px; border: 3px solid #a44b24; background: #fff5df; color: #602800; font-weight: 700; font-size: 1rem; line-height: 1.5; }
+@media print { .design-warning, #sample-status { display:block !important; color:#000 !important; border:3px solid #000; } }
