@@ -1,5 +1,6 @@
 import type { SignalCard } from "@/lib/data";
 import DataMeta from "@/components/DataMeta";
+import { isSampleInstrument } from "@/lib/sample-marks";
 
 const SIGNAL_STYLES: Record<string, { dot: string; label: string }> = {
   bullish: { dot: "bg-gain", label: "text-gain" },
@@ -9,6 +10,7 @@ const SIGNAL_STYLES: Record<string, { dot: string; label: string }> = {
 };
 
 export default function SignalCardView({ card }: { card: SignalCard }) {
+  if (isSampleInstrument([card.label, card.value, card.detail])) return null;
   const style = SIGNAL_STYLES[card.signal] ?? SIGNAL_STYLES.neutral;
   return (
     <div className="card card-hover">

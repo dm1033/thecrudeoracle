@@ -46,7 +46,13 @@ const routes = findPageRoutes(APP_DIR).sort();
 // Routes that are deliberately excluded from sitemap.ts: private/auth-gated
 // surfaces and pure post-checkout redirect targets that should never be
 // indexed or crawled. Anything NOT in this list must appear in the sitemap.
-const EXCLUDED_FROM_SITEMAP = new Set(["/admin", "/account", "/payment/cancelled", "/payment/success"]);
+const EXCLUDED_FROM_SITEMAP = new Set([
+  "/admin",
+  "/account",
+  "/payment/cancelled",
+  "/payment/success",
+  "/offshore",
+]);
 
 describe("route inventory", () => {
   it("found the app's page.tsx routes (sanity check on the walker itself)", () => {

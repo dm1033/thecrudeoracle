@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import { FREE_ANNOUNCEMENT } from "@/lib/site";
+import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
   "Free Access — The Crude Oracle is now 100% free",
-  "The Crude Oracle has removed its paywall. The full oil and gas intelligence dashboard, daily briefings, investment watchlist, company intelligence, analysis tools and the $100,000,000 paper fund are free for everyone.",
+  "The Crude Oracle has removed its paywall. The full oil and gas intelligence dashboard, daily briefings, investment watchlist, company intelligence and analysis tools are free for everyone.",
   "/subscribe"
 );
 
@@ -18,7 +19,9 @@ const INCLUDED = [
   ["Investment watchlist", "/watchlist", "Monitored names across 12 energy segments. Monitored, never recommended."],
   ["Company intelligence", "/company-intelligence", "Structured notes on production, reserves, balance sheets and catalysts."],
   ["Analysis tools", "/tools", "Balance engine, curve monitor, flow map, positioning, news-to-barrels and hypothesis builder."],
-  ["$100,000,000 paper fund", "/portfolio", "The live paper fund: every open line, the closed trade, and the profit on each. Virtual capital. Wins and losses both."],
+  ...(PAPER_FUND_PUBLISHED
+    ? [["$100,000,000 paper fund", "/portfolio", "The live paper fund: every open line, the closed trade, and the profit on each. Virtual capital. Wins and losses both."] as const]
+    : []),
   ["Research library", "/research-library", "Deep-dive notes on supply, demand, LNG, shipping and UK energy security."],
   ["UK energy security", "/uk-energy-security", "Dedicated North Sea, UKCS fiscal and import-dependency coverage."],
 ] as const;
@@ -38,11 +41,11 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is this financial advice?",
-    a: "No. The Crude Oracle provides market commentary, research and education for information purposes only. It is not financial advice or a recommendation to transact. The $100,000,000 fund is paper trading with virtual capital. Capital at risk.",
+    a: "No. The Crude Oracle provides market commentary, research and education for information purposes only. It is not financial advice or a recommendation to transact. Capital at risk.",
   },
   {
     q: "How is the site funded if it's free?",
-    a: "The Crude Oracle is currently run as an open intelligence project. If that ever changes, it will be announced clearly here first — the data and the disclaimers stay honest either way.",
+    a: "The Crude Oracle is currently run as an open intelligence project. Sponsorship enquiries go to the advertise page. Sponsors do not see or influence content before publication — that rule is the editorial policy.",
   },
 ];
 

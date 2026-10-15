@@ -4,11 +4,14 @@ import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import { SITE } from "@/lib/site";
 
-export const metadata: Metadata = pageMeta(
-  "Offshore hire — AI for asset desks in Cayman, Bermuda and the BVI",
-  "UK-based builder of The Crude Oracle, open to employment and relocation to the Cayman Islands, Bermuda or the British Virgin Islands. The AI work is on this site.",
-  "/offshore"
-);
+export const metadata: Metadata = {
+  ...pageMeta(
+    "Offshore hire — AI for asset desks in Cayman, Bermuda and the BVI",
+    "UK-based builder of The Crude Oracle, open to employment and relocation to the Cayman Islands, Bermuda or the British Virgin Islands. The AI work is on this site.",
+    "/offshore"
+  ),
+  robots: { index: false, follow: false },
+};
 
 const JURISDICTIONS = [
   {
