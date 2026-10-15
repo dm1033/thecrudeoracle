@@ -6,10 +6,16 @@ import PageHeader from "@/components/PageHeader";
 import PaperTradingDisclaimer from "@/components/PaperTradingDisclaimer";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
+import FundUnpublished from "@/components/FundUnpublished";
+import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
 
 export const metadata: Metadata = pageMeta(
-  "Virtual Portfolio Dashboard — Positions, Journal, Risk & Benchmarks",
-  "The live dashboard for The Crude Oracle $100,000,000 paper fund: every open line with its profit, the closed trade, full journal, exposure, drawdown ladder, benchmarks and the daily trading brief. Virtual capital.",
+  PAPER_FUND_PUBLISHED
+    ? "Virtual Portfolio Dashboard — Positions, Journal, Risk & Benchmarks"
+    : "Paper fund dashboard",
+  PAPER_FUND_PUBLISHED
+    ? "The live dashboard for The Crude Oracle $100,000,000 paper fund: every open line with its profit, the closed trade, full journal, exposure, drawdown ladder, benchmarks and the daily trading brief. Virtual capital."
+    : "The paper fund dashboard is not published. Sample tickers and placeholder instruments are withheld. Virtual capital only. Not financial advice.",
   "/portfolio/dashboard"
 );
 
@@ -377,6 +383,19 @@ function DashboardContent() {
 }
 
 export default function PortfolioDashboardPage() {
+  if (!PAPER_FUND_PUBLISHED) {
+    return (
+      <>
+        <PageHeader
+          eyebrow="Paper fund"
+          title="The paper fund is not published"
+          intro="Sample tickers and placeholder instruments are withheld. Positions, journal and account totals stay off this page until every line is a real mark."
+        />
+        <FundUnpublished />
+      </>
+    );
+  }
+
   return (
     <>
       <PageHeader

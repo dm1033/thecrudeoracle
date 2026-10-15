@@ -9,6 +9,7 @@ import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PriceFreshness from "@/components/PriceFreshness";
 import { getPublishedPrices } from "@/lib/published-prices";
+import { isSampleInstrument } from "@/lib/sample-marks";
 import {
   BrentWtiChart,
   GasTrendChart,
@@ -39,6 +40,14 @@ const INTEL_GROUPS = [
 
 export default async function DashboardPage() {
   const feed = await getPublishedPrices();
+  const intelRows = INTEL_GROUPS.flatMap((group) => {
+    const company = watchlistCompanies.find(
+      (row) =>
+        row.category === group &&
+        !isSampleInstrument([row.ticker, row.company, row.market_cap, row.investment_theme, row.catalyst])
+    );
+    return company ? [{ group, company }] : [];
+  });
 
   return (
     <>
@@ -121,6 +130,11 @@ export default async function DashboardPage() {
             </Link>
           </div>
           <p className="mt-1 text-sm text-steel-500">Monitored names by segment — watchlist, not recommendations.</p>
+          {intelRows.length === 0 ? (
+            <p className="mt-4 text-sm leading-relaxed text-steel-400">
+              No investment names are published. Sample and placeholder tickers are withheld.
+            </p>
+          ) : (
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
             <table className="table-dark min-w-[760px]">
               <caption className="sr-only">
@@ -137,10 +151,7 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {INTEL_GROUPS.map((group) => {
-                  const company = watchlistCompanies.find((row) => row.category === group);
-                  if (!company) return null;
-                  return (
+                {intelRows.map(({ group, company }) => (
                     <tr key={group}>
                       <td className="whitespace-nowrap font-medium text-steel-300">{group}</td>
                       <td>{company.company}</td>
@@ -149,11 +160,11 @@ export default async function DashboardPage() {
                       <td>{company.catalyst}</td>
                       <td className="whitespace-nowrap text-xs">{company.last_updated}</td>
                     </tr>
-                  );
-                })}
+                ))}
               </tbody>
             </table>
           </div>
+          )}
         </section>
 
         <section aria-labelledby="bl-h">

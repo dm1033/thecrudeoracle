@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import { watchlistCompanies } from "@/lib/data";
+import { isSampleInstrument } from "@/lib/sample-marks";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
@@ -51,13 +52,15 @@ const FAQ_ITEMS = [
   },
   {
     q: "Which companies are exposed?",
-    a: "Exposure ranges from majors with legacy hubs to focused independents and AIM-listed explorers. Our watchlist tracks representative UKCS names with thesis, catalysts and risks — as monitored names, not recommendations.",
+    a: "Exposure ranges from majors with legacy hubs to focused independents and AIM-listed explorers. Published watchlist names, when the desk has real marks, carry a thesis, catalysts and risks. Sample tickers are not shown, and a listing is never a recommendation.",
   },
 ];
 
 export default function NorthSeaPage() {
   const ukcsNames = watchlistCompanies.filter(
-    (c) => c.category === "North Sea / UKCS" || c.country === "United Kingdom"
+    (c) =>
+      (c.category === "North Sea / UKCS" || c.country === "United Kingdom") &&
+      !isSampleInstrument([c.ticker, c.company, c.market_cap, c.investment_theme])
   );
 
   return (
@@ -86,6 +89,11 @@ export default function NorthSeaPage() {
           <h2 id="names-h" className="h3">
             UK-exposed names on the watchlist
           </h2>
+          {ukcsNames.length === 0 ? (
+            <p className="mt-3 text-sm leading-relaxed text-steel-400">
+              No published UKCS names are on the watchlist. Sample tickers are withheld.
+            </p>
+          ) : (
           <ul className="mt-3 space-y-2">
             {ukcsNames.map((c) => (
               <li key={c.ticker} className="flex flex-wrap items-baseline gap-x-3 text-sm">
@@ -97,12 +105,13 @@ export default function NorthSeaPage() {
               </li>
             ))}
           </ul>
+          )}
           <p className="mt-4 text-xs text-steel-500">
             Full thesis, catalysts and risks on the{" "}
             <Link href="/watchlist" className="text-gold-400 underline">
               Investment Watchlist
-            </Link>{" "}
-            (premium). Watchlist, not recommendations.
+            </Link>
+            . Watchlist, not recommendations.
           </p>
         </section>
 

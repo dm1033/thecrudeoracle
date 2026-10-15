@@ -6,6 +6,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 import FreshnessBadge from "@/components/FreshnessBadge";
 import { DataTypeBadge } from "@/components/DataMeta";
+import { isSampleInstrument } from "@/lib/sample-marks";
 
 export const metadata: Metadata = pageMeta(
   "Company Intelligence — Oil & Gas Equity Research Notes",
@@ -65,24 +66,35 @@ function IntelCard({ c }: { c: CompanyIntel }) {
   );
 }
 
+const publishedIntel = companyIntel.filter(
+  (c) => !isSampleInstrument([c.ticker, c.company, c.description, c.latest_update])
+);
+
 export default function CompanyIntelligencePage() {
   return (
     <>
       <PageHeader
         eyebrow="Structured Research Notes"
         title="Company Intelligence"
-        intro="Structured intelligence notes on monitored oil and gas companies: production, reserves, balance sheet, valuation context, management and catalysts — each with sources and a last-updated stamp."
+        intro="Structured notes on monitored oil and gas companies. Sample and placeholder profiles are not shown. Each published note carries sources and a last-updated stamp, and none of them is a recommendation."
       />
       <div className="container-site space-y-10 py-10">
         <PremiumGate
           title="Company intelligence is for premium subscribers"
-          preview={<IntelCard c={companyIntel[0]} />}
+          preview={publishedIntel[0] ? <IntelCard c={publishedIntel[0]} /> : undefined}
         >
-          <div className="space-y-6">
-            {companyIntel.map((c) => (
-              <IntelCard key={c.ticker} c={c} />
-            ))}
-          </div>
+          {publishedIntel.length === 0 ? (
+            <p className="max-w-3xl text-sm leading-relaxed text-steel-400">
+              No company notes are published. Profiles labelled as samples or placeholders are
+              withheld until the desk replaces them with real marks.
+            </p>
+          ) : (
+            <div className="space-y-6">
+              {publishedIntel.map((c) => (
+                <IntelCard key={c.ticker} c={c} />
+              ))}
+            </div>
+          )}
         </PremiumGate>
         <DisclaimerBlock />
       </div>

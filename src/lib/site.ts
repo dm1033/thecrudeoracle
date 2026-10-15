@@ -1,3 +1,5 @@
+import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
+
 export const SITE = {
   name: "The Crude Oracle",
   domain: "www.thecrudeoracle.com",
@@ -13,7 +15,7 @@ export const SITE = {
 // The Crude Oracle is free — the paid subscription has been retired and the
 // Stripe payment integration (webhook, billing portal, subscription link) removed.
 export const FREE_ANNOUNCEMENT =
-  "The Crude Oracle is now 100% free. Every dashboard, daily briefing, watchlist, company note, tool and the $100,000,000 paper fund — no paywall, no card, no catch.";
+  "The Crude Oracle is now 100% free. Every dashboard, daily briefing, watchlist, company note and tool — no paywall, no card, no catch.";
 
 export const FINANCIAL_DISCLAIMER_SHORT =
   "The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital.";
@@ -27,7 +29,7 @@ export interface NavItem {
   premium?: boolean;
 }
 
-export const NAV_MAIN: NavItem[] = [
+const NAV_MAIN_ALL: NavItem[] = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Daily Briefing", href: "/daily-briefing" },
   { label: "Watchlist", href: "/watchlist" },
@@ -43,16 +45,21 @@ export const NAV_MAIN: NavItem[] = [
   { label: "Research", href: "/research-library" },
 ];
 
+export const NAV_MAIN: NavItem[] = PAPER_FUND_PUBLISHED
+  ? NAV_MAIN_ALL
+  : NAV_MAIN_ALL.filter((item) => item.href !== "/portfolio");
+
 export const NAV_FOOTER_LEGAL: NavItem[] = [
   { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Terms of Use", href: "/terms-of-use" },
   { label: "Financial Disclaimer", href: "/financial-disclaimer" },
   { label: "Data Disclaimer", href: "/data-disclaimer" },
+  { label: "Editorial Policy", href: "/editorial-policy" },
 ];
 
 export const NAV_FOOTER_COMPANY: NavItem[] = [
   { label: "About", href: "/about" },
-  { label: "Offshore hire", href: "/offshore" },
+  { label: "Advertise", href: "/advertise" },
   { label: "Free Access", href: "/subscribe" },
   { label: "Account", href: "/account" },
   { label: "Contact", href: "/contact" },

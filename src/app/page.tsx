@@ -11,6 +11,7 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
 import PaperBookPanel from "@/components/PaperBookPanel";
 import PriceFreshness from "@/components/PriceFreshness";
+import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { getPublishedPrices } from "@/lib/published-prices";
 import { pageMeta } from "@/lib/seo";
@@ -19,7 +20,7 @@ export const revalidate = 21600;
 
 export const metadata: Metadata = pageMeta(
   "The Crude Oracle — Daily Brent & WTI Oil Intelligence (Free)",
-  "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security, investor-focused research and a transparent $100,000,000 paper fund.",
+  "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security and investor-focused research.",
   "/"
 );
 
@@ -44,7 +45,6 @@ const PRICING_FEATURES = [
   "Supply and demand alerts",
   "OPEC / geopolitical risk monitoring",
   "Research archive",
-  "$100,000,000 paper fund with every trade and its profit",
 ];
 
 const FAQ_ITEMS = [
@@ -62,7 +62,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How much does it cost?",
-    a: "Nothing. The Crude Oracle is now completely free — the former £299.99/month subscription has been retired and the paywall removed. Every dashboard, briefing, watchlist, tool and the $100,000,000 paper fund is open to everyone.",
+    a: "Nothing. The Crude Oracle is now completely free — the former £299.99/month subscription has been retired and the paywall removed. Every dashboard, briefing, watchlist and tool is open to everyone.",
   },
   {
     q: "How often is the intelligence updated?",
@@ -79,7 +79,7 @@ export default async function HomePage() {
     <>
       <FrontScreen />
 
-      <PaperBookPanel />
+      {PAPER_FUND_PUBLISHED ? <PaperBookPanel /> : null}
 
       {/* Dashboard preview */}
       <section className="container-site py-14">
@@ -213,22 +213,6 @@ export default async function HomePage() {
               capital at risk.
             </p>
           </div>
-        </div>
-      </section>
-
-      <section className="border-y border-ink-700 bg-ink-900">
-        <div className="container-site flex flex-col items-start justify-between gap-4 py-10 sm:flex-row sm:items-center">
-          <div className="max-w-2xl">
-            <p className="eyebrow">Cayman · Bermuda · British Virgin Islands</p>
-            <h2 className="h2 mt-1">Offshore asset desks can hire this AI from the UK</h2>
-            <p className="mt-2 text-sm leading-relaxed text-steel-400">
-              The globe, the desk and the tools on this site are the work. Open to employment
-              and relocation from the United Kingdom.
-            </p>
-          </div>
-          <Link href="/offshore" className="btn-primary shrink-0">
-            See the hire page
-          </Link>
         </div>
       </section>
 

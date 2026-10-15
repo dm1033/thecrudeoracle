@@ -6,10 +6,14 @@ import PageHeader from "@/components/PageHeader";
 import PaperTradingDisclaimer from "@/components/PaperTradingDisclaimer";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import { SITE } from "@/lib/site";
+import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
+import FundUnpublished from "@/components/FundUnpublished";
 
 export const metadata: Metadata = pageMeta(
-  "The Crude Oracle $100,000,000 Paper Fund",
-  "The live published paper fund: every open line, the closed trade, and the profit on each. Virtual capital only. Last published desk marks. Not financial advice.",
+  PAPER_FUND_PUBLISHED ? "The Crude Oracle $100,000,000 Paper Fund" : "Paper fund",
+  PAPER_FUND_PUBLISHED
+    ? "The live published paper fund: every open line, the closed trade, and the profit on each. Virtual capital only. Last published desk marks. Not financial advice."
+    : "The paper fund is not published. Sample tickers and placeholder instruments are withheld. Virtual capital only. Not financial advice.",
   "/portfolio"
 );
 
@@ -46,6 +50,19 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 }
 
 export default function PortfolioPublicPage() {
+  if (!PAPER_FUND_PUBLISHED) {
+    return (
+      <>
+        <PageHeader
+          eyebrow="Paper fund"
+          title="The paper fund is not published"
+          intro="Sample tickers and placeholder instruments are withheld. No performance figure from that book is shown."
+        />
+        <FundUnpublished />
+      </>
+    );
+  }
+
   const totalPl = account.unrealised_pl + account.realised_pl;
 
   return (

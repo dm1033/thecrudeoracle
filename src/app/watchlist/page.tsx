@@ -7,6 +7,7 @@ import PremiumGate from "@/components/PremiumGate";
 import FreshnessBadge from "@/components/FreshnessBadge";
 import { DataTypeBadge } from "@/components/DataMeta";
 import { WatchlistPerformanceChart } from "@/components/charts/Charts";
+import { isSampleInstrument } from "@/lib/sample-marks";
 
 export const metadata: Metadata = pageMeta(
   "Investment Watchlist — Oil & Gas Equities",
@@ -82,12 +83,28 @@ function CompanyCard({ c }: { c: WatchlistCompany }) {
   );
 }
 
+function isPublishedName(c: WatchlistCompany) {
+  return !isSampleInstrument([c.ticker, c.company, c.market_cap, c.investment_theme, c.catalyst]);
+}
+
+const publishedCompanies = watchlistCompanies.filter(isPublishedName);
+
 function WatchlistContent() {
+  if (publishedCompanies.length === 0) {
+    return (
+      <p className="max-w-3xl text-sm leading-relaxed text-steel-400">
+        No names are published on the watchlist. Entries labelled as samples or placeholders are
+        withheld until the desk replaces them with real marks. A name here is monitored, never a
+        recommendation.
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-10">
       <WatchlistPerformanceChart />
       {watchlistCategories.map((cat) => {
-        const companies = watchlistCompanies.filter((c) => c.category === cat);
+        const companies = publishedCompanies.filter((c) => c.category === cat);
         if (companies.length === 0) return null;
         return (
           <section key={cat} aria-label={cat}>
@@ -110,17 +127,19 @@ export default function WatchlistPage() {
       <PageHeader
         eyebrow="Monitored Names, Not Recommendations"
         title="Investment Watchlist"
-        intro="Curated oil and gas equities across twelve segments, each with thesis, catalyst, risks and sources. Every entry is a monitored name — never a recommendation to buy, sell or hold."
+        intro="Oil and gas names with thesis, catalyst, risks and sources. Sample and placeholder tickers are not shown. Every published entry is a monitored name — never a recommendation to buy, sell or hold."
       />
       <div className="container-site space-y-10 py-10">
         <PremiumGate
           title="The full watchlist is for premium subscribers"
           preview={
-            <div className="grid gap-4 lg:grid-cols-2">
-              {watchlistCompanies.slice(0, 2).map((c) => (
-                <CompanyCard key={c.ticker} c={c} />
-              ))}
-            </div>
+            publishedCompanies.length > 0 ? (
+              <div className="grid gap-4 lg:grid-cols-2">
+                {publishedCompanies.slice(0, 2).map((c) => (
+                  <CompanyCard key={c.ticker} c={c} />
+                ))}
+              </div>
+            ) : undefined
           }
         >
           <WatchlistContent />
