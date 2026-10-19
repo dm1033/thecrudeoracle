@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en-GB" class="twc-refined">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BREEAM Construction Project Scoring Tool &amp; Pre-Assessment Calculator | Temporary Works Consulting</title>
+  <meta name="description" content="Free online BREEAM UK Construction Project Scoring Tool by Temporary Works Consulting &amp; Design Ltd. Score New Construction, Shell &amp; Core, Refurbishment &amp; Civil projects across all 10 categories, check mandatory minimum standards, and calculate Man 03, Wst 01/02 &amp; Mat 03 site credits." />
+  <meta name="author" content="David J. Miller MSc CEng MICE — Temporary Works Consulting &amp; Design Ltd" />
+  <link rel="canonical" href="https://www.temporaryworksconsulting.com/breeam-scoring-tool/" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="BREEAM Construction Project Scoring Tool | Temporary Works Consulting" />
+  <meta property="og:description" content="Interactive BREEAM UK credit calculator, mandatory minimum standards gate checker, gap-to-target optimizer, and temporary works site evidence register." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.temporaryworksconsulting.com/breeam-scoring-tool/" />
+  <meta property="og:site_name" content="Temporary Works Consulting" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/styles.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BREEAM Construction Project Scoring Tool & Pre-Assessment Calculator",
+    "url": "https://www.temporaryworksconsulting.com/breeam-scoring-tool/",
+    "applicationCategory": "EngineeringApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "GBP"
+    },
+    "creator": {
+      "@type": "EngineeringBusiness",
+      "name": "Temporary Works Consulting & Design Ltd",
+      "url": "https://www.temporaryworksconsulting.com/",
+      "telephone": "+447900984900",
+      "email": "david@temporaryworksconsulting.com",
+      "founder": {
+        "@type": "Person",
+        "name": "David J. Miller",
+        "honorificSuffix": "MSc CEng MICE"
+      }
+    }
+  }
+  </script>
+</head>
+<body class="twc-refined">
+  <a class="skip-link" href="#main-content">Skip to BREEAM Scoring Tool</a>
+
+  <!-- Preferred Source & Direct Line Banner -->
+  <aside class="twc-preferred-banner" aria-label="Temporary Works Consulting UK engineering desk">
+    <div class="hub-wrap twc-preferred-banner-inner">
+      <span class="twc-preferred-banner-label">
+        CHARTERED TEMPORARY WORKS &amp; SITE SUSTAINABILITY DESK · BS 5975 · BR 470 · BREEAM UK NC &amp; RFO
+      </span>
+      <div class="twc-preferred-links">
+        <a href="https://www.temporaryworksconsulting.com/tools">All Engineering Tools</a>
+        <a href="https://www.temporaryworksconsulting.com/SEATSprep">CITB SEATS Exam Prep</a>
+        <a href="https://www.temporaryworksconsulting.com/bre470.html">BR 470 Piling Mat Tool</a>
+        <a href="https://www.temporaryworksconsulting.com/quote.html">2-Hour Fixed Fee Quote</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- TWC Global Header -->
+  <header class="hub-header">
+    <div class="hub-wrap hub-header-inner">
+      <a class="hub-brand" href="https://www.temporaryworksconsulting.com/" aria-label="Temporary Works Consulting home">
+        <span class="hub-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="28" height="28">
+            <path d="M10 16h44v6H35v28h-6V22H10z" fill="#C6A15B" />
+            <path d="M18 46h28v4H18z" fill="#2A9B96" />
+          </svg>
+        </span>
+        <span>
+          TEMPORARY WORKS
+          <small>CONSULTING &amp; DESIGN LTD</small>
+        </span>
+      </a>
+
+      <div class="twc-header-utilities">
+        <a href="https://www.temporaryworksconsulting.com/tools">Tools Hub</a>
+        <a href="https://www.temporaryworksconsulting.com/SEATSprep">SEATS Prep</a>
+        <a href="https://www.temporaryworksconsulting.com/bre470.html">BR 470 Calculator</a>
+        <a href="https://www.temporaryworksconsulting.com/rams-generator.html">RAMS Generator</a>
+        <a href="tel:+447900984900">+44 (0)7900 984900</a>
+      </div>
+
+      <a class="hub-header-cta" href="https://wa.me/447900984900" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 2a10 10 0 0 0-8.66 15l-1.2 4.38 4.5-1.18A10 10 0 1 0 12 2zm5.47 14.12c-.23.65-1.34 1.24-1.86 1.32-.48.07-1.08.1-1.75-.11-.41-.13-.93-.31-1.6-.6-2.82-1.22-4.66-4.06-4.8-4.25-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.99-2.35.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.3-.12.58.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.41.29.14.45.12.62-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.64-.14.26.1 1.67.79 1.96.93.29.14.48.22.55.34.07.12.07.7-.16 1.35z" />
+        </svg>
+        <span>WhatsApp David</span>
+      </a>
+
+      <details class="hub-menu">
+        <summary aria-label="Open Temporary Works Consulting menu">
+          <span>Menu</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </summary>
+        <div class="hub-menu-panel">
+          <div class="hub-wrap hub-menu-grid">
+            <div class="hub-menu-col">
+              <h3>Interactive Tools</h3>
+              <ul>
+                <li><a href="./"><strong>BREEAM Project Scoring Tool</strong></a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/bre470.html">BR 470 Working Platform Calculator</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/SEATSprep">CITB SEATS Exam Prep &amp; Mock Simulator</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/rams-generator.html">Construction RAMS Generator</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/psm/">Professional Services Manager (NEC4 PSC)</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/NEC-Contract-Master">NEC4 Contract Master</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/tools">View All Engineering Tools →</a></li>
+              </ul>
+            </div>
+            <div class="hub-menu-col">
+              <h3>Temporary Works Design</h3>
+              <ul>
+                <li><a href="https://www.temporaryworksconsulting.com/services/working-platforms.html">Piling Mats &amp; Crane Platforms (BR 470)</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/services/excavation-support.html">Deep Excavation Support &amp; Propping</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/services/facade-retention.html">Facade Retention &amp; Needling</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/services/formwork-falsework.html">Falsework &amp; Formwork (BS 5975)</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/services/hoardings.html">Site Hoardings &amp; Temporary Fencing</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/services/cat-3-checks.html">Independent Cat 2 &amp; Cat 3 Checks</a></li>
+              </ul>
+            </div>
+            <div class="hub-menu-col">
+              <h3>Compliance &amp; Guides</h3>
+              <ul>
+                <li><a href="https://www.temporaryworksconsulting.com/bs-5975-guide.html">BS 5975:2019 Procedural Guide</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/twc-role-guide.html">Temporary Works Coordinator (TWC) Guide</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/cdm-2015-guide.html">CDM 2015 &amp; Principal Contractor Duties</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/case-studies.html">UK Project Case Studies</a></li>
+              </ul>
+            </div>
+            <div class="hub-menu-col">
+              <h3>Fast-Track Desk</h3>
+              <ul>
+                <li><a href="https://www.temporaryworksconsulting.com/quote.html">Request Fixed-Fee Quote (2-Hour Reply)</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/design-brief.html">Online Temporary Works Design Brief</a></li>
+                <li><a href="https://www.temporaryworksconsulting.com/contact.html">Contact David J. Miller CEng MICE</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <!-- Tool Hero Shell -->
+  <section class="hub-tool-head">
+    <div class="hub-wrap">
+      <nav class="hub-tool-crumb" aria-label="Breadcrumb">
+        <a href="https://www.temporaryworksconsulting.com/">Home</a>
+        <span>/</span>
+        <a href="https://www.temporaryworksconsulting.com/tools">Tools</a>
+        <span>/</span>
+        <strong>BREEAM Construction Project Scorer</strong>
+      </nav>
+
+      <div class="hub-tool-head-grid">
+        <div>
+          <p class="hub-kicker">ONLINE ENGINEERING &amp; SUSTAINABILITY TOOL · BREEAM UK NC / RFO / INFRA</p>
+          <h1>BREEAM Construction Project <span>Scoring Tool.</span></h1>
+          <p class="lead">
+            Score any UK construction project across all 10 BREEAM environmental sections, verify mandatory Minimum Standards gates for Pass through Outstanding, model Principal Contractor site credits (Man 03, Wst 01/02, Mat 03), and audit temporary works interfaces before credits are lost on site.
+          </p>
+          <div class="hub-tool-head-actions">
+            <a class="hub-button hub-button-gold" href="#breeam-workspace">Jump to Live Scorer</a>
+            <button type="button" class="hub-button hub-button-outline" data-preset-id="at-risk-rescue-audit">
+              Load "At-Risk Site Audit" Demo
+            </button>
+            <a class="hub-button hub-button-outline" href="https://www.temporaryworksconsulting.com/bre470.html">
+              BR 470 Recycled Platform Tool
+            </a>
+          </div>
+        </div>
+
+        <aside class="hub-tool-head-card" aria-label="Tool technical specification">
+          <img class="hub-tool-head-art" src="./assets/breeam-hero.svg" alt="BREEAM UK Weighted Scoring Engine and Category Breakdown" width="600" height="320" />
+          <dl>
+            <div>
+              <dt>Schemes Covered</dt>
+              <dd>UK NC (Fully Fitted, Shell &amp; Core, Shell Only), RFO &amp; Civil</dd>
+            </div>
+            <div>
+              <dt>Mandatory Gates</dt>
+              <dd>Man 03, Man 04, Man 05, Ene 01, Ene 02, Wat 01/02, Mat 03, Wst 01/03</dd>
+            </div>
+            <div>
+              <dt>TW Site Calculators</dt>
+              <dd>Man 03 CCS, Wst 01/02 BR 470 Aggregates &amp; Mat 03 Timber Gate</dd>
+            </div>
+            <div>
+              <dt>Lead Reviewer</dt>
+              <dd><a href="https://www.temporaryworksconsulting.com/about.html">David J. Miller MSc CEng MICE</a></dd>
+            </div>
+          </dl>
+          <a class="hub-tool-head-all" href="https://www.temporaryworksconsulting.com/tools">← All Temporary Works Consulting Tools</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Interactive Workspace -->
+  <main id="main-content" class="breeam-workspace">
+    <div id="breeam-workspace" class="hub-wrap">
+
+      <!-- Project Configuration & Preset Bar -->
+      <section class="project-setup-card" aria-labelledby="setup-heading">
+        <div class="setup-header">
+          <h2 id="setup-heading">
+            <span>Project Assessment Parameters</span>
+            <span class="setup-badge">AUTO-SAVED IN BROWSER</span>
+          </h2>
+          <div class="preset-bar" role="group" aria-label="Load BREEAM project preset">
+            <span>Load Benchmark Preset:</span>
+            <button type="button" class="preset-btn is-active" data-preset-id="commercial-office-excellent">Commercial Office (Excellent)</button>
+            <button type="button" class="preset-btn" data-preset-id="industrial-logistics-vg">Industrial Shed (Very Good)</button>
+            <button type="button" class="preset-btn" data-preset-id="data-centre-outstanding">Tech / Data Campus (Outstanding)</button>
+            <button type="button" class="preset-btn" data-preset-id="refurbishment-fitout-excellent">Cut &amp; Carve Refurb (Excellent)</button>
+            <button type="button" class="preset-btn" data-preset-id="at-risk-rescue-audit">At-Risk Rescue Audit</button>
+          </div>
+        </div>
+
+        <div class="setup-grid">
+          <div class="setup-field setup-field--wide">
+            <label for="input-project-name">Project Name / Contract Package</label>
+            <input id="input-project-name" type="text" value="Thames Valley Gateway — Plot 4B" />
+          </div>
+          <div class="setup-field">
+            <label for="input-site-address">Site Location / Postcode</label>
+            <input id="input-site-address" type="text" value="Reading, Berkshire (UK)" />
+          </div>
+          <div class="setup-field">
+            <label for="input-gia">Gross Internal Area (m²)</label>
+            <input id="input-gia" type="number" min="50" step="50" value="8500" />
+          </div>
+          <div class="setup-field">
+            <label for="input-contract-value">Contract Value (£ GBP)</label>
+            <input id="input-contract-value" type="number" min="0" step="100000" value="24500000" />
+          </div>
+          <div class="setup-field">
+            <label for="input-assessor">Lead Contractor / Assessor</label>
+            <input id="input-assessor" type="text" value="Principal Contractor / BREEAM AP" />
+          </div>
+
+          <div class="setup-field setup-field--wide">
+            <label for="select-scheme">BREEAM Assessment Scheme &amp; Weighting Profile</label>
+            <select id="select-scheme">
+              <option value="nc-fully-fitted">BREEAM UK New Construction — Fully Fitted</option>
+              <option value="nc-shell-core">BREEAM UK New Construction — Shell &amp; Core</option>
+              <option value="nc-shell-only">BREEAM UK New Construction — Shell Only</option>
+              <option value="rfo-full">BREEAM UK Refurbishment &amp; Fit-Out (Parts 1–4)</option>
+              <option value="infra-civil">Civil &amp; Heavy Temporary Works / Enabling Package</option>
+            </select>
+          </div>
+          <div class="setup-field setup-field--wide">
+            <label for="select-target-band">Contractual Target BREEAM Rating</label>
+            <select id="select-target-band">
+              <option value="outstanding">Outstanding (≥85% + Mandatory Gates)</option>
+              <option value="excellent" selected>Excellent (≥70% + Mandatory Gates)</option>
+              <option value="very_good">Very Good (≥55% + Mandatory Gates)</option>
+              <option value="good">Good (≥45% + Mandatory Gates)</option>
+              <option value="pass">Pass (≥30% + Mandatory Gates)</option>
+            </select>
+          </div>
+          <div class="setup-field setup-field--wide">
+            <label for="select-stage">Current RIBA Work Stage</label>
+            <select id="select-stage">
+              <option value="RIBA Stage 2 (Concept Design)">RIBA Stage 2 (Concept Design — Early AP &amp; Ecology)</option>
+              <option value="RIBA Stage 3 (Spatial Coordination)">RIBA Stage 3 (Spatial Coordination)</option>
+              <option value="RIBA Stage 4 / Pre-Construction" selected>RIBA Stage 4 / Pre-Construction Tender</option>
+              <option value="RIBA Stage 5 (Construction Phase)">RIBA Stage 5 (Construction Phase &amp; Temporary Works)</option>
+              <option value="RIBA Stage 6 (Handover &amp; Post-Construction)">RIBA Stage 6 (Handover &amp; Post-Construction Review)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setup-bottom-bar">
+          <label class="timber-gate-toggle">
+            <input id="check-timber-prereq" type="checkbox" checked />
+            <span>
+              <strong>Mandatory UKTR Timber Prerequisite Confirmed:</strong> 100% of permanent &amp; temporary works timber (formwork, scaffold boards, hoardings, sole plates) is legally harvested &amp; traded.
+            </span>
+          </label>
+
+          <div class="setup-actions">
+            <button type="button" id="btn-share-link" class="btn-tool">Copy Shareable Link</button>
+            <button type="button" id="btn-export-csv" class="btn-tool">Export CSV Schedule</button>
+            <button type="button" id="btn-print-report" class="btn-tool btn-tool--gold">Print / Save A4 PDF Report</button>
+            <button type="button" id="btn-reset-default" class="btn-tool">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Scoreboard Ribbon -->
+      <section class="scoreboard-grid" aria-label="Live BREEAM Score Summary">
+        <div class="score-tile score-tile--primary">
+          <span class="score-tile-label">Total Weighted BREEAM Score</span>
+          <div class="score-tile-big" id="metric-total-score">75.40%</div>
+          <div class="score-tile-sub" id="metric-score-sub">73.40% base + 2.0% innovation</div>
+        </div>
+
+        <div class="score-tile score-tile--rating">
+          <span class="score-tile-label">Achievable Certified Rating</span>
+          <div class="score-tile-big" id="metric-certified-band">EXCELLENT</div>
+          <div class="score-tile-sub" id="metric-certified-stars">
+            <span class="rating-pill rating-pill--pass">★★★★☆ CERTIFIED GATE PASS</span>
+          </div>
+        </div>
+
+        <div class="score-tile">
+          <span class="score-tile-label">Margin / Gap vs Target Band</span>
+          <div class="score-tile-big" id="metric-target-gap">+5.40%</div>
+          <div class="score-tile-sub" id="metric-target-sub">Buffer above Excellent (70% threshold)</div>
+        </div>
+
+        <div class="score-tile">
+          <span class="score-tile-label">Contractor &amp; TW Controlled Share</span>
+          <div class="score-tile-big" id="metric-contractor-share">26.4% / 33.8%</div>
+          <div class="score-tile-sub" id="metric-contractor-sub">Principal Contractor &amp; Temporary Works credits</div>
+        </div>
+      </section>
+
+      <!-- Mandatory Minimum Standards Gate Banner -->
+      <section id="min-standards-banner" class="min-standards-banner" aria-live="polite">
+        <div class="min-standards-head">
+          <span id="min-standards-title">
+            Mandatory Minimum Standards Gate: <strong>PASSED</strong> for target <strong>Excellent (70%+)</strong>
+          </span>
+          <button type="button" id="btn-autofix-gates" class="btn-autofix" hidden>
+            Auto-Fix Mandatory Minimum Standards →
+          </button>
+        </div>
+        <ul id="min-standards-list" class="min-standards-list" hidden></ul>
+      </section>
+
+      <!-- Workspace Mode Tabs -->
+      <div class="workspace-tabs" role="tablist" aria-label="BREEAM Tool Views">
+        <button type="button" role="tab" aria-selected="true" class="workspace-tab is-active" data-tab-target="scorer">
+          <span class="tab-num">01</span> Full Credit Scorer &amp; Gap Optimizer (43 Issues)
+        </button>
+        <button type="button" role="tab" aria-selected="false" class="workspace-tab" data-tab-target="calculators">
+          <span class="tab-num">02</span> Site &amp; Temporary Works Credit Calculators (Man 03 / Wst 01 / Mat 03)
+        </button>
+        <button type="button" role="tab" aria-selected="false" class="workspace-tab" data-tab-target="audit">
+          <span class="tab-num">03</span> Contractor Evidence &amp; Temporary Works Audit Register
+        </button>
+      </div>
+
+      <!-- TAB 1: FULL CREDIT SCORER & GAP OPTIMIZER -->
+      <section data-tab-panel="scorer" aria-label="Full Credit Scorer and Gap Optimizer">
+        <div class="filter-bar">
+          <div class="filter-pills" role="group" aria-label="Filter BREEAM issues">
+            <button type="button" class="filter-pill is-active" data-issue-filter="all">All 43 Issues</button>
+            <button type="button" class="filter-pill" data-issue-filter="contractor">Principal Contractor Owned</button>
+            <button type="button" class="filter-pill" data-issue-filter="tw">Temporary Works Interfaces</button>
+            <button type="button" class="filter-pill" data-issue-filter="gates">Mandatory Minimum Gates</button>
+            <button type="button" class="filter-pill" data-issue-filter="unachieved">Unachieved / Upside Credits</button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <input id="input-issue-search" type="search" class="search-input" placeholder="Search issue (e.g. Mat 03, piling, Ene 01)..." aria-label="Search BREEAM issues" />
+            <button type="button" id="btn-toggle-all-cats" class="filter-pill">Expand / Collapse All</button>
+          </div>
+        </div>
+
+        <div class="scorer-layout">
+          <div id="categories-accordion-root"></div>
+
+          <aside class="side-panel" aria-label="Weighted Category Breakdown and Quick Wins">
+            <div class="panel-box">
+              <h3>
+                <span>Weighted Section Breakdown</span>
+                <small style="font-family:var(--tw-mono);font-size:11px;color:var(--tw-gold);">LIVE %</small>
+              </h3>
+              <div id="side-category-bars" class="cat-bar-list"></div>
+            </div>
+
+            <div class="panel-box">
+              <h3>
+                <span>Highest-Leverage Quick Wins</span>
+                <small style="font-family:var(--tw-mono);font-size:11px;color:#6FE3DD;">GAP OPTIMIZER</small>
+              </h3>
+              <p style="font-size:12px;color:#B8BDC6;margin-bottom:10px;">
+                Ranked by mandatory gate priority, weighted percentage gain per credit, and ease of site implementation:
+              </p>
+              <div id="side-quick-wins" class="quick-win-list"></div>
+            </div>
+
+            <div class="panel-box" style="border-top:3px solid var(--tw-gold);">
+              <h3>Temporary Works BREEAM Desk</h3>
+              <p style="font-size:13px;color:#D0CBBF;margin-bottom:14px;">
+                Need BR 470 piling mat calculations using WRAP recycled aggregates (Wst 01 / Wst 02 / Mat 06) or certified temporary works designs? Send this score breakdown directly to David J. Miller MSc CEng MICE.
+              </p>
+              <div style="display:grid;gap:8px;">
+                <a id="cta-whatsapp-breeam" class="hub-button hub-button-gold" href="https://wa.me/447900984900" target="_blank" rel="noopener" style="width:100%;">
+                  WhatsApp Score to David →
+                </a>
+                <a id="cta-email-breeam" class="hub-button hub-button-outline" href="mailto:david@temporaryworksconsulting.com" style="width:100%;">
+                  Email Score &amp; Request Review
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- TAB 2: SITE & TEMPORARY WORKS CREDIT CALCULATORS -->
+      <section data-tab-panel="calculators" hidden aria-label="Site and Temporary Works Credit Calculators">
+        <div class="site-calcs-grid">
+
+          <!-- Calculator 1: Man 03 -->
+          <article class="calc-card">
+            <div>
+              <span class="badge-chip badge-chip--contractor">MAN 03 · 6 CREDITS + 1 EXEMPLARY</span>
+              <h3 style="margin-top:6px;">Man 03 Responsible Construction Practices</h3>
+              <p class="calc-desc">
+                Calculate achievable Principal Contractor site management credits from Considerate Constructors Scheme (CCS) audits, ISO 14001 EMS, and site utility/transport logging.
+              </p>
+            </div>
+
+            <label class="calc-check">
+              <input type="checkbox" id="calc-man03-uktr" checked />
+              <span><strong>Prerequisite:</strong> 100% legal timber (UKTR) verified across all site &amp; temporary works</span>
+            </label>
+            <label class="calc-check">
+              <input type="checkbox" id="calc-man03-ems" checked />
+              <span>Principal Contractor operates certified EMS (ISO 14001 / EMAS) (+1 cr)</span>
+            </label>
+            <label class="calc-check">
+              <input type="checkbox" id="calc-man03-champ" checked />
+              <span>Dedicated BREEAM Sustainability Champion appointed on site (+1 cr)</span>
+            </label>
+
+            <div class="calc-field">
+              <label for="calc-man03-ccs">Considerate Constructors Scheme (CCS) Score (out of 45/50)</label>
+              <input type="number" id="calc-man03-ccs" min="0" max="50" step="1" value="40" />
+              <small style="font-size:11.5px;color:var(--tw-ink-soft);">30–34 = 1 cr · 35–39 = 2 cr · ≥40 = 2 cr + 1 Exemplary Innovation cr</small>
+            </div>
+
+            <label class="calc-check">
+              <input type="checkbox" id="calc-man03-energy" checked />
+              <span>Site energy (kWh, generator HVO/diesel fuel) monitored &amp; targeted</span>
+            </label>
+            <label class="calc-check">
+              <input type="checkbox" id="calc-man03-water" checked />
+              <span>Site water (mains &amp; bowser m³) monitored &amp; logged (+1 cr with energy)</span>
+            </label>
+            <label class="calc-check">
+              <input type="checkbox" id="calc-man03-transport" checked />
+              <span>Material delivery &amp; muck-away transport (t·km) logged (+1 cr)</span>
+            </label>
+
+            <div class="calc-output">
+              <div class="calc-output-score">
+                <span>Calculated Man 03 Credits</span>
+                <strong id="out-man03-score">6 / 6 Credits (+1 Inn)</strong>
+              </div>
+              <ul id="out-man03-list"></ul>
+              <button type="button" id="btn-apply-man03" class="hub-button hub-button-gold" style="width:100%;padding:10px;">
+                Apply Man 03 Credits to Project Score
+              </button>
+            </div>
+          </article>
+
+          <!-- Calculator 2: Wst 01 & Wst 02 -->
+          <article class="calc-card">
+            <div>
+              <span class="badge-chip badge-chip--tw">WST 01 (5 CR) &amp; WST 02 (1 CR) · BR 470 LINKED</span>
+              <h3 style="margin-top:6px;">Waste &amp; Piling Platform Recycled Aggregate</h3>
+              <p class="calc-desc">
+                Model construction waste benchmarks (tonnes per 100 m² GIA) and crushed concrete / WRAP 6F2 reuse in BR 470 piling mats &amp; crane platforms.
+              </p>
+            </div>
+
+            <label class="calc-check">
+              <input type="checkbox" id="calc-wst-rmp" checked />
+              <span>Compliant Resource Management Plan (RMP) active with monthly waste tracking</span>
+            </label>
+
+            <div class="calc-field">
+              <label for="calc-wst-tonnes">Non-Hazardous Construction Waste (tonnes / 100 m² GIA)</label>
+              <input type="number" id="calc-wst-tonnes" min="0" max="30" step="0.1" value="5.8" />
+              <small style="font-size:11.5px;color:var(--tw-ink-soft);">≤11.1 = 1 cr · ≤6.5 = 2 cr · ≤3.4 = 3 cr · ≤1.6 = Exemplary</small>
+            </div>
+
+            <div class="calc-field">
+              <label for="calc-wst-diversion">Non-Hazardous Waste Diverted from Landfill (% by weight)</label>
+              <input type="number" id="calc-wst-diversion" min="0" max="100" step="1" value="88" />
+              <small style="font-size:11.5px;color:var(--tw-ink-soft);">≥70% = +1 cr · ≥85% = Exemplary diversion benchmark</small>
+            </div>
+
+            <label class="calc-check">
+              <input type="checkbox" id="calc-wst-audit" checked />
+              <span>Pre-demolition / pre-refurbishment audit completed before strip-out (+1 cr)</span>
+            </label>
+
+            <div class="calc-field">
+              <label for="calc-wst-agg">Recycled / Secondary Aggregate in Working Platforms &amp; Sub-base (%)</label>
+              <input type="number" id="calc-wst-agg" min="0" max="100" step="1" value="40" />
+              <small style="font-size:11.5px;color:var(--tw-ink-soft);">≥25% recycled aggregate unlocks Wst 02 (+1 cr)</small>
+            </div>
+
+            <div class="calc-output">
+              <div class="calc-output-score">
+                <span>Calculated Waste Credits</span>
+                <strong id="out-wst-score">Wst 01: 4/5 · Wst 02: 1/1</strong>
+              </div>
+              <ul id="out-wst-list"></ul>
+              <button type="button" id="btn-apply-wst" class="hub-button hub-button-gold" style="width:100%;padding:10px;">
+                Apply Wst 01 &amp; Wst 02 to Project Score
+              </button>
+            </div>
+          </article>
+
+          <!-- Calculator 3: Mat 03 -->
+          <article class="calc-card">
+            <div>
+              <span class="badge-chip badge-chip--min">MAT 03 · MANDATORY TIMBER GATE + 4 CREDITS</span>
+              <h3 style="margin-top:6px;">Mat 03 Responsible Sourcing &amp; Site Timber Gate</h3>
+              <p class="calc-desc">
+                Verify the mandatory UK Government Timber Procurement Policy prerequisite for temporary works timber and calculate Responsible Sourcing (RSCS) credits.
+              </p>
+            </div>
+
+            <label class="calc-check">
+              <input type="checkbox" id="calc-mat03-timber" checked />
+              <span>
+                <strong>MANDATORY SITE GATE:</strong> 100% of formwork ply, scaffold boards, hoardings, sole plates &amp; permanent timber has legal &amp; FSC/PEFC Chain-of-Custody tickets on file
+              </span>
+            </label>
+
+            <label class="calc-check">
+              <input type="checkbox" id="calc-mat03-plan" checked />
+              <span> documented Sustainable Procurement Plan adopted at Stage 2–4 (+1 cr)</span>
+            </label>
+
+            <div class="calc-field">
+              <label for="calc-mat03-rscs">Achieved Responsible Sourcing (BES 6001 / FSC / ISO 14001) Points (%)</label>
+              <input type="number" id="calc-mat03-rscs" min="0" max="100" step="1" value="42" />
+              <small style="font-size:11.5px;color:var(--tw-ink-soft);">≥10% = 1 cr · ≥18% = 2 cr · ≥36% = 3 cr · ≥54% = 3 cr + Exemplary</small>
+            </div>
+
+            <div class="issue-tw-callout" style="margin-top:4px;">
+              <strong>TWC Coordinator Warning:</strong> A single delivery of uncertified timber packing wedges or hoarding rails without an FSC/PEFC CoC invoice number can invalidate the Mat 03 prerequisite and freeze BREEAM certification.
+            </div>
+
+            <div class="calc-output">
+              <div class="calc-output-score">
+                <span>Calculated Mat 03 Credits</span>
+                <strong id="out-mat03-score">4 / 4 Credits</strong>
+              </div>
+              <ul id="out-mat03-list"></ul>
+              <button type="button" id="btn-apply-mat03" class="hub-button hub-button-gold" style="width:100%;padding:10px;">
+                Apply Mat 03 Credits to Project Score
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- TAB 3: CONTRACTOR EVIDENCE & TEMPORARY WORKS MATRIX -->
+      <section data-tab-panel="audit" hidden aria-label="Contractor Evidence and Temporary Works Register">
+        <div class="audit-table-wrap">
+          <table class="audit-table">
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Title &amp; TW Tag</th>
+                <th>Targeted Score</th>
+                <th>Stage &amp; Owner</th>
+                <th>Required BREEAM QA Evidence</th>
+                <th>Temporary Works &amp; Site Engineering Interface</th>
+                <th>Gate Status</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- TWC Advisory & Cross-Link Band -->
+  <section class="twc-advisory-band no-print" aria-labelledby="advisory-heading">
+    <div class="hub-wrap advisory-grid">
+      <div>
+        <p class="hub-kicker">TEMPORARY WORKS CONSULTING &amp; DESIGN LTD · CHARTERED ENGINEERING</p>
+        <h2 id="advisory-heading">Protect Your BREEAM Rating &amp; Temporary Works Package on Site.</h2>
+        <p>
+          Over 30% of a typical BREEAM UK New Construction score is directly influenced by Principal Contractor site management, earthworks, working platforms, and temporary works procurement. We design value-engineered BR 470 piling platforms using recycled aggregates (unlocking Wst 01, Wst 02 &amp; Mat 06) and reusable steel propping systems (improving Mat 01 LCA).
+        </p>
+        <div class="hub-tool-head-actions">
+          <a class="hub-button hub-button-gold" href="https://www.temporaryworksconsulting.com/quote.html">Get a 2-Hour Fixed-Fee Quote</a>
+          <a class="hub-button hub-button-outline" href="https://wa.me/447900984900" target="_blank" rel="noopener">WhatsApp David (+44 7900 984900)</a>
+        </div>
+      </div>
+
+      <div class="advisory-links">
+        <a class="advisory-card-link" href="https://www.temporaryworksconsulting.com/bre470.html">
+          <span>BR 470 Working Platform &amp; Piling Mat Calculator</span>
+          <span style="color:var(--tw-gold);">Open Tool →</span>
+        </a>
+        <a class="advisory-card-link" href="https://www.temporaryworksconsulting.com/SEATSprep">
+          <span>CITB SEATS (Site Environmental Awareness) Exam Simulator</span>
+          <span style="color:var(--tw-gold);">Open Tool →</span>
+        </a>
+        <a class="advisory-card-link" href="https://www.temporaryworksconsulting.com/rams-generator.html">
+          <span>BS 5975 &amp; CDM 2015 Construction RAMS Generator</span>
+          <span style="color:var(--tw-gold);">Open Tool →</span>
+        </a>
+        <a class="advisory-card-link" href="https://www.temporaryworksconsulting.com/design-brief.html">
+          <span>Submit an Online Temporary Works Design Brief</span>
+          <span style="color:var(--tw-gold);">Start Brief →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWC Footer -->
+  <footer class="site-footer no-print">
+    <div class="hub-wrap">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Temporary Works Consulting &amp; Design Ltd</h4>
+          <p style="margin-bottom:10px;">
+            Chartered Civil &amp; Structural Temporary Works Engineering across the UK. Led by David J. Miller MSc CEng MICE (ICE Reg. No. 094002192).
+          </p>
+          <p style="font-family:var(--tw-mono);font-size:12px;color:#D2CDC2;">
+            Tel: <a href="tel:+447900984900">+44 (0)7900 984900</a><br />
+            Email: <a href="mailto:david@temporaryworksconsulting.com">david@temporaryworksconsulting.com</a>
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Online Engineering Tools</h4>
+          <ul>
+            <li><a href="./">BREEAM Project Scoring Tool</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/bre470.html">BR 470 Piling Platform Calculator</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/SEATSprep">CITB SEATS Exam Prep Hub</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/rams-generator.html">Construction RAMS Generator</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/psm/">Professional Services Manager</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/tools">All Engineering Tools</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Core Engineering Services</h4>
+          <ul>
+            <li><a href="https://www.temporaryworksconsulting.com/services/working-platforms.html">Working Platforms (BR 470)</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/services/excavation-support.html">Excavation Support &amp; Propping</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/services/facade-retention.html">Facade Retention Design</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/services/formwork-falsework.html">Formwork &amp; Falsework (BS 5975)</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/services/cat-3-checks.html">Cat 2 &amp; Cat 3 Design Checks</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Standards &amp; Governance</h4>
+          <ul>
+            <li><a href="https://www.temporaryworksconsulting.com/bs-5975-guide.html">BS 5975:2019 Guide</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/cdm-2015-guide.html">CDM 2015 Guidance</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/privacy.html">Privacy Policy</a></li>
+            <li><a href="https://www.temporaryworksconsulting.com/terms.html">Terms of Business</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Temporary Works Consulting &amp; Design Ltd (Company No. 17198188). All rights reserved.</span>
+        <span>BREEAM® is a registered trademark of BRE (Building Research Establishment). Pre-assessment tool for engineering &amp; tender planning.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./assets/app.js"></script>
+</body>
+</html>
