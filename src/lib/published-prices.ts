@@ -1,4 +1,6 @@
+import { unstable_cache } from "next/cache";
 import {
+  EIA_DATA_REVALIDATE_SECONDS,
   EIA_SERIES,
   EiaFetchError,
   EiaValidationError,
@@ -11,8 +13,8 @@ import {
 } from "@/lib/eia";
 import { marketPrices, type MarketPrice } from "@/lib/data";
 
-/** How long a successful EIA overlay may be reused inside one server instance. */
-const MEMORY_TTL_MS = 6 * 60 * 60 * 1000;
+/** In-process copy of the shared snapshot. Fresh reads do not touch the network. */
+const MEMORY_TTL_MS = EIA_DATA_REVALIDATE_SECONDS * 1000;
 
 const PRICE_BOUNDS = { min: 0, max: 400 };
 const PCT_BOUNDS = { min: -50, max: 50 };
@@ -35,6 +37,8 @@ interface MemoryEntry {
 
 let memory: MemoryEntry | null = null;
 let pending: Promise<PublishedPrices> | null = null;
+let epoch = 0;
+let lastFailure: { reason: string | null; latestPeriod: string | null } | null = null;
 
 function configuredEiaKey(): boolean {
   return readEiaApiKey() !== null;
@@ -155,7 +159,9 @@ function newerPeriod(a: string | null, b: string | null): string | null {
 }
 
 async function probeSpots(): Promise<SpotProbe> {
-  const opts = { timeoutMs: 8_000, maxRetries: 1, retryBaseDelayMs: 200 };
+  // One attempt each, started together. A retry would hold a cold render for
+  // another full RWTC timeout after the first 8000ms failure.
+  const opts = { timeoutMs: 8_000, maxRetries: 0 };
   const [brentSettled, wtiSettled] = await Promise.allSettled([getBrentSpot(opts), getWtiSpot(opts)]);
   const reasons: string[] = [];
   const brent = brentSettled.status === "fulfilled" ? brentSettled.value : null;
@@ -189,47 +195,130 @@ async function probeSpots(): Promise<SpotProbe> {
     manualUpdated: newestIso(manual.length ? manual : marketPrices),
     eiaUpdated: brentMark.last_updated > wtiMark.last_updated ? brentMark.last_updated : wtiMark.last_updated,
   };
-  memory = { at: Date.now(), value };
   return { ok: true, reason: null, latestPeriod, value };
 }
 
-async function fetchOverlay(): Promise<PublishedPrices> {
-  const probe = await probeSpots();
-  return probe.value ?? manualBoard();
+class EiaProbeError extends Error {
+  readonly latestPeriod: string | null;
+  constructor(message: string, latestPeriod: string | null) {
+    super(message);
+    this.name = "EiaProbeError";
+    this.latestPeriod = latestPeriod;
+  }
 }
 
-/** Live Brent/WTI probe for /api/eia-health. Never includes the API key. */
+/** Live Brent+WTI read. Throws on failure so a bad payload is not cached. */
+async function loadFreshPrices(): Promise<PublishedPrices> {
+  const probe = await probeSpots();
+  if (!probe.value) {
+    throw new EiaProbeError(probe.reason ?? "EIA spot overlay unavailable", probe.latestPeriod);
+  }
+  return probe.value;
+}
+
+/**
+ * Shared across server instances. A fresh hit returns without calling EIA.
+ * A stale hit returns the last good snapshot and refreshes in the background.
+ * Failures throw, which leaves the previous cache entry in place.
+ */
+const loadCachedPrices = unstable_cache(loadFreshPrices, ["eia-brent-wti-v1"], {
+  revalidate: EIA_DATA_REVALIDATE_SECONDS,
+  tags: ["eia-brent-wti"],
+});
+
+function isMissingNextCache(err: unknown): boolean {
+  return err instanceof Error && err.message.includes("incrementalCache missing");
+}
+
+function remember(value: PublishedPrices, token: number): void {
+  if (token !== epoch) return;
+  memory = { at: Date.now(), value };
+  lastFailure = null;
+}
+
+function noteFailure(err: unknown, token: number): void {
+  if (token !== epoch) return;
+  const latestPeriod = err instanceof EiaProbeError ? err.latestPeriod : null;
+  const reason = redactApiKey(err instanceof Error ? err.message : String(err));
+  lastFailure = { reason, latestPeriod };
+}
+
+function refreshShared(): Promise<PublishedPrices> {
+  if (!pending) {
+    const token = epoch;
+    const run = (async () => {
+      try {
+        return await loadCachedPrices();
+      } catch (err) {
+        if (!isMissingNextCache(err)) throw err;
+        return loadFreshPrices();
+      }
+    })()
+      .then((value) => {
+        remember(value, token);
+        return value;
+      })
+      .catch((err) => {
+        noteFailure(err, token);
+        throw err;
+      })
+      .finally(() => {
+        if (pending === run) pending = null;
+      });
+    pending = run;
+  }
+  return pending;
+}
+
+function snapshotServable(value: PublishedPrices): boolean {
+  return Boolean(value.eia && value.eiaUpdated && observationFresh(value.eiaUpdated));
+}
+
+/**
+ * Brent and WTI from EIA when a key is set.
+ * A warm or stale snapshot is returned without waiting on the network.
+ * A live timeout or error serves that last good snapshot instead of desk marks.
+ */
+export function getPublishedPrices(): Promise<PublishedPrices> {
+  if (!configuredEiaKey()) return Promise.resolve(manualBoard());
+  if (memory && snapshotServable(memory.value)) {
+    if (Date.now() - memory.at >= MEMORY_TTL_MS) {
+      void refreshShared().catch(() => {});
+    }
+    return Promise.resolve(memory.value);
+  }
+  return refreshShared().catch(() => {
+    if (memory && snapshotServable(memory.value)) return memory.value;
+    return manualBoard();
+  });
+}
+
+/** Brent/WTI probe for /api/eia-health. Uses the same cache. Never includes the API key. */
 export async function checkEiaHealth(): Promise<EiaHealth> {
   if (!configuredEiaKey()) {
     return { configured: false, ok: false, reason: "EIA API key is not set", latestPeriod: null };
   }
-  const probe = await probeSpots();
+  const feed = await getPublishedPrices();
+  if (feed.eia && feed.eiaUpdated) {
+    return { configured: true, ok: true, reason: null, latestPeriod: feed.eiaUpdated.slice(0, 10) };
+  }
   return {
     configured: true,
-    ok: probe.ok,
-    reason: probe.ok ? null : probe.reason,
-    latestPeriod: probe.latestPeriod,
+    ok: false,
+    reason: lastFailure?.reason ?? "EIA spot overlay unavailable",
+    latestPeriod: lastFailure?.latestPeriod ?? null,
   };
 }
 
 /** Drops the in-process EIA overlay cache. Used by tests. */
 export function resetPublishedPricesCache(): void {
+  epoch += 1;
   memory = null;
   pending = null;
+  lastFailure = null;
 }
 
-async function loadFromEia(): Promise<PublishedPrices> {
-  if (!configuredEiaKey()) return manualBoard();
-  if (memory && Date.now() - memory.at < MEMORY_TTL_MS) return memory.value;
-  if (!pending) {
-    pending = fetchOverlay().finally(() => {
-      pending = null;
-    });
-  }
-  return pending;
-}
-
-/** Brent and WTI from EIA when a key is set; otherwise the published JSON marks. */
-export function getPublishedPrices(): Promise<PublishedPrices> {
-  return loadFromEia();
+/** Test helper: the next read should treat the in-process snapshot as stale. */
+export function expirePublishedPricesCache(): void {
+  if (memory) memory.at = Date.now() - MEMORY_TTL_MS - 1;
 }
