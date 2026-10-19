@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { GET } from "@/app/api/eia-health/route";
 import { buildEiaDataUrl, EIA_SERIES, readEiaApiKey } from "@/lib/eia";
-import { checkEiaHealth, getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
+import { checkEiaHealth, expirePublishedPricesCache, getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
 import PriceFreshness from "@/components/PriceFreshness";
 import DeskTape from "@/components/DeskTape";
 
@@ -165,6 +165,77 @@ describe("EIA spot fallback", () => {
     expect(logged(vi.mocked(console.error))).not.toMatch(/fallback/);
     const health = await checkEiaHealth();
     expect(health).toEqual({ configured: true, ok: true, reason: null, latestPeriod: period });
+  });
+
+  it("fetches Brent and WTI together and reuses a success for one to three hours", async () => {
+    process.env.EIA_API_KEY = SECRET;
+    const period = daysAgo(1);
+    let inFlight = 0;
+    let maxInFlight = 0;
+    const inits: RequestInit[] = [];
+    vi.stubGlobal("fetch", (input: RequestInfo | URL, init?: RequestInit) => {
+      inits.push(init ?? {});
+      inFlight += 1;
+      maxInFlight = Math.max(maxInFlight, inFlight);
+      const series = new URL(String(input)).searchParams.get("facets[series][]") ?? "RWTC";
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          inFlight -= 1;
+          resolve(
+            new Response(JSON.stringify(payload(series, [{ period, value: series === "RBRTE" ? 82 : 77 }])), { status: 200 })
+          );
+        }, 40);
+      });
+    });
+    const feed = await getPublishedPrices();
+    expect(maxInFlight).toBe(2);
+    expect(feed.eia).toBe(true);
+    expect(feed.prices.find((price) => price.ticker === "BRN")?.price).toBe(82);
+    expect(feed.prices.find((price) => price.ticker === "WTI")?.price).toBe(77);
+    expect(inits.length).toBeGreaterThanOrEqual(2);
+    for (const init of inits) {
+      const next = (init as { next?: { revalidate?: number }; cache?: string }).next;
+      expect(next?.revalidate).toBeGreaterThanOrEqual(3600);
+      expect(next?.revalidate).toBeLessThanOrEqual(10800);
+      expect((init as { cache?: string }).cache).not.toBe("no-store");
+    }
+
+    vi.stubGlobal("fetch", () => Promise.reject(new Error("refetch inside the fresh window")));
+    const again = await getPublishedPrices();
+    expect(again.eia).toBe(true);
+    expect(again.prices.find((price) => price.ticker === "BRN")?.price).toBe(82);
+  });
+
+  it("returns the last good print immediately when a later RWTC call hangs", async () => {
+    process.env.EIA_API_KEY = SECRET;
+    const period = daysAgo(1);
+    vi.stubGlobal("fetch", (input: RequestInfo | URL) => {
+      const series = new URL(String(input)).searchParams.get("facets[series][]") ?? "RWTC";
+      return Promise.resolve(
+        new Response(JSON.stringify(payload(series, [{ period, value: series === "RBRTE" ? 81.25 : 76.5 }])), { status: 200 })
+      );
+    });
+    const first = await getPublishedPrices();
+    expect(first.eia).toBe(true);
+
+    expirePublishedPricesCache();
+    let release: (value: Response) => void = () => {};
+    const hung = new Promise<Response>((resolve) => {
+      release = resolve;
+    });
+    vi.stubGlobal("fetch", () => hung);
+
+    const started = Date.now();
+    const feed = await getPublishedPrices();
+    expect(Date.now() - started).toBeLessThan(200);
+    expect(feed.eia).toBe(true);
+    expect(feed.prices.find((price) => price.ticker === "BRN")?.price).toBe(81.25);
+    expect(feed.prices.find((price) => price.ticker === "WTI")?.price).toBe(76.5);
+    const health = await checkEiaHealth();
+    expect(health).toEqual({ configured: true, ok: true, reason: null, latestPeriod: period });
+
+    release(new Response(JSON.stringify({ error: "slow" }), { status: 504 }));
+    await new Promise((resolve) => setTimeout(resolve, 20));
   });
 });
 

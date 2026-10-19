@@ -60,6 +60,12 @@ export class EiaValidationError extends Error {
 
 export const EIA_API_BASE = "https://api.eia.gov/v2";
 
+/**
+ * Successful spot responses are reused for two hours (inside the 1–3h window).
+ * A slow EIA call must not be required on every homepage render.
+ */
+export const EIA_DATA_REVALIDATE_SECONDS = 2 * 60 * 60;
+
 /** Default per-attempt network timeout. */
 export const DEFAULT_TIMEOUT_MS = 15_000;
 
@@ -304,9 +310,9 @@ async function attemptFetchOnce(url: string, timeoutMs: number): Promise<unknown
     const res = await fetch(url, {
       signal: controller.signal,
       headers: { Accept: "application/json" },
-      // Don't let Next's default fetch cache freeze a spot print forever.
-      // Page-level revalidate controls how often a render refetches.
-      cache: "no-store",
+      // Cache a successful body for two hours. `cache: "no-store"` made every
+      // homepage request wait on EIA, so a slow RWTC call fell back to desk marks.
+      next: { revalidate: EIA_DATA_REVALIDATE_SECONDS, tags: ["eia-spot"] },
     });
 
     if (res.ok) {

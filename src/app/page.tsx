@@ -17,7 +17,8 @@ import { getPublishedPrices } from "@/lib/published-prices";
 import type { BoardQuote } from "@/lib/desk-tape";
 import { pageMeta } from "@/lib/seo";
 
-export const revalidate = 21600;
+/** Two hours, same window as the EIA spot cache. Visitors are not held for a live call. */
+export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
   "The Crude Oracle — Daily Brent & WTI Oil Intelligence (Free)",
