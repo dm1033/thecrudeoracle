@@ -7,8 +7,9 @@ import HeroGlobe from "@/components/HeroGlobe";
 import { compassPoint, formatLatLon } from "@/lib/tankermap";
 import type { TapePlayhead } from "@/lib/desk-tape";
 import { parseGlobeShip, type GlobeShip } from "@/lib/sea-lanes";
+import type { BoardQuote } from "@/lib/desk-tape";
 
-export default function FrontScreen() {
+export default function FrontScreen({ board }: { board?: BoardQuote | null }) {
   const [ship, setShip] = useState<GlobeShip | null>(null);
   const shipRef = useRef<GlobeShip | null>(null);
   const tapeRef = useRef<TapePlayhead | null>(null);
@@ -49,7 +50,7 @@ export default function FrontScreen() {
             Ships move on the desk lanes. Offshore rigs mark the basins. Brent and WTI barrels
             replay the published price path, in dollars per barrel.
           </p>
-          <DeskTape tapeRef={tapeRef} />
+          <DeskTape tapeRef={tapeRef} board={board} />
           <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-steel-400">
             <li className="flex items-center gap-2">
               <span aria-hidden className="h-1.5 w-6 rounded-full bg-gold-400" />

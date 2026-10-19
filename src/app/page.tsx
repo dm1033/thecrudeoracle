@@ -14,6 +14,7 @@ import PriceFreshness from "@/components/PriceFreshness";
 import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { getPublishedPrices } from "@/lib/published-prices";
+import type { BoardQuote } from "@/lib/desk-tape";
 import { pageMeta } from "@/lib/seo";
 
 export const revalidate = 21600;
@@ -74,10 +75,21 @@ export default async function HomePage() {
   const feed = await getPublishedPrices();
   const heroPrices = feed.prices.slice(0, 6);
   const previewSignals = [...riskSignals.slice(0, 2), supplySignals[1], supplySignals[2]];
+  const brent = feed.prices.find((price) => price.ticker === "BRN");
+  const wti = feed.prices.find((price) => price.ticker === "WTI");
+  const board: BoardQuote | null =
+    brent && wti
+      ? {
+          brent: brent.price,
+          wti: wti.price,
+          asOf: feed.eia && feed.eiaUpdated ? feed.eiaUpdated : feed.manualUpdated,
+          live: feed.eia,
+        }
+      : null;
 
   return (
     <>
-      <FrontScreen />
+      <FrontScreen board={board} />
 
       {PAPER_FUND_PUBLISHED ? <PaperBookPanel /> : null}
 
