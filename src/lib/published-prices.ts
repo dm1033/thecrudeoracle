@@ -1,4 +1,14 @@
-import { EIA_SERIES, getBrentSpot, getWtiSpot, type DailySeriesResult } from "@/lib/eia";
+import {
+  EIA_SERIES,
+  EiaFetchError,
+  EiaValidationError,
+  getBrentSpot,
+  getWtiSpot,
+  logEiaFallback,
+  readEiaApiKey,
+  redactApiKey,
+  type DailySeriesResult,
+} from "@/lib/eia";
 import { marketPrices, type MarketPrice } from "@/lib/data";
 
 /** How long a successful EIA overlay may be reused inside one server instance. */
@@ -27,8 +37,14 @@ let memory: MemoryEntry | null = null;
 let pending: Promise<PublishedPrices> | null = null;
 
 function configuredEiaKey(): boolean {
-  const key = process.env.EIA_API_KEY?.trim();
-  return Boolean(key && key !== "replace_me");
+  return readEiaApiKey() !== null;
+}
+
+export interface EiaHealth {
+  configured: boolean;
+  ok: boolean;
+  reason: string | null;
+  latestPeriod: string | null;
 }
 
 function newestIso(prices: MarketPrice[]): string {
@@ -59,57 +75,147 @@ function observationFresh(date: string): boolean {
 /**
  * Same field mapping as scripts/update-eia-data.mjs. Returns null instead of
  * throwing so a bad series id never replaces the published desk mark.
+ * Stale and out-of-range prints are logged before the desk mark is kept.
  */
-function overlaySpot(price: MarketPrice, result: DailySeriesResult, description: string, sourceUrl: string): MarketPrice | null {
-  if (!observationFresh(result.latest.date)) return null;
+function overlaySpot(price: MarketPrice, result: DailySeriesResult, description: string, sourceUrl: string): { price: MarketPrice | null; reason: string | null } {
+  const label = `${price.ticker} ${result.latest.seriesId}`;
+  if (!observationFresh(result.latest.date)) {
+    const reason = `${label} observation ${result.latest.date} is outside the ${MAX_AGE_DAYS}-day window`;
+    logEiaFallback("stale data", reason);
+    return { price: null, reason };
+  }
   const next = Math.round(result.latest.value * 100) / 100;
-  if (!inRange(next, PRICE_BOUNDS)) return null;
-  if (!inRange(result.dailyChangePct, PCT_BOUNDS)) return null;
-  if (!inRange(result.weeklyChangePct, PCT_BOUNDS)) return null;
-  if (!inRange(result.monthlyChangePct, PCT_BOUNDS)) return null;
+  if (!inRange(next, PRICE_BOUNDS)) {
+    const reason = `${label} price ${next} is outside ${PRICE_BOUNDS.min}–${PRICE_BOUNDS.max}`;
+    logEiaFallback("out-of-range", reason);
+    return { price: null, reason };
+  }
+  if (!inRange(result.dailyChangePct, PCT_BOUNDS) || !inRange(result.weeklyChangePct, PCT_BOUNDS) || !inRange(result.monthlyChangePct, PCT_BOUNDS)) {
+    const reason =
+      `${label} percent change is outside ${PCT_BOUNDS.min}–${PCT_BOUNDS.max} ` +
+      `(daily ${result.dailyChangePct}, weekly ${result.weeklyChangePct}, monthly ${result.monthlyChangePct})`;
+    logEiaFallback("out-of-range", reason);
+    return { price: null, reason };
+  }
 
   const daily = result.dailyChangePct ?? price.daily_change;
   const trend = result.dailyChangePct === null ? price.trend : daily > 0 ? "up" : daily < 0 ? "down" : "flat";
 
   return {
-    ...price,
-    price: next,
-    daily_change: daily,
-    weekly_change: result.weeklyChangePct ?? price.weekly_change,
-    monthly_change: result.monthlyChangePct ?? price.monthly_change,
-    trend,
-    source: `EIA Open Data API — ${description}`,
-    source_url: sourceUrl,
-    last_updated: `${result.latest.date.slice(0, 10)}T00:00:00Z`,
-    data_type: "delayed",
+    price: {
+      ...price,
+      price: next,
+      daily_change: daily,
+      weekly_change: result.weeklyChangePct ?? price.weekly_change,
+      monthly_change: result.monthlyChangePct ?? price.monthly_change,
+      trend,
+      source: `EIA Open Data API — ${description}`,
+      source_url: sourceUrl,
+      last_updated: `${result.latest.date.slice(0, 10)}T00:00:00Z`,
+      data_type: "delayed",
+    },
+    reason: null,
   };
 }
 
-async function fetchOverlay(): Promise<PublishedPrices> {
-  try {
-    const opts = { timeoutMs: 8_000, maxRetries: 1, retryBaseDelayMs: 200 };
-    const [brent, wti] = await Promise.all([getBrentSpot(opts), getWtiSpot(opts)]);
-    const brentNext = overlaySpot(marketPrices.find((p) => p.ticker === "BRN")!, brent, EIA_SERIES.BRENT_SPOT.description, EIA_SERIES.BRENT_SPOT.sourcePageUrl);
-    const wtiNext = overlaySpot(marketPrices.find((p) => p.ticker === "WTI")!, wti, EIA_SERIES.WTI_SPOT.description, EIA_SERIES.WTI_SPOT.sourcePageUrl);
-    if (!brentNext || !wtiNext) return manualBoard();
-
-    const prices = marketPrices.map((price) => {
-      if (price.ticker === "BRN") return brentNext;
-      if (price.ticker === "WTI") return wtiNext;
-      return price;
-    });
-    const manual = prices.filter((price) => price.data_type !== "delayed");
-    const value: PublishedPrices = {
-      prices,
-      eia: true,
-      manualUpdated: newestIso(manual.length ? manual : marketPrices),
-      eiaUpdated: brentNext.last_updated > wtiNext.last_updated ? brentNext.last_updated : wtiNext.last_updated,
-    };
-    memory = { at: Date.now(), value };
-    return value;
-  } catch {
-    return manualBoard();
+function logThrownFallback(err: unknown): string {
+  const detail = redactApiKey(err instanceof Error ? err.message : String(err));
+  if (err instanceof EiaFetchError && /responded \d+/.test(detail)) {
+    logEiaFallback("non-200", detail);
+    return detail;
   }
+  if (err instanceof EiaValidationError && /zero observation|none had a usable/i.test(detail)) {
+    logEiaFallback("empty data", detail);
+    return detail;
+  }
+  if (/EIA API error body/i.test(detail)) {
+    logEiaFallback("non-200", detail);
+    return detail;
+  }
+  logEiaFallback("fetch error", detail);
+  return detail;
+}
+
+interface SpotProbe {
+  ok: boolean;
+  reason: string | null;
+  latestPeriod: string | null;
+  value: PublishedPrices | null;
+}
+
+function periodOf(result: DailySeriesResult | null): string | null {
+  const date = result?.latest.date?.slice(0, 10);
+  return date || null;
+}
+
+function newerPeriod(a: string | null, b: string | null): string | null {
+  if (!a) return b;
+  if (!b) return a;
+  return a > b ? a : b;
+}
+
+async function probeSpots(): Promise<SpotProbe> {
+  const opts = { timeoutMs: 8_000, maxRetries: 1, retryBaseDelayMs: 200 };
+  const [brentSettled, wtiSettled] = await Promise.allSettled([getBrentSpot(opts), getWtiSpot(opts)]);
+  const reasons: string[] = [];
+  const brent = brentSettled.status === "fulfilled" ? brentSettled.value : null;
+  const wti = wtiSettled.status === "fulfilled" ? wtiSettled.value : null;
+  if (brentSettled.status === "rejected") reasons.push(logThrownFallback(brentSettled.reason));
+  if (wtiSettled.status === "rejected") reasons.push(logThrownFallback(wtiSettled.reason));
+
+  const latestPeriod = newerPeriod(periodOf(brent), periodOf(wti));
+  const brentPrice = marketPrices.find((price) => price.ticker === "BRN");
+  const wtiPrice = marketPrices.find((price) => price.ticker === "WTI");
+  const brentNext = brent && brentPrice ? overlaySpot(brentPrice, brent, EIA_SERIES.BRENT_SPOT.description, EIA_SERIES.BRENT_SPOT.sourcePageUrl) : null;
+  const wtiNext = wti && wtiPrice ? overlaySpot(wtiPrice, wti, EIA_SERIES.WTI_SPOT.description, EIA_SERIES.WTI_SPOT.sourcePageUrl) : null;
+  const brentMark = brentNext?.price ?? null;
+  const wtiMark = wtiNext?.price ?? null;
+  if (brentNext?.reason) reasons.push(brentNext.reason);
+  if (wtiNext?.reason) reasons.push(wtiNext.reason);
+  if (!brentMark || !wtiMark) {
+    if (!reasons.length) reasons.push("Brent or WTI spot was rejected");
+    return { ok: false, reason: reasons.join("; "), latestPeriod, value: null };
+  }
+
+  const prices = marketPrices.map((price) => {
+    if (price.ticker === "BRN") return brentMark;
+    if (price.ticker === "WTI") return wtiMark;
+    return price;
+  });
+  const manual = prices.filter((price) => price.data_type !== "delayed");
+  const value: PublishedPrices = {
+    prices,
+    eia: true,
+    manualUpdated: newestIso(manual.length ? manual : marketPrices),
+    eiaUpdated: brentMark.last_updated > wtiMark.last_updated ? brentMark.last_updated : wtiMark.last_updated,
+  };
+  memory = { at: Date.now(), value };
+  return { ok: true, reason: null, latestPeriod, value };
+}
+
+async function fetchOverlay(): Promise<PublishedPrices> {
+  const probe = await probeSpots();
+  return probe.value ?? manualBoard();
+}
+
+/** Live Brent/WTI probe for /api/eia-health. Never includes the API key. */
+export async function checkEiaHealth(): Promise<EiaHealth> {
+  if (!configuredEiaKey()) {
+    return { configured: false, ok: false, reason: "EIA API key is not set", latestPeriod: null };
+  }
+  const probe = await probeSpots();
+  return {
+    configured: true,
+    ok: probe.ok,
+    reason: probe.ok ? null : probe.reason,
+    latestPeriod: probe.latestPeriod,
+  };
+}
+
+/** Drops the in-process EIA overlay cache. Used by tests. */
+export function resetPublishedPricesCache(): void {
+  memory = null;
+  pending = null;
 }
 
 async function loadFromEia(): Promise<PublishedPrices> {
@@ -123,7 +229,7 @@ async function loadFromEia(): Promise<PublishedPrices> {
   return pending;
 }
 
-/** Brent and WTI from EIA when EIA_API_KEY is set; otherwise the published JSON marks. */
+/** Brent and WTI from EIA when a key is set; otherwise the published JSON marks. */
 export function getPublishedPrices(): Promise<PublishedPrices> {
   return loadFromEia();
 }

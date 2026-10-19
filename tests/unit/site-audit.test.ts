@@ -3,7 +3,7 @@ import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { pageMeta, pageTitle } from "@/lib/seo";
 import { isValidEmail, newsletterConfig } from "@/lib/newsletter";
-import { getPublishedPrices } from "@/lib/published-prices";
+import { getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
 import { SITE } from "@/lib/site";
 
 describe("page titles", () => {
@@ -82,12 +82,17 @@ describe("newsletter config", () => {
 describe("published prices", () => {
   it("keeps the desk marks when EIA_API_KEY is not set", async () => {
     const saved = process.env.EIA_API_KEY;
+    const savedAlt = process.env.EIA_API;
     delete process.env.EIA_API_KEY;
+    delete process.env.EIA_API;
+    resetPublishedPricesCache();
     const feed = await getPublishedPrices();
     expect(feed.eia).toBe(false);
     expect(feed.manualUpdated).toBe("2026-07-15T07:00:00Z");
     expect(feed.prices.find((price) => price.ticker === "BRN")?.data_type).toBe("manual");
     if (saved === undefined) delete process.env.EIA_API_KEY;
     else process.env.EIA_API_KEY = saved;
+    if (savedAlt === undefined) delete process.env.EIA_API;
+    else process.env.EIA_API = savedAlt;
   });
 });

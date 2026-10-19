@@ -147,7 +147,9 @@ section("Layer 2: malformed responses are rejected with EiaValidationError");
 section("Config: API key required, never hardcoded, URL built correctly");
 {
   const savedKey = process.env.EIA_API_KEY;
+  const savedAlt = process.env.EIA_API;
   delete process.env.EIA_API_KEY;
+  delete process.env.EIA_API;
 
   await expectThrows(
     "getApiKey() throws EiaConfigError when EIA_API_KEY is unset",
@@ -170,13 +172,29 @@ section("Config: API key required, never hardcoded, URL built correctly");
   );
   check("buildEiaDataUrl includes the api key", parsed.searchParams.get("api_key") === "test-key-123");
   check("buildEiaDataUrl requests descending sort by period", parsed.searchParams.get("sort[0][column]") === "period");
+  check("buildEiaDataUrl sets frequency=daily", parsed.searchParams.get("frequency") === "daily");
+  check("buildEiaDataUrl requests data[0]=value", parsed.searchParams.get("data[0]") === "value");
   check(
     "redactApiKey() hides the key but keeps the rest of the URL",
     !eia.redactApiKey(url).includes("test-key-123") && eia.redactApiKey(url).includes("REDACTED")
   );
 
+  process.env.EIA_API_KEY = '  "quoted-key"  ';
+  const quoted = new URL(eia.buildEiaDataUrl(eia.EIA_SERIES.BRENT_SPOT, { length: 1 }));
+  check("quoted EIA_API_KEY is trimmed", quoted.searchParams.get("api_key") === "quoted-key");
+  check(
+    "Brent URL uses the RBRTE series facet",
+    quoted.searchParams.getAll("facets[series][]").includes("RBRTE")
+  );
+  delete process.env.EIA_API_KEY;
+  process.env.EIA_API = "  'alt-key'  ";
+  const alt = new URL(eia.buildEiaDataUrl(eia.EIA_SERIES.WTI_SPOT, { length: 1 }));
+  check("EIA_API is used when EIA_API_KEY is unset", alt.searchParams.get("api_key") === "alt-key");
+
   if (savedKey === undefined) delete process.env.EIA_API_KEY;
   else process.env.EIA_API_KEY = savedKey;
+  if (savedAlt === undefined) delete process.env.EIA_API;
+  else process.env.EIA_API = savedAlt;
 }
 
 // ============================================================================

@@ -69,6 +69,34 @@ export const DEFAULT_MAX_RETRIES = 3;
 /** Base delay for exponential backoff between retries (doubles each attempt, plus jitter). */
 export const DEFAULT_RETRY_BASE_DELAY_MS = 1_000;
 
+const PLACEHOLDER_KEYS = new Set(["replace_me"]);
+
+/**
+ * Strips surrounding whitespace and one pair of matching quotes. Netlify and
+ * Vercel sometimes store the value with a trailing newline or wrapped quotes,
+ * and EIA then rejects the request as an invalid key.
+ */
+function normalizeEiaKey(raw: string | undefined): string | null {
+  if (raw == null) return null;
+  let key = raw.trim();
+  if (
+    key.length >= 2 &&
+    ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'")))
+  ) {
+    key = key.slice(1, -1).trim();
+  }
+  if (!key || PLACEHOLDER_KEYS.has(key)) return null;
+  return key;
+}
+
+/**
+ * EIA_API_KEY is the canonical name. EIA_API is accepted when that is unset
+ * (missing, blank, quoted-empty, or the example placeholder).
+ */
+export function readEiaApiKey(): string | null {
+  return normalizeEiaKey(process.env.EIA_API_KEY) ?? normalizeEiaKey(process.env.EIA_API);
+}
+
 /**
  * Reads and validates the EIA API key from the environment. Never hardcode a
  * key in source — this throws loudly rather than silently proceeding keyless
@@ -76,10 +104,11 @@ export const DEFAULT_RETRY_BASE_DELAY_MS = 1_000;
  * network call so the error message is actionable).
  */
 export function getApiKey(): string {
-  const key = process.env.EIA_API_KEY;
-  if (!key || key.trim() === "") {
+  const key = readEiaApiKey();
+  if (!key) {
     throw new EiaConfigError(
-      "EIA_API_KEY is not set. Get a free key at https://www.eia.gov/opendata/register.php " +
+      "EIA_API_KEY is not set (EIA_API is accepted when EIA_API_KEY is unset). " +
+        "Get a free key at https://www.eia.gov/opendata/register.php " +
         "and set it in your environment (.env.local for local dev, a project env var in " +
         "Vercel/Netlify for production). See .env.example. Refusing to proceed without it."
     );
@@ -136,10 +165,9 @@ export const EIA_SERIES = {
     sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/RWTCD.htm",
     confidence: "high",
     verificationNote:
-      "RWTC is EIA's long-standing WTI Cushing daily spot series id (unchanged across the v1 -> v2 " +
-      "API migration in widespread third-party use). Confirm the v2 route path " +
-      "'petroleum/pri/spt' via https://www.eia.gov/opendata/browser/petroleum/pri/spt before " +
-      "the first production run.",
+      "Checked against EIA APIv2 docs (https://www.eia.gov/opendata/documentation.php) and the " +
+      "petroleum/pri/spt route: daily frequency, data column `value`, facet `series` = RWTC " +
+      "(Cushing, OK WTI Spot Price FOB). Query uses frequency=daily, data[0]=value, facets[series][].",
   },
   BRENT_SPOT: {
     key: "BRENT_SPOT",
@@ -152,8 +180,8 @@ export const EIA_SERIES = {
     sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/RBRTED.htm",
     confidence: "high",
     verificationNote:
-      "RBRTE is EIA's long-standing Europe Brent daily spot series id. Same route-path caveat " +
-      "as WTI_SPOT — verify via the API browser before the first production run.",
+      "Same petroleum/pri/spt route as WTI. RBRTE is the Europe Brent Spot Price FOB series id. " +
+      "Docs use facets[series][] and data[0]=value (data[]=value is equivalent).",
   },
   US_COMMERCIAL_CRUDE_STOCKS: {
     key: "US_COMMERCIAL_CRUDE_STOCKS",
@@ -203,7 +231,14 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Builds the fully-qualified EIA v2 API URL for a series, including the API key. */
+/**
+ * Builds the fully-qualified EIA v2 API URL for a series, including the API key.
+ *
+ * Spot prices (petroleum/pri/spt, series RBRTE and RWTC) follow the current
+ * APIv2 query shape from https://www.eia.gov/opendata/documentation.php:
+ * frequency, data[0]=value, facets[series][], sort[0][column]=period desc.
+ * `data[]=value` is documented as equivalent; this client sends `data[0]`.
+ */
 export function buildEiaDataUrl(seriesDef: EiaSeriesDef, opts: { length?: number } = {}): string {
   const apiKey = getApiKey();
   const length = opts.length ?? 10;
@@ -219,9 +254,20 @@ export function buildEiaDataUrl(seriesDef: EiaSeriesDef, opts: { length?: number
   return url.toString();
 }
 
-/** Same as buildEiaDataUrl but with the api_key redacted — safe to log. */
-export function redactApiKey(url: string): string {
-  return url.replace(/([?&]api_key=)[^&]+/, "$1REDACTED");
+/** Hides api_key query values, JSON echoes, and the live key itself. Safe to log. */
+export function redactApiKey(text: string): string {
+  let out = text.replace(/([?&]api_key=)[^&\s"'#]+/gi, "$1REDACTED");
+  out = out.replace(/("api_key"\s*:\s*")[^"]*"/gi, '$1REDACTED"');
+  const key = readEiaApiKey();
+  if (key && key.length >= 8) out = out.split(key).join("REDACTED");
+  return out;
+}
+
+export type EiaFallbackKind = "fetch error" | "non-200" | "empty data" | "stale data" | "out-of-range";
+
+/** One console.error line per fallback. The detail is redacted before it is written. */
+export function logEiaFallback(kind: EiaFallbackKind, detail: string): void {
+  console.error(`[eia] fallback (${kind}): ${redactApiKey(detail)}`);
 }
 
 export interface FetchRetryOptions {
@@ -279,7 +325,7 @@ async function attemptFetchOnce(url: string, timeoutMs: number): Promise<unknown
     const bodyText = await res.text().catch(() => "");
     const transient = res.status === 429 || res.status >= 500;
     throw new ClassifiedFetchError(
-      `EIA API responded ${res.status} ${res.statusText} for ${redactApiKey(url)}: ${bodyText.slice(0, 500)}`,
+      redactApiKey(`EIA API responded ${res.status} ${res.statusText} for ${url}: ${bodyText.slice(0, 500)}`),
       transient
     );
   } catch (err) {
@@ -287,9 +333,11 @@ async function attemptFetchOnce(url: string, timeoutMs: number): Promise<unknown
     const isAbort = err instanceof Error && err.name === "AbortError";
     // Network errors and timeouts are transient by nature — always retriable.
     throw new ClassifiedFetchError(
-      `EIA API request failed for ${redactApiKey(url)}: ${
-        isAbort ? `timed out after ${timeoutMs}ms` : err instanceof Error ? err.message : String(err)
-      }`,
+      redactApiKey(
+        `EIA API request failed for ${url}: ${
+          isAbort ? `timed out after ${timeoutMs}ms` : err instanceof Error ? err.message : String(err)
+        }`
+      ),
       true
     );
   } finally {
@@ -316,10 +364,17 @@ export async function fetchWithRetry(url: string, opts: FetchRetryOptions = {}):
     try {
       return await attemptFetchOnce(url, timeoutMs);
     } catch (err) {
-      if (err instanceof EiaValidationError) throw err; // never retry a parse failure
+      if (err instanceof EiaValidationError) {
+        logEiaFallback("fetch error", err.message);
+        throw err; // never retry a parse failure
+      }
       const transient = err instanceof ClassifiedFetchError ? err.transient : true;
       const fetchErr = err instanceof EiaFetchError ? err : new EiaFetchError(err instanceof Error ? err.message : String(err));
-      if (!transient || attempt === maxRetries) throw fetchErr;
+      if (!transient || attempt === maxRetries) {
+        const kind = /responded \d+/.test(fetchErr.message) ? "non-200" : "fetch error";
+        logEiaFallback(kind, fetchErr.message);
+        throw fetchErr;
+      }
       lastError = fetchErr;
     }
 
@@ -369,9 +424,10 @@ export function parseEiaResponse(json: unknown, seriesDef: EiaSeriesDef): EiaObs
   }
 
   if ("error" in json) {
-    throw new EiaValidationError(
-      `EIA API returned an error for ${seriesDef.seriesId}: ${JSON.stringify(json["error"])}`
-    );
+    const detail = `EIA API error body for ${seriesDef.seriesId}: ${JSON.stringify(json["error"])}`;
+    // Older gateway builds answered HTTP 200 with this envelope. The body is the signal.
+    logEiaFallback("non-200", detail);
+    throw new EiaValidationError(detail);
   }
 
   const response = json["response"];
@@ -385,7 +441,9 @@ export function parseEiaResponse(json: unknown, seriesDef: EiaSeriesDef): EiaObs
   }
 
   if (data.length === 0) {
-    throw new EiaValidationError(`EIA response for ${seriesDef.seriesId} contained zero observation rows`);
+    const detail = `EIA response for ${seriesDef.seriesId} contained zero observation rows`;
+    logEiaFallback("empty data", detail);
+    throw new EiaValidationError(detail);
   }
 
   const ISO_DATE = /^\d{4}-\d{2}-\d{2}/;
@@ -420,10 +478,11 @@ export function parseEiaResponse(json: unknown, seriesDef: EiaSeriesDef): EiaObs
   }
 
   if (observations.length === 0) {
-    throw new EiaValidationError(
+    const detail =
       `EIA response for ${seriesDef.seriesId} had ${data.length} row(s) but none had a usable ` +
-        `numeric value for a matching series id — refusing to guess`
-    );
+      `numeric value for a matching series id — refusing to guess`;
+    logEiaFallback("empty data", detail);
+    throw new EiaValidationError(detail);
   }
 
   // Sort newest-first regardless of what the API returned (defensive; we also

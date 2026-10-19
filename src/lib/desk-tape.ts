@@ -6,6 +6,14 @@
 
 export type TapePrint = { date: string; brent: number; wti: number };
 
+/** Homepage board quote. `asOf` is the EIA observation date when `live` is true. */
+export type BoardQuote = {
+  brent: number;
+  wti: number;
+  asOf: string;
+  live: boolean;
+};
+
 export type TapePlayhead = {
   brent: number;
   wti: number;

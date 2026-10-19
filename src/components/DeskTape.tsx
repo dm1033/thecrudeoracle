@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import chartData from "../../data/chart-data.json";
-import { playheadAt, priceBounds, seriesLine, type TapePlayhead } from "@/lib/desk-tape";
+import { playheadAt, priceBounds, seriesLine, type BoardQuote, type TapePlayhead } from "@/lib/desk-tape";
 
 const SERIES = chartData.brent_wti_30d;
 const SPAN = Math.max(1, SERIES.length - 1);
@@ -25,7 +25,7 @@ function Step({ value }: { value: number }) {
   );
 }
 
-function Barrel({ name, price, step }: { name: string; price: number; step: number }) {
+function Barrel({ name, price, step }: { name: string; price: number; step: number | null }) {
   return (
     <div className="rounded-md border border-gold-600/30 bg-ink-950/80 px-2 py-2">
       <div className="text-[10px] font-semibold uppercase tracking-wider text-steel-500">{name}</div>
@@ -39,31 +39,56 @@ function Barrel({ name, price, step }: { name: string; price: number; step: numb
           <span className="num text-base font-bold text-gold-300">{money(price)}</span>
         </div>
       </div>
-      <div className="text-[10px] text-steel-500">
-        <Step value={step} /> this print
-      </div>
+      {step === null ? null : (
+        <div className="text-[10px] text-steel-500">
+          <Step value={step} /> this print
+        </div>
+      )}
     </div>
   );
 }
 
-export default function DeskTape({ tapeRef }: { tapeRef: { current: TapePlayhead | null } }) {
+export default function DeskTape({
+  tapeRef,
+  board,
+}: {
+  tapeRef: { current: TapePlayhead | null };
+  board?: BoardQuote | null;
+}) {
   const clipId = useId().replace(/:/g, "");
   const bounds = priceBounds(SERIES);
   const [play, setPlay] = useState<TapePlayhead>(() => playheadAt(SERIES, 0));
   const [progress, setProgress] = useState(0);
   const [spoken, setSpoken] = useState(() => {
+    if (board) {
+      return `As of ${board.asOf.slice(0, 10)}: Brent ${money(board.brent)}, WTI ${money(board.wti)}`;
+    }
     const first = playheadAt(SERIES, 0);
     return `${first.date}: Brent ${money(first.brent)}, WTI ${money(first.wti)}`;
   });
 
   useEffect(() => {
+    if (board) {
+      tapeRef.current = {
+        brent: board.brent,
+        wti: board.wti,
+        date: board.asOf.slice(0, 10),
+        brentStep: 0,
+        wtiStep: 0,
+      };
+      setSpoken(
+        `As of ${board.asOf.slice(0, 10)}: Brent ${money(board.brent)}, WTI ${money(board.wti)}${
+          board.live ? ", delayed EIA spot" : ", manual desk marks"
+        }`
+      );
+    }
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
       const last = playheadAt(SERIES, SPAN);
-      tapeRef.current = last;
+      if (!board) tapeRef.current = last;
       setPlay(last);
       setProgress(SPAN);
-      setSpoken(`${last.date}: Brent ${money(last.brent)}, WTI ${money(last.wti)}`);
+      if (!board) setSpoken(`${last.date}: Brent ${money(last.brent)}, WTI ${money(last.wti)}`);
       return;
     }
     let frame = 0;
@@ -74,13 +99,13 @@ export default function DeskTape({ tapeRef }: { tapeRef: { current: TapePlayhead
       const cycle = ((now - start) % LOOP_MS) / LOOP_MS;
       const t = cycle * SPAN;
       const next = playheadAt(SERIES, t);
-      tapeRef.current = next;
+      if (!board) tapeRef.current = next;
       if (now - lastUi > 80) {
         lastUi = now;
         setProgress(t);
         setPlay(next);
       }
-      if (next.date !== lastDate) {
+      if (!board && next.date !== lastDate) {
         lastDate = next.date;
         setSpoken(`${next.date}: Brent ${money(next.brent)}, WTI ${money(next.wti)}`);
       }
@@ -88,7 +113,7 @@ export default function DeskTape({ tapeRef }: { tapeRef: { current: TapePlayhead
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [tapeRef]);
+  }, [tapeRef, board]);
 
   const brent = seriesLine(
     SERIES.map((row) => row.brent),
@@ -106,12 +131,21 @@ export default function DeskTape({ tapeRef }: { tapeRef: { current: TapePlayhead
   );
   const reveal = (progress / SPAN) * 320;
 
+  const brentPrice = board?.brent ?? play.brent;
+  const wtiPrice = board?.wti ?? play.wti;
+
   return (
     <div className="mt-4">
       <div className="grid grid-cols-2 gap-2">
-        <Barrel name="Brent" price={play.brent} step={play.brentStep} />
-        <Barrel name="WTI" price={play.wti} step={play.wtiStep} />
+        <Barrel name="Brent" price={brentPrice} step={board ? null : play.brentStep} />
+        <Barrel name="WTI" price={wtiPrice} step={board ? null : play.wtiStep} />
       </div>
+      {board ? (
+        <p className="mt-2 text-[11px] leading-relaxed text-steel-300">
+          As of <time dateTime={board.asOf}>{board.asOf.slice(0, 10)}</time>
+          {board.live ? " · delayed EIA spot" : " · manual desk marks"}
+        </p>
+      ) : null}
       <figure className="mt-3">
         <figcaption className="flex items-baseline justify-between gap-2 text-[10px] uppercase tracking-wider text-steel-500">
           <span>Brent / WTI · USD/bbl</span>
