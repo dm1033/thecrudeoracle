@@ -64,7 +64,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How much does it cost?",
-    a: "Nothing. The Crude Oracle is now completely free — the former £299.99/month subscription has been retired and the paywall removed. Every dashboard, briefing, watchlist and tool is open to everyone.",
+    a: "Nothing. The Crude Oracle is free. Every dashboard, briefing, watchlist and tool is open.",
   },
   {
     q: "How often is the intelligence updated?",
@@ -90,7 +90,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <FrontScreen board={board} />
+      <FrontScreen board={board} tape={feed.brentWtiHistory} />
 
       {PAPER_FUND_PUBLISHED ? <PaperBookPanel /> : null}
 
@@ -118,7 +118,7 @@ export default async function HomePage() {
         </div>
         <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <BottomLineCard />
+            <BottomLineCard feed={feed} />
           </div>
           <div className="card flex flex-col justify-between border-navy-700 bg-navy-900/40">
             <div>
@@ -126,7 +126,7 @@ export default async function HomePage() {
                 All free — no paywall
               </h3>
               <ul className="mt-4 space-y-2 text-sm text-steel-400">
-                <li>· Full price complex: Brent, WTI, Dubai, NBP, TTF, Henry Hub, LNG marker</li>
+                <li>· Brent, WTI and Henry Hub from the EIA daily spot</li>
                 <li>· Supply, demand and risk signal grids</li>
                 <li>· Daily briefing and bottom line</li>
                 <li>· Investment watchlist and company intelligence</li>
@@ -222,8 +222,7 @@ export default async function HomePage() {
               Open the Full Dashboard — Free
             </Link>
             <p className="mt-4 text-xs text-steel-500">
-              The former £299.99/month subscription has been retired. Not financial advice —
-              capital at risk.
+              Free. Sourced. On time. Information only, not investment advice.
             </p>
           </div>
         </div>

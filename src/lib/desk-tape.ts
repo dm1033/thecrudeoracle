@@ -1,7 +1,7 @@
 /**
  * Homepage trading tape.
- * The path is the published indicative Brent/WTI series. The playhead replays
- * those prints. It does not invent a live quote.
+ * The path is the EIA Brent/WTI daily spot history when that feed is loaded.
+ * The playhead replays those prints. It does not invent a quote.
  */
 
 export type TapePrint = { date: string; brent: number; wti: number };

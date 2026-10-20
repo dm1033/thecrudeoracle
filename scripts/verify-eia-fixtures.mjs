@@ -386,7 +386,14 @@ function runUpdateScript({ dataDir, fixtureDir, extraArgs = [] }) {
   check("WTI last_updated stamped from the fixture's observation date", wti.last_updated.startsWith(latestDate), wti.last_updated);
   check("WTI price is a finite positive number", Number.isFinite(wti.price) && wti.price > 0, String(wti.price));
   check("BRN row also updated", brn.data_type === "delayed" && brn.last_updated.startsWith(latestDate));
-  check("Dubai Crude row untouched (not an EIA target)", parsedPrices.prices.find((p) => p.ticker === "DUB").data_type === "manual");
+  check(
+    "Dubai, NBP and TTF stay off the price file",
+    ["DUB", "NBP", "TTF"].every((ticker) => !parsedPrices.prices.some((p) => p.ticker === ticker))
+  );
+  check(
+    "Henry Hub row is not rewritten by the crude script",
+    parsedPrices.prices.find((p) => p.ticker === "HH").data_type === "manual"
+  );
 
   const parsedBalance = JSON.parse(afterFirstBalance);
   const usRow = parsedBalance.stocks.find((r) => r.metric === "US commercial crude stocks");

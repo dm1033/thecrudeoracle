@@ -1,5 +1,7 @@
 import type { MarketPrice } from "@/lib/data";
 import DataMeta from "@/components/DataMeta";
+import PriceStamp from "@/components/PriceStamp";
+import { priceSourceLabel } from "@/lib/price-stamp";
 
 function Change({ label, value }: { label: string; value: number }) {
   const color = value > 0 ? "text-gain" : value < 0 ? "text-loss" : "text-steel-500";
@@ -33,6 +35,7 @@ export default function MarketCard({ price }: { price: MarketPrice }) {
         <Change label="Weekly" value={price.weekly_change} />
         <Change label="Monthly" value={price.monthly_change} />
       </div>
+      <PriceStamp lastUpdated={price.last_updated} sourceLabel={priceSourceLabel(price)} />
       <DataMeta
         source={price.source}
         sourceUrl={price.source_url}

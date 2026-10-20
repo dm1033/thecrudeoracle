@@ -5,20 +5,35 @@ import {
   EiaFetchError,
   EiaValidationError,
   getBrentSpot,
+  getHenryHubSpot,
   getWtiSpot,
   logEiaFallback,
   readEiaApiKey,
   redactApiKey,
-  type DailySeriesResult,
+  type DailySpotFetch,
+  type EiaObservation,
 } from "@/lib/eia";
 import { marketPrices, type MarketPrice } from "@/lib/data";
+import type { TapePrint } from "@/lib/desk-tape";
 
 /** In-process copy of the shared snapshot. Fresh reads do not touch the network. */
 const MEMORY_TTL_MS = EIA_DATA_REVALIDATE_SECONDS * 1000;
 
 const PRICE_BOUNDS = { min: 0, max: 400 };
+/** Henry Hub spot in $/MMBtu. Tighter than crude so an oil series cannot be labelled as gas. */
+const HENRY_HUB_BOUNDS = { min: 0.5, max: 40 };
 const PCT_BOUNDS = { min: -50, max: 50 };
-const MAX_AGE_DAYS = 10;
+/**
+ * Hard reject for a print too old to overlay. The visible stale flag is 7 days
+ * (see PriceStamp). A print inside this window is still shown, and flagged
+ * when it is older than 7 days, instead of being swapped for a July desk mark.
+ */
+const MAX_AGE_DAYS = 21;
+
+export interface HubPrint {
+  date: string;
+  value: number;
+}
 
 export interface PublishedPrices {
   prices: MarketPrice[];
@@ -26,8 +41,12 @@ export interface PublishedPrices {
   eia: boolean;
   /** Newest manual desk mark still on the board (ISO). */
   manualUpdated: string;
-  /** Observation time of the EIA overlay, when `eia` is true. */
+  /** Observation time of the Brent/WTI EIA overlay, when `eia` is true. */
   eiaUpdated: string | null;
+  /** Chronological EIA Brent and WTI prints. Empty when that overlay is off. */
+  brentWtiHistory: TapePrint[];
+  /** Chronological EIA Henry Hub prints. Empty when that series did not overlay. */
+  henryHubHistory: HubPrint[];
 }
 
 interface MemoryEntry {
@@ -61,7 +80,31 @@ function manualBoard(): PublishedPrices {
     eia: false,
     manualUpdated: newestIso(marketPrices),
     eiaUpdated: null,
+    brentWtiHistory: [],
+    henryHubHistory: [],
   };
+}
+
+function round2(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+function brentWtiHistory(brent: readonly EiaObservation[], wti: readonly EiaObservation[]): TapePrint[] {
+  const wtiByDate = new Map(wti.map((row) => [row.date, row.value]));
+  const points: TapePrint[] = [];
+  for (const row of brent) {
+    const wtiValue = wtiByDate.get(row.date);
+    if (wtiValue == null) continue;
+    points.push({ date: row.date, brent: round2(row.value), wti: round2(wtiValue) });
+  }
+  points.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return points;
+}
+
+function hubHistory(observations: readonly EiaObservation[]): HubPrint[] {
+  return observations
+    .map((row) => ({ date: row.date, value: round2(row.value) }))
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 }
 
 function inRange(value: number | null, bounds: { min: number; max: number }): boolean {
@@ -81,16 +124,22 @@ function observationFresh(date: string): boolean {
  * throwing so a bad series id never replaces the published desk mark.
  * Stale and out-of-range prints are logged before the desk mark is kept.
  */
-function overlaySpot(price: MarketPrice, result: DailySeriesResult, description: string, sourceUrl: string): { price: MarketPrice | null; reason: string | null } {
+function overlaySpot(
+  price: MarketPrice,
+  result: DailySpotFetch,
+  description: string,
+  sourceUrl: string,
+  bounds: { min: number; max: number } = PRICE_BOUNDS
+): { price: MarketPrice | null; reason: string | null } {
   const label = `${price.ticker} ${result.latest.seriesId}`;
   if (!observationFresh(result.latest.date)) {
     const reason = `${label} observation ${result.latest.date} is outside the ${MAX_AGE_DAYS}-day window`;
     logEiaFallback("stale data", reason);
     return { price: null, reason };
   }
-  const next = Math.round(result.latest.value * 100) / 100;
-  if (!inRange(next, PRICE_BOUNDS)) {
-    const reason = `${label} price ${next} is outside ${PRICE_BOUNDS.min}–${PRICE_BOUNDS.max}`;
+  const next = round2(result.latest.value);
+  if (!inRange(next, bounds)) {
+    const reason = `${label} price ${next} is outside ${bounds.min}–${bounds.max}`;
     logEiaFallback("out-of-range", reason);
     return { price: null, reason };
   }
@@ -147,7 +196,7 @@ interface SpotProbe {
   value: PublishedPrices | null;
 }
 
-function periodOf(result: DailySeriesResult | null): string | null {
+function periodOf(result: DailySpotFetch | null): string | null {
   const date = result?.latest.date?.slice(0, 10);
   return date || null;
 }
@@ -162,23 +211,38 @@ async function probeSpots(): Promise<SpotProbe> {
   // One attempt each, started together. A retry would hold a cold render for
   // another full RWTC timeout after the first 8000ms failure.
   const opts = { timeoutMs: 8_000, maxRetries: 0 };
-  const [brentSettled, wtiSettled] = await Promise.allSettled([getBrentSpot(opts), getWtiSpot(opts)]);
+  const [brentSettled, wtiSettled, hubSettled] = await Promise.allSettled([
+    getBrentSpot(opts),
+    getWtiSpot(opts),
+    getHenryHubSpot(opts),
+  ]);
   const reasons: string[] = [];
   const brent = brentSettled.status === "fulfilled" ? brentSettled.value : null;
   const wti = wtiSettled.status === "fulfilled" ? wtiSettled.value : null;
+  const hub = hubSettled.status === "fulfilled" ? hubSettled.value : null;
   if (brentSettled.status === "rejected") reasons.push(logThrownFallback(brentSettled.reason));
   if (wtiSettled.status === "rejected") reasons.push(logThrownFallback(wtiSettled.reason));
+  if (hubSettled.status === "rejected") reasons.push(logThrownFallback(hubSettled.reason));
 
-  const latestPeriod = newerPeriod(periodOf(brent), periodOf(wti));
+  const latestPeriod = newerPeriod(newerPeriod(periodOf(brent), periodOf(wti)), periodOf(hub));
   const brentPrice = marketPrices.find((price) => price.ticker === "BRN");
   const wtiPrice = marketPrices.find((price) => price.ticker === "WTI");
+  const hubPrice = marketPrices.find((price) => price.ticker === "HH");
   const brentNext = brent && brentPrice ? overlaySpot(brentPrice, brent, EIA_SERIES.BRENT_SPOT.description, EIA_SERIES.BRENT_SPOT.sourcePageUrl) : null;
   const wtiNext = wti && wtiPrice ? overlaySpot(wtiPrice, wti, EIA_SERIES.WTI_SPOT.description, EIA_SERIES.WTI_SPOT.sourcePageUrl) : null;
+  const hubNext =
+    hub && hubPrice
+      ? overlaySpot(hubPrice, hub, EIA_SERIES.HENRY_HUB_SPOT.description, EIA_SERIES.HENRY_HUB_SPOT.sourcePageUrl, HENRY_HUB_BOUNDS)
+      : null;
   const brentMark = brentNext?.price ?? null;
   const wtiMark = wtiNext?.price ?? null;
+  const hubMark = hubNext?.price ?? null;
   if (brentNext?.reason) reasons.push(brentNext.reason);
   if (wtiNext?.reason) reasons.push(wtiNext.reason);
-  if (!brentMark || !wtiMark) {
+  // Henry Hub fails on its own. A gas miss is already logged inside overlaySpot
+  // or logThrownFallback, and it must not drop a good Brent/WTI print.
+  if (!brent || !wti || !brentMark || !wtiMark) {
+    if (hubNext?.reason) reasons.push(hubNext.reason);
     if (!reasons.length) reasons.push("Brent or WTI spot was rejected");
     return { ok: false, reason: reasons.join("; "), latestPeriod, value: null };
   }
@@ -186,6 +250,7 @@ async function probeSpots(): Promise<SpotProbe> {
   const prices = marketPrices.map((price) => {
     if (price.ticker === "BRN") return brentMark;
     if (price.ticker === "WTI") return wtiMark;
+    if (price.ticker === "HH" && hubMark) return hubMark;
     return price;
   });
   const manual = prices.filter((price) => price.data_type !== "delayed");
@@ -194,6 +259,8 @@ async function probeSpots(): Promise<SpotProbe> {
     eia: true,
     manualUpdated: newestIso(manual.length ? manual : marketPrices),
     eiaUpdated: brentMark.last_updated > wtiMark.last_updated ? brentMark.last_updated : wtiMark.last_updated,
+    brentWtiHistory: brentWtiHistory(brent.observations, wti.observations),
+    henryHubHistory: hubMark && hub ? hubHistory(hub.observations) : [],
   };
   return { ok: true, reason: null, latestPeriod, value };
 }
@@ -221,7 +288,7 @@ async function loadFreshPrices(): Promise<PublishedPrices> {
  * A stale hit returns the last good snapshot and refreshes in the background.
  * Failures throw, which leaves the previous cache entry in place.
  */
-const loadCachedPrices = unstable_cache(loadFreshPrices, ["eia-brent-wti-v1"], {
+const loadCachedPrices = unstable_cache(loadFreshPrices, ["eia-brent-wti-hh-v1"], {
   revalidate: EIA_DATA_REVALIDATE_SECONDS,
   tags: ["eia-brent-wti"],
 });

@@ -80,9 +80,10 @@ export default function AboutPage() {
 
           <h2>Coverage</h2>
           <p>
-            Crude benchmarks (Brent, WTI, Dubai) · European and UK gas (TTF, NBP) · US gas (Henry
-            Hub) · LNG and shipping · OPEC+ and supply risk · demand signals · energy equities
-            across twelve segments · UK energy security and the North Sea.
+            Crude benchmarks (Brent and WTI, from the EIA daily spot) · US gas (Henry Hub, from the
+            EIA) · LNG and shipping · OPEC+ and supply risk · demand signals · energy equities
+            across twelve segments · UK energy security and the North Sea. Dubai, UK NBP and Dutch
+            TTF are not priced here.
           </p>
         </div>
         <SubscribeCTA />

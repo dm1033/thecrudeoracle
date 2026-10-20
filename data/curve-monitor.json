@@ -146,20 +146,6 @@
       "data_type": "manual"
     },
     {
-      "instrument": "Brent–Dubai",
-      "value": "+1.50",
-      "unit": "USD/bbl",
-      "change": "-0.2 w/w",
-      "valuation": "cheap",
-      "momentum": "loosening",
-      "physical_check": "supported",
-      "note": "Narrow vs history because OPEC+ cuts are concentrated in medium-sour barrels — sour tightness props Dubai. Sweet-sour economics favour running sours where possible.",
-      "source": "Desk mark (indicative)",
-      "source_url": "https://www.opec.org/",
-      "last_updated": "2026-07-04",
-      "data_type": "manual"
-    },
-    {
       "instrument": "Midland–Cushing (WTI)",
       "value": "+1.10",
       "unit": "USD/bbl",

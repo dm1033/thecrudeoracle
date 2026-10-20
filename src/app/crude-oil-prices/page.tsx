@@ -9,11 +9,12 @@ import JsonLd from "@/components/JsonLd";
 import PriceFreshness from "@/components/PriceFreshness";
 import { getPublishedPrices } from "@/lib/published-prices";
 import { SITE } from "@/lib/site";
-import { BrentWtiChart, InventoriesChart } from "@/components/charts/Charts";
+import { BrentWtiChart } from "@/components/charts/Charts";
+import UnlicensedMarks from "@/components/UnlicensedMarks";
 
 export const metadata: Metadata = pageMeta(
-  "Crude Oil Prices — Brent, WTI & Dubai Analysis",
-  "Indicative Brent, WTI and Dubai crude oil prices with daily, weekly and monthly moves, 30-day trends, inventory context and clear source labelling. Brent crude analysis for investors.",
+  "Crude Oil Prices — Brent and WTI",
+  "Brent and WTI daily spot prices from the U.S. EIA, with the trade date, source and a lag note. Dubai is not shown.",
   "/crude-oil-prices"
 );
 
@@ -32,11 +33,11 @@ const FAQ_ITEMS = [
   },
 ];
 
-export const revalidate = 21600;
+export const revalidate = 7200;
 
 export default async function CrudeOilPricesPage() {
   const feed = await getPublishedPrices();
-  const crude = feed.prices.filter((p) => ["BRN", "WTI", "DUB"].includes(p.ticker));
+  const crude = feed.prices.filter((p) => ["BRN", "WTI"].includes(p.ticker));
   const dxy = feed.prices.find((p) => p.ticker === "DXY*");
 
   return (
@@ -45,21 +46,21 @@ export default async function CrudeOilPricesPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "Dataset",
-          name: "Indicative Brent, WTI and Dubai crude prices",
+          name: "Brent and WTI crude prices",
           description:
-            "Indicative crude benchmark prices published by The Crude Oracle. Each series is labelled with its source, timestamp and whether it is a manual desk mark or a delayed public print. Not a live exchange feed and not financial advice.",
+            "Brent and WTI daily spot prices from the U.S. EIA. Each card shows the trade date and source. Not a live exchange feed and not financial advice.",
           url: `${SITE.url}/crude-oil-prices`,
           creator: { "@id": `${SITE.url}/#organization` },
           dateModified: feed.eiaUpdated ?? feed.manualUpdated,
           isAccessibleForFree: true,
-          license: `${SITE.url}/data-disclaimer`,
-          variableMeasured: ["Brent crude", "WTI crude", "Dubai crude"],
+          license: `${SITE.url}/data-sources`,
+          variableMeasured: ["Brent crude", "WTI crude"],
         }}
       />
       <PageHeader
         eyebrow="Market Data · Indicative"
         title="Crude Oil Prices"
-        intro="Brent, WTI and Dubai benchmarks with daily, weekly and monthly moves — plus the dollar and inventory context that drives them. All values are indicative and source-labelled."
+        intro="Brent and WTI from the EIA daily spot, with the trade date on every card. Dubai is a licensed assessment and is not shown."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="benchmarks-h">
@@ -75,13 +76,14 @@ export default async function CrudeOilPricesPage() {
           </div>
         </section>
 
-        <section aria-labelledby="trend-h" className="grid gap-4 lg:grid-cols-2">
+        <section aria-labelledby="trend-h">
           <h2 id="trend-h" className="sr-only">
-            Price trends
+            Price trend
           </h2>
-          <BrentWtiChart />
-          <InventoriesChart />
+          <BrentWtiChart points={feed.brentWtiHistory} />
         </section>
+
+        <UnlicensedMarks />
 
         <section className="prose-dark max-w-3xl">
           <h2>Reading the crude complex</h2>

@@ -33,6 +33,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/terms-of-use", priority: 0.2, changeFrequency: "yearly" },
   { path: "/financial-disclaimer", priority: 0.2, changeFrequency: "yearly" },
   { path: "/data-disclaimer", priority: 0.2, changeFrequency: "yearly" },
+  { path: "/data-sources", priority: 0.6, changeFrequency: "monthly" },
   { path: "/editorial-policy", priority: 0.3, changeFrequency: "yearly" },
 ];
 

@@ -45,6 +45,16 @@ describe("data/market-prices.json", () => {
     );
   });
 
+  it("does not publish licensed Dubai, NBP or TTF marks", () => {
+    const tickers = data.prices.map((p) => p.ticker);
+    expect(tickers).not.toContain("DUB");
+    expect(tickers).not.toContain("NBP");
+    expect(tickers).not.toContain("TTF");
+    expect(tickers).toContain("HH");
+    expect(tickers).toContain("BRN");
+    expect(tickers).toContain("WTI");
+  });
+
   it("every ticker is unique (used as a lookup key by getPrice())", () => {
     const tickers = data.prices.map((p) => p.ticker);
     expect(new Set(tickers).size).toBe(tickers.length);

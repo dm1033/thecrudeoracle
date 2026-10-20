@@ -7,7 +7,6 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import SignalCardView from "@/components/SignalCardView";
 import FAQ from "@/components/FAQ";
-import { OpecProductionChart, RigCountChart } from "@/components/charts/Charts";
 
 export const metadata: Metadata = pageMeta(
   "OPEC & Supply Risk Monitor",
@@ -78,10 +77,10 @@ export default function OpecSupplyRiskPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-2">
-          <OpecProductionChart />
-          <RigCountChart />
-        </section>
+        <p className="max-w-3xl text-sm leading-relaxed text-steel-400">
+          OPEC production and rig-count charts are not shown. The previous charts were a sample
+          series, not an EIA or Baker Hughes feed.
+        </p>
 
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA

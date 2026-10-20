@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
-import { formatUpdated, riskSignals } from "@/lib/data";
+import { riskSignals } from "@/lib/data";
 import { getPublishedPrices } from "@/lib/published-prices";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
@@ -8,18 +8,19 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 import MarketCard from "@/components/MarketCard";
 import SignalCardView from "@/components/SignalCardView";
 import FAQ from "@/components/FAQ";
-import { GasTrendChart } from "@/components/charts/Charts";
+import { HenryHubChart } from "@/components/charts/Charts";
+import UnlicensedMarks from "@/components/UnlicensedMarks";
 
 export const metadata: Metadata = pageMeta(
-  "Gas & LNG Dashboard — NBP, TTF, Henry Hub Intelligence",
-  "UK NBP, European TTF, US Henry Hub and Asian LNG marker signals with trends, sources and LNG investment intelligence for investors and energy professionals.",
+  "Gas & LNG — Henry Hub from the EIA",
+  "Henry Hub natural gas daily spot from the U.S. EIA (series RNGWHHD), with the trade date and source. UK NBP and Dutch TTF are not shown.",
   "/gas-lng"
 );
 
 const FAQ_ITEMS = [
   {
-    q: "Why do UK and European gas prices track each other?",
-    a: "Britain and continental Europe are physically connected by interconnectors and compete for the same LNG cargoes. NBP and TTF therefore usually move together, with spreads reflecting interconnector capacity, storage and local weather.",
+    q: "Why are NBP and TTF not on this page?",
+    a: "UK NBP and Dutch TTF are ICE prices. This site does not republish licensed exchange marks. Henry Hub is shown because the U.S. EIA publishes that spot in the public domain.",
   },
   {
     q: "What is the JKM LNG marker?",
@@ -31,11 +32,11 @@ const FAQ_ITEMS = [
   },
 ];
 
-export const revalidate = 21600;
+export const revalidate = 7200;
 
 export default async function GasLngPage() {
   const feed = await getPublishedPrices();
-  const gas = feed.prices.filter((p) => ["NBP", "TTF", "HH", "JKM*"].includes(p.ticker));
+  const gas = feed.prices.filter((p) => ["HH", "JKM*"].includes(p.ticker));
   const gasUpdated = gas.reduce((best, price) => (price.last_updated > best ? price.last_updated : best), gas[0]?.last_updated ?? "");
   const lngSignal = riskSignals.find((s) => s.id === "lng-signal");
 
@@ -44,7 +45,7 @@ export default async function GasLngPage() {
       <PageHeader
         eyebrow="Market Data · Indicative"
         title="Gas / LNG Dashboard"
-        intro="UK NBP, European TTF, US Henry Hub and the Asian LNG marker — the four prices that set the global gas balance, with the signals that connect them."
+        intro="Henry Hub from the EIA daily spot. UK NBP and Dutch TTF are licensed ICE marks and are not shown. The Asian LNG marker, when present, is a labelled placeholder."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="gas-h">
@@ -53,8 +54,8 @@ export default async function GasLngPage() {
           </h2>
           {gasUpdated && (
             <p className="mt-2 text-sm text-steel-300">
-              Last updated <time dateTime={gasUpdated}>{formatUpdated(gasUpdated)}</time>. Manual desk marks. This is
-              not a live exchange feed.
+              Each card carries its own trade date. Henry Hub uses the EIA print when that feed is loaded. Information
+              only, not investment advice.
             </p>
           )}
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -66,7 +67,7 @@ export default async function GasLngPage() {
 
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <GasTrendChart />
+            <HenryHubChart points={feed.henryHubHistory.map((point) => ({ date: point.date, hh: point.value }))} />
           </div>
           {lngSignal && <SignalCardView card={lngSignal} />}
         </section>
@@ -74,14 +75,13 @@ export default async function GasLngPage() {
         <section className="prose-dark max-w-3xl">
           <h2>The global gas system in one paragraph</h2>
           <p>
-            Gas is now a globally arbitraged market: US Henry Hub sets the cost of new LNG supply,
-            European hubs (TTF, NBP) set the price of security, and Asian demand sets the
-            competition for cargoes. The spreads between these hubs — minus freight and
-            regasification — decide where every flexible cargo sails. The daily briefing covers
-            this arbitrage picture, storage trajectories and LNG equity implications, free.
+            US Henry Hub, published by the EIA, is the public price this page can show. European
+            hub prices are exchange marks and are not republished here. The daily briefing stays
+            factual and does not recommend gas equities.
           </p>
         </section>
 
+        <UnlicensedMarks />
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA />
         <DisclaimerBlock />

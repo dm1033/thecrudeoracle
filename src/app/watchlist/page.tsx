@@ -6,7 +6,6 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 import FreshnessBadge from "@/components/FreshnessBadge";
 import { DataTypeBadge } from "@/components/DataMeta";
-import { WatchlistPerformanceChart } from "@/components/charts/Charts";
 import { isSampleInstrument } from "@/lib/sample-marks";
 
 export const metadata: Metadata = pageMeta(
@@ -102,7 +101,6 @@ function WatchlistContent() {
 
   return (
     <div className="space-y-10">
-      <WatchlistPerformanceChart />
       {watchlistCategories.map((cat) => {
         const companies = publishedCompanies.filter((c) => c.category === cat);
         if (companies.length === 0) return null;

@@ -17,6 +17,12 @@ function daysAgo(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+function spotValue(series: string, brent: number, wti: number, hub = 3.12): number {
+  if (series === "RBRTE") return brent;
+  if (series === "RNGWHHD") return hub;
+  return wti;
+}
+
 function payload(series: string, rows: Array<{ period: string; value: number }>) {
   return {
     response: {
@@ -154,7 +160,7 @@ describe("EIA spot fallback", () => {
       expect(url.searchParams.get("api_key")).toBe(SECRET);
       const series = url.searchParams.get("facets[series][]") ?? "RWTC";
       return Promise.resolve(
-        new Response(JSON.stringify(payload(series, [{ period, value: series === "RBRTE" ? 81.25 : 76.5 }])), { status: 200 })
+        new Response(JSON.stringify(payload(series, [{ period, value: spotValue(series, 81.25, 76.5) }])), { status: 200 })
       );
     });
     const feed = await getPublishedPrices();
@@ -182,13 +188,13 @@ describe("EIA spot fallback", () => {
         setTimeout(() => {
           inFlight -= 1;
           resolve(
-            new Response(JSON.stringify(payload(series, [{ period, value: series === "RBRTE" ? 82 : 77 }])), { status: 200 })
+            new Response(JSON.stringify(payload(series, [{ period, value: spotValue(series, 82, 77) }])), { status: 200 })
           );
         }, 40);
       });
     });
     const feed = await getPublishedPrices();
-    expect(maxInFlight).toBe(2);
+    expect(maxInFlight).toBe(3);
     expect(feed.eia).toBe(true);
     expect(feed.prices.find((price) => price.ticker === "BRN")?.price).toBe(82);
     expect(feed.prices.find((price) => price.ticker === "WTI")?.price).toBe(77);
@@ -212,7 +218,7 @@ describe("EIA spot fallback", () => {
     vi.stubGlobal("fetch", (input: RequestInfo | URL) => {
       const series = new URL(String(input)).searchParams.get("facets[series][]") ?? "RWTC";
       return Promise.resolve(
-        new Response(JSON.stringify(payload(series, [{ period, value: series === "RBRTE" ? 81.25 : 76.5 }])), { status: 200 })
+        new Response(JSON.stringify(payload(series, [{ period, value: spotValue(series, 81.25, 76.5) }])), { status: 200 })
       );
     });
     const first = await getPublishedPrices();
@@ -263,12 +269,16 @@ describe("homepage as-of date", () => {
           eia: true,
           manualUpdated: "2026-07-15T07:00:00Z",
           eiaUpdated: "2026-10-16T00:00:00Z",
+          brentWtiHistory: [],
+          henryHubHistory: [],
         }}
       />
     );
     const stamp = screen.getByText("2026-10-16");
     expect(stamp.closest("time")?.getAttribute("dateTime")).toBe("2026-10-16T00:00:00Z");
     expect(screen.getByText(/Brent and WTI as of/i)).toBeTruthy();
+    expect(screen.getByText(/Source: EIA/i)).toBeTruthy();
+    expect(screen.getByText(/Information only, not investment advice/i)).toBeTruthy();
   });
 
   it("shows the manual as-of date when the EIA overlay is off", () => {
@@ -279,11 +289,13 @@ describe("homepage as-of date", () => {
           eia: false,
           manualUpdated: "2026-07-15T07:00:00Z",
           eiaUpdated: null,
+          brentWtiHistory: [],
+          henryHubHistory: [],
         }}
       />
     );
     expect(screen.getByText("2026-07-15").closest("time")?.getAttribute("dateTime")).toBe("2026-07-15T07:00:00Z");
-    expect(screen.getByText(/manual desk marks/i)).toBeTruthy();
+    expect(screen.getByText(/desk marks/i)).toBeTruthy();
   });
 
   it("shows the board as-of date on the hero tape", () => {

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "The Crude Oracle market price data. All values are SAMPLE / INDICATIVE placeholders pending a licensed data feed. Edit manually or replace with API integration. See docs/DAILY_UPDATE_GUIDE.md.",
+    "description": "Price board. Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) are overlaid from the EIA Open Data API when a key is set. Dubai, NBP and TTF are not published. Remaining rows are labelled placeholders.",
     "last_published": "2026-07-15T07:00:00Z",
     "status": "published"
   },
@@ -30,48 +30,6 @@
       "trend": "up",
       "source": "NYMEX via EIA (indicative)",
       "source_url": "https://www.eia.gov/petroleum/",
-      "last_updated": "2026-07-15T07:00:00Z",
-      "data_type": "manual"
-    },
-    {
-      "asset": "Dubai Crude",
-      "ticker": "DUB",
-      "price": 77.55,
-      "currency": "USD/bbl",
-      "daily_change": 0.85,
-      "weekly_change": 1.4,
-      "monthly_change": 0.6,
-      "trend": "up",
-      "source": "Assessment (indicative)",
-      "source_url": "https://www.eia.gov/petroleum/",
-      "last_updated": "2026-07-15T07:00:00Z",
-      "data_type": "manual"
-    },
-    {
-      "asset": "UK Natural Gas (NBP)",
-      "ticker": "NBP",
-      "price": 91.1,
-      "currency": "p/therm",
-      "daily_change": -1.41,
-      "weekly_change": -1.4,
-      "monthly_change": 3.9,
-      "trend": "mixed",
-      "source": "National Gas / DESNZ (indicative)",
-      "source_url": "https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero",
-      "last_updated": "2026-07-15T07:00:00Z",
-      "data_type": "manual"
-    },
-    {
-      "asset": "European Gas (TTF)",
-      "ticker": "TTF",
-      "price": 36.2,
-      "currency": "EUR/MWh",
-      "daily_change": -1.77,
-      "weekly_change": -1.8,
-      "monthly_change": 3.2,
-      "trend": "mixed",
-      "source": "ICE Endex (indicative)",
-      "source_url": "https://www.iea.org/data-and-statistics",
       "last_updated": "2026-07-15T07:00:00Z",
       "data_type": "manual"
     },

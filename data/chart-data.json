@@ -1,9 +1,9 @@
 {
   "meta": {
-    "description": "Chart series for The Crude Oracle dashboards. SAMPLE / INDICATIVE data for layout and demonstration only — replace with licensed or public-source series. See docs/DAILY_UPDATE_GUIDE.md.",
+    "description": "Legacy sample series kept for the data-file tests. The site no longer plots these points. Brent, WTI and Henry Hub charts use EIA spot history.",
     "last_published": "2026-07-03T07:00:00Z",
     "data_type": "manual",
-    "source": "Sample series shaped on public EIA/IEA ranges (indicative)"
+    "source": "Not plotted. Price charts use U.S. EIA daily spot history."
   },
   "brent_wti_30d": [
     { "date": "06-04", "brent": 79.8, "wti": 75.9 },

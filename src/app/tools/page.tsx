@@ -35,7 +35,7 @@ const MODULES = [
     title: "Futures Curve & Spread Dashboard",
     approach: "Curve / relative-value traders",
     description:
-      "Brent and WTI forward curves, M1/M2 through 6-month timespreads, Brent–WTI, Brent–Dubai and Midland–Cushing differentials, gasoline/diesel/jet cracks and freight-adjusted arbs — each marked cheap/fair/expensive, tightening/loosening, and supported or contradicted by the physical data.",
+      "Brent and WTI forward curves, M1/M2 through 6-month timespreads, the Brent–WTI differential and Midland–Cushing, gasoline/diesel/jet cracks and freight-adjusted arbs. Brent–Dubai is not shown.",
     href: "/tools/curve-monitor",
     status: "live",
   },

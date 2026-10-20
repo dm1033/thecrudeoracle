@@ -54,6 +54,7 @@ export const NAV_FOOTER_LEGAL: NavItem[] = [
   { label: "Terms of Use", href: "/terms-of-use" },
   { label: "Financial Disclaimer", href: "/financial-disclaimer" },
   { label: "Data Disclaimer", href: "/data-disclaimer" },
+  { label: "Data sources", href: "/data-sources" },
   { label: "Editorial Policy", href: "/editorial-policy" },
 ];
 
