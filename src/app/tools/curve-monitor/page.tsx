@@ -11,7 +11,7 @@ import { formatUpdated } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta(
   "Futures Curve & Spread Dashboard — Timespreads, Differentials, Cracks & Arbs",
-  "Module 3 of The Crude Oracle trader toolkit: Brent and WTI curves, M1/M2 and 6-month timespreads, Brent-WTI, Brent-Dubai, Midland-Cushing, gasoline/diesel/jet cracks and freight-adjusted arbitrage — each marked cheap/fair/expensive, tightening/loosening, and supported or contradicted by physical data.",
+  "Module 3 of The Crude Oracle trader toolkit: Brent and WTI curves, M1/M2 and 6-month timespreads, Brent-WTI and Midland-Cushing differentials, gasoline/diesel/jet cracks and freight-adjusted arbitrage. Brent-Dubai is not shown.",
   "/tools/curve-monitor"
 );
 

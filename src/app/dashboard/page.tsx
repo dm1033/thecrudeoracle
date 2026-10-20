@@ -10,20 +10,13 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PriceFreshness from "@/components/PriceFreshness";
 import { getPublishedPrices } from "@/lib/published-prices";
 import { isSampleInstrument } from "@/lib/sample-marks";
-import {
-  BrentWtiChart,
-  GasTrendChart,
-  InventoriesChart,
-  RigCountChart,
-  OpecProductionChart,
-  SectorHeatmapChart,
-} from "@/components/charts/Charts";
+import { BrentWtiChart, HenryHubChart } from "@/components/charts/Charts";
 
-export const revalidate = 21600;
+export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
   "Daily Oil Dashboard — Free Market Snapshot",
-  "Free daily crude oil market snapshot: Brent and WTI indicative prices, UK and European gas, OPEC alerts and geopolitical risk signals with sources and update times.",
+  "Free daily crude oil market snapshot: Brent, WTI and Henry Hub from the EIA daily spot, with sources, trade dates and update times.",
   "/dashboard"
 );
 
@@ -54,7 +47,7 @@ export default async function DashboardPage() {
       <PageHeader
         eyebrow="Full Dashboard · Free For Everyone"
         title="Daily Oil Dashboard"
-        intro="The complete terminal-grade view: full price complex, supply data, demand signals, risk monitor, chart pack, investment intelligence and the daily bottom line."
+        intro="Brent, WTI and Henry Hub from the EIA daily spot, plus supply, demand and risk cards. Dubai, NBP and TTF are not on this board."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="mp-h">
@@ -111,12 +104,8 @@ export default async function DashboardPage() {
             Chart pack
           </h2>
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
-            <BrentWtiChart />
-            <GasTrendChart />
-            <InventoriesChart />
-            <RigCountChart />
-            <OpecProductionChart />
-            <SectorHeatmapChart />
+            <BrentWtiChart points={feed.brentWtiHistory} />
+            <HenryHubChart points={feed.henryHubHistory.map((point) => ({ date: point.date, hh: point.value }))} />
           </div>
         </section>
 
@@ -171,7 +160,7 @@ export default async function DashboardPage() {
           <h2 id="bl-h" className="sr-only">
             Daily bottom line
           </h2>
-          <BottomLineCard />
+          <BottomLineCard feed={feed} />
         </section>
 
         <section className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-gold-600/40 bg-navy-900/30 p-5">

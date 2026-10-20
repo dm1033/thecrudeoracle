@@ -187,12 +187,12 @@
     }
   ],
   "bottom_line": {
-    "what_moved": "Crude extended its grind higher over the past fortnight; Brent holding the upper-$78/low-$79 area after another modest US stock draw.",
-    "why_it_moved": "A larger-than-expected stock draw, resilient summer demand indicators and persistent shipping disruption offset macro caution.",
-    "what_matters_next": "OPEC+ signalling on the pace of unwinding voluntary cuts, plus weekly EIA inventory data.",
-    "biggest_risk": "A faster-than-expected return of OPEC+ barrels into a soft diesel demand environment.",
-    "biggest_opportunity": "Quality upstream producers with low break-evens remain attractively valued relative to strip prices (watchlist, not a recommendation).",
-    "watch_tomorrow": "Weekly EIA inventories (Wed), OPEC MOMR follow-through, and Atlantic hurricane tracking.",
+    "what_moved": "The price note on the site is generated from the latest EIA spot prints. This stored July text is not the current market commentary.",
+    "why_it_moved": "No cause is stated here. This file does not hold today's prices.",
+    "what_matters_next": "The next EIA daily spot publication. EIA publishes the trade date with a lag of several days.",
+    "biggest_risk": "No risk call is published in this note.",
+    "biggest_opportunity": "No valuation view is published. This site does not say whether any producer is cheap or attractive.",
+    "watch_tomorrow": "The EIA spot series on the price board: Brent RBRTE, WTI RWTC and Henry Hub RNGWHHD.",
     "last_updated": "2026-07-15T07:00:00Z",
     "source": "The Crude Oracle editorial desk",
     "data_type": "manual"

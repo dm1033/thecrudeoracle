@@ -13,8 +13,9 @@
  *   3. Transform:  buildDailySeriesResult() /
  *                  buildWeeklySeriesResult()    — pure arithmetic over validated observations
  *
- * High-level functions (getWtiSpot, getBrentSpot, getUsCommercialCrudeStocks,
- * getCushingStocks) wire all three layers together for the update script.
+ * High-level functions (getWtiSpot, getBrentSpot, getHenryHubSpot,
+ * getUsCommercialCrudeStocks, getCushingStocks) wire all three layers
+ * together for the update script and the live spot cache.
  *
  * IMPORTANT — series identifiers were written from training-data recollection
  * of the EIA v2 API; this development environment has no outbound internet
@@ -189,6 +190,23 @@ export const EIA_SERIES = {
       "Same petroleum/pri/spt route as WTI. RBRTE is the Europe Brent Spot Price FOB series id. " +
       "Docs use facets[series][] and data[0]=value (data[]=value is equivalent).",
   },
+  HENRY_HUB_SPOT: {
+    key: "HENRY_HUB_SPOT",
+    route: "natural-gas/pri/fut",
+    seriesId: "RNGWHHD",
+    frequency: "daily",
+    description: "Henry Hub Natural Gas Spot Price ($/MMBtu)",
+    expectedUnits: "$/MMBTU",
+    outputUnit: "USD/MMBtu",
+    sourcePageUrl: "https://www.eia.gov/dnav/ng/hist/rngwhhdD.htm",
+    confidence: "high",
+    verificationNote:
+      "EIA publishes the Henry Hub spot on the natural-gas futures dataset, not a pri/spt route. " +
+      "Route natural-gas/pri/fut, daily frequency, data[0]=value, facets[series][]=RNGWHHD. " +
+      "A keyless request to /v2/natural-gas/pri/fut/data/ is rejected with API_KEY_MISSING, and " +
+      "the same route plus RNGWHHD is the series EIA's browser and other public clients use for " +
+      "the Henry Hub spot in $/MMBtu. There is no separate natural-gas/pri/spt series for this price.",
+  },
   US_COMMERCIAL_CRUDE_STOCKS: {
     key: "US_COMMERCIAL_CRUDE_STOCKS",
     route: "petroleum/stoc/wstk",
@@ -240,8 +258,9 @@ function sleep(ms: number): Promise<void> {
 /**
  * Builds the fully-qualified EIA v2 API URL for a series, including the API key.
  *
- * Spot prices (petroleum/pri/spt, series RBRTE and RWTC) follow the current
- * APIv2 query shape from https://www.eia.gov/opendata/documentation.php:
+ * Spot prices (petroleum/pri/spt for RBRTE and RWTC, natural-gas/pri/fut for
+ * RNGWHHD) follow the current APIv2 query shape from
+ * https://www.eia.gov/opendata/documentation.php:
  * frequency, data[0]=value, facets[series][], sort[0][column]=period desc.
  * `data[]=value` is documented as equivalent; this client sends `data[0]`.
  */
@@ -534,6 +553,11 @@ export interface DailySeriesResult {
   monthlyChangePct: number | null;
 }
 
+/** Daily result plus the validated observations, oldest values included, newest first. */
+export interface DailySpotFetch extends DailySeriesResult {
+  observations: EiaObservation[];
+}
+
 /** Pure — derives d/w/m % changes from a newest-first list of daily observations. */
 export function buildDailySeriesResult(observations: readonly EiaObservation[]): DailySeriesResult {
   if (observations.length === 0) {
@@ -590,11 +614,11 @@ export function buildWeeklySeriesResult(observations: readonly EiaObservation[])
 export async function getDailySpotSeries(
   seriesDef: EiaSeriesDef,
   opts: { length?: number } & FetchRetryOptions = {}
-): Promise<DailySeriesResult> {
+): Promise<DailySpotFetch> {
   const url = buildEiaDataUrl(seriesDef, { length: opts.length ?? 45 });
   const json = await fetchWithRetry(url, opts);
   const observations = parseEiaResponse(json, seriesDef);
-  return buildDailySeriesResult(observations);
+  return { ...buildDailySeriesResult(observations), observations };
 }
 
 export async function getWeeklyStockSeries(
@@ -607,12 +631,16 @@ export async function getWeeklyStockSeries(
   return buildWeeklySeriesResult(observations);
 }
 
-export function getWtiSpot(opts: FetchRetryOptions = {}): Promise<DailySeriesResult> {
+export function getWtiSpot(opts: FetchRetryOptions = {}): Promise<DailySpotFetch> {
   return getDailySpotSeries(EIA_SERIES.WTI_SPOT, opts);
 }
 
-export function getBrentSpot(opts: FetchRetryOptions = {}): Promise<DailySeriesResult> {
+export function getBrentSpot(opts: FetchRetryOptions = {}): Promise<DailySpotFetch> {
   return getDailySpotSeries(EIA_SERIES.BRENT_SPOT, opts);
+}
+
+export function getHenryHubSpot(opts: FetchRetryOptions = {}): Promise<DailySpotFetch> {
+  return getDailySpotSeries(EIA_SERIES.HENRY_HUB_SPOT, opts);
 }
 
 export function getUsCommercialCrudeStocks(opts: FetchRetryOptions = {}): Promise<WeeklySeriesResult> {

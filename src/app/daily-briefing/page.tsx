@@ -6,8 +6,10 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 import JsonLd from "@/components/JsonLd";
 import NewsletterSignup from "@/components/NewsletterSignup";
-import { SITE } from "@/lib/site";
+import BottomLineCard from "@/components/BottomLineCard";
 import { BrentWtiChart } from "@/components/charts/Charts";
+import { SITE } from "@/lib/site";
+import { getPublishedPrices } from "@/lib/published-prices";
 
 export const metadata: Metadata = pageMeta(
   "Daily Briefing — Crude Oil Market Intelligence",
@@ -28,7 +30,7 @@ const SECTIONS: { key: keyof Briefing; label: string }[] = [
   { key: "one_chart", label: "10 · One chart to watch" },
 ];
 
-function BriefingArticle({ briefing, latest }: { briefing: Briefing; latest?: boolean }) {
+function BriefingArticle({ briefing }: { briefing: Briefing }) {
   return (
     <article className="card p-6 sm:p-8">
       <header className="border-b border-ink-700 pb-5">
@@ -45,11 +47,6 @@ function BriefingArticle({ briefing, latest }: { briefing: Briefing; latest?: bo
           <section key={key}>
             <h3 className="text-xs font-bold uppercase tracking-widest text-gold-500">{label}</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-steel-300">{String(briefing[key])}</p>
-            {key === "one_chart" && latest && (
-              <div className="mt-4">
-                <BrentWtiChart />
-              </div>
-            )}
           </section>
         ))}
 
@@ -76,7 +73,8 @@ function BriefingArticle({ briefing, latest }: { briefing: Briefing; latest?: bo
   );
 }
 
-export default function DailyBriefingPage() {
+export default async function DailyBriefingPage() {
+  const feed = await getPublishedPrices();
   const archive = briefings.slice(1);
   const articles = briefings
     .filter((briefing) => briefing.status === "published")
@@ -99,7 +97,7 @@ export default function DailyBriefingPage() {
       <PageHeader
         eyebrow="Updated Every Trading Day"
         title="The Crude Oracle Daily Briefing"
-        intro="Eleven concise sections covering the entire crude complex — written for people who make decisions, not people with time to waste."
+        intro="The current note is generated from the EIA spot prints. Older editions are an archive and are not today's prices."
       />
       <div className="container-site space-y-10 py-10">
         <PremiumGate
@@ -114,7 +112,16 @@ export default function DailyBriefingPage() {
           }
         >
           <div className="space-y-8">
-            <BriefingArticle briefing={latestBriefing} latest />
+            <BottomLineCard feed={feed} />
+            <BrentWtiChart points={feed.brentWtiHistory} />
+            <div className="rounded-lg border border-risk/50 bg-risk/15 p-4">
+              <p className="text-sm font-bold uppercase tracking-widest text-risk">Stale — July 2026 archive</p>
+              <p className="mt-2 text-sm leading-relaxed text-steel-200">
+                These notes are older than a trading day. They are not the current market, they do not
+                quote today&apos;s EIA prints, and they are not investment advice.
+              </p>
+            </div>
+            <BriefingArticle briefing={latestBriefing} />
             {archive.length > 0 && (
               <section>
                 <h2 className="h2">Recent briefings</h2>

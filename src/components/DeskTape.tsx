@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import chartData from "../../data/chart-data.json";
-import { playheadAt, priceBounds, seriesLine, type BoardQuote, type TapePlayhead } from "@/lib/desk-tape";
+import { playheadAt, priceBounds, seriesLine, type BoardQuote, type TapePlayhead, type TapePrint } from "@/lib/desk-tape";
 
-const SERIES = chartData.brent_wti_30d;
-const SPAN = Math.max(1, SERIES.length - 1);
 const LOOP_MS = 22_000;
 
 function money(value: number): string {
@@ -51,20 +48,29 @@ function Barrel({ name, price, step }: { name: string; price: number; step: numb
 export default function DeskTape({
   tapeRef,
   board,
+  series = [],
 }: {
   tapeRef: { current: TapePlayhead | null };
   board?: BoardQuote | null;
+  /** Chronological EIA Brent/WTI prints. Fewer than two points and the chart is omitted. */
+  series?: TapePrint[];
 }) {
   const clipId = useId().replace(/:/g, "");
-  const bounds = priceBounds(SERIES);
-  const [play, setPlay] = useState<TapePlayhead>(() => playheadAt(SERIES, 0));
+  const prints = series.length > 1 ? series : [];
+  const span = Math.max(1, prints.length - 1);
+  const seriesIdentity = series.map((row) => `${row.date}:${row.brent}:${row.wti}`).join("|");
+  const bounds = priceBounds(prints);
+  const [play, setPlay] = useState<TapePlayhead | null>(() => (prints.length > 1 ? playheadAt(prints, 0) : null));
   const [progress, setProgress] = useState(0);
   const [spoken, setSpoken] = useState(() => {
     if (board) {
       return `As of ${board.asOf.slice(0, 10)}: Brent ${money(board.brent)}, WTI ${money(board.wti)}`;
     }
-    const first = playheadAt(SERIES, 0);
-    return `${first.date}: Brent ${money(first.brent)}, WTI ${money(first.wti)}`;
+    if (prints.length > 1) {
+      const first = playheadAt(prints, 0);
+      return `${first.date}: Brent ${money(first.brent)}, WTI ${money(first.wti)}`;
+    }
+    return "";
   });
 
   useEffect(() => {
@@ -82,12 +88,13 @@ export default function DeskTape({
         }`
       );
     }
+    if (prints.length < 2) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      const last = playheadAt(SERIES, SPAN);
+      const last = playheadAt(prints, span);
       if (!board) tapeRef.current = last;
       setPlay(last);
-      setProgress(SPAN);
+      setProgress(span);
       if (!board) setSpoken(`${last.date}: Brent ${money(last.brent)}, WTI ${money(last.wti)}`);
       return;
     }
@@ -97,8 +104,8 @@ export default function DeskTape({
     const start = performance.now();
     const tick = (now: number) => {
       const cycle = ((now - start) % LOOP_MS) / LOOP_MS;
-      const t = cycle * SPAN;
-      const next = playheadAt(SERIES, t);
+      const t = cycle * span;
+      const next = playheadAt(prints, t);
       if (!board) tapeRef.current = next;
       if (now - lastUi > 80) {
         lastUi = now;
@@ -113,72 +120,75 @@ export default function DeskTape({
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [tapeRef, board]);
+    // seriesIdentity stands in for `series` so a new empty array each render does not restart the effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tapeRef, board, seriesIdentity, span]);
 
-  const brent = seriesLine(
-    SERIES.map((row) => row.brent),
-    320,
-    96,
-    bounds.min,
-    bounds.max
-  );
-  const wti = seriesLine(
-    SERIES.map((row) => row.wti),
-    320,
-    96,
-    bounds.min,
-    bounds.max
-  );
-  const reveal = (progress / SPAN) * 320;
-
-  const brentPrice = board?.brent ?? play.brent;
-  const wtiPrice = board?.wti ?? play.wti;
+  const brentPrice = board?.brent ?? play?.brent ?? null;
+  const wtiPrice = board?.wti ?? play?.wti ?? null;
+  const showChart = prints.length > 1 && play !== null;
+  const brentPath = showChart
+    ? seriesLine(
+        prints.map((row) => row.brent),
+        320,
+        96,
+        bounds.min,
+        bounds.max
+      )
+    : "";
+  const wtiPath = showChart
+    ? seriesLine(
+        prints.map((row) => row.wti),
+        320,
+        96,
+        bounds.min,
+        bounds.max
+      )
+    : "";
+  const reveal = (progress / span) * 320;
+  const latest = prints.length > 1 ? prints[prints.length - 1].date : "";
 
   return (
     <div className="mt-4">
-      <div className="grid grid-cols-2 gap-2">
-        <Barrel name="Brent" price={brentPrice} step={board ? null : play.brentStep} />
-        <Barrel name="WTI" price={wtiPrice} step={board ? null : play.wtiStep} />
-      </div>
+      {brentPrice !== null && wtiPrice !== null ? (
+        <div className="grid grid-cols-2 gap-2">
+          <Barrel name="Brent" price={brentPrice} step={board || !play ? null : play.brentStep} />
+          <Barrel name="WTI" price={wtiPrice} step={board || !play ? null : play.wtiStep} />
+        </div>
+      ) : null}
       {board ? (
         <p className="mt-2 text-[11px] leading-relaxed text-steel-300">
           As of <time dateTime={board.asOf}>{board.asOf.slice(0, 10)}</time>
           {board.live ? " · delayed EIA spot" : " · manual desk marks"}
+          {" · "}Information only, not investment advice.
         </p>
       ) : null}
-      <figure className="mt-3">
-        <figcaption className="flex items-baseline justify-between gap-2 text-[10px] uppercase tracking-wider text-steel-500">
-          <span>Brent / WTI · USD/bbl</span>
-          <span className="num text-steel-400">{play.date}</span>
-        </figcaption>
-        <svg viewBox="0 0 320 96" className="mt-1 h-28 w-full" role="img" aria-label="Brent and WTI indicative series replay">
-          {[0.25, 0.5, 0.75].map((g) => (
-            <line
-              key={g}
-              x1="0"
-              x2="320"
-              y1={96 * g}
-              y2={96 * g}
-              stroke="#212936"
-              strokeWidth="1"
-            />
-          ))}
-          <defs>
-            <clipPath id={clipId}>
-              <rect x="0" y="0" width={reveal} height="96" />
-            </clipPath>
-          </defs>
-          <g clipPath={`url(#${clipId})`}>
-            <path d={brent} fill="none" stroke="#dcb54e" strokeWidth="2.2" />
-            <path d={wti} fill="none" stroke="#7eb0e8" strokeWidth="2" />
-          </g>
-          <line x1={reveal} x2={reveal} y1="0" y2="96" stroke="#e9cd7e" strokeOpacity="0.7" strokeWidth="1" />
-        </svg>
-        <p className="mt-1 text-[10px] leading-relaxed text-steel-500">
-          Last published {chartData.meta.last_published.slice(0, 10)} · {chartData.meta.data_type} · {chartData.meta.source} ·
-          replay of the published prints
-        </p>
-      </figure>
+      {showChart ? (
+        <figure className="mt-3">
+          <figcaption className="flex items-baseline justify-between gap-2 text-[10px] uppercase tracking-wider text-steel-500">
+            <span>Brent / WTI · USD/bbl</span>
+            <span className="num text-steel-400">{play.date}</span>
+          </figcaption>
+          <svg viewBox="0 0 320 96" className="mt-1 h-28 w-full" role="img" aria-label="Brent and WTI EIA daily spot history">
+            {[0.25, 0.5, 0.75].map((g) => (
+              <line key={g} x1="0" x2="320" y1={96 * g} y2={96 * g} stroke="#212936" strokeWidth="1" />
+            ))}
+            <defs>
+              <clipPath id={clipId}>
+                <rect x="0" y="0" width={reveal} height="96" />
+              </clipPath>
+            </defs>
+            <g clipPath={`url(#${clipId})`}>
+              <path d={brentPath} fill="none" stroke="#dcb54e" strokeWidth="2.2" />
+              <path d={wtiPath} fill="none" stroke="#7eb0e8" strokeWidth="2" />
+            </g>
+            <line x1={reveal} x2={reveal} y1="0" y2="96" stroke="#e9cd7e" strokeOpacity="0.7" strokeWidth="1" />
+          </svg>
+          <p className="mt-1 text-[10px] leading-relaxed text-steel-300">
+            Last updated <time dateTime={latest}>{latest}</time> · Source: EIA · daily spot history
+          </p>
+        </figure>
+      ) : null}
       <p className="sr-only" aria-live="polite">
         {spoken}
       </p>
