@@ -19,6 +19,14 @@ for (const target of [distDir, resolve(distDir, 'breeam-scoring-tool')]) {
   cpSync(resolve(rootDir, 'assets'), resolve(target, 'assets'), { recursive: true });
 }
 
+// Copy temporaryworksconsulting.com site integration bundle into dist/twc-site-integration/
+const twcIntegrationSrc = resolve(rootDir, 'twc-site-integration');
+if (existsSync(twcIntegrationSrc)) {
+  const twcIntegrationDest = resolve(distDir, 'twc-site-integration');
+  cpSync(twcIntegrationSrc, twcIntegrationDest, { recursive: true });
+  cpSync(resolve(distDir, 'breeam-scoring-tool'), resolve(twcIntegrationDest, 'breeam-scoring-tool'), { recursive: true });
+}
+
 // Also generate a single-file portable HTML version (breeam-scoring-tool.html) that can be dropped directly into temporaryworksconsulting.com root
 writeFileSync(
   resolve(distDir, '_redirects'),

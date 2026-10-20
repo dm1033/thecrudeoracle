@@ -67,7 +67,7 @@ let state = loadInitialState();
 function loadInitialState() {
   const base = createDefaultState();
 
-  // Check URL query parameter ?breeam=... first
+  // Check URL query parameter ?breeam=... or ?preset=... / ?tab=... first
   try {
     const params = new URLSearchParams(window.location.search);
     const encoded = params.get('breeam');
@@ -81,6 +81,37 @@ function loadInitialState() {
           excluded: { ...(decoded.excluded || {}) }
         };
       }
+    }
+
+    const presetParam = params.get('preset');
+    const tabParam = params.get('tab');
+    const validTabs = new Set(['scorer', 'site-calcs', 'tw-register', 'report']);
+    const presetAliasMap = {
+      'commercial-office': 'commercial-office-excellent',
+      'office': 'commercial-office-excellent',
+      'industrial': 'industrial-logistics-very-good',
+      'shell-core': 'shell-core-good-at-risk',
+      'infrastructure': 'infrastructure-civil-very-good'
+    };
+    const resolvedPresetId = presetParam ? (presetAliasMap[presetParam] || presetParam) : null;
+    if (resolvedPresetId && PROJECT_PRESETS[resolvedPresetId]) {
+      const preset = PROJECT_PRESETS[resolvedPresetId];
+      return {
+        ...base,
+        activePresetId: preset.id,
+        schemeId: preset.schemeId,
+        targetBand: preset.targetBand,
+        giaM2: preset.giaM2,
+        contractValueGbp: preset.contractValueGbp,
+        stage: preset.stage,
+        timberPrerequisiteMet: preset.timberPrerequisiteMet,
+        credits: { ...preset.credits },
+        excluded: {},
+        activeTab: tabParam && validTabs.has(tabParam) ? tabParam : base.activeTab
+      };
+    }
+    if (tabParam && validTabs.has(tabParam)) {
+      base.activeTab = tabParam;
     }
   } catch {
     // Ignore malformed URL state

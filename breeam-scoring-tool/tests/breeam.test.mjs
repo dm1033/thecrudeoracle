@@ -170,7 +170,22 @@ describe('Temporary Works Consulting Integration & HTML Structure', () => {
     assert.ok(html.includes('https://www.temporaryworksconsulting.com/'), 'Must link to temporaryworksconsulting.com');
     assert.ok(html.includes('Temporary Works Consulting &amp; Design Ltd'), 'Must include TWC company name');
     assert.ok(html.includes('David J. Miller'), 'Must reference David J. Miller MSc CEng MICE');
+    assert.ok(html.includes('hub-primary-live-tab'), 'Must include live BREEAM Scorer tab in primary header navigation');
     assert.ok(html.includes('id="categories-accordion-root"'), 'Must include scorer mount point');
     assert.ok(html.includes('id="audit-table-body"'), 'Must include audit table mount point');
+  });
+
+  test('twc-site-integration pages include live BREEAM Scorer tab and catalogue card for temporaryworksconsulting.com', () => {
+    const twcIndex = readFileSync(resolve(rootDir, 'twc-site-integration/index.html'), 'utf8');
+    const twcTools = readFileSync(resolve(rootDir, 'twc-site-integration/tools.html'), 'utf8');
+    const twcSeats = readFileSync(resolve(rootDir, 'twc-site-integration/seatsprep.html'), 'utf8');
+    const svgThumb = resolve(rootDir, 'twc-site-integration/assets/images/tools/breeam-scorer.svg');
+
+    assert.ok(existsSync(svgThumb), 'breeam-scorer.svg thumbnail must exist');
+    assert.ok(twcIndex.includes('<a href="/breeam-scoring-tool/">BREEAM Scorer</a>'), 'Homepage header must include live BREEAM Scorer tab');
+    assert.ok(twcIndex.includes('data-thumbnail="breeam-scorer"'), 'Homepage catalogue must include BREEAM Scorer card');
+    assert.ok(twcTools.includes('<a href="/breeam-scoring-tool/">BREEAM Scorer</a>'), 'Tools hub header must include live BREEAM Scorer tab');
+    assert.ok(twcTools.includes('data-thumbnail="breeam-scorer"'), 'Tools hub catalogue must include BREEAM Scorer card');
+    assert.ok(twcSeats.includes('/breeam-scoring-tool/'), 'SEATS & BREEAM page must link directly to BREEAM Scorer');
   });
 });
