@@ -1,0 +1,2 @@
+#!/bin/sh
+node structuralengineeringsite/scripts/check-secrets.mjs
