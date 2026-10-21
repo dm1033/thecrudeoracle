@@ -1,0 +1,12 @@
+{
+  "name": "twc-breeam-scoring-tool",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "BREEAM Construction Project Scoring Tool attached to temporaryworksconsulting.com",
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "test": "node --test ./tests/breeam.test.mjs",
+    "serve": "npx --yes serve -l 4173 ."
+  }
+}

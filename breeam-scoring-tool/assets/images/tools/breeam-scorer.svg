@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-label="BREEAM Construction Project Scoring Tool">
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#1b2026" stroke-width="1"/></pattern></defs>
+<rect width="800" height="300" fill="#121418"/><rect width="800" height="300" fill="url(#g)"/>
+<text x="40" y="46" font-family="Inter,Helvetica,Arial,sans-serif" font-size="13" letter-spacing="3.5" fill="#c6a15b">BREEAM CONSTRUCTION SCORER</text>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="170" cy="172" r="76" stroke="#222a34" stroke-width="14"/>
+  <circle cx="170" cy="172" r="76" stroke="#2a9b96" stroke-width="14" stroke-dasharray="352 478" transform="rotate(-90 170 172)"/>
+  <text x="170" y="166" font-family="Inter,Helvetica,Arial,sans-serif" font-size="34" font-weight="700" fill="#ece7dc" text-anchor="middle">73.7%</text>
+  <text x="170" y="192" font-family="Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="2.2" fill="#2a9b96" text-anchor="middle">EXCELLENT</text>
+  <rect x="300" y="96" width="210" height="44" rx="4" fill="#171b22" stroke="#2a9b96" stroke-width="1.5"/>
+  <text x="316" y="115" font-family="Inter,Helvetica,Arial,sans-serif" font-size="11" letter-spacing="1.5" fill="#c6a15b">MIN STANDARDS GATE</text>
+  <text x="316" y="132" font-family="Inter,Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#ece7dc">10 / 10 MANDATORY PASS</text>
+  <rect x="300" y="152" width="210" height="44" rx="4" fill="#171b22" stroke="#2d3542" stroke-width="1.5"/>
+  <text x="316" y="171" font-family="Inter,Helvetica,Arial,sans-serif" font-size="11" letter-spacing="1.5" fill="#9ca4b0">SITE CALCULATORS</text>
+  <text x="316" y="188" font-family="Inter,Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#ece7dc">Man 03 · Wst 01 · Mat 03</text>
+  <rect x="300" y="208" width="210" height="44" rx="4" fill="#171b22" stroke="#c6a15b" stroke-width="1.5"/>
+  <text x="316" y="227" font-family="Inter,Helvetica,Arial,sans-serif" font-size="11" letter-spacing="1.5" fill="#c6a15b">TEMP WORKS REGISTER</text>
+  <text x="316" y="244" font-family="Inter,Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#ece7dc">BS 5975 &amp; BR 470 Evidence</text>
+  <rect x="556" y="102" width="24" height="140" fill="#2a9b96"/>
+  <rect x="590" y="118" width="24" height="124" fill="#2a9b96"/>
+  <rect x="624" y="138" width="24" height="104" fill="#c6a15b"/>
+  <rect x="658" y="110" width="24" height="132" fill="#2a9b96"/>
+  <rect x="692" y="152" width="24" height="90" fill="#6f7681"/>
+  <rect x="726" y="128" width="24" height="114" fill="#c6a15b"/>
+  <line x1="546" y1="242" x2="762" y2="242" stroke="#6f7681" stroke-width="2"/>
+  <text x="654" y="266" font-family="Inter,Helvetica,Arial,sans-serif" font-size="12" fill="#9ca4b0" text-anchor="middle">10 weighted sections + innovation</text>
+</g>
+</svg>
