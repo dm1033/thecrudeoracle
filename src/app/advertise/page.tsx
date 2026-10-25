@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
+import { AdvertiseCtaLink, TrackOnMount } from "@/components/analytics-events";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
@@ -50,6 +51,7 @@ const PACKAGES: { name: string; includes: string; from: string }[] = [
 export default function AdvertisePage() {
   return (
     <>
+      <TrackOnMount name="advertise_view" />
       <PageHeader
         eyebrow="Sponsorship"
         title="Advertise"
@@ -58,8 +60,11 @@ export default function AdvertisePage() {
       <div className="container-site space-y-10 py-10">
         <div className="prose-dark max-w-3xl">
           <p>
-            Sponsorship enquiries: <a href={MAILTO}>{SITE.contactEmail}</a>. Say who you are, which
-            slot you want, and the period you have in mind.
+            Sponsorship enquiries:{" "}
+            <AdvertiseCtaLink href={MAILTO} location="advertise_intro">
+              {SITE.contactEmail}
+            </AdvertiseCtaLink>
+            . Say who you are, which slot you want, and the period you have in mind.
           </p>
           <p>
             These figures are indicative starting points for a site that does not publish traffic,
@@ -138,7 +143,9 @@ export default function AdvertisePage() {
             what the desk writes. That rule is the <Link href="/editorial-policy">editorial policy</Link>.
           </p>
           <p>
-            <a href={MAILTO}>Email a sponsorship enquiry</a>
+            <AdvertiseCtaLink href={MAILTO} location="advertise_footer">
+              Email a sponsorship enquiry
+            </AdvertiseCtaLink>
           </p>
         </div>
       </div>

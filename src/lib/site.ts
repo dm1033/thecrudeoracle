@@ -30,6 +30,7 @@ export interface NavItem {
 }
 
 const NAV_MAIN_ALL: NavItem[] = [
+  { label: "Daily Note", href: "/daily" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Daily Briefing", href: "/daily-briefing" },
   { label: "Watchlist", href: "/watchlist" },

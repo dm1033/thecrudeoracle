@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
 import { ROUTE_LASTMOD } from "@/lib/content-dates";
+import { listDailyNoteDates } from "@/lib/daily-feed";
 import { SITE } from "@/lib/site";
 
 const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }[] = [
   { path: "/", priority: 1.0, changeFrequency: "daily" },
+  { path: "/daily", priority: 0.9, changeFrequency: "daily" },
   { path: "/dashboard", priority: 0.9, changeFrequency: "daily" },
   { path: "/daily-briefing", priority: 0.9, changeFrequency: "daily" },
   { path: "/watchlist", priority: 0.8, changeFrequency: "weekly" },
@@ -37,8 +39,8 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/editorial-policy", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return ROUTES.map((route) => {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const entries: MetadataRoute.Sitemap = ROUTES.map((route) => {
     const stamp = ROUTE_LASTMOD[route.path];
     return {
       url: `${SITE.url}${route.path === "/" ? "" : route.path}`,
@@ -47,4 +49,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: route.priority,
     };
   });
+  const dates = await listDailyNoteDates().catch(() => [] as string[]);
+  for (const date of dates) {
+    entries.push({
+      url: `${SITE.url}/daily/${date}`,
+      lastModified: new Date(`${date}T00:00:00Z`),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    });
+  }
+  return entries;
 }

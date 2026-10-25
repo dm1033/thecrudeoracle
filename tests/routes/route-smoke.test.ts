@@ -52,6 +52,9 @@ const EXCLUDED_FROM_SITEMAP = new Set([
   "/payment/cancelled",
   "/payment/success",
   "/offshore",
+  // Dated copies are added by sitemap() from EIA trade dates. The template
+  // path itself is not a URL.
+  "/daily/[date]",
 ]);
 
 describe("route inventory", () => {

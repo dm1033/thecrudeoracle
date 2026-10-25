@@ -40,9 +40,8 @@ describe("robots.txt rules", () => {
 });
 
 describe("sitemap lastmod", () => {
-  const entries = sitemap();
-
-  it("uses content dates, and drops the retired premium routes", () => {
+  it("uses content dates, and drops the retired premium routes", async () => {
+    const entries = await sitemap();
     const home = entries.find((entry) => entry.url === SITE.url);
     const fund = entries.find((entry) => entry.url === `${SITE.url}/portfolio`);
     const book = entries.find((entry) => entry.url === `${SITE.url}/paper-book`);
