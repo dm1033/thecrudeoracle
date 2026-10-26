@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { useId, useState } from "react";
 import { SITE } from "@/lib/site";
 
@@ -78,7 +79,12 @@ export default function NewsletterSignup() {
             <label htmlFor={`${emailId}-company`}>Company</label>
             <input id={`${emailId}-company`} name="company" type="text" tabIndex={-1} autoComplete="off" />
           </div>
-          <button type="submit" className="btn-primary shrink-0" disabled={status === "sending"}>
+          <button
+            type="submit"
+            className="btn-primary shrink-0"
+            disabled={status === "sending"}
+            onClick={() => track("newsletter_signup_click", { location: "site_form" })}
+          >
             {status === "sending" ? "Adding…" : "Get the Daily Bottom Line"}
           </button>
         </form>

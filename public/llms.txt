@@ -11,6 +11,7 @@ The Crude Oracle provides market commentary, educational content and investment 
 ## Key pages
 
 - [Home](https://www.thecrudeoracle.com/): Daily Brent and WTI oil intelligence and the bottom line
+- [Daily morning note](https://www.thecrudeoracle.com/daily): Latest EIA Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) prints, day-on-day, week-on-week and month-on-month changes, the Brent–WTI spread, and the next EIA, Baker Hughes and CFTC releases. EIA lags the trade date by one to three days. Dated archive at /daily/YYYY-MM-DD. Information only, not investment advice.
 - [Dashboard](https://www.thecrudeoracle.com/dashboard): Full price complex, supply, demand, risk and charts
 - [Daily Briefing](https://www.thecrudeoracle.com/daily-briefing): Trading-day briefing and archive
 - [Crude Oil Prices](https://www.thecrudeoracle.com/crude-oil-prices): Indicative Brent, WTI and Dubai

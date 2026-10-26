@@ -92,6 +92,20 @@ export default async function HomePage() {
     <>
       <FrontScreen board={board} tape={feed.brentWtiHistory} />
 
+      <section className="border-b border-ink-700 bg-ink-900">
+        <div className="container-site flex flex-wrap items-center justify-between gap-4 py-6">
+          <div>
+            <p className="eyebrow">Daily morning note</p>
+            <p className="mt-1 max-w-2xl text-sm text-steel-300">
+              Latest EIA Brent, WTI and Henry Hub prints, the changes, and what is due next.
+            </p>
+          </div>
+          <Link href="/daily" className="btn-primary">
+            Open the morning note
+          </Link>
+        </div>
+      </section>
+
       {PAPER_FUND_PUBLISHED ? <PaperBookPanel /> : null}
 
       {/* Dashboard preview */}
@@ -126,6 +140,7 @@ export default async function HomePage() {
                 All free — no paywall
               </h3>
               <ul className="mt-4 space-y-2 text-sm text-steel-400">
+                <li>· Morning note from the EIA daily spot</li>
                 <li>· Brent, WTI and Henry Hub from the EIA daily spot</li>
                 <li>· Supply, demand and risk signal grids</li>
                 <li>· Daily briefing and bottom line</li>
