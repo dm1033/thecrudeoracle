@@ -38,11 +38,17 @@ export function gatherContext() {
 
   const sig = signals?.signals ?? signals ?? {};
   const bottom =
-    signals?.bottom_line ??
-    signals?.daily_bottom_line ??
-    signals?.meta?.bottom_line ??
-    sig?.bottom_line ??
-    null;
+    typeof signals?.bottom_line === "string"
+      ? signals.bottom_line
+      : typeof signals?.bottom_line?.what_moved === "string"
+        ? signals.bottom_line.what_moved
+        : typeof signals?.daily_bottom_line === "string"
+          ? signals.daily_bottom_line
+          : typeof signals?.meta?.bottom_line === "string"
+            ? signals.meta.bottom_line
+            : typeof sig?.bottom_line === "string"
+              ? sig.bottom_line
+              : null;
 
   return {
     generatedAt: new Date().toISOString(),
