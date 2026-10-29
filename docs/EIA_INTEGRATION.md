@@ -20,7 +20,7 @@ a human runs it once against the live API and checks the output.
 | `data/market-prices.json` | `prices[].price/.daily_change/.weekly_change/.monthly_change/.trend/.source/.source_url/.last_updated/.data_type` for `ticker: "WTI"` | `RWTC` — Cushing, OK WTI Spot Price FOB | Daily |
 | `data/market-prices.json` | same fields, for `ticker: "BRN"` | `RBRTE` — Europe Brent Spot Price FOB | Daily |
 | `data/balance-engine.json` | `stocks[].value/.change/.trend/.source/.source_url/.last_updated/.data_type` for `metric: "US commercial crude stocks"` | `WCESTUS1` — Weekly U.S. Ending Stocks excluding SPR of Crude Oil | Weekly |
-| `data/balance-engine.json` | same fields, for `metric: "Cushing (WTI delivery hub)"` | `WCESTOK1` — Weekly Cushing, OK Ending Stocks of Crude Oil | Weekly |
+| `data/balance-engine.json` | same fields, for `metric: "Cushing (WTI delivery hub)"` | `W_EPC0_SAX_YCUOK_MBBL` — Weekly Cushing, OK Ending Stocks excluding SPR of Crude Oil | Weekly |
 
 Nothing else is touched — Dubai Crude, NBP, TTF, Henry Hub, the JKM/DXY
 placeholders, every other `balance-engine.json` supply/demand/stocks row,
@@ -42,13 +42,17 @@ Each is a named constant in `src/lib/eia.ts` (`EIA_SERIES`) carrying its own
 `confidence` and `verificationNote`. Before the first production run, check
 every one of these against https://www.eia.gov/opendata/browser/:
 
-- **`RWTC`, `RBRTE`** (WTI/Brent spot, route `petroleum/pri/spt`) — **high
-  confidence**. These are long-standing, widely-used EIA series ids.
+- **`RWTC`, `RBRTE`** (WTI/Brent spot, route `petroleum/pri/spt`, dollars
+  per barrel, no conversion) — **checked 29 Oct 2026**. FRED series
+  DCOILWTICO and DCOILBRENTEU, both sourced from EIA, printed WTI 103.37
+  and Brent 123.10 for 2026-10-27. The site's morning note showed those
+  same figures. The $19.73 spread is the published EIA spread.
 - **`WCESTUS1`** (US commercial crude stocks, route `petroleum/stoc/wstk`)
   — **high confidence**. Also mirrored by FRED under the identical id.
-- **`WCESTOK1`** (Cushing stocks) — **medium confidence only**. This id is
-  a best-recollection guess formed on the same naming pattern as
-  `WCESTUS1`. Verify it specifically before trusting it.
+- **`W_EPC0_SAX_YCUOK_MBBL`** (Cushing stocks) — **checked 29 Oct 2026**
+  against the EIA navigator title "Weekly Cushing, OK Ending Stocks
+  excluding SPR of Crude Oil (Thousand Barrels)". The earlier guess
+  `WCESTOK1` has no navigator page and is not used.
 
 If a route or series id is wrong, the request either 404s/400s (fails
 loudly, no write happens) or returns rows tagged with an unexpected
@@ -143,10 +147,10 @@ required):
 - That `https://api.eia.gov/v2/petroleum/pri/spt/data/` and
   `https://api.eia.gov/v2/petroleum/stoc/wstk/data/` are the correct v2
   route paths.
-- That `RWTC`, `RBRTE`, `WCESTUS1`, and — especially — `WCESTOK1` are the
-  correct current series ids, and that EIA hasn't changed the v2 response
-  shape (field names, nesting, units string) since this was written from
-  memory.
+- A keyed v2 data call. On 29 Oct 2026 the spot prints and the weekly
+  series ids were checked against FRED (EIA source) and the public EIA
+  navigator titles, without `EIA_API_KEY`, so the response shape of a live
+  `/data/` payload was not re-fetched from this environment.
 - That a real EIA API key issued today actually authenticates and that
   EIA's real rate limits are compatible with `DEFAULT_MAX_RETRIES` /
   `DEFAULT_RETRY_BASE_DELAY_MS` in `src/lib/eia.ts`.
@@ -165,7 +169,7 @@ required):
    step): `curl "https://api.eia.gov/v2/petroleum/pri/spt/data/?api_key=$EIA_API_KEY&frequency=daily&data[0]=value&facets[series][]=RWTC&sort[0][column]=period&sort[0][direction]=desc&length=3"`
    and confirm it 200s with a `response.data` array shaped like
    `scripts/fixtures/valid/RWTC.json`. Repeat for `RBRTE` on the same
-   route, then for `WCESTUS1` and `WCESTOK1` on
+   route, then for `WCESTUS1`, `WGTSTUS1`, `WDISTUS1` and `W_EPC0_SAX_YCUOK_MBBL` on
    `petroleum/stoc/wstk/data/` with `frequency=weekly`.
 3. If any of those 404s, 400s, or comes back with an unexpected shape,
    fix the `route`/`seriesId` in `EIA_SERIES` in `src/lib/eia.ts` (the

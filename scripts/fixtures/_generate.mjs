@@ -136,8 +136,8 @@ const usStocks = buildWeeklyStockFixture({
 });
 
 const cushing = buildWeeklyStockFixture({
-  seriesId: "WCESTOK1",
-  seriesDesc: "Weekly Cushing, OK Ending Stocks of Crude Oil",
+  seriesId: "W_EPC0_SAX_YCUOK_MBBL",
+  seriesDesc: "Weekly Cushing, OK Ending Stocks excluding SPR of Crude Oil",
   area: "R30",
   areaName: "Cushing, OK",
   startValueMb: 24.2,
@@ -148,6 +148,6 @@ const cushing = buildWeeklyStockFixture({
 writeFileSync(join(outDir, "RWTC.json"), JSON.stringify(wti, null, 2) + "\n");
 writeFileSync(join(outDir, "RBRTE.json"), JSON.stringify(brent, null, 2) + "\n");
 writeFileSync(join(outDir, "WCESTUS1.json"), JSON.stringify(usStocks, null, 2) + "\n");
-writeFileSync(join(outDir, "WCESTOK1.json"), JSON.stringify(cushing, null, 2) + "\n");
+writeFileSync(join(outDir, "W_EPC0_SAX_YCUOK_MBBL.json"), JSON.stringify(cushing, null, 2) + "\n");
 
 console.log("Wrote fixtures to", outDir);

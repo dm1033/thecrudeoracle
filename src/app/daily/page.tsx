@@ -9,8 +9,9 @@ export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
   "Daily morning note",
-  "EIA daily spot for Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD), with day-on-day, week-on-week and month-on-month changes. EIA lags the trade date by one to three days. Information only, not investment advice.",
-  "/daily"
+  "EIA daily spot for Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD), with day-on-day, week-on-week and month-on-month changes. EIA lags the trade date by one to two business days. Information only, not investment advice.",
+  "/daily",
+  { dynamicImage: true }
 );
 
 export default async function DailyPage() {

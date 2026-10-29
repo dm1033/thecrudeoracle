@@ -5,6 +5,7 @@ import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
   "About — The Crude Oracle",
@@ -69,13 +70,49 @@ export default function AboutPage() {
             </li>
           </ul>
 
+          <h2>Author</h2>
+          <p>
+            The morning note, the Wednesday stocks page and the longer notes are published by {SITE.name}. This page
+            does not name an individual author, and it does not list credentials, a track record or a professional
+            qualification. Where a note has a byline, that byline is the publication.
+          </p>
+
+          <h2>Methodology</h2>
+          <p>
+            The daily note is arithmetic on three EIA Open Data series: Brent RBRTE and WTI RWTC, both in dollars per
+            barrel from petroleum/pri/spt, and Henry Hub RNGWHHD in dollars per MMBtu from natural-gas/pri/fut. The
+            page shows the latest print, the previous print, the newest print on or before seven calendar days
+            earlier, and the newest print on or before thirty calendar days earlier. The Brent–WTI spread is Brent
+            minus WTI on a shared trade date. No forecast is added, and a missing print is left blank.
+          </p>
+          <p>
+            EIA publishes those daily spots one to two business days after the trade date. Weekends and US holidays
+            can make the calendar gap longer. The date on the page is the trade date of the print, not the day you
+            opened it.
+          </p>
+          <p>
+            The Wednesday page reads the Weekly Petroleum Status Report from petroleum/stoc/wstk: US commercial crude
+            excluding the Strategic Petroleum Reserve (WCESTUS1), total gasoline (WGTSTUS1), distillate (WDISTUS1) and
+            Cushing crude (W_EPC0_SAX_YCUOK_MBBL). EIA reports those stocks in thousand barrels. The page divides by
+            1,000 and labels the result in million barrels, and it shows the week-on-week change against the previous
+            published week. The report itself is released on Wednesday at 10:30 a.m. US Eastern, for the week ending
+            the previous Friday.
+          </p>
+          <p>
+            Other pages still carry hand-maintained notes. Each card says whether its figure is delayed, manual or a
+            placeholder, and links the source. A wrong figure is handled under the{" "}
+            <Link href="/corrections">corrections policy</Link>. Sponsors do not see copy before publication. That
+            rule is the <Link href="/editorial-policy">editorial policy</Link>.
+          </p>
+
           <h2>What we are not</h2>
           <p>
-            The Crude Oracle is not a regulated financial adviser and does not provide financial
-            advice, investment advice or recommendations to buy, sell or hold anything. We provide
-            market commentary, research and education so you can make your own decisions — with a
-            regulated adviser where appropriate. See our{" "}
-            <Link href="/financial-disclaimer">Financial Disclaimer</Link>.
+            The Crude Oracle is not a regulated financial adviser. It is not authorised or regulated
+            by the Financial Conduct Authority, and it does not provide financial advice, investment
+            advice or recommendations to buy, sell or hold anything. We provide market commentary,
+            research and education so you can make your own decisions — with a regulated adviser where
+            appropriate. See our <Link href="/financial-disclaimer">Financial Disclaimer</Link>. Not
+            financial advice.
           </p>
 
           <h2>Coverage</h2>

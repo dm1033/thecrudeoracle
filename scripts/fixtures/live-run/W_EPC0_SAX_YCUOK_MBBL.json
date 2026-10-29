@@ -12,7 +12,7 @@
         "product-name": "Crude Oil",
         "process": "SAE",
         "process-name": "Ending Stocks excluding SPR",
-        "series": "WCESTOK1",
+        "series": "W_EPC0_SAX_YCUOK_MBBL",
         "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
         "value": 24200,
         "units": "MBBL"
@@ -25,7 +25,7 @@
         "product-name": "Crude Oil",
         "process": "SAE",
         "process-name": "Ending Stocks excluding SPR",
-        "series": "WCESTOK1",
+        "series": "W_EPC0_SAX_YCUOK_MBBL",
         "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
         "value": 24351,
         "units": "MBBL"
@@ -38,7 +38,7 @@
         "product-name": "Crude Oil",
         "process": "SAE",
         "process-name": "Ending Stocks excluding SPR",
-        "series": "WCESTOK1",
+        "series": "W_EPC0_SAX_YCUOK_MBBL",
         "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
         "value": 23548,
         "units": "MBBL"
@@ -51,7 +51,7 @@
         "product-name": "Crude Oil",
         "process": "SAE",
         "process-name": "Ending Stocks excluding SPR",
-        "series": "WCESTOK1",
+        "series": "W_EPC0_SAX_YCUOK_MBBL",
         "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
         "value": 23524,
         "units": "MBBL"
@@ -64,7 +64,7 @@
         "product-name": "Crude Oil",
         "process": "SAE",
         "process-name": "Ending Stocks excluding SPR",
-        "series": "WCESTOK1",
+        "series": "W_EPC0_SAX_YCUOK_MBBL",
         "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
         "value": 24922,
         "units": "MBBL"
@@ -77,7 +77,7 @@
         "product-name": "Crude Oil",
         "process": "SAE",
         "process-name": "Ending Stocks excluding SPR",
-        "series": "WCESTOK1",
+        "series": "W_EPC0_SAX_YCUOK_MBBL",
         "series-description": "Weekly Cushing, OK Ending Stocks of Crude Oil",
         "value": 25313,
         "units": "MBBL"
@@ -91,7 +91,7 @@
       "frequency": "weekly",
       "facets": {
         "series": [
-          "WCESTOK1"
+          "W_EPC0_SAX_YCUOK_MBBL"
         ]
       }
     }

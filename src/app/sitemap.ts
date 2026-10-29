@@ -6,6 +6,7 @@ import { SITE } from "@/lib/site";
 const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }[] = [
   { path: "/", priority: 1.0, changeFrequency: "daily" },
   { path: "/daily", priority: 0.9, changeFrequency: "daily" },
+  { path: "/eia-weekly", priority: 0.9, changeFrequency: "weekly" },
   { path: "/dashboard", priority: 0.9, changeFrequency: "daily" },
   { path: "/daily-briefing", priority: 0.9, changeFrequency: "daily" },
   { path: "/watchlist", priority: 0.8, changeFrequency: "weekly" },
@@ -30,6 +31,8 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/subscribe", priority: 0.9, changeFrequency: "monthly" },
   { path: "/about", priority: 0.5, changeFrequency: "monthly" },
   { path: "/advertise", priority: 0.4, changeFrequency: "monthly" },
+  { path: "/media-kit", priority: 0.4, changeFrequency: "monthly" },
+  { path: "/corrections", priority: 0.3, changeFrequency: "yearly" },
   { path: "/contact", priority: 0.5, changeFrequency: "monthly" },
   { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly" },
   { path: "/terms-of-use", priority: 0.2, changeFrequency: "yearly" },
@@ -40,8 +43,9 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const today = new Date().toISOString().slice(0, 10);
   const entries: MetadataRoute.Sitemap = ROUTES.map((route) => {
-    const stamp = ROUTE_LASTMOD[route.path];
+    const stamp = route.path === "/daily" || route.path === "/eia-weekly" ? `${today}T00:00:00Z` : ROUTE_LASTMOD[route.path];
     return {
       url: `${SITE.url}${route.path === "/" ? "" : route.path}`,
       ...(stamp ? { lastModified: new Date(stamp) } : {}),

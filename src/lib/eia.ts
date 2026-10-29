@@ -17,13 +17,14 @@
  * getUsCommercialCrudeStocks, getCushingStocks) wire all three layers
  * together for the update script and the live spot cache.
  *
- * IMPORTANT — series identifiers were written from training-data recollection
- * of the EIA v2 API; this development environment has no outbound internet
- * access to confirm them live against https://www.eia.gov/opendata/browser/.
- * Each entry in EIA_SERIES below carries a `confidence` rating and a
- * `verificationNote` — read them before the first production run. A wrong
- * route or series id fails LOUDLY (HTTP error or zero-rows validation error),
- * not silently — this module never invents a fallback value.
+ * Spot series RBRTE and RWTC were checked on 29 Oct 2026 against FRED series
+ * DCOILBRENTEU and DCOILWTICO (both sourced from EIA, dollars per barrel).
+ * The 27 Oct 2026 prints are Brent 123.10 and WTI 103.37. That is a real
+ * $19.73 Brent premium, not a swapped series, a unit conversion, or a
+ * mismatched date. Weekly stock ids below were checked the same day against
+ * EIA's public navigator titles. A live v2 data call still needs EIA_API_KEY;
+ * without a key the routes answer API_KEY_MISSING. A wrong route or series
+ * id fails loudly. This module never invents a fallback value.
  * ----------------------------------------------------------------------------
  */
 
@@ -160,6 +161,15 @@ function toMillionBarrels(rawThousandBarrels: number): number {
   return rawThousandBarrels / 1000;
 }
 
+/**
+ * EIA labels thousand barrels as MBBL (M = thousand in petroleum statistics).
+ * A value already in million barrels must not be divided again.
+ */
+export function isThousandBarrelUnits(units: string): boolean {
+  const normalized = units.toUpperCase().replace(/[^A-Z]/g, "");
+  return normalized === "MBBL" || normalized.includes("THOUSANDBARREL");
+}
+
 export const EIA_SERIES = {
   WTI_SPOT: {
     key: "WTI_SPOT",
@@ -172,9 +182,8 @@ export const EIA_SERIES = {
     sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/RWTCD.htm",
     confidence: "high",
     verificationNote:
-      "Checked against EIA APIv2 docs (https://www.eia.gov/opendata/documentation.php) and the " +
-      "petroleum/pri/spt route: daily frequency, data column `value`, facet `series` = RWTC " +
-      "(Cushing, OK WTI Spot Price FOB). Query uses frequency=daily, data[0]=value, facets[series][].",
+      "petroleum/pri/spt, daily, data[0]=value, facets[series][]=RWTC, units $/BBL, no conversion. " +
+      "29 Oct 2026: FRED DCOILWTICO (EIA source) printed 103.37 for 2026-10-27, matching this mapping.",
   },
   BRENT_SPOT: {
     key: "BRENT_SPOT",
@@ -187,8 +196,9 @@ export const EIA_SERIES = {
     sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/RBRTED.htm",
     confidence: "high",
     verificationNote:
-      "Same petroleum/pri/spt route as WTI. RBRTE is the Europe Brent Spot Price FOB series id. " +
-      "Docs use facets[series][] and data[0]=value (data[]=value is equivalent).",
+      "Same petroleum/pri/spt route as WTI. RBRTE, units $/BBL, no conversion. " +
+      "29 Oct 2026: FRED DCOILBRENTEU (EIA source) printed 123.10 for 2026-10-27, matching this mapping. " +
+      "The same-day WTI print was 103.37, so the wide Brent premium is the published spread.",
   },
   HENRY_HUB_SPOT: {
     key: "HENRY_HUB_SPOT",
@@ -216,32 +226,58 @@ export const EIA_SERIES = {
     expectedUnits: "MBBL",
     outputUnit: "mb", // million barrels — matches data/balance-engine.json "unit": "mb"
     unitConversion: toMillionBarrels,
-    sourcePageUrl: "https://www.eia.gov/petroleum/supply/weekly/",
+    sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WCESTUS1&f=W",
     confidence: "high",
     verificationNote:
-      "WCESTUS1 ('commercial', i.e. excluding SPR, US crude stocks) is the series id also mirrored " +
-      "by FRED under the identical id, which corroborates it. Confirm the v2 route path " +
-      "'petroleum/stoc/wstk' via https://www.eia.gov/opendata/browser/petroleum/stoc/wstk before " +
-      "the first production run.",
+      "29 Oct 2026: EIA navigator title is 'Weekly U.S. Ending Stocks excluding SPR of Crude Oil " +
+      "(Thousand Barrels)' for WCESTUS1. Route petroleum/stoc/wstk. EIA's MBBL means thousand barrels; " +
+      "this module divides by 1,000 and reports million barrels.",
+  },
+  US_GASOLINE_STOCKS: {
+    key: "US_GASOLINE_STOCKS",
+    route: "petroleum/stoc/wstk",
+    seriesId: "WGTSTUS1",
+    frequency: "weekly",
+    description: "Weekly U.S. Ending Stocks of Total Gasoline (thousand barrels)",
+    expectedUnits: "MBBL",
+    outputUnit: "mb",
+    unitConversion: toMillionBarrels,
+    sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WGTSTUS1&f=W",
+    confidence: "high",
+    verificationNote:
+      "29 Oct 2026: EIA navigator title is 'Weekly U.S. Ending Stocks of Total Gasoline (Thousand Barrels)'. " +
+      "Same petroleum/stoc/wstk route and thousand-barrel conversion as commercial crude.",
+  },
+  US_DISTILLATE_STOCKS: {
+    key: "US_DISTILLATE_STOCKS",
+    route: "petroleum/stoc/wstk",
+    seriesId: "WDISTUS1",
+    frequency: "weekly",
+    description: "Weekly U.S. Ending Stocks of Distillate Fuel Oil (thousand barrels)",
+    expectedUnits: "MBBL",
+    outputUnit: "mb",
+    unitConversion: toMillionBarrels,
+    sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WDISTUS1&f=W",
+    confidence: "high",
+    verificationNote:
+      "29 Oct 2026: EIA navigator title is 'Weekly U.S. Ending Stocks of Distillate Fuel Oil (Thousand Barrels)'. " +
+      "Same petroleum/stoc/wstk route and thousand-barrel conversion as commercial crude.",
   },
   CUSHING_CRUDE_STOCKS: {
     key: "CUSHING_CRUDE_STOCKS",
     route: "petroleum/stoc/wstk",
-    seriesId: "WCESTOK1",
+    seriesId: "W_EPC0_SAX_YCUOK_MBBL",
     frequency: "weekly",
-    description: "Weekly Cushing, OK Ending Stocks of Crude Oil (thousand barrels)",
+    description: "Weekly Cushing, OK Ending Stocks excluding SPR of Crude Oil (thousand barrels)",
     expectedUnits: "MBBL",
     outputUnit: "mb",
     unitConversion: toMillionBarrels,
-    sourcePageUrl: "https://www.eia.gov/petroleum/supply/weekly/",
-    confidence: "medium",
+    sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=W_EPC0_SAX_YCUOK_MBBL&f=W",
+    confidence: "high",
     verificationNote:
-      "WCESTOK1 is a best-recollection series id formed on the same WCEST{AREA}1 pattern as " +
-      "WCESTUS1 (which is high-confidence). This one specifically MUST be checked in the EIA API " +
-      "browser (https://www.eia.gov/opendata/browser/petroleum/stoc/wstk, filter area to Cushing) " +
-      "before the first production run. If the id is wrong the request fails with a 4xx/empty " +
-      "result and update-eia-data.mjs refuses to write rather than silently mislabelling a " +
-      "different series as Cushing stock.",
+      "29 Oct 2026: EIA navigator title for W_EPC0_SAX_YCUOK_MBBL is 'Weekly Cushing, OK Ending Stocks " +
+      "excluding SPR of Crude Oil (Thousand Barrels)'. The guessed id WCESTOK1 has no navigator page. " +
+      "Same petroleum/stoc/wstk route and thousand-barrel conversion as commercial crude.",
   },
 } as const satisfies Record<string, EiaSeriesDef>;
 

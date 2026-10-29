@@ -2,7 +2,8 @@ import Link from "next/link";
 import JsonLd from "@/components/JsonLd";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
-import { AdvertiseCtaLink, NewsletterSignupLink, SponsoredLink } from "@/components/analytics-events";
+import BeehiivSignup from "@/components/BeehiivSignup";
+import PresentedBy from "@/components/PresentedBy";
 import { EIA_SERIES } from "@/lib/eia";
 import {
   DAILY_NOTE_SPONSOR,
@@ -12,7 +13,6 @@ import {
   type PeriodChange,
   type PricePoint,
 } from "@/lib/daily-note";
-import { BEEHIIV_PUBLIC_URL } from "@/lib/newsletter";
 import { formatLondonTimestamp, upcomingReleases, type ReleaseEvent } from "@/lib/release-calendar";
 import { SITE } from "@/lib/site";
 
@@ -129,33 +129,8 @@ function SeriesRow({ series }: { series: DailyNoteSeries }) {
 function SponsorAndNewsletter() {
   return (
     <>
-      <aside aria-label="Sponsored" className="rounded-lg border border-dashed border-gold-600/70 bg-ink-900 p-5">
-        <p className="text-xs font-bold uppercase tracking-widest text-gold-400">Sponsored</p>
-        {DAILY_NOTE_SPONSOR ? (
-          <SponsoredLink href={DAILY_NOTE_SPONSOR.href} className="mt-2 inline-block text-sm font-semibold text-white underline">
-            {DAILY_NOTE_SPONSOR.name}
-          </SponsoredLink>
-        ) : (
-          <p className="mt-2 text-sm text-steel-300">
-            <AdvertiseCtaLink href="/advertise" location="daily_sponsor_slot" className="font-semibold text-gold-400 underline">
-              Sponsor this note
-            </AdvertiseCtaLink>
-          </p>
-        )}
-      </aside>
-      <section className="rounded-lg border border-gold-600/40 bg-ink-900 p-6 sm:p-8" aria-labelledby="daily-newsletter">
-        <p className="eyebrow">Newsletter</p>
-        <h2 id="daily-newsletter" className="h2 mt-1">
-          Get the morning note by email
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-steel-400">
-          The Daily Bottom Line is the desk&apos;s beehiiv publication. Sign-up is on that page. This site does not
-          take an API key for it.
-        </p>
-        <NewsletterSignupLink href={BEEHIIV_PUBLIC_URL} location="daily_note" className="btn-primary mt-4">
-          Sign up for the newsletter
-        </NewsletterSignupLink>
-      </section>
+      <PresentedBy sponsor={DAILY_NOTE_SPONSOR} location="daily_sponsor_slot" />
+      <BeehiivSignup location="daily_note" />
     </>
   );
 }
@@ -172,12 +147,13 @@ export function DailyNoteUnavailable({ date }: { date?: string }) {
       />
       <div className="container-site space-y-8 py-10">
         <section className="max-w-3xl space-y-4">
+          <p className="text-lg font-semibold text-white">Latest EIA print: not loaded</p>
           <p className="text-sm leading-relaxed text-steel-300">
             EIA daily spot is not available for this note. No Brent, WTI or Henry Hub price is shown.
           </p>
           <p className="text-sm text-steel-400">
             Series used when the feed is up: Brent RBRTE, WTI RWTC, Henry Hub RNGWHHD. EIA publishes them with a lag of
-            one to three days after the trade date.
+            one to two business days after the trade date. Weekends and US holidays can make the calendar gap longer.
           </p>
           <p className="text-sm font-medium text-steel-200">Information only, not investment advice.</p>
           <Link href="/data-sources" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
@@ -256,6 +232,32 @@ export default function DailyNoteView({
     citation: [SOURCE_URL.RBRTE, SOURCE_URL.RWTC, SOURCE_URL.RNGWHHD],
     isBasedOn: "https://www.eia.gov/opendata/",
   };
+  const latestPrint = archiveDates[0] ?? note.date;
+  const dataset = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: `EIA daily spot prices, ${note.date}`,
+    description:
+      "Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) daily spot prices from the U.S. Energy Information Administration.",
+    url,
+    temporalCoverage: note.date,
+    isAccessibleForFree: true,
+    license: "https://www.eia.gov/about/copyrights_reuse.php",
+    creator: {
+      "@type": "Organization",
+      name: "U.S. Energy Information Administration",
+      url: "https://www.eia.gov/",
+    },
+    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    variableMeasured: series.map((item) => ({
+      "@type": "PropertyValue",
+      name: item.name,
+      propertyID: item.seriesId,
+      unitText: item.unit,
+      value: item.window.latest.value,
+      measurementTechnique: "EIA Open Data API v2",
+    })),
+  };
   const older = archiveDates.filter((date) => date < note.date).slice(0, 12);
   const newer = archiveDates.filter((date) => date > note.date).slice(-1)[0] ?? null;
   const previous = older[0] ?? null;
@@ -265,15 +267,20 @@ export default function DailyNoteView({
       <PageHeader
         eyebrow="Morning note"
         title={headline}
-        intro="Brent, WTI and Henry Hub from the EIA daily spot, with the change from the previous print, from about a week earlier and from about a month earlier. EIA lags the trade date by one to three days."
+        intro="Brent, WTI and Henry Hub from the EIA daily spot, with the change from the previous print, from about a week earlier and from about a month earlier. EIA publishes the spot one to two business days after the trade date."
       />
       <div className="container-site space-y-8 py-10">
-        <section className="rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm leading-relaxed text-steel-300" aria-label="As of">
-          <p>
-            <span className="font-semibold text-white">As of the trade date.</span> Brent {formatLongDate(note.brent.window.latest.date)}
-            . WTI {formatLongDate(note.wti.window.latest.date)}
-            {note.henryHub ? `. Henry Hub ${formatLongDate(note.henryHub.window.latest.date)}` : ". Henry Hub not loaded"}
-            . EIA publishes these daily spots with a lag of one to three days, so the trade date is not the day this page was opened.
+        <section className="rounded-lg border border-gold-600/40 bg-ink-900 p-5 text-sm leading-relaxed text-steel-300" aria-label="Latest EIA print">
+          <p className="text-lg font-semibold text-white sm:text-xl">Latest EIA print: {formatLongDate(latestPrint)}</p>
+          <p className="mt-2">
+            EIA publishes the daily spot one to two business days after the trade date. A Monday trade date is often
+            on the site on Tuesday. Weekends and US holidays widen the calendar gap, so the print date is not the day
+            this page was opened.
+          </p>
+          <p className="mt-2">
+            This note uses Brent {formatLongDate(note.brent.window.latest.date)}, WTI{" "}
+            {formatLongDate(note.wti.window.latest.date)}
+            {note.henryHub ? `, Henry Hub ${formatLongDate(note.henryHub.window.latest.date)}` : ", Henry Hub not loaded"}.
           </p>
           <p className="mt-2 text-xs text-steel-500">
             Fetched {formatLondonTimestamp(fetchedAt)}. Source: U.S. Energy Information Administration, Open Data API.
@@ -428,6 +435,7 @@ export default function DailyNoteView({
         <DisclaimerBlock />
       </div>
       <JsonLd data={schema} />
+      <JsonLd data={dataset} />
     </>
   );
 }
