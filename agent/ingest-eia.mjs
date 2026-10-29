@@ -9,7 +9,7 @@ const SERIES = {
   RWTC: "WTI spot (Cushing) $/bbl",
   RBRTE: "Brent spot (Europe) $/bbl",
   WCESTUS1: "US commercial crude stocks (kbbl)",
-  WCESTOK1: "Cushing crude stocks (kbbl)",
+  W_EPC0_SAX_YCUOK_MBBL: "Cushing crude stocks (kbbl)",
 };
 
 async function fetchSeries(id, key) {

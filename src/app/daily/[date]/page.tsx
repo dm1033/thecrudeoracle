@@ -19,7 +19,8 @@ export function generateMetadata({ params }: { params: { date: string } }): Meta
   return pageMeta(
     title,
     "EIA daily spot for Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) on this trade date, with day-on-day, week-on-week and month-on-month changes. Information only, not investment advice.",
-    path
+    path,
+    { dynamicImage: true }
   );
 }
 

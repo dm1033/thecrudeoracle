@@ -20,6 +20,10 @@
     {
       "path": "/api/revalidate-daily",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/revalidate-daily",
+      "schedule": "45 15 * * 3"
     }
   ]
 }

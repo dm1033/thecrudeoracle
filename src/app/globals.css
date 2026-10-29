@@ -95,3 +95,21 @@ body {
 .num {
   font-variant-numeric: tabular-nums;
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body,
+  main,
+  main * {
+    color: #111 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  main a {
+    text-decoration: underline;
+  }
+}

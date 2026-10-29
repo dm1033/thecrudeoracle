@@ -31,6 +31,7 @@ export interface NavItem {
 
 const NAV_MAIN_ALL: NavItem[] = [
   { label: "Daily Note", href: "/daily" },
+  { label: "EIA Weekly", href: "/eia-weekly" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Daily Briefing", href: "/daily-briefing" },
   { label: "Watchlist", href: "/watchlist" },
@@ -57,11 +58,13 @@ export const NAV_FOOTER_LEGAL: NavItem[] = [
   { label: "Data Disclaimer", href: "/data-disclaimer" },
   { label: "Data sources", href: "/data-sources" },
   { label: "Editorial Policy", href: "/editorial-policy" },
+  { label: "Corrections", href: "/corrections" },
 ];
 
 export const NAV_FOOTER_COMPANY: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Advertise", href: "/advertise" },
+  { label: "Media kit", href: "/media-kit" },
   { label: "Free Access", href: "/subscribe" },
   { label: "Account", href: "/account" },
   { label: "Contact", href: "/contact" },

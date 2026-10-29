@@ -25,10 +25,20 @@ export function pageTitle(title: string): { title: Metadata["title"]; social: st
   return { title: clean, social: `${clean} | ${SITE.name}` };
 }
 
-/** Build consistent per-page metadata: title, description, canonical, Open Graph, Twitter. */
-export function pageMeta(title: string, description: string, path: string): Metadata {
+/**
+ * Build consistent per-page metadata: title, description, canonical, Open Graph, Twitter.
+ * `dynamicImage` leaves the image to a sibling opengraph-image file so a static brand
+ * photo is not listed ahead of the generated card.
+ */
+export function pageMeta(
+  title: string,
+  description: string,
+  path: string,
+  options?: { dynamicImage?: boolean }
+): Metadata {
   const url = `${SITE.url}${path}`;
   const named = pageTitle(title);
+  const dynamicImage = options?.dynamicImage === true;
   return {
     title: named.title,
     description,
@@ -40,13 +50,13 @@ export function pageMeta(title: string, description: string, path: string): Meta
       siteName: SITE.name,
       type: "website",
       locale: "en_GB",
-      images: [OG_IMAGE],
+      ...(dynamicImage ? {} : { images: [OG_IMAGE] }),
     },
     twitter: {
       card: "summary_large_image",
       title: named.social,
       description,
-      images: [OG_IMAGE.url],
+      ...(dynamicImage ? {} : { images: [OG_IMAGE.url] }),
     },
   };
 }

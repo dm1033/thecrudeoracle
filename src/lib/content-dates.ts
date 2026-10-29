@@ -68,4 +68,8 @@ export const ROUTE_LASTMOD: Record<string, string> = {
   "/gas-lng": latest(prices, charts)!,
   "/opec-supply-risk": latest(signals, charts)!,
   "/research-library": notes,
+  "/about": "2026-10-29T00:00:00Z",
+  "/advertise": "2026-10-29T00:00:00Z",
+  "/media-kit": "2026-10-29T00:00:00Z",
+  "/corrections": "2026-10-29T00:00:00Z",
 };

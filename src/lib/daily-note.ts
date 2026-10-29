@@ -218,7 +218,7 @@ export function writeSummary(note: Omit<DailyNote, "summary">): string[] {
     lines.push("Henry Hub is not loaded from EIA for this note, so no gas price is stated.");
   }
   lines.push(
-    "These figures are U.S. EIA daily spot prices. EIA publishes them with a lag of one to three days after the trade date. The dates above are those trade dates."
+    "These figures are U.S. EIA daily spot prices. EIA publishes them with a lag of one to two business days after the trade date. Weekends and US holidays can make the calendar gap longer. The dates above are those trade dates."
   );
   lines.push("Information only, not investment advice.");
   return lines;

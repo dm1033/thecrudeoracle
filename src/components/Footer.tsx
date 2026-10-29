@@ -11,7 +11,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-ink-700 bg-ink-900">
+    <footer className="no-print mt-16 border-t border-ink-700 bg-ink-900">
       <div className="container-site py-12">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
