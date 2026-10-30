@@ -32,6 +32,7 @@ export interface NavItem {
 const NAV_MAIN_ALL: NavItem[] = [
   { label: "Daily Note", href: "/daily" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Desk Bot", href: "/desk-agent" },
   { label: "Daily Briefing", href: "/daily-briefing" },
   { label: "Watchlist", href: "/watchlist" },
   { label: "Company Intel", href: "/company-intelligence" },
