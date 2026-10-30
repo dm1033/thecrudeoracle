@@ -2,33 +2,39 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { get, requireUsable, resolvePath } from "./lib/env.mjs";
 import { log } from "./lib/log.mjs";
-import { guardedFetch } from "./lib/allowlist.mjs";
+import {
+  EIA_SERIES,
+  getWtiSpot,
+  getBrentSpot,
+  getUsCommercialCrudeStocks,
+  getCushingStocks,
+} from "../src/lib/eia.ts";
 
 // EIA Open Data series powering the site's WTI/Brent spot + crude stocks.
-const SERIES = {
-  RWTC: "WTI spot (Cushing) $/bbl",
-  RBRTE: "Brent spot (Europe) $/bbl",
-  WCESTUS1: "US commercial crude stocks (kbbl)",
-  W_EPC0_SAX_YCUOK_MBBL: "Cushing crude stocks (kbbl)",
-};
-
-async function fetchSeries(id, key) {
-  const url = `https://api.eia.gov/v2/seriesid/${id}?api_key=${encodeURIComponent(key)}`;
-  const res = await guardedFetch(url);
-  if (!res.ok) throw new Error(`EIA ${id} failed: ${res.status} ${res.statusText}`);
-  const json = await res.json();
-  const rows = json?.response?.data;
-  if (!Array.isArray(rows) || rows.length === 0) throw new Error(`EIA ${id}: no data`);
-  const latest = rows[0];
-  return { id, label: SERIES[id], period: latest.period, value: latest.value };
-}
+// Uses EIA_SERIES from src/lib/eia.ts (including W_EPC0_SAX_YCUOK_MBBL for Cushing).
+const SERIES = [
+  { id: EIA_SERIES.WTI_SPOT.seriesId, label: "WTI spot (Cushing) $/bbl", fetch: () => getWtiSpot() },
+  { id: EIA_SERIES.BRENT_SPOT.seriesId, label: "Brent spot (Europe) $/bbl", fetch: () => getBrentSpot() },
+  {
+    id: EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS.seriesId,
+    label: "US commercial crude stocks (mbbl)",
+    fetch: () => getUsCommercialCrudeStocks(),
+  },
+  {
+    id: EIA_SERIES.CUSHING_CRUDE_STOCKS.seriesId,
+    label: "Cushing crude stocks (mbbl)",
+    fetch: () => getCushingStocks(),
+  },
+];
 
 export async function ingestEia() {
   const key = requireUsable("EIA_API_KEY", "free key: https://www.eia.gov/opendata/register.php");
+  process.env.EIA_API_KEY = key;
   const out = { fetchedAt: new Date().toISOString(), dataType: "delayed", source: "EIA Open Data", series: [] };
-  for (const id of Object.keys(SERIES)) {
-    log.info(`Fetching EIA series ${id}…`);
-    out.series.push(await fetchSeries(id, key));
+  for (const s of SERIES) {
+    log.info(`Fetching EIA series ${s.id}…`);
+    const res = await s.fetch();
+    out.series.push({ id: s.id, label: s.label, period: res.latest.date, value: res.latest.value });
   }
   const dir = resolvePath(get("OUTBOX_DIR", "./outbox"));
   mkdirSync(dir, { recursive: true });

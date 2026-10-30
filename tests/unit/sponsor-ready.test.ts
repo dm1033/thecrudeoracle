@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { AUDIENCE_METRICS, filledAudienceMetrics } from "@/lib/audience";
-import { EIA_SERIES, isThousandBarrelUnits } from "@/lib/eia";
+import { EIA_SERIES, isThousandBarrelUnits, type EiaSeriesDef } from "@/lib/eia";
 import { RATE_SLOTS } from "@/lib/rate-card";
 
 describe("EIA series mapping", () => {
   it("keeps Brent and WTI as unconverted dollar-per-barrel spot series", () => {
-    for (const series of [EIA_SERIES.BRENT_SPOT, EIA_SERIES.WTI_SPOT]) {
+    for (const series of [EIA_SERIES.BRENT_SPOT, EIA_SERIES.WTI_SPOT] as EiaSeriesDef[]) {
       expect(series.route).toBe("petroleum/pri/spt");
       expect(series.frequency).toBe("daily");
       expect(series.expectedUnits).toBe("$/BBL");

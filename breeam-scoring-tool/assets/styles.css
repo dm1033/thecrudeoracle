@@ -1408,6 +1408,17 @@ h1, h2, h3, h4, p {
   .setup-field--wide {
     grid-column: span 1;
   }
+  .cat-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .cat-head-metrics {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    flex-shrink: 1;
+  }
   .issue-top {
     flex-direction: column;
   }
@@ -1438,14 +1449,50 @@ h1, h2, h3, h4, p {
     font-size: 10.5pt;
   }
   .hub-tool-head,
+  .hub-tool-head-card,
   .project-setup-card,
   .score-tile,
   .panel-box,
-  .cat-section-head {
+  .cat-section-head,
+  .calc-output,
+  .quick-win-card {
     background: #fff !important;
     color: #000 !important;
     border: 1px solid #999 !important;
     box-shadow: none !important;
+  }
+  .hub-tool-head h1,
+  .hub-tool-head h1 span,
+  .hub-tool-head .lead,
+  .hub-tool-crumb,
+  .hub-tool-crumb a,
+  .hub-kicker,
+  .hub-tool-head-card dt,
+  .hub-tool-head-card dd,
+  .setup-header h2,
+  .setup-field label,
+  .setup-field input,
+  .setup-field select,
+  .timber-gate-toggle,
+  .score-tile-label,
+  .score-tile-big,
+  .score-tile-sub,
+  .rating-pill,
+  .panel-box h3,
+  .panel-box p,
+  .panel-box small,
+  .cat-head-title h3,
+  .cat-head-title p,
+  .cat-head-metrics,
+  .cat-head-weighted,
+  .cat-code-badge,
+  .quick-win-info strong,
+  .quick-win-info small,
+  .calc-output-score strong,
+  .calc-output ul,
+  .audit-table th {
+    color: #000 !important;
+    background: transparent !important;
   }
   .scorer-layout {
     display: block;

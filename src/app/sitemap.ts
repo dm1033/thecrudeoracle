@@ -8,6 +8,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/daily", priority: 0.9, changeFrequency: "daily" },
   { path: "/eia-weekly", priority: 0.9, changeFrequency: "weekly" },
   { path: "/dashboard", priority: 0.9, changeFrequency: "daily" },
+  { path: "/desk-agent", priority: 0.9, changeFrequency: "daily" },
   { path: "/daily-briefing", priority: 0.9, changeFrequency: "daily" },
   { path: "/watchlist", priority: 0.8, changeFrequency: "weekly" },
   { path: "/company-intelligence", priority: 0.8, changeFrequency: "weekly" },
