@@ -15,23 +15,25 @@ export function AdvertiseCtaLink({
   href,
   location,
   className,
+  rel,
   children,
 }: {
   href: string;
   location: string;
   className?: string;
+  rel?: string;
   children: React.ReactNode;
 }) {
   const onClick = () => track("advertise_cta_click", { location, href });
   if (href.startsWith("/")) {
     return (
-      <Link href={href} className={className} onClick={onClick}>
+      <Link href={href} className={className} rel={rel} onClick={onClick}>
         {children}
       </Link>
     );
   }
   return (
-    <a href={href} className={className} onClick={onClick}>
+    <a href={href} className={className} rel={rel} onClick={onClick}>
       {children}
     </a>
   );

@@ -85,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <a
           href="/subscribe"
-          className="block bg-gold-500 px-4 py-2 text-center text-xs font-semibold text-ink-950 hover:bg-gold-400"
+          className="no-print block bg-gold-500 px-4 py-2 text-center text-xs font-semibold text-ink-950 hover:bg-gold-400"
         >
           The Crude Oracle is now 100% FREE — every dashboard, briefing and tool. No paywall, no
           card. Learn more →

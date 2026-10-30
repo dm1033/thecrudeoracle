@@ -11,7 +11,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink-700 bg-ink-950/95 backdrop-blur">
+    <header className="no-print sticky top-0 z-40 border-b border-ink-700 bg-ink-950/95 backdrop-blur">
       <div className="container-site flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <BrandMark priority className="h-14 w-auto" sizes="64px" />
@@ -19,7 +19,7 @@ export default function Header() {
 
         <nav className="hidden items-center gap-1 xl:flex" aria-label="Main navigation">
           <ul className="flex items-center gap-1">
-            {NAV_MAIN.slice(0, 8).map((item) => (
+            {NAV_MAIN.slice(0, 9).map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}

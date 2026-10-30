@@ -12,7 +12,8 @@ import FAQ from "@/components/FAQ";
 import PaperBookPanel from "@/components/PaperBookPanel";
 import PriceFreshness from "@/components/PriceFreshness";
 import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
-import NewsletterSignup from "@/components/NewsletterSignup";
+import BeehiivSignup from "@/components/BeehiivSignup";
+import PresentedBy from "@/components/PresentedBy";
 import { getPublishedPrices } from "@/lib/published-prices";
 import type { BoardQuote } from "@/lib/desk-tape";
 import { pageMeta } from "@/lib/seo";
@@ -23,7 +24,8 @@ export const revalidate = 7200;
 export const metadata: Metadata = pageMeta(
   "The Crude Oracle — Daily Brent & WTI Oil Intelligence (Free)",
   "Professional oil and gas intelligence platform — now 100% free: daily crude oil market dashboard, Brent and WTI analysis, gas and LNG signals, OPEC monitoring, UK energy security and investor-focused research.",
-  "/"
+  "/",
+  { dynamicImage: true }
 );
 
 const MEMBER_BENEFITS = [
@@ -243,8 +245,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="container-site py-14">
-        <NewsletterSignup />
+      <section className="container-site grid gap-6 py-14 lg:grid-cols-2">
+        <PresentedBy location="home_presented_by" />
+        <BeehiivSignup location="homepage" />
       </section>
 
       {/* FAQ */}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import { AdvertiseCtaLink, TrackOnMount } from "@/components/analytics-events";
+import { RATE_PACKAGES, RATE_SLOTS } from "@/lib/rate-card";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
@@ -12,41 +13,6 @@ export const metadata: Metadata = pageMeta(
 );
 
 const MAILTO = `mailto:${SITE.contactEmail}?subject=${encodeURIComponent("Sponsorship enquiry")}`;
-
-const SLOTS: { slot: string; where: string; from: string }[] = [
-  { slot: "Price board, presented by", where: "Homepage and price cards", from: "$200/week" },
-  { slot: "Daily note, primary", where: "Five sends a week, when the note is running", from: "$150/week" },
-  { slot: "Daily note, secondary", where: "Footer of that email", from: "$50/week" },
-  { slot: "EIA inventory day, presented by", where: "Wednesday page, email and social card", from: "$100/week" },
-  { slot: "Friday positioning, presented by", where: "Friday pages", from: "$100/week" },
-  { slot: "Monthly balances digest", where: "Monthly digest", from: "$75/week" },
-  { slot: "North Sea / UK energy security takeover", where: "That section and related articles", from: "$150/week" },
-  { slot: "LNG, gas and shipping takeover", where: "That section and related articles", from: "$100/week" },
-  { slot: "Calculator sponsor, each", where: "Calculator pages, once they exist", from: "$40/week" },
-  { slot: "Release calendar, presented by", where: "Calendar page", from: "$50/week" },
-  { slot: "Embeddable widget co-brand", where: "Third-party embeds, once they exist", from: "$100/week" },
-  { slot: "Social card sponsor", where: "Social charts", from: "$50/week" },
-  { slot: "Jobs or events listing", where: "A listing, when that page exists", from: "$50 per listing" },
-  { slot: "Sunday week-ahead email", where: "One weekly send", from: "$75/week" },
-];
-
-const PACKAGES: { name: string; includes: string; from: string }[] = [
-  {
-    name: "A. Three founding sponsors",
-    includes: "Price board; a category takeover plus Friday positioning; the daily note primary plus EIA inventory day.",
-    from: "$1,050/week",
-  },
-  {
-    name: "B. One anchor plus fill",
-    includes: "A site-wide presenting partner across the price board, the daily note and EIA inventory day; two calculator slots; the calendar; two listings.",
-    from: "$1,000/week",
-  },
-  {
-    name: "C. North Sea-heavy",
-    includes: "North Sea / UK energy security takeover; the price board; the daily note primary; Friday positioning.",
-    from: "$1,000/week",
-  },
-];
 
 export default function AdvertisePage() {
   return (
@@ -70,6 +36,7 @@ export default function AdvertisePage() {
             These figures are indicative starting points for a site that does not publish traffic,
             subscriber or revenue numbers. They are assumptions to test with buyers, invoiced monthly
             in advance on an 8–12 week minimum if a founding rate is agreed. They are not market data.
+            The same inventory is on the <Link href="/media-kit">media kit</Link>, which is the page to print.
           </p>
         </div>
 
@@ -92,7 +59,7 @@ export default function AdvertisePage() {
                 </tr>
               </thead>
               <tbody>
-                {SLOTS.map((row) => (
+                {RATE_SLOTS.map((row) => (
                   <tr key={row.slot}>
                     <th scope="row" className="font-medium text-steel-200">
                       {row.slot}
@@ -114,7 +81,7 @@ export default function AdvertisePage() {
             Illustrative combinations of the slot prices above. The weekly totals are indicative, not a quote.
           </p>
           <div className="mt-4 grid gap-4 lg:grid-cols-3">
-            {PACKAGES.map((pack) => (
+            {RATE_PACKAGES.map((pack) => (
               <article key={pack.name} className="card">
                 <h3 className="text-base font-semibold text-white">{pack.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-steel-400">{pack.includes}</p>

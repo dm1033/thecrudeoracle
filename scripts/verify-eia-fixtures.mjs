@@ -105,11 +105,11 @@ section("Layer 2/3: valid fixtures parse and transform correctly");
 }
 
 {
-  const json = await loadJson(join(FIXTURES_VALID, "WCESTOK1.json"));
+  const json = await loadJson(join(FIXTURES_VALID, "W_EPC0_SAX_YCUOK_MBBL.json"));
   const obs = eia.parseEiaResponse(json, eia.EIA_SERIES.CUSHING_CRUDE_STOCKS);
-  check("WCESTOK1 fixture parses to 6 observations", obs.length === 6, `got ${obs.length}`);
+  check("Cushing fixture parses to 6 observations", obs.length === 6, `got ${obs.length}`);
   check(
-    "WCESTOK1 thousand-barrel -> million-barrel conversion (24200 -> 24.2)",
+    "Cushing thousand-barrel -> million-barrel conversion (24200 -> 24.2)",
     obs[0].rawValue === 24200 && obs[0].value === 24.2,
     `raw=${obs[0].rawValue} value=${obs[0].value}`
   );
@@ -338,14 +338,14 @@ async function writeFreshFixtures(dir) {
   });
   const cushingRows = weeklyDates.map((period, i) => {
     if (i > 0) cushingStock += (rand() - 0.55) * 0.6;
-    return { period, series: "WCESTOK1", value: Math.round(cushingStock * 1000), units: "MBBL" };
+    return { period, series: "W_EPC0_SAX_YCUOK_MBBL", value: Math.round(cushingStock * 1000), units: "MBBL" };
   });
 
   const wrap = (rows) => JSON.stringify({ response: { total: String(rows.length), dateFormat: "YYYY-MM-DD", data: rows } }, null, 2);
   await writeFile(join(dir, "RWTC.json"), wrap(wtiRows));
   await writeFile(join(dir, "RBRTE.json"), wrap(brentRows));
   await writeFile(join(dir, "WCESTUS1.json"), wrap(usRows));
-  await writeFile(join(dir, "WCESTOK1.json"), wrap(cushingRows));
+  await writeFile(join(dir, "W_EPC0_SAX_YCUOK_MBBL.json"), wrap(cushingRows));
   return dailyDates[0]; // the "latest" observation date, for assertions
 }
 
@@ -431,7 +431,7 @@ function runUpdateScript({ dataDir, fixtureDir, extraArgs = [] }) {
   await cp(join(freshDir, "RWTC.json"), join(brokenDir, "RWTC.json"));
   await cp(join(freshDir, "RBRTE.json"), join(brokenDir, "RBRTE.json"));
   await cp(join(freshDir, "WCESTUS1.json"), join(brokenDir, "WCESTUS1.json"));
-  await cp(join(FIXTURES_MALFORMED, "all_null_values.json"), join(brokenDir, "WCESTOK1.json"));
+  await cp(join(FIXTURES_MALFORMED, "all_null_values.json"), join(brokenDir, "W_EPC0_SAX_YCUOK_MBBL.json"));
 
   const brokenDataDir = await makeScratchDataDir("broken");
   const brokenBeforePrices = await readFile(join(brokenDataDir, "market-prices.json"), "utf8");

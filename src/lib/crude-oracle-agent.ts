@@ -283,7 +283,7 @@ export function generateDeskLeadResponse(
       `- **Clarifying Questions for Your Research:** What is your time horizon (prompt contract vs multi-quarter), and are you analysing flat price, timespreads, or energy equities?`,
       `### 5. Sources & Freshness`,
       `- ${freshnessBanner}`,
-      `- Primary sources: EIA.gov (RBRTE, RWTC, RNGWHHD, WCESTUS1, WCESTOK1), IEA Oil Market Report, OPEC MOMR, CFTC/ICE COT.`,
+      `- Primary sources: EIA.gov (RBRTE, RWTC, RNGWHHD, WCESTUS1, W_EPC0_SAX_YCUOK_MBBL), IEA Oil Market Report, OPEC MOMR, CFTC/ICE COT.`,
       `---`,
       `**Disclaimer:** ${CRUDE_ORACLE_MANDATORY_DISCLAIMER}`,
       ``,
@@ -391,7 +391,7 @@ export function generateDeskLeadResponse(
     `### 6. Sources & Freshness`,
     `- **Freshness & Delays:** ${freshnessBanner}`,
     `- **Primary Sources Cited:** EIA.gov (Daily Spot ` +
-      `RBRTE/RWTC/RNGWHHD as of ${formatAsOf(brent.last_updated)}; Weekly Petroleum Status Report WCESTUS1/WCESTOK1 as of ${usStocks.last_updated}), IEA Oil Market Report (as of ${oecd.last_updated}), OPEC MOMR (as of 2026-07-01), CFTC & ICE COT (as of 2026-07-01, Tuesday positions released Friday), Baker Hughes Rig Count (as of ${rigCount?.last_updated ?? "2026-07-14"}), OFAC & NHC public advisories (as of 2026-07-02..04).`
+      `RBRTE/RWTC/RNGWHHD as of ${formatAsOf(brent.last_updated)}; Weekly Petroleum Status Report WCESTUS1/W_EPC0_SAX_YCUOK_MBBL as of ${usStocks.last_updated}), IEA Oil Market Report (as of ${oecd.last_updated}), OPEC MOMR (as of 2026-07-01), CFTC & ICE COT (as of 2026-07-01, Tuesday positions released Friday), Baker Hughes Rig Count (as of ${rigCount?.last_updated ?? "2026-07-14"}), OFAC & NHC public advisories (as of 2026-07-02..04).`
   );
 
   // 7. Mandatory Disclaimer & Interactive Footer

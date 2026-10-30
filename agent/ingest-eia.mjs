@@ -11,6 +11,7 @@ import {
 } from "../src/lib/eia.ts";
 
 // EIA Open Data series powering the site's WTI/Brent spot + crude stocks.
+// Uses EIA_SERIES from src/lib/eia.ts (including W_EPC0_SAX_YCUOK_MBBL for Cushing).
 const SERIES = [
   { id: EIA_SERIES.WTI_SPOT.seriesId, label: "WTI spot (Cushing) $/bbl", fetch: () => getWtiSpot() },
   { id: EIA_SERIES.BRENT_SPOT.seriesId, label: "Brent spot (Europe) $/bbl", fetch: () => getBrentSpot() },

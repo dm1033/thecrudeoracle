@@ -159,7 +159,7 @@ describe("morning note summary", () => {
     expect(text).toContain("$73.50 per barrel");
     expect(text).toContain("$3.05 per MMBtu");
     expect(text).toContain("$6.50 per barrel");
-    expect(text).toContain("lag of one to three days");
+    expect(text).toContain("lag of one to two business days");
     expect(text).not.toContain("99.00");
     expect(text).not.toContain("126.55");
     expect(text.toLowerCase()).not.toMatch(/\b(buy|sell|bullish|bearish|forecast|predict|target|recommend|attractive)\b/);
