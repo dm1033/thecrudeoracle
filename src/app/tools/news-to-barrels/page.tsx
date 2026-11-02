@@ -7,7 +7,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
-  "News-to-Barrels AI — Event Impact in Barrels, Not Headlines",
+  "News-to-barrels event impact",
   "Module 4 of The Crude Oracle trader toolkit: AI-assisted analysis that converts oil market news into estimated barrel impact — affected capacity, the full impact chain across crude, products, cracks and differentials, and an honest confidence grade.",
   "/tools/news-to-barrels"
 );

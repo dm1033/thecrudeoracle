@@ -6,7 +6,7 @@ import PaperBookDashboard from "@/components/PaperBookDashboard";
 import dashboard from "../../../paper-book/report/dashboard.json";
 
 export const metadata: Metadata = pageMeta(
-  "Crude Oracle Paper Book — an AI crude desk, timestamped before the market grades it",
+  "AI crude desk paper book",
   "A forward-only, simulated crude oil book run by AI analyst agents with a deterministic risk check, a no-AI baseline and a public, timestamped decision log. Paper trading only. Not investment advice.",
   "/paper-book"
 );

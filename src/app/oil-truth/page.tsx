@@ -7,7 +7,7 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
-  "Oil Truth: What Crude Oil Is and Why It Still Matters",
+  "Why crude oil still matters",
   "A clear, evidence-led explanation of what crude oil is, what oil and gas are actually used for — plastics, medicine, fertilisers, transport, aviation, construction — and why they remain central to global energy systems.",
   "/oil-truth"
 );

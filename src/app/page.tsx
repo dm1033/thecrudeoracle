@@ -17,6 +17,7 @@ import PresentedBy from "@/components/PresentedBy";
 import { getPublishedPrices } from "@/lib/published-prices";
 import type { BoardQuote } from "@/lib/desk-tape";
 import { pageMeta } from "@/lib/seo";
+import { priceFigureShown } from "@/lib/price-stamp";
 
 /** Two hours, same window as the EIA spot cache. Visitors are not held for a live call. */
 export const revalidate = 7200;
@@ -62,7 +63,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is the market data live?",
-    a: "No. Data is labelled on every card as manual, delayed, indicative or an API placeholder, with its source and last-updated time. We do not display unlicensed real-time exchange data. Verify all figures with primary sources before trading.",
+    a: "No. Brent, WTI and Henry Hub are delayed public EIA spot prints, with the trade date and source on each card. The site does not display live or real-time prices. Series that need a licence are left without a figure.",
   },
   {
     q: "How much does it cost?",
@@ -81,7 +82,7 @@ export default async function HomePage() {
   const brent = feed.prices.find((price) => price.ticker === "BRN");
   const wti = feed.prices.find((price) => price.ticker === "WTI");
   const board: BoardQuote | null =
-    brent && wti
+    brent && wti && priceFigureShown(brent) && priceFigureShown(wti)
       ? {
           brent: brent.price,
           wti: wti.price,

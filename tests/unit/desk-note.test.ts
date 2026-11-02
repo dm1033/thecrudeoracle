@@ -32,7 +32,7 @@ describe("spot desk note", () => {
     const feed: PublishedPrices = {
       eia: true,
       manualUpdated: "2026-07-15T07:00:00Z",
-      eiaUpdated: "2026-10-14T00:00:00Z",
+      eiaUpdated: new Date(Date.now() - 2 * 86_400_000).toISOString(),
       brentWtiHistory: [],
       henryHubHistory: [],
       prices: [
@@ -42,7 +42,7 @@ describe("spot desk note", () => {
           daily_change: 0.4,
           data_type: "delayed",
           source: "EIA Open Data API — Brent",
-          last_updated: "2026-10-14T00:00:00Z",
+          last_updated: new Date(Date.now() - 2 * 86_400_000).toISOString(),
         }),
         price({
           ticker: "WTI",
@@ -50,7 +50,7 @@ describe("spot desk note", () => {
           daily_change: -0.2,
           data_type: "delayed",
           source: "EIA Open Data API — WTI",
-          last_updated: "2026-10-14T00:00:00Z",
+          last_updated: new Date(Date.now() - 2 * 86_400_000).toISOString(),
         }),
         price({
           ticker: "HH",
@@ -58,7 +58,7 @@ describe("spot desk note", () => {
           daily_change: 1.1,
           data_type: "delayed",
           source: "EIA Open Data API — Henry Hub",
-          last_updated: "2026-10-14T00:00:00Z",
+          last_updated: new Date(Date.now() - 2 * 86_400_000).toISOString(),
         }),
       ],
     };

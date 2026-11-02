@@ -7,7 +7,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
-  "Trade Hypothesis Builder — Structured, Falsifiable Market Scenarios",
+  "Falsifiable trade hypotheses",
   "Module 6 of The Crude Oracle trader toolkit: structured research hypotheses assembled from physical flows, inventories, curve structure, positioning and news — each with evidence, explicit invalidation conditions and an evidence-weight confidence score. Never buy/sell signals.",
   "/tools/hypothesis-builder"
 );

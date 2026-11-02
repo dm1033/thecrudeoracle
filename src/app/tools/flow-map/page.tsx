@@ -11,7 +11,7 @@ import { loadWatchedVessel } from "@/lib/tankermap-feed";
 import VesselWatch from "@/components/VesselWatch";
 
 export const metadata: Metadata = pageMeta(
-  "Physical Flow Map — Tanker Flows with Explainable Anomaly Detection",
+  "Physical tanker flow map",
   "Module 2 of The Crude Oracle trader toolkit: tanker loadings and discharges, destination changes, dark AIS gaps, floating storage, port congestion and freight — with a TankerMap vessel layer and a desk note attached to the hull.",
   "/tools/flow-map"
 );

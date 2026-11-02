@@ -1,6 +1,8 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import type { Metadata } from "next";
+import { documentTitle } from "@/lib/seo";
 
 /**
  * Route smoke test.
@@ -43,6 +45,17 @@ function findPageRoutes(dir: string, base = ""): string[] {
 
 const routes = findPageRoutes(APP_DIR).sort();
 
+async function renderedTitle(mod: Record<string, unknown>, route: string): Promise<string> {
+  let meta = mod.metadata as Metadata | undefined;
+  if (!meta && typeof mod.generateMetadata === "function") {
+    const params = route.includes("[date]") ? { date: "2026-10-27" } : {};
+    meta = await (mod.generateMetadata as (arg: { params: Record<string, string> }) => Metadata | Promise<Metadata>)({
+      params,
+    });
+  }
+  return documentTitle(meta?.title);
+}
+
 // Routes that are deliberately excluded from sitemap.ts: private/auth-gated
 // surfaces and pure post-checkout redirect targets that should never be
 // indexed or crawled. Anything NOT in this list must appear in the sitemap.
@@ -72,10 +85,14 @@ describe("route inventory", () => {
       try {
         // eslint-disable-next-line no-await-in-loop
         const mod: unknown = await import(/* @vite-ignore */ modPath);
-        const Component = (mod as { default?: unknown }).default;
+        const record = mod as { default?: unknown };
+        const Component = record.default;
         if (typeof Component !== "function") {
           failures.push(`${route}: default export is not a function (got ${typeof Component})`);
         }
+        const title = await renderedTitle(record as Record<string, unknown>, route);
+        if (!title) failures.push(`${route}: missing document title`);
+        else if (title.length > 60) failures.push(`${route}: title is ${title.length} characters (${title})`);
       } catch (err) {
         failures.push(`${route}: threw on import — ${(err as Error).message}`);
       }

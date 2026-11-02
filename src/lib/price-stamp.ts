@@ -31,3 +31,25 @@ export function priceSourceLabel(price: { source: string; data_type: string }): 
   if (price.data_type === "API placeholder") return "placeholder";
   return "desk mark";
 }
+
+/** A card must not show a number once the print is older than this. */
+export const PRICE_FIGURE_MAX_AGE_DAYS = 30;
+
+export const LICENSED_DATA_REQUIRED = "not available – licensed data required";
+
+export function isPlaceholderPrice(price: { source: string; data_type: string }): boolean {
+  return price.data_type === "API placeholder" || /placeholder/i.test(price.source);
+}
+
+export function priceFigureTooOld(lastUpdated: string, now = Date.now()): boolean {
+  const age = priceAgeDays(lastUpdated, now);
+  return age === null || age > PRICE_FIGURE_MAX_AGE_DAYS;
+}
+
+/** True when a card may print the number. Placeholders and prints older than 30 days may not. */
+export function priceFigureShown(
+  price: { source: string; data_type: string; last_updated: string },
+  now = Date.now()
+): boolean {
+  return !isPlaceholderPrice(price) && !priceFigureTooOld(price.last_updated, now);
+}

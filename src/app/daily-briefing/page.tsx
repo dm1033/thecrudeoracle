@@ -12,7 +12,7 @@ import { SITE } from "@/lib/site";
 import { getPublishedPrices } from "@/lib/published-prices";
 
 export const metadata: Metadata = pageMeta(
-  "Daily Briefing — Crude Oil Market Intelligence",
+  "Daily crude market briefing",
   "The Crude Oracle Daily Briefing: oil price summary, gas signal, supply risk, demand, OPEC update, inventories, geopolitical risk, energy equities and the bottom line — every trading day.",
   "/daily-briefing"
 );

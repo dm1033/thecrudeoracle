@@ -281,7 +281,7 @@ describe("homepage as-of date", () => {
     expect(screen.getByText(/Information only, not investment advice/i)).toBeTruthy();
   });
 
-  it("shows the manual as-of date when the EIA overlay is off", () => {
+  it("does not print a desk price when the EIA overlay is off", () => {
     render(
       <PriceFreshness
         feed={{
@@ -294,8 +294,9 @@ describe("homepage as-of date", () => {
         }}
       />
     );
-    expect(screen.getByText("2026-07-15").closest("time")?.getAttribute("dateTime")).toBe("2026-07-15T07:00:00Z");
-    expect(screen.getByText(/desk marks/i)).toBeTruthy();
+    expect(screen.queryByText("2026-07-15")).toBeNull();
+    expect(screen.getByText(/no desk price is shown/i)).toBeTruthy();
+    expect(screen.queryByText(/79\.15|74\.86/)).toBeNull();
   });
 
   it("shows the board as-of date on the hero tape", () => {
