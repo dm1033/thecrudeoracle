@@ -10,6 +10,7 @@ export const SITE = {
   price: "Free",
   priceSuffix: "",
   contactEmail: "intelligence@thecrudeoracle.com",
+  xProfile: "https://x.com/thecrudeoracle",
 } as const;
 
 // The Crude Oracle is free — the paid subscription has been retired and the
@@ -21,7 +22,7 @@ export const FINANCIAL_DISCLAIMER_SHORT =
   "The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital.";
 
 export const DATA_DISCLAIMER_SHORT =
-  "Data shown may be delayed, indicative, manually updated or provided via API placeholders. Verify all figures with primary sources before making any trading or investment decision.";
+  "Data shown may be delayed, indicative or manually updated. Series that need a licence are not given a figure. Verify all figures with primary sources before making any trading or investment decision.";
 
 export interface NavItem {
   label: string;

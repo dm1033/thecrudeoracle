@@ -52,6 +52,15 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <a
+                  href={SITE.xProfile}
+                  className="text-sm text-steel-400 hover:text-gold-400"
+                  rel="me noopener noreferrer"
+                >
+                  X (@thecrudeoracle)
+                </a>
+              </li>
             </ul>
             <h2 className="mt-6 text-xs font-semibold uppercase tracking-widest text-steel-500">
               Legal

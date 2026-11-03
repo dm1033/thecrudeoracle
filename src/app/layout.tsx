@@ -59,6 +59,7 @@ const siteSchema = {
       },
       description: SITE.description,
       email: SITE.contactEmail,
+      sameAs: [SITE.xProfile],
     },
     {
       "@type": "WebSite",

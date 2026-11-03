@@ -6,7 +6,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 
 export const metadata: Metadata = pageMeta(
-  "Trader Toolkit — Tools by Trading Approach",
+  "Tools by trading approach",
   "The Crude Oracle trader toolkit: purpose-built oil market tools matched to your approach — fundamental balance, curve and spreads, positioning and risk. Module 1: the Global Balance Engine.",
   "/tools"
 );

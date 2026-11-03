@@ -24,7 +24,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What is the JKM LNG marker?",
-    a: "JKM (Japan-Korea Marker) is the benchmark spot price for LNG delivered into North-East Asia. It sets the arbitrage against European hubs and drives where flexible cargoes flow. Licensed assessments are required to display live values, so we show a labelled placeholder.",
+    a: "JKM (Japan-Korea Marker) is the benchmark spot price for LNG delivered into North-East Asia. It sets the arbitrage against European hubs and drives where flexible cargoes flow. A licensed assessment is required, so this page does not show a JKM figure.",
   },
   {
     q: "How does LNG affect UK energy security?",
@@ -45,7 +45,7 @@ export default async function GasLngPage() {
       <PageHeader
         eyebrow="Market Data · Indicative"
         title="Gas / LNG Dashboard"
-        intro="Henry Hub from the EIA daily spot. UK NBP and Dutch TTF are licensed ICE marks and are not shown. The Asian LNG marker, when present, is a labelled placeholder."
+        intro="Henry Hub from the EIA daily spot. UK NBP and Dutch TTF are licensed ICE marks and are not shown. The Asian LNG marker is not available – licensed data required."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="gas-h">

@@ -1,4 +1,5 @@
 import { getPublishedPrices } from "@/lib/published-prices";
+import { priceFigureShown } from "@/lib/price-stamp";
 import { formatLongDate } from "@/lib/daily-note";
 import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/lib/og-card";
 
@@ -12,7 +13,9 @@ export default async function Image() {
   const feed = await getPublishedPrices().catch(() => null);
   const brent = feed?.prices.find((price) => price.ticker === "BRN");
   const wti = feed?.prices.find((price) => price.ticker === "WTI");
-  const loaded = Boolean(feed?.eia && feed.eiaUpdated && brent && wti);
+  const loaded = Boolean(
+    feed?.eia && feed.eiaUpdated && brent && wti && priceFigureShown(brent) && priceFigureShown(wti)
+  );
   return renderOgCard({
     title: "Brent and WTI",
     dateLine: loaded && feed?.eiaUpdated ? `Latest EIA print: ${formatLongDate(feed.eiaUpdated)}` : "Latest EIA print: not loaded",

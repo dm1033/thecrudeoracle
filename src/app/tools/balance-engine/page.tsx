@@ -9,7 +9,7 @@ import PremiumGate from "@/components/PremiumGate";
 import { formatUpdated } from "@/lib/data";
 
 export const metadata: Metadata = pageMeta(
-  "Global Balance Engine — Oil Supply, Demand & Stocks Table",
+  "Global oil balance engine",
   "Module 1 of The Crude Oracle trader toolkit: the global oil balance in one live table — OPEC and non-OPEC supply, sanctioned barrels, outages, refinery runs, China/India imports, OECD demand, US and OECD stocks, Cushing and floating storage.",
   "/tools/balance-engine"
 );

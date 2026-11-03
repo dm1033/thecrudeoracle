@@ -13,6 +13,15 @@ const OG_IMAGE = {
  * (`%s | The Crude Oracle`) does not append the brand a second time.
  * A trailing " — The Crude Oracle" is stripped and left to the template.
  */
+/** The document title Next will emit, including the layout brand suffix. */
+export function documentTitle(title: Metadata["title"] | undefined): string {
+  if (!title) return "";
+  if (typeof title === "string") return `${title} | ${SITE.name}`;
+  if ("absolute" in title && title.absolute) return title.absolute;
+  if ("default" in title && title.default) return title.default;
+  return "";
+}
+
 export function pageTitle(title: string): { title: Metadata["title"]; social: string } {
   let clean = title.trim();
   const suffixes = [` | ${SITE.name}`, ` — ${SITE.name}`, ` - ${SITE.name}`];

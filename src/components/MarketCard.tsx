@@ -1,7 +1,7 @@
 import type { MarketPrice } from "@/lib/data";
 import DataMeta from "@/components/DataMeta";
 import PriceStamp from "@/components/PriceStamp";
-import { priceSourceLabel } from "@/lib/price-stamp";
+import { isPlaceholderPrice, LICENSED_DATA_REQUIRED, priceFigureTooOld, priceSourceLabel } from "@/lib/price-stamp";
 
 function Change({ label, value }: { label: string; value: number }) {
   const color = value > 0 ? "text-gain" : value < 0 ? "text-loss" : "text-steel-500";
@@ -18,6 +18,16 @@ function Change({ label, value }: { label: string; value: number }) {
 }
 
 export default function MarketCard({ price }: { price: MarketPrice }) {
+  if (isPlaceholderPrice(price)) {
+    return (
+      <div className="card">
+        <h3 className="text-sm font-semibold text-white">{price.asset}</h3>
+        <div className="font-mono text-[11px] text-steel-500">{price.ticker}</div>
+        <p className="mt-4 text-sm font-semibold leading-relaxed text-steel-200">{LICENSED_DATA_REQUIRED}</p>
+      </div>
+    );
+  }
+  if (priceFigureTooOld(price.last_updated)) return null;
   return (
     <div className="card card-hover">
       <div className="flex items-start justify-between gap-2">

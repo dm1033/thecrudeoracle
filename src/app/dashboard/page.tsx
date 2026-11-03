@@ -15,7 +15,7 @@ import { BrentWtiChart, HenryHubChart } from "@/components/charts/Charts";
 export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
-  "Daily Oil Dashboard — Free Market Snapshot",
+  "Daily oil market dashboard",
   "Free daily crude oil market snapshot: Brent, WTI and Henry Hub from the EIA daily spot, with sources, trade dates and update times.",
   "/dashboard"
 );
@@ -56,8 +56,8 @@ export default async function DashboardPage() {
           </h2>
           <PriceFreshness feed={feed} />
           <p className="mt-1 text-sm text-steel-500">
-            Every card shows its source, timestamp and licence status. No unlicensed real-time exchange
-            data is displayed.
+            Brent, WTI and Henry Hub show the EIA source and trade date. The site does not display live or
+            real-time prices.
           </p>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {feed.prices.map((p) => (

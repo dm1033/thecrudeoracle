@@ -19,16 +19,15 @@ export default function DataDisclaimerPage() {
           <p>
             Data displayed on {SITE.name} may be <strong>public, licensed, delayed, manual or
             indicative</strong>. Each data card is labelled with its source, its last-updated
-            date/time and a data-type badge (live, delayed, manual, indicative or API
-            placeholder). Where a value is marked &ldquo;manual&rdquo; or
+            date/time and a data-type badge (delayed, manual or indicative). Where a value is marked
+            &ldquo;manual&rdquo; or
             &ldquo;indicative&rdquo;, it is an editorial estimate or a manually transcribed figure
             and must not be treated as a market quotation.
           </p>
 
           <h2>2. No real-time exchange data</h2>
           <p>
-            We do not display live or real-time exchange data unless properly licensed or lawfully
-            sourced through an authorised API. Values shown are not suitable for trade execution,
+            The site does not display live or real-time prices. Values shown are not suitable for trade execution,
             pricing, settlement or valuation purposes.
           </p>
 

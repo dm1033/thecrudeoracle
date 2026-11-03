@@ -58,7 +58,7 @@ export default function AccountPanel({ authError = false }: { authError?: boolea
           <div className="flex justify-between gap-4">
             <dt className="text-steel-500">Plan</dt>
             <dd className="text-white">
-              "Free — full access (site-wide, no paid tier)"
+              Free — full access (site-wide, no paid tier)
             </dd>
           </div>
           <div className="flex justify-between gap-4">

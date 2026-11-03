@@ -9,6 +9,20 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Netlify-only. Vercel does not read this file, so the production host is unchanged.
+# force is required so generated Next.js routes do not win over the redirect.
+[[redirects]]
+  from = "/"
+  to = "https://www.thecrudeoracle.com/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "https://www.thecrudeoracle.com/:splat"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

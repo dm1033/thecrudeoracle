@@ -25,7 +25,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Are these live prices?",
-    a: "No. Prices on this page are indicative, with the source and last-updated time shown on every card. Brent and WTI are delayed public EIA spot prints when that feed is connected, and manual desk marks otherwise. We do not display unlicensed real-time exchange data. Always verify with primary sources before trading.",
+    a: "No. Brent and WTI on this page are delayed public EIA spot prints, with the trade date and source on each card. The site does not display live or real-time prices. Always verify with primary sources before trading.",
   },
   {
     q: "What moves crude oil prices?",
@@ -48,7 +48,7 @@ export default async function CrudeOilPricesPage() {
           "@type": "Dataset",
           name: "Brent and WTI crude prices",
           description:
-            "Brent and WTI daily spot prices from the U.S. EIA. Each card shows the trade date and source. Not a live exchange feed and not financial advice.",
+            "Brent and WTI daily spot prices from the U.S. EIA. Each card shows the trade date and source. Delayed public prints, not an exchange feed, and not financial advice.",
           url: `${SITE.url}/crude-oil-prices`,
           creator: { "@id": `${SITE.url}/#organization` },
           dateModified: feed.eiaUpdated ?? feed.manualUpdated,

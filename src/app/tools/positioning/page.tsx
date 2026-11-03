@@ -7,7 +7,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
-  "Positioning & Crowd-Risk Engine — CFTC COT Intelligence",
+  "CFTC positioning and crowd risk",
   "Module 5 of The Crude Oracle trader toolkit: managed-money positioning from CFTC and ICE COT reports with a three-part crowding checklist — stretched positioning, structure confirmation and physical support — graded into liquidation risk.",
   "/tools/positioning"
 );

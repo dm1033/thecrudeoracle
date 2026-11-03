@@ -274,7 +274,7 @@ class EiaProbeError extends Error {
   }
 }
 
-/** Live Brent+WTI read. Throws on failure so a bad payload is not cached. */
+/** Fresh Brent and WTI read. Throws on failure so a bad payload is not cached. */
 async function loadFreshPrices(): Promise<PublishedPrices> {
   const probe = await probeSpots();
   if (!probe.value) {

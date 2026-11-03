@@ -1,6 +1,6 @@
 import type { MarketPrice } from "@/lib/data";
 import type { PublishedPrices } from "@/lib/published-prices";
-import { formatPriceDate } from "@/lib/price-stamp";
+import { formatPriceDate, priceFigureShown } from "@/lib/price-stamp";
 
 function money(value: number): string {
   return `$${value.toFixed(2)}`;
@@ -12,7 +12,7 @@ function signedPct(value: number): string {
 }
 
 function liveEia(price: MarketPrice | undefined): price is MarketPrice {
-  return Boolean(price && price.data_type === "delayed" && /EIA/i.test(price.source));
+  return Boolean(price && price.data_type === "delayed" && /EIA/i.test(price.source) && priceFigureShown(price));
 }
 
 /**

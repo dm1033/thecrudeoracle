@@ -11,7 +11,7 @@ import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
 
 export const metadata: Metadata = pageMeta(
   PAPER_FUND_PUBLISHED
-    ? "Virtual Portfolio Dashboard — Positions, Journal, Risk & Benchmarks"
+    ? "Paper fund positions and risk"
     : "Paper fund dashboard",
   PAPER_FUND_PUBLISHED
     ? "The live dashboard for The Crude Oracle $100,000,000 paper fund: every open line with its profit, the closed trade, full journal, exposure, drawdown ladder, benchmarks and the daily trading brief. Virtual capital."

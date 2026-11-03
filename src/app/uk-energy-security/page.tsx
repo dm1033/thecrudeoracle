@@ -6,7 +6,7 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
-  "UK Energy Security — Analysis for Investors",
+  "UK energy security analysis",
   "UK energy security analysis: North Sea production decline, import dependency, LNG reliance, jobs and supply chains, fiscal and policy risk, and industrial competitiveness — with official source placeholders.",
   "/uk-energy-security"
 );

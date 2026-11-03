@@ -65,8 +65,9 @@ export default function AboutPage() {
               watchlist entry carries a &ldquo;watchlist, not recommendation&rdquo; label.
             </li>
             <li>
-              <strong>Honest about data:</strong> we do not display unlicensed real-time exchange
-              data. Values are labelled live, delayed, manual or indicative — always.
+              <strong>Honest about data:</strong> Brent, WTI and Henry Hub are delayed EIA daily
+              spot prints. The site does not display live or real-time prices. Other values are
+              labelled delayed, manual or indicative.
             </li>
           </ul>
 

@@ -2,11 +2,11 @@
 
 > Daily Brent and WTI oil intelligence for investors, traders and energy professionals. 100% free. Market commentary and education only.
 
-The Crude Oracle publishes a daily crude and gas briefing, indicative benchmark prices, supply and demand signals and a research library. Figures are manual desk marks or delayed public prints. They are labelled with a source and a last-updated time. The site does not show unlicensed real-time exchange data. The paper fund is withheld while its book still contains sample tickers and placeholder instruments. Sponsors do not see or influence content before publication.
+The Crude Oracle publishes a daily crude and gas briefing, delayed EIA spot prices, supply and demand signals and a research library. Brent, WTI and Henry Hub are delayed public EIA prints, labelled with a source and a trade date. The site does not show live or real-time prices. JKM and the dollar index are not given a figure. The paper fund is withheld while its book still contains sample tickers and placeholder instruments. Sponsors do not see or influence content before publication.
 
 ## Not financial advice
 
-The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital. Data shown may be delayed, indicative, manually updated or provided via API placeholders. Verify all figures with primary sources before making any trading or investment decision.
+The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital. Data shown may be delayed, indicative or manually updated. Series that need a licence are not given a figure. Verify all figures with primary sources before making any trading or investment decision.
 
 ## Key pages
 
@@ -14,8 +14,8 @@ The Crude Oracle provides market commentary, educational content and investment 
 - [Daily morning note](https://www.thecrudeoracle.com/daily): Latest EIA Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) prints, day-on-day, week-on-week and month-on-month changes, the Brent–WTI spread, and the next EIA, Baker Hughes and CFTC releases. EIA lags the trade date by one to three days. Dated archive at /daily/YYYY-MM-DD. Information only, not investment advice.
 - [Dashboard](https://www.thecrudeoracle.com/dashboard): Full price complex, supply, demand, risk and charts
 - [Daily Briefing](https://www.thecrudeoracle.com/daily-briefing): Trading-day briefing and archive
-- [Crude Oil Prices](https://www.thecrudeoracle.com/crude-oil-prices): Indicative Brent, WTI and Dubai
-- [Gas / LNG](https://www.thecrudeoracle.com/gas-lng): NBP, TTF, Henry Hub and the LNG marker
+- [Crude Oil Prices](https://www.thecrudeoracle.com/crude-oil-prices): Delayed EIA Brent and WTI. Dubai is not shown
+- [Gas / LNG](https://www.thecrudeoracle.com/gas-lng): Henry Hub from the EIA. NBP, TTF and JKM are not given a figure
 - [OPEC / Supply Risk](https://www.thecrudeoracle.com/opec-supply-risk): Producer and supply-risk monitor
 - [Paper fund](https://www.thecrudeoracle.com/portfolio): Withheld until every line is a real mark. Sample tickers are not shown
 - [Watchlist](https://www.thecrudeoracle.com/watchlist): Monitored energy names, not recommendations

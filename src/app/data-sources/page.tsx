@@ -48,9 +48,9 @@ const ROWS: { dataset: string; source: string; terms: string; frequency: string 
   },
   {
     dataset: "LNG Asia marker (JKM) and US dollar index",
-    source: "Labelled placeholders on the dashboard, when those rows are still present. They are not a live Platts or FX feed.",
-    terms: "JKM is a Platts assessment and is not licensed for this site. The dollar row is not a live index feed.",
-    frequency: "Not a market feed. Cards are flagged when the stored date is more than 7 days old.",
+    source: "Not shown. The card names the series and does not print a number.",
+    terms: "JKM is a Platts assessment and is not licensed for this site. The dollar index is not licensed either. The card reads: not available – licensed data required.",
+    frequency: "Not updated here.",
   },
   {
     dataset: "Brent vs WTI chart and Henry Hub chart",

@@ -9,7 +9,7 @@ import { DataTypeBadge } from "@/components/DataMeta";
 import { isSampleInstrument } from "@/lib/sample-marks";
 
 export const metadata: Metadata = pageMeta(
-  "Company Intelligence — Oil & Gas Equity Research Notes",
+  "Oil and gas company notes",
   "Structured company intelligence on oil and gas equities: production exposure, reserves, financial health, valuation context, management and catalysts — with sources.",
   "/company-intelligence"
 );
