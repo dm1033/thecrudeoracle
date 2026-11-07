@@ -1,0 +1,40 @@
+name: Update Crude Oil Market Data
+
+on:
+  schedule:
+    # Runs Wednesdays at 15:40 UTC (after EIA 10:30 AM ET Weekly Petroleum Status Report)
+    - cron: '40 15 * * 3'
+    # Runs Fridays at 20:45 UTC (after CFTC 3:30 PM ET Commitments of Traders release)
+    - cron: '45 20 * * 5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch EIA & CFTC datasets
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python scripts/fetch_oil_data.py
+
+      - name: Commit and push updated JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/market_snapshot.json
+          git diff --staged --quiet || git commit -m "chore(data): automated EIA & CFTC crude update [skip ci]"
+          git push
