@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import CrudeOracleBot from "@/components/CrudeOracleBot";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main-content" className="flex-1">
           {children}
         </main>
+        <CrudeOracleBot mode="floating" />
         <Footer />
         <JsonLd data={siteSchema} />
         <Analytics />

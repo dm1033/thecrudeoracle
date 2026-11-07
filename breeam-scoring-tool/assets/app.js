@@ -44,23 +44,57 @@ function createDefaultState() {
         ccsScore: 40,
         energyMonitoring: true,
         waterMonitoring: true,
-        transportMonitoring: true
+        transportMonitoring: true,
+        appliedExemplary: 0
       },
       wst01: {
         hasRmp: true,
         wasteTonnesPer100m2: 5.8,
         diversionByWeightPct: 88,
         preDemolitionAuditDone: true,
-        recycledAggregatePct: 40
+        recycledAggregatePct: 40,
+        appliedExemplary: 0
       },
       mat03: {
         allSiteTimberLegalAndCertified: true,
         sustainableProcurementPlan: true,
-        rscsPercentage: 42
+        rscsPercentage: 42,
+        appliedExemplary: 0
       }
     }
   };
 }
+
+export function encodeSharePayload(payload) {
+  const json = JSON.stringify(payload).replace(/[\u0080-\uFFFF]/g, (ch) =>
+    `\\u${ch.charCodeAt(0).toString(16).padStart(4, '0')}`
+  );
+  return btoa(json);
+}
+
+export function decodeSharePayload(encoded) {
+  return JSON.parse(atob(encoded));
+}
+
+export const TAB_ALIAS_MAP = {
+  'scorer': 'scorer',
+  'calculators': 'calculators',
+  'site-calcs': 'calculators',
+  'audit': 'audit',
+  'tw-register': 'audit',
+  'report': 'audit'
+};
+
+export const PRESET_ALIAS_MAP = {
+  'commercial-office': 'commercial-office-excellent',
+  'office': 'commercial-office-excellent',
+  'industrial': 'industrial-logistics-vg',
+  'industrial-logistics-very-good': 'industrial-logistics-vg',
+  'data-centre': 'data-centre-outstanding',
+  'refurbishment': 'refurbishment-fitout-excellent',
+  'shell-core': 'industrial-logistics-vg',
+  'at-risk': 'at-risk-rescue-audit'
+};
 
 let state = loadInitialState();
 
@@ -70,30 +104,24 @@ function loadInitialState() {
   // Check URL query parameter ?breeam=... or ?preset=... / ?tab=... first
   try {
     const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    const resolvedTab = tabParam ? TAB_ALIAS_MAP[tabParam] : null;
     const encoded = params.get('breeam');
     if (encoded) {
-      const decoded = JSON.parse(atob(encoded));
+      const decoded = decodeSharePayload(encoded);
       if (decoded && typeof decoded === 'object') {
         return {
           ...base,
           ...decoded,
           credits: { ...base.credits, ...(decoded.credits || {}) },
-          excluded: { ...(decoded.excluded || {}) }
+          excluded: { ...(decoded.excluded || {}) },
+          activeTab: resolvedTab || decoded.activeTab || base.activeTab
         };
       }
     }
 
     const presetParam = params.get('preset');
-    const tabParam = params.get('tab');
-    const validTabs = new Set(['scorer', 'site-calcs', 'tw-register', 'report']);
-    const presetAliasMap = {
-      'commercial-office': 'commercial-office-excellent',
-      'office': 'commercial-office-excellent',
-      'industrial': 'industrial-logistics-very-good',
-      'shell-core': 'shell-core-good-at-risk',
-      'infrastructure': 'infrastructure-civil-very-good'
-    };
-    const resolvedPresetId = presetParam ? (presetAliasMap[presetParam] || presetParam) : null;
+    const resolvedPresetId = presetParam ? (PRESET_ALIAS_MAP[presetParam] || presetParam) : null;
     if (resolvedPresetId && PROJECT_PRESETS[resolvedPresetId]) {
       const preset = PROJECT_PRESETS[resolvedPresetId];
       return {
@@ -107,11 +135,11 @@ function loadInitialState() {
         timberPrerequisiteMet: preset.timberPrerequisiteMet,
         credits: { ...preset.credits },
         excluded: {},
-        activeTab: tabParam && validTabs.has(tabParam) ? tabParam : base.activeTab
+        activeTab: resolvedTab || base.activeTab
       };
     }
-    if (tabParam && validTabs.has(tabParam)) {
-      base.activeTab = tabParam;
+    if (resolvedTab) {
+      base.activeTab = resolvedTab;
     }
   } catch {
     // Ignore malformed URL state
@@ -123,9 +151,13 @@ function loadInitialState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === 'object') {
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get('tab');
+        const resolvedTab = tabParam ? TAB_ALIAS_MAP[tabParam] : null;
         return {
           ...base,
           ...parsed,
+          activeTab: resolvedTab || TAB_ALIAS_MAP[parsed.activeTab] || base.activeTab,
           credits: { ...base.credits, ...(parsed.credits || {}) },
           excluded: { ...(parsed.excluded || {}) },
           siteCalcs: {
@@ -146,6 +178,15 @@ function loadInitialState() {
 function saveState() {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (typeof window !== 'undefined' && window.history && window.location.search) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('preset') || params.has('breeam')) {
+        params.delete('preset');
+        params.delete('breeam');
+        const qs = params.toString();
+        window.history.replaceState({}, '', `${window.location.pathname}${qs ? `?${qs}` : ''}${window.location.hash}`);
+      }
+    }
   } catch {
     // Ignore storage quota errors
   }
@@ -250,6 +291,11 @@ function bindSetupInputs() {
       state.contractValueGbp = preset.contractValueGbp;
       state.stage = preset.stage;
       state.timberPrerequisiteMet = preset.timberPrerequisiteMet;
+      state.siteCalcs.man03.uktrLegalTimberConfirmed = preset.timberPrerequisiteMet;
+      state.siteCalcs.mat03.allSiteTimberLegalAndCertified = preset.timberPrerequisiteMet;
+      state.siteCalcs.man03.appliedExemplary = 0;
+      state.siteCalcs.wst01.appliedExemplary = 0;
+      state.siteCalcs.mat03.appliedExemplary = 0;
       state.credits = { ...preset.credits };
       state.excluded = {};
       syncSetupDomFromState();
@@ -263,7 +309,14 @@ function bindSetupInputs() {
 function syncSetupDomFromState() {
   const setVal = (id, val) => {
     const el = document.getElementById(id);
-    if (el) el.value = val;
+    if (!el) return;
+    if (el.tagName === 'SELECT' && val && !Array.from(el.options).some((opt) => opt.value === String(val))) {
+      const opt = document.createElement('option');
+      opt.value = String(val);
+      opt.textContent = String(val);
+      el.appendChild(opt);
+    }
+    el.value = val;
   };
   setVal('input-project-name', state.projectName);
   setVal('input-site-address', state.siteAddress);
@@ -389,6 +442,8 @@ function autoFixMinimumStandards() {
   let fixedCount = 0;
   if (!state.timberPrerequisiteMet) {
     state.timberPrerequisiteMet = true;
+    state.siteCalcs.man03.uktrLegalTimberConfirmed = true;
+    state.siteCalcs.mat03.allSiteTimberLegalAndCertified = true;
     const timberCheckbox = document.getElementById('check-timber-prereq');
     if (timberCheckbox) timberCheckbox.checked = true;
     fixedCount++;
@@ -415,7 +470,7 @@ function autoFixMinimumStandards() {
 
 let lastResult = null;
 
-function renderAll() {
+function renderAll({ inPlaceScorer = false } = {}) {
   renderTabs();
 
   const result = calculateBreeamScore({
@@ -429,7 +484,7 @@ function renderAll() {
 
   renderScoreboard(result);
   renderMinStandardsBanner(result);
-  renderScorerCategories(result);
+  renderScorerCategories(result, { inPlace: inPlaceScorer });
   renderSidePanel(result);
   renderSiteCalculators();
   renderAuditTable(result);
@@ -513,9 +568,129 @@ function renderMinStandardsBanner(result) {
   }
 }
 
-function renderScorerCategories(result) {
+function captureActiveControlFocus(container) {
+  const active = document.activeElement;
+  if (!active || !container || !container.contains(active)) return null;
+  if (active.hasAttribute('data-credit-slider')) {
+    return { type: 'slider', issueId: active.getAttribute('data-credit-slider') };
+  }
+  if (active.hasAttribute('data-credit-input')) {
+    return {
+      type: 'input',
+      issueId: active.getAttribute('data-credit-input'),
+      selectionStart: active.selectionStart,
+      selectionEnd: active.selectionEnd
+    };
+  }
+  if (active.hasAttribute('data-step-issue')) {
+    return {
+      type: 'step',
+      issueId: active.getAttribute('data-step-issue'),
+      delta: active.getAttribute('data-step-delta')
+    };
+  }
+  if (active.hasAttribute('data-exclude-issue')) {
+    return { type: 'exclude', issueId: active.getAttribute('data-exclude-issue') };
+  }
+  return null;
+}
+
+function escapeSelectorValue(val) {
+  if (typeof CSS !== 'undefined' && typeof CSS.escape === 'function') {
+    return CSS.escape(String(val));
+  }
+  return String(val).replace(/["\\]/g, '\\$&');
+}
+
+function restoreActiveControlFocus(container, focusDescriptor) {
+  if (!container || !focusDescriptor) return;
+  let target = null;
+  const { type, issueId, delta } = focusDescriptor;
+  const escId = escapeSelectorValue(issueId);
+  if (type === 'slider') {
+    target = container.querySelector(`[data-credit-slider="${escId}"]`);
+  } else if (type === 'input') {
+    target = container.querySelector(`[data-credit-input="${escId}"]`);
+  } else if (type === 'step') {
+    target = container.querySelector(
+      `[data-step-issue="${escId}"][data-step-delta="${escapeSelectorValue(delta)}"]`
+    );
+  } else if (type === 'exclude') {
+    target = container.querySelector(`[data-exclude-issue="${escId}"]`);
+  }
+  if (target && !target.disabled) {
+    target.focus({ preventScroll: true });
+    if (type === 'input' && typeof focusDescriptor.selectionStart === 'number') {
+      try {
+        target.setSelectionRange(focusDescriptor.selectionStart, focusDescriptor.selectionEnd);
+      } catch {
+        // Ignore selection range errors on number inputs
+      }
+    }
+  }
+}
+
+function updateScorerCategoriesInPlace(container, result) {
+  for (const cat of result.categories) {
+    const det = container.querySelector(`details.cat-section[data-cat-id="${cat.id}"]`);
+    if (!det) continue;
+    const metricsEl = det.querySelector('.cat-head-metrics');
+    if (metricsEl) {
+      const weightLabel = cat.isAdditive
+        ? `Additive Max +${cat.effectiveWeight.toFixed(1)}%`
+        : `Weight ${cat.effectiveWeight.toFixed(1)}%`;
+      metricsEl.innerHTML = `
+        <span>${cat.achievedCredits}/${cat.availableCredits} cr (${cat.percentageAchieved.toFixed(0)}%)</span>
+        <span>|</span>
+        <span>${weightLabel}</span>
+        <span>|</span>
+        <span class="cat-head-weighted">+${cat.weightedContribution.toFixed(2)}%</span>
+      `;
+    }
+  }
+
+  for (const issue of result.issues) {
+    const row = container.querySelector(`[data-issue-row="${issue.id}"]`);
+    if (!row) continue;
+    row.classList.toggle('is-min-fail', Boolean(issue.isMinStandardFailureForTarget));
+    const numInput = row.querySelector(`[data-credit-input="${issue.id}"]`);
+    if (numInput && document.activeElement !== numInput) {
+      numInput.value = String(issue.achievedCredits);
+    }
+    if (numInput) numInput.disabled = Boolean(issue.isExcluded);
+
+    const slider = row.querySelector(`[data-credit-slider="${issue.id}"]`);
+    if (slider && document.activeElement !== slider) {
+      slider.value = String(issue.achievedCredits);
+    }
+    if (slider) slider.disabled = Boolean(issue.isExcluded);
+
+    row.querySelectorAll(`[data-step-issue="${issue.id}"]`).forEach((btn) => {
+      btn.disabled = Boolean(issue.isExcluded);
+    });
+
+    const maxLabelStrong = row.querySelector('.credit-max-label strong');
+    if (maxLabelStrong) {
+      maxLabelStrong.textContent = `+${issue.achievedWeightedPct.toFixed(2)}%`;
+    }
+
+    const excludeChk = row.querySelector(`[data-exclude-issue="${issue.id}"]`);
+    if (excludeChk) {
+      excludeChk.checked = Boolean(issue.isExcluded);
+    }
+  }
+}
+
+function renderScorerCategories(result, { inPlace = false } = {}) {
   const container = document.getElementById('categories-accordion-root');
   if (!container) return;
+
+  if (inPlace && state.issueFilter !== 'unachieved' && container.querySelector('details.cat-section')) {
+    updateScorerCategoriesInPlace(container, result);
+    return;
+  }
+
+  const focusDescriptor = captureActiveControlFocus(container);
 
   const filter = state.issueFilter;
   const query = state.searchQuery;
@@ -608,7 +783,7 @@ function renderScorerCategories(result) {
       state.credits[issueId] = next;
       state.activePresetId = 'custom';
       saveState();
-      renderAll();
+      renderAll({ inPlaceScorer: true });
     });
   });
 
@@ -621,7 +796,7 @@ function renderScorerCategories(result) {
       state.credits[issueId] = next;
       state.activePresetId = 'custom';
       saveState();
-      renderAll();
+      renderAll({ inPlaceScorer: true });
     });
   });
 
@@ -634,7 +809,12 @@ function renderScorerCategories(result) {
       state.credits[issueId] = next;
       state.activePresetId = 'custom';
       saveState();
-      renderAll();
+      renderAll({ inPlaceScorer: true });
+    });
+    slider.addEventListener('change', () => {
+      if (state.issueFilter === 'unachieved') {
+        renderScorerCategories(lastResult);
+      }
     });
   });
 
@@ -647,6 +827,8 @@ function renderScorerCategories(result) {
       renderAll();
     });
   });
+
+  restoreActiveControlFocus(container, focusDescriptor);
 }
 
 function renderIssueRow(issue, targetBandId) {
@@ -792,6 +974,15 @@ function renderSidePanel(result) {
   }
 }
 
+function applyExemplaryContribution(calcKey, newExemplary) {
+  const prev = Number(state.siteCalcs[calcKey].appliedExemplary || 0);
+  const next = Number(newExemplary || 0);
+  const currentInn = Number(state.credits['Inn 01'] || 0);
+  const manualOrOtherInn = Math.max(0, currentInn - prev);
+  state.credits['Inn 01'] = Math.max(0, Math.min(10, manualOrOtherInn + next));
+  state.siteCalcs[calcKey].appliedExemplary = next;
+}
+
 function bindSiteCalculators() {
   // Man 03 inputs
   const manChecks = [
@@ -806,7 +997,11 @@ function bindSiteCalculators() {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener('change', (e) => {
-        state.siteCalcs.man03[key] = Boolean(e.target.checked);
+        const checked = Boolean(e.target.checked);
+        state.siteCalcs.man03[key] = checked;
+        if (key === 'uktrLegalTimberConfirmed') {
+          state.siteCalcs.mat03.allSiteTimberLegalAndCertified = checked;
+        }
         saveState();
         renderSiteCalculators();
       });
@@ -825,10 +1020,10 @@ function bindSiteCalculators() {
     applyMan03Btn.addEventListener('click', () => {
       const calc = calculateMan03SiteCredits(state.siteCalcs.man03);
       state.credits['Man 03'] = calc.credits;
-      state.timberPrerequisiteMet = calc.prerequisitePassed;
-      if (calc.exemplaryCredit > 0 && (state.credits['Inn 01'] || 0) < 1) {
-        state.credits['Inn 01'] = Math.min(10, (state.credits['Inn 01'] || 0) + 1);
-      }
+      state.timberPrerequisiteMet = Boolean(
+        state.siteCalcs.man03.uktrLegalTimberConfirmed && state.siteCalcs.mat03.allSiteTimberLegalAndCertified
+      );
+      applyExemplaryContribution('man03', calc.exemplaryCredit);
       syncSetupDomFromState();
       saveState();
       renderAll();
@@ -883,6 +1078,7 @@ function bindSiteCalculators() {
       const calc = calculateWst01SiteCredits(state.siteCalcs.wst01);
       state.credits['Wst 01'] = calc.wst01Credits;
       state.credits['Wst 02'] = calc.wst02Credits;
+      applyExemplaryContribution('wst01', calc.exemplaryCredit);
       saveState();
       renderAll();
       showToast(`Applied Waste & Platform calculator: Wst 01 (${calc.wst01Credits}/5) & Wst 02 (${calc.wst02Credits}/1).`);
@@ -893,7 +1089,9 @@ function bindSiteCalculators() {
   const matTimber = document.getElementById('calc-mat03-timber');
   if (matTimber) {
     matTimber.addEventListener('change', (e) => {
-      state.siteCalcs.mat03.allSiteTimberLegalAndCertified = Boolean(e.target.checked);
+      const checked = Boolean(e.target.checked);
+      state.siteCalcs.mat03.allSiteTimberLegalAndCertified = checked;
+      state.siteCalcs.man03.uktrLegalTimberConfirmed = checked;
       saveState();
       renderSiteCalculators();
     });
@@ -919,7 +1117,10 @@ function bindSiteCalculators() {
     applyMat03Btn.addEventListener('click', () => {
       const calc = calculateMat03SiteCredits(state.siteCalcs.mat03);
       state.credits['Mat 03'] = calc.credits;
-      state.timberPrerequisiteMet = calc.prerequisitePassed;
+      state.timberPrerequisiteMet = Boolean(
+        state.siteCalcs.man03.uktrLegalTimberConfirmed && state.siteCalcs.mat03.allSiteTimberLegalAndCertified
+      );
+      applyExemplaryContribution('mat03', calc.exemplaryCredit);
       syncSetupDomFromState();
       saveState();
       renderAll();
@@ -1132,7 +1333,7 @@ function shareProjectLink() {
       credits: state.credits,
       excluded: state.excluded
     };
-    const encoded = btoa(JSON.stringify(payload));
+    const encoded = encodeSharePayload(payload);
     const shareUrl = `${window.location.origin}${window.location.pathname}?breeam=${encodeURIComponent(encoded)}`;
     window.history.replaceState({}, '', `?breeam=${encodeURIComponent(encoded)}`);
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1140,7 +1341,7 @@ function shareProjectLink() {
     }
     showToast('Shareable project URL updated and copied to clipboard.');
   } catch {
-    showToast('Updated URL with current BREEAM project state.');
+    showToast('Unable to encode shareable URL.');
   }
 }
 

@@ -34,6 +34,15 @@ else
   npm install
 fi
 
+if [ -f paper-book/requirements.txt ] && command -v python3 >/dev/null 2>&1; then
+  if ! python3 -c "import pytest, yaml, pandas, numpy, requests" 2>/dev/null; then
+    log "Installing paper-book Python dependencies…"
+    python3 -m pip install --break-system-packages -q pytest pyyaml pandas numpy requests matplotlib 2>/dev/null \
+      || python3 -m pip install -q pytest pyyaml pandas numpy requests matplotlib 2>/dev/null \
+      || log "WARNING: could not auto-install paper-book Python dependencies (continuing)."
+  fi
+fi
+
 # --- 2. Agent working directories ------------------------------------------
 log "Ensuring agent directories…"
 mkdir -p secrets network prompts outbox repos logs run
@@ -89,24 +98,27 @@ fi
 
 # --- 5. Optional repo clones -----------------------------------------------
 if [ "$WITH_REPOS" = "1" ]; then
-  owner="$(grep -E '^GITHUB_OWNER=' secrets/.env | cut -d= -f2- || echo dm1033)"
-  site="$(grep -E '^GITHUB_SITE_REPO=' secrets/.env | cut -d= -f2- || echo thecrudeoracle)"
-  desk="$(grep -E '^GITHUB_DESK_REPO=' secrets/.env | cut -d= -f2- || echo thecrudeoracle-desk)"
-  token="$(grep -E '^GITHUB_TOKEN=' secrets/.env | cut -d= -f2- || true)"
-  if [ -z "$token" ] || [ "$token" = "replace_me" ]; then
-    log "--with-repos requested but GITHUB_TOKEN is not set; skipping clones."
-  else
-    for repo in "$site" "$desk"; do
-      dest="repos/$repo"
-      if [ -d "$dest/.git" ]; then
-        log "repos/$repo already cloned; skipping."
-      else
-        log "Cloning $owner/$repo …"
-        git clone --depth 1 "https://x-access-token:${token}@github.com/${owner}/${repo}.git" "$dest" \
-          || log "WARNING: clone of $owner/$repo failed (continuing)."
-      fi
-    done
-  fi
+  owner="$(grep -E '^GITHUB_OWNER=' secrets/.env 2>/dev/null | cut -d= -f2- || echo dm1033)"
+  owner="${owner:-dm1033}"
+  site="$(grep -E '^GITHUB_SITE_REPO=' secrets/.env 2>/dev/null | cut -d= -f2- || echo thecrudeoracle)"
+  site="${site:-thecrudeoracle}"
+  desk="$(grep -E '^GITHUB_DESK_REPO=' secrets/.env 2>/dev/null | cut -d= -f2- || echo thecrudeoracle-desk)"
+  desk="${desk:-thecrudeoracle-desk}"
+  token="$(grep -E '^GITHUB_TOKEN=' secrets/.env 2>/dev/null | cut -d= -f2- || true)"
+  for repo in "$site" "$desk"; do
+    dest="repos/$repo"
+    if [ -d "$dest/.git" ]; then
+      log "repos/$repo already cloned; skipping."
+    elif [ -n "$token" ] && [ "$token" != "replace_me" ]; then
+      log "Cloning $owner/$repo (authenticated)…"
+      git clone --depth 1 "https://x-access-token:${token}@github.com/${owner}/${repo}.git" "$dest" \
+        || log "WARNING: clone of $owner/$repo failed (continuing)."
+    else
+      log "Cloning $owner/$repo (public HTTPS; set GITHUB_TOKEN in secrets/.env for push access)…"
+      git clone --depth 1 "https://github.com/${owner}/${repo}.git" "$dest" \
+        || log "WARNING: clone of $owner/$repo failed (continuing)."
+    fi
+  done
 fi
 
 log "Install complete. Start the console with: bash start.sh"
