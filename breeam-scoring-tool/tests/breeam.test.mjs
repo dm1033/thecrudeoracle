@@ -17,6 +17,12 @@ import {
   calculateWst01SiteCredits,
   calculateMat03SiteCredits
 } from '../assets/breeam-engine.js';
+import {
+  encodeSharePayload,
+  decodeSharePayload,
+  TAB_ALIAS_MAP,
+  PRESET_ALIAS_MAP
+} from '../assets/app.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
@@ -187,5 +193,35 @@ describe('Temporary Works Consulting Integration & HTML Structure', () => {
     assert.ok(twcTools.includes('<a href="/breeam-scoring-tool/">BREEAM Scorer</a>'), 'Tools hub header must include live BREEAM Scorer tab');
     assert.ok(twcTools.includes('data-thumbnail="breeam-scorer"'), 'Tools hub catalogue must include BREEAM Scorer card');
     assert.ok(twcSeats.includes('/breeam-scoring-tool/'), 'SEATS & BREEAM page must link directly to BREEAM Scorer');
+  });
+
+  test('Shareable link encoder handles em dashes and non-ASCII characters safely', () => {
+    const payload = {
+      projectName: 'Thames Valley Gateway — Plot 4B (£24.5m)',
+      stage: 'RIBA Stage 3–4 (Technical Design)'
+    };
+    const encoded = encodeSharePayload(payload);
+    const decoded = decodeSharePayload(encoded);
+    assert.deepEqual(decoded, payload);
+  });
+
+  test('Tab aliases and preset aliases map to valid rendered IDs and PROJECT_PRESETS keys', () => {
+    for (const target of Object.values(TAB_ALIAS_MAP)) {
+      assert.ok(['scorer', 'calculators', 'audit'].includes(target), `Invalid tab target ${target}`);
+    }
+    for (const presetId of Object.values(PRESET_ALIAS_MAP)) {
+      assert.ok(PROJECT_PRESETS[presetId], `Alias mapped to nonexistent preset ${presetId}`);
+    }
+  });
+
+  test('All preset RIBA stage strings exist in index.html select options', () => {
+    const html = readFileSync(resolve(rootDir, 'index.html'), 'utf8');
+    for (const preset of Object.values(PROJECT_PRESETS)) {
+      const escapedStage = preset.stage.replace(/&/g, '&amp;');
+      assert.ok(
+        html.includes(`value="${preset.stage}"`) || html.includes(`value="${escapedStage}"`),
+        `Preset ${preset.id} stage "${preset.stage}" must be in #select-stage options`
+      );
+    }
   });
 });

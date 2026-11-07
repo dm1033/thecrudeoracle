@@ -36,10 +36,29 @@ export async function createBranch(owner, repo, branch, sha) {
   });
 }
 
-export async function putFile(owner, repo, filePath, contentB64, message, branch) {
-  return gh(`/repos/${owner}/${repo}/contents/${filePath}`, {
+export async function getFileSha(owner, repo, filePath, ref) {
+  const encodedPath = String(filePath)
+    .split("/")
+    .map((seg) => encodeURIComponent(seg))
+    .join("/");
+  try {
+    const info = await gh(`/repos/${owner}/${repo}/contents/${encodedPath}?ref=${encodeURIComponent(ref)}`);
+    return Array.isArray(info) ? null : info.sha ?? null;
+  } catch {
+    return null; // file does not exist on that ref yet
+  }
+}
+
+export async function putFile(owner, repo, filePath, contentB64, message, branch, sha) {
+  const encodedPath = String(filePath)
+    .split("/")
+    .map((seg) => encodeURIComponent(seg))
+    .join("/");
+  const body = { message, content: contentB64, branch };
+  if (sha) body.sha = sha;
+  return gh(`/repos/${owner}/${repo}/contents/${encodedPath}`, {
     method: "PUT",
-    body: JSON.stringify({ message, content: contentB64, branch }),
+    body: JSON.stringify(body),
   });
 }
 

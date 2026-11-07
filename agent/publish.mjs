@@ -18,6 +18,7 @@ export async function publishDraft({ markdownPath, stamp }) {
   log.info(`Publishing to ${owner}/${repo} on branch ${branch}`);
   const { base, sha } = await gh.getDefaultBranchSha(owner, repo);
   await gh.createBranch(owner, repo, branch, sha);
+  const existingSha = await gh.getFileSha(owner, repo, targetPath, branch);
   await gh.putFile(
     owner,
     repo,
@@ -25,6 +26,7 @@ export async function publishDraft({ markdownPath, stamp }) {
     Buffer.from(content, "utf8").toString("base64"),
     `CODA desk note ${stamp}`,
     branch,
+    existingSha,
   );
   const pr = await gh.openPr(
     owner,
@@ -35,6 +37,29 @@ export async function publishDraft({ markdownPath, stamp }) {
     "Automated desk-note draft from CODA. Review before merge — not financial advice.",
   );
   return pr;
+}
+
+// Generic path: open a DRAFT PR that creates or updates a single file in the
+// site repo (used by the SIMULATED paper-trade proposal). Human merges.
+export async function publishFile({ repoRelPath, content, branch, title, body }) {
+  requireUsable("GITHUB_TOKEN", "fine-grained PAT with contents:write + pull_requests");
+  const owner = get("GITHUB_OWNER", "dm1033");
+  const repo = get("GITHUB_SITE_REPO", "thecrudeoracle");
+
+  log.info(`Publishing ${repoRelPath} to ${owner}/${repo} on branch ${branch}`);
+  const { base, sha } = await gh.getDefaultBranchSha(owner, repo);
+  await gh.createBranch(owner, repo, branch, sha);
+  const existingSha = await gh.getFileSha(owner, repo, repoRelPath, branch);
+  await gh.putFile(
+    owner,
+    repo,
+    repoRelPath,
+    Buffer.from(content, "utf8").toString("base64"),
+    title,
+    branch,
+    existingSha,
+  );
+  return gh.openPr(owner, repo, branch, base, title, body);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
