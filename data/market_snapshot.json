@@ -1,7 +1,7 @@
 {
   "source": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "license": "CC-BY-4.0",
-  "updated_at_utc": null,
+  "updated_at_utc": "2026-11-11T23:40:39Z",
   "eia_us_crude_stocks": {
     "updated_at_utc": null,
     "rows": [],
@@ -10,8 +10,117 @@
     "origin": "U.S. Energy Information Administration, API v2"
   },
   "cftc_wti_managed_money": {
-    "updated_at_utc": null,
-    "rows": [],
+    "updated_at_utc": "2026-11-11T23:40:39Z",
+    "rows": [
+      {
+        "report_date": "2026-11-03",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1908732,
+        "managed_money_long": 147382,
+        "managed_money_short": 125654,
+        "managed_money_spreading": 305122,
+        "managed_money_net": 21728
+      },
+      {
+        "report_date": "2026-10-27",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1886280,
+        "managed_money_long": 157433,
+        "managed_money_short": 126305,
+        "managed_money_spreading": 284987,
+        "managed_money_net": 31128
+      },
+      {
+        "report_date": "2026-10-20",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1835144,
+        "managed_money_long": 163413,
+        "managed_money_short": 127226,
+        "managed_money_spreading": 272416,
+        "managed_money_net": 36187
+      },
+      {
+        "report_date": "2026-10-13",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1900179,
+        "managed_money_long": 171973,
+        "managed_money_short": 131399,
+        "managed_money_spreading": 286687,
+        "managed_money_net": 40574
+      },
+      {
+        "report_date": "2026-10-06",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1889422,
+        "managed_money_long": 178353,
+        "managed_money_short": 124755,
+        "managed_money_spreading": 311571,
+        "managed_money_net": 53598
+      },
+      {
+        "report_date": "2026-09-29",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1878576,
+        "managed_money_long": 209028,
+        "managed_money_short": 129436,
+        "managed_money_spreading": 302987,
+        "managed_money_net": 79592
+      },
+      {
+        "report_date": "2026-09-22",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1841811,
+        "managed_money_long": 223190,
+        "managed_money_short": 121362,
+        "managed_money_spreading": 276269,
+        "managed_money_net": 101828
+      },
+      {
+        "report_date": "2026-09-15",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1955764,
+        "managed_money_long": 221896,
+        "managed_money_short": 115617,
+        "managed_money_spreading": 298939,
+        "managed_money_net": 106279
+      },
+      {
+        "report_date": "2026-09-08",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1939911,
+        "managed_money_long": 218960,
+        "managed_money_short": 107229,
+        "managed_money_spreading": 284214,
+        "managed_money_net": 111731
+      },
+      {
+        "report_date": "2026-09-01",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1921085,
+        "managed_money_long": 205300,
+        "managed_money_short": 111019,
+        "managed_money_spreading": 295613,
+        "managed_money_net": 94281
+      },
+      {
+        "report_date": "2026-08-25",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1906740,
+        "managed_money_long": 196882,
+        "managed_money_short": 112862,
+        "managed_money_spreading": 289511,
+        "managed_money_net": 84020
+      },
+      {
+        "report_date": "2026-08-18",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1888960,
+        "managed_money_long": 195538,
+        "managed_money_short": 108059,
+        "managed_money_spreading": 267661,
+        "managed_money_net": 87479
+      }
+    ],
     "origin": "CFTC Disaggregated Futures-Only Commitments of Traders (72hh-3qpy)"
   }
 }
