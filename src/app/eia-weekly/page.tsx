@@ -5,6 +5,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import DataMeta from "@/components/DataMeta";
 import PresentedBy from "@/components/PresentedBy";
 import JsonLd from "@/components/JsonLd";
+import { EiaCrudeStocksSnapshot } from "@/components/MarketSnapshot";
 import { getEiaWeekly, type WeeklyStockLine } from "@/lib/eia-weekly";
 import { formatLongDate } from "@/lib/daily-note";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
@@ -159,6 +160,7 @@ export default async function EiaWeeklyPage() {
             </Link>
           </section>
         )}
+        <EiaCrudeStocksSnapshot />
         <PresentedBy location="eia_weekly_sponsor" />
         <p className="text-sm font-medium text-steel-200">Not financial advice.</p>
         <DisclaimerBlock />

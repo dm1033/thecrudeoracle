@@ -5,6 +5,7 @@ import posData from "../../../../data/positioning-engine.json";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
+import { CftcManagedMoneySnapshot } from "@/components/MarketSnapshot";
 
 export const metadata: Metadata = pageMeta(
   "CFTC positioning and crowd risk",
@@ -161,6 +162,8 @@ function CrowdRiskCard({ c }: { c: CrowdRisk }) {
 function PositioningContent() {
   return (
     <div className="space-y-10">
+      <CftcManagedMoneySnapshot />
+
       <section aria-labelledby="pos-h">
         <h2 id="pos-h" className="h2">
           Managed-money positioning

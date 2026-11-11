@@ -1,0 +1,17 @@
+{
+  "source": "The Crude Oracle (https://www.thecrudeoracle.com)",
+  "license": "CC-BY-4.0",
+  "updated_at_utc": null,
+  "eia_us_crude_stocks": {
+    "updated_at_utc": null,
+    "rows": [],
+    "series": "WCESTUS1",
+    "series_name": "U.S. Ending Stocks excluding SPR of Crude Oil",
+    "origin": "U.S. Energy Information Administration, API v2"
+  },
+  "cftc_wti_managed_money": {
+    "updated_at_utc": null,
+    "rows": [],
+    "origin": "CFTC Disaggregated Futures-Only Commitments of Traders (72hh-3qpy)"
+  }
+}
