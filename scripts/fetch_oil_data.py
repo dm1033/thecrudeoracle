@@ -104,7 +104,13 @@ def fetch_cftc_wti_managed_money():
             continue
         records.append(record)
     if not records:
-        raise ValueError(f"CFTC returned no usable rows for contract {CFTC_CONTRACT}")
+        # Say what came back, so a renamed column is visible in the run log.
+        first = raw_rows[0] if raw_rows and isinstance(raw_rows[0], dict) else {}
+        seen = sorted(k for k in first if "m_money" in k or "open_interest" in k or "report_date" in k)
+        raise ValueError(
+            f"CFTC returned no usable rows for contract {CFTC_CONTRACT} "
+            f"({len(raw_rows)} raw rows; relevant columns in first row: {seen})"
+        )
     return records
 
 
