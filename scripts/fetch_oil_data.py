@@ -96,7 +96,7 @@ def fetch_cftc_wti_managed_money():
                 "open_interest": _num(row, "open_interest_all"),
                 "managed_money_long": long_pos,
                 "managed_money_short": short_pos,
-                "managed_money_spreading": _num(row, "m_money_positions_spread_all"),
+                "managed_money_spreading": _num(row, "m_money_positions_spread"),
                 "managed_money_net": long_pos - short_pos,
             }
         except (KeyError, TypeError, ValueError):
