@@ -13,7 +13,7 @@ import {
 export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
-  "CrudeOracle Desk Lead — Onscreen Oil & Gas Investment Agent",
+  "Desk Bot: oil & gas market intelligence",
   "Interactive terminal-grade oil & gas market intelligence bot powered by the CrudeOracle Master System Prompt (v30 Oct 2026): cited EIA/OPEC/IEA/COT data, bull/bear scenarios, invalidation levels and strict non-advisory risk controls.",
   "/desk-agent"
 );

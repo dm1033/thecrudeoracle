@@ -48,7 +48,7 @@ const routes = findPageRoutes(APP_DIR).sort();
 async function renderedTitle(mod: Record<string, unknown>, route: string): Promise<string> {
   let meta = mod.metadata as Metadata | undefined;
   if (!meta && typeof mod.generateMetadata === "function") {
-    const params = route.includes("[date]") ? { date: "2026-10-27" } : {};
+    const params: Record<string, string> = route.includes("[date]") ? { date: "2026-10-27" } : {};
     meta = await (mod.generateMetadata as (arg: { params: Record<string, string> }) => Metadata | Promise<Metadata>)({
       params,
     });
