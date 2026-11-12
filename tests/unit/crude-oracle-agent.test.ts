@@ -71,11 +71,77 @@ describe("CrudeOracle Investment Agent — Master System Prompt (v2026-10-30)", 
     expect(res.reply).toContain(CRUDE_ORACLE_INTERACTIVE_FOOTER);
   });
 
+  it("never types a market figure into the reply: no price targets, conviction labels or fixed levels", async () => {
+    resetPublishedPricesCache();
+    const feed = await getPublishedPrices();
+    const queries = [
+      "Give me today's crude & gas market snapshot and key drivers.",
+      "Latest EIA crude inventories and Cushing draw",
+      "Deep dive on Hormuz and Red Sea Houthi risk",
+      "Equity impacts on XOM, CVX, SHEL and OFS names",
+      "Check CFTC COT managed money positioning and diesel cracks",
+      "Scenario analysis if OPEC cuts another 500 kb/d",
+      "Henry Hub and JKM LNG winter spread",
+      "Should I buy XOM right now?",
+    ];
+    const banned = [
+      "Conviction:",
+      "Confidence: High",
+      "Confidence: Medium",
+      "$79.50",
+      "$71.00",
+      "$78–$84",
+      "$70–$74",
+      "$60/bbl",
+      "$11.90",
+      "$12/MMBtu",
+      "WS 68",
+      "24.0 mb",
+      "27.5 mb",
+      "+185k",
+      "65th",
+      "82nd percentile",
+      "+$0.45/bbl",
+      "+$2.10/bbl",
+      "512 rigs",
+      "93.4%",
+      "The tape is firm",
+    ];
+    for (const query of queries) {
+      const { reply } = generateDeskLeadResponse(query, feed, []);
+      for (const text of banned) expect(reply, `"${text}" in reply to: ${query}`).not.toContain(text);
+      expect(reply).toContain("not current");
+      expect(reply, "a months-old event must not be raised as an active alert").not.toContain("ACTIVE PHYSICAL EVENT");
+      expect(reply).toContain(CRUDE_ORACLE_MANDATORY_DISCLAIMER);
+    }
+  });
+
+  it("withholds placeholder prices and prints older than 30 days, as the price cards do", async () => {
+    resetPublishedPricesCache();
+    const feed = await getPublishedPrices();
+    const stale = feed.prices.map((p) => ({ ...p, data_type: "manual", source: "desk", last_updated: "2026-01-01T00:00:00Z", price: 123.45, daily_change: 9.87 }));
+    const snap = buildMarketSnapshotTable(stale);
+    expect(snap.tableMarkdown).not.toContain("123.45");
+    expect(snap.tableMarkdown).toContain("withheld");
+    expect(snap.alertLine ?? "").not.toContain("9.87");
+    const placeholder = feed.prices.map((p) => ({ ...p, data_type: "API placeholder", last_updated: new Date().toISOString(), price: 123.45 }));
+    expect(buildMarketSnapshotTable(placeholder).tableMarkdown).not.toContain("123.45");
+  });
+
+  it("stamps every hand-entered figure as a dated desk record", async () => {
+    resetPublishedPricesCache();
+    const feed = await getPublishedPrices();
+    const { reply } = generateDeskLeadResponse("Latest EIA crude inventories and Cushing draw", feed, []);
+    const stockLines = reply.split("\n").filter((line) => line.startsWith("- **") && line.includes(" mb "));
+    expect(stockLines.length).toBeGreaterThan(0);
+    for (const line of stockLines) expect(line).toMatch(/desk record as of \d{4}-\d{2}-\d{2}/);
+  });
+
   it("surfaces an ALERT line when a price moves >= 2% or a confirmed physical outage is active", async () => {
     resetPublishedPricesCache();
     const feed = await getPublishedPrices();
     const spiked = feed.prices.map((p) =>
-      p.ticker === "BRN" ? { ...p, daily_change: 3.45 } : p
+      p.ticker === "BRN" ? { ...p, daily_change: 3.45, data_type: "delayed", last_updated: new Date().toISOString() } : p
     );
     const snap = buildMarketSnapshotTable(spiked);
     expect(snap.alertLine).toContain("**ALERT:**");

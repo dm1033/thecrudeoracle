@@ -19,6 +19,7 @@ import {
   type MarketPrice,
 } from "@/lib/data";
 import type { PublishedPrices } from "@/lib/published-prices";
+import { LICENSED_DATA_REQUIRED, isPlaceholderPrice, priceFigureShown, priceFigureTooOld } from "@/lib/price-stamp";
 
 export const CRUDE_ORACLE_PROMPT_VERSION = "2026-10-30";
 
@@ -172,8 +173,12 @@ export function buildMarketSnapshotTable(prices: MarketPrice[]): {
   alertLine: string | null;
 } {
   const rows = prices.slice(0, 5);
-  const bigMover = rows.find((p) => Math.abs(p.daily_change) >= 2.0);
-  const confirmedOutage = newsToBarrelsJson.events.find((e) => e.status === "confirmed");
+  // Same rule as the price cards: no figure for a placeholder or a print older than 30 days.
+  const bigMover = rows.find((p) => priceFigureShown(p) && Math.abs(p.daily_change) >= 2.0);
+  // An event is only an "active" alert while its record is recent; an old one is listed in the drivers with its date.
+  const confirmedOutage = newsToBarrelsJson.events.find(
+    (e) => e.status === "confirmed" && !priceFigureTooOld(e.last_updated)
+  );
 
   let alertLine: string | null = null;
   if (bigMover) {
@@ -186,9 +191,10 @@ export function buildMarketSnapshotTable(prices: MarketPrice[]): {
   const lines = [
     "| Asset | Price | Δ (d/d · w/w) | As-of | Source & Type |",
     "| --- | --- | --- | --- | --- |",
-    ...rows.map(
-      (p) =>
-        `| **${p.asset} (${p.ticker})** | **${formatPriceCell(p)}** | ${formatDeltaCell(p)} | ${formatAsOf(p.last_updated)} | ${p.source} _(${p.data_type})_ |`
+    ...rows.map((p) =>
+      priceFigureShown(p)
+        ? `| **${p.asset} (${p.ticker})** | **${formatPriceCell(p)}** | ${formatDeltaCell(p)} | ${formatAsOf(p.last_updated)} | ${p.source} _(${p.data_type})_ |`
+        : `| **${p.asset} (${p.ticker})** | ${isPlaceholderPrice(p) ? LICENSED_DATA_REQUIRED : "withheld – last print is over 30 days old"} | n/a | ${formatAsOf(p.last_updated)} | ${p.source} _(${p.data_type})_ |`
     ),
   ];
 
@@ -259,6 +265,99 @@ export function buildDeskContextBlock(feed: PublishedPrices): string {
   ].join("\n");
 }
 
+/**
+ * The canned Desk Bot reply.
+ *
+ * Rule for everything below: no market figure is ever typed into the text.
+ * Each number is read from a data record at request time and printed with
+ * that record's own date, source and data type, so an old record reads as
+ * old. Scenario text names conditions, never price levels, and carries no
+ * conviction label. A line with no record behind it is left out.
+ */
+
+type DeskRecord = { last_updated: string; source: string; data_type: string };
+
+function stamp(record: DeskRecord): string {
+  return `desk record as of ${formatAsOf(record.last_updated)}, ${record.source}, ${record.data_type}`;
+}
+
+function stockBullets(): string[] {
+  return balanceEngineJson.stocks.map(
+    (s) => `- **${s.metric}:** ${s.value} ${s.unit} (${s.change}) — ${stamp(s)}.`
+  );
+}
+
+function balanceBullet(): string {
+  const b = balanceEngineJson.balance_summary;
+  return `- **Implied global balance:** ${b.implied_balance} ${b.unit} (supply ${b.total_supply} vs demand ${b.total_demand} ${b.unit}) — ${stamp({ ...b, data_type: "sample assessment" })}.`;
+}
+
+function eventBullets(): string[] {
+  return newsToBarrelsJson.events.map(
+    (e) =>
+      `- **${e.headline}** (${e.region}; status: ${e.status}; confidence: ${e.confidence}): ${e.affected_capacity} ${e.capacity_type}. Watch: ${e.watch} — ${stamp(e)}.`
+  );
+}
+
+function crackBullets(): string[] {
+  return curveMonitorJson.cracks.map(
+    (c) =>
+      `- **${c.instrument}:** ${c.value} ${c.unit} (${c.change}; valuation ${c.valuation}; physical check ${c.physical_check}) — ${stamp(c)}.`
+  );
+}
+
+function otherPositioningBullets(): string[] {
+  return positioningJson.positioning.map(
+    (p) =>
+      `- **${p.instrument}:** ${p.net_position} (${p.change}, ${p.percentile}, ${p.stance}) — indicative desk value, last reviewed ${p.last_updated}, ${p.source}. Not current.`
+  );
+}
+
+function eiaStocksBullet(): string[] {
+  const row = getMarketSnapshot().eia.rows[0];
+  if (!row) return [];
+  const change =
+    row.changeMillionBarrels == null || row.previousWeekEnding == null
+      ? ""
+      : ` (${row.changeMillionBarrels > 0 ? "+" : ""}${row.changeMillionBarrels.toFixed(3)} vs ${row.previousWeekEnding})`;
+  return [
+    `- **US commercial crude stocks (EIA print):** ${row.millionBarrels.toFixed(3)} million barrels${change} — EIA Weekly Petroleum Status Report, week ending ${row.weekEnding}, delayed.`,
+  ];
+}
+
+function priceBullet(p: MarketPrice | undefined): string[] {
+  if (!p || !priceFigureShown(p)) return [];
+  return [
+    `- **${p.asset} (${p.ticker}):** ${formatPriceCell(p)}, ${formatDeltaCell(p)} — as of ${formatAsOf(p.last_updated)}, ${p.source}, ${p.data_type}.`,
+  ];
+}
+
+function latestRecordDate(): string {
+  return [
+    ...balanceEngineJson.stocks.map((s) => s.last_updated),
+    ...newsToBarrelsJson.events.map((e) => e.last_updated),
+    ...curveMonitorJson.cracks.map((c) => c.last_updated),
+    ...positioningJson.positioning.map((p) => p.last_updated),
+  ]
+    .map(formatAsOf)
+    .sort()
+    .at(-1) ?? "unknown";
+}
+
+const DESK_VIEW: string[] = [
+  `### 3. Desk View`,
+  `- **Bull Case (conditions, not a forecast):** Weekly EIA prints keep showing commercial crude and Cushing draws, prompt timespreads stay backwardated, and a confirmed supply or refining disruption lasts longer than first reported.`,
+  `- **Bear Case (conditions, not a forecast):** Stocks start building, prompt timespreads weaken toward contango, producers add supply faster than demand absorbs it, and speculative length is cut.`,
+  `- **Explicit Invalidation:** Either case is dropped when the next primary print contradicts it — check the latest EIA weekly stocks and the CFTC positioning print against the dates shown above before relying on any line here. I give no price target and no conviction level.`,
+];
+
+const WATCHPOINTS: string[] = [
+  `### 4. Watchpoints & Invalidation`,
+  `- **EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET):** commercial crude, Cushing, gasoline and distillate stock changes.`,
+  `- **CFTC Commitments of Traders (Fridays 15:30 ET):** managed-money long, short and net in NYMEX WTI.`,
+  `- **Events on file:** the status and duration of each event listed in the News-to-Barrels tool, checked against the operator or official source.`,
+];
+
 export function generateDeskLeadResponse(
   query: string,
   feed: PublishedPrices,
@@ -268,163 +367,29 @@ export function generateDeskLeadResponse(
   const focus = inferSessionFocus(history, query);
   const { tableMarkdown, alertLine } = buildMarketSnapshotTable(feed.prices);
 
-  const brent = feed.prices.find((p) => p.ticker === "BRN") ?? feed.prices[0];
-  const wti = feed.prices.find((p) => p.ticker === "WTI") ?? feed.prices[1];
+  const brent = feed.prices.find((p) => p.ticker === "BRN");
+  const wti = feed.prices.find((p) => p.ticker === "WTI");
   const hh = feed.prices.find((p) => p.ticker === "HH");
-  const spread = brent && wti ? (brent.price - wti.price).toFixed(2) : "4.29";
+  const spreadBullet =
+    brent && wti && priceFigureShown(brent) && priceFigureShown(wti)
+      ? [
+          `- **Brent–WTI spread:** $${(brent.price - wti.price).toFixed(2)}/bbl, from the two prices above (as of ${formatAsOf(brent.last_updated)}, ${brent.source}).`,
+        ]
+      : [];
 
-  const usStocks = balanceEngineJson.stocks[0];
-  const cushing = balanceEngineJson.stocks[1];
-  const oecd = balanceEngineJson.stocks[2];
-  const prodStocks = balanceEngineJson.stocks[4];
-  const rigCount = supplySignals.find((s) => s.id === "us-rig-count");
-  const refUtil = supplySignals.find((s) => s.id === "refinery-utilisation");
-
+  const recordDate = latestRecordDate();
   const freshnessBanner = feed.eia
-    ? `Live EIA Open Data spot overlay active (latest print **${formatAsOf(feed.eiaUpdated ?? brent.last_updated)}**; EIA daily spot series publish with a 1–3 business-day lag). Weekly inventory, COT, and curve figures are delayed/indicative desk records stamped with their respective release dates.`
-    : `No live EIA API key configured in this environment — last known published desk marks shown as of **${formatAsOf(feed.manualUpdated)}** (delayed/manual). Verify all figures against primary releases before acting.`;
+    ? `Live EIA Open Data spot overlay active (latest print **${formatAsOf(feed.eiaUpdated ?? feed.manualUpdated)}**; EIA daily spot series publish with a 1–3 business-day lag).`
+    : `No live EIA API key configured in this environment — last known published desk marks shown as of **${formatAsOf(feed.manualUpdated)}** (delayed/manual).`;
+  const recordsBanner = `Lines marked "desk record" are hand-entered sample or indicative values; the newest is dated **${recordDate}**. They show how the desk reads the market and are not current. Verify every figure against the primary release before acting.`;
 
-  const sections: string[] = [];
-
-  if (topic === "advice_refusal") {
-    sections.push(
-      `### Desk Policy — Analytical Framework Only (No Personalised Advice)`,
-      `I don’t give personalised investment advice, portfolio allocations, or buy/sell/hold instructions. You need a regulated financial adviser for capital allocation decisions. What I **will** give you is the institutional framework, the physical tape, and the risk parameters so you can stress-test your own thesis.`,
-      `### 1. Market Snapshot`,
-      ...(alertLine ? [alertLine, ""] : []),
-      tableMarkdown,
-      `### 2. What Moved / Drivers`,
-      `- **Prompt Physical vs Structure:** **Brent ($${brent.price.toFixed(2)}/bbl)** over **WTI ($${wti.price.toFixed(2)}/bbl)** holds a **+$${spread}/bbl** differential (as of ${formatAsOf(brent.last_updated)}, ${brent.source}), keeping the US Gulf Coast export arbitrage open (**+$0.35/bbl** net margin to NW Europe, Module 3, as of 2026-07-04).`,
-      `- **Inventory Cushion:** US commercial crude sits at **${usStocks.value} ${usStocks.unit}** (**${usStocks.change}**, as of ${usStocks.last_updated}, ${usStocks.source}) and Cushing at **${cushing.value} ${cushing.unit}** (**${cushing.change}**).`,
-      `### 3. Desk View (Framework & Scenarios)`,
-      `- **Bull Case (Confidence: Medium):** Sustained US/OECD stock draws (**${balanceEngineJson.balance_summary.implied_balance} mb/d** implied balance) plus Middle East/Red Sea transit friction keep front-month backwardation firm (**Brent M1/M2 +$0.45/bbl**) and support **$78–$84/bbl** Brent.`,
-      `- **Bear Case (Confidence: Medium):** Faster OPEC+ voluntary cut unwind (**+250 kb/d per month** signalled, Module 4) meeting **2.3σ** West African unsold cargo length compresses timespreads toward **$70–$74/bbl**.`,
-      `- **Invalidation:** Two consecutive weekly US commercial crude builds >3 mb or Brent M1/M2 flipping into contango.`,
-      `### 4. Watchpoints & Invalidation`,
-      `- **Next Prints:** EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET) and CFTC/ICE COT positioning (Fridays 15:30 ET).`,
-      `- **Clarifying Questions for Your Research:** What is your time horizon (prompt contract vs multi-quarter), and are you analysing flat price, timespreads, or energy equities?`,
-      `### 5. Sources & Freshness`,
-      `- ${freshnessBanner}`,
-      `- Primary sources: EIA.gov (RBRTE, RWTC, RNGWHHD, WCESTUS1, W_EPC0_SAX_YCUOK_MBBL), IEA Oil Market Report, OPEC MOMR, CFTC/ICE COT.`,
-      `---`,
-      `**Disclaimer:** ${CRUDE_ORACLE_MANDATORY_DISCLAIMER}`,
-      ``,
-      `**${CRUDE_ORACLE_INTERACTIVE_FOOTER}**`
-    );
-
-    return {
-      reply: sections.join("\n\n"),
-      topic,
-      focus,
-      model: "crude-oracle-desk-lead-v1",
-      eiaLive: feed.eia,
-      promptVersion: CRUDE_ORACLE_PROMPT_VERSION,
-      quickOptions: CRUDE_ORACLE_QUICK_PROMPTS,
-    };
-  }
-
-  // 1. Market Snapshot (Always present)
-  sections.push(
-    `### 1. Market Snapshot`,
-    `The tape is firm at the front and contested in the deferred months. Session focus: **${focus}**.`,
-    ...(alertLine ? [alertLine] : []),
-    tableMarkdown,
-    `- **Key Physical Prints:** US commercial crude **${usStocks.value} ${usStocks.unit}** (**${usStocks.change}**, as of ${usStocks.last_updated}, ${usStocks.source}) · Cushing **${cushing.value} ${cushing.unit}** (**${cushing.change}**) · Implied global balance **${balanceEngineJson.balance_summary.implied_balance} mb/d** (as of ${balanceEngineJson.balance_summary.last_updated.slice(0, 10)}, ${balanceEngineJson.balance_summary.source}).`
-  );
-
-  // 2. What Moved / Drivers (Adapted by topic)
-  if (topic === "inventories") {
-    sections.push(
-      `### 2. What Moved / Drivers (Inventories & Balance)`,
-      `- **US Crude & Cushing Draw Cycle:** Commercial crude stocks drew **${usStocks.change}** to **${usStocks.value} mb** (~11 mb below the 5-year seasonal average, as of ${usStocks.last_updated}, EIA WPSR). Cushing hub stocks fell **${cushing.change}** to **${cushing.value} mb**, pressing toward operational tank bottoms.`,
-      `- **Refinery Runs vs Product Builds:** US refinery utilisation is running hot at **${refUtil?.value ?? "93.4%"}** (as of ${refUtil?.last_updated ?? "2026-07-14"}, EIA WPSR), pulling crude down but building combined gasoline + distillate stocks by **${prodStocks.change}** to **${prodStocks.value} mb** (as of ${prodStocks.last_updated}).`,
-      `- **Global S&D & OECD Cover:** Global supply (**${balanceEngineJson.balance_summary.total_supply} mb/d**) trails demand (**${balanceEngineJson.balance_summary.total_demand} mb/d**) for a **${balanceEngineJson.balance_summary.implied_balance} mb/d** deficit, corroborated by OECD industry stocks drawing **${oecd.change}** to **${oecd.value} mb** (as of ${oecd.last_updated}, IEA OMR) while US rig count stays flat at **${rigCount?.value ?? "512 rigs"}** (Baker Hughes, as of ${rigCount?.last_updated ?? "2026-07-14"}).`
-    );
-  } else if (topic === "geopolitics") {
-    sections.push(
-      `### 2. What Moved / Drivers (Geopolitics & Supply Risk)`,
-      `- **Rotterdam Refining Outage (Confirmed — Confidence: Medium):** **400 kb/d** CDU offline in NW Europe for an estimated **2–4 weeks** (as of 2026-07-04, Operator statement / Module 4). Bearish local North Sea crude differentials (Forties/Ekofisk), bullish European diesel cracks and ARA middle-distillate imports.`,
-      `- **Red Sea Rerouting & Shadow-Fleet Sanctions (Confirmed — Confidence: Medium):** OFAC designations target **~300 kb/d** of sanctioned exports (as of 2026-07-02, OFAC / Module 4), driving dark-AIS gaps to **+1.8σ** and TD3C MEG–China VLCC freight to **WS 68 (+1.2σ)** (Module 2, as of 2026-07-04).`,
-      `- **OPEC+ Unwind Signalling vs Spare Capacity (Developing — Confidence: Low):** Ministers signalled a potential **+250 kb/d per month** unwind from October (as of 2026-07-03, OPEC communications), while effective spare capacity remains concentrated in Gulf producers (IEA OMR, as of 2026-07-14).`
-    );
-  } else if (topic === "positioning") {
-    sections.push(
-      `### 2. What Moved / Drivers (Curve, Cracks & Positioning)`,
-      `- **Brent Long Crowding (82nd Percentile — Confidence: High):** ICE COT managed money holds **+310k contracts** (**+25k w/w**, as of 2026-07-01, ICE COT). Prompt **Brent M1/M2 (+$0.45/bbl)** confirms the front, but **M1/M7 (+$2.10/bbl)** is contradicted by **+2.3σ** West African unsold loadings (Modules 2–3, as of 2026-07-04).`,
-      `- **ICE Gasoil Short Squeeze Setup (8th Percentile — Confidence: Medium):** Speculators sit heavily short at **-45k contracts** (**-6k w/w**, as of 2026-07-01, ICE COT) just as the **400 kb/d** Rotterdam outage tightens European distillate supply. Diesel crack is at **+$16.0/bbl** vs Brent (Module 3, as of 2026-07-04).`,
-      ...cftcWtiBullet()
-    );
-  } else if (topic === "gas_lng") {
-    sections.push(
-      `### 2. What Moved / Drivers (Gas & LNG)`,
-      `- **Henry Hub vs Global LNG Arb:** **Henry Hub (${hh ? `$${hh.price.toFixed(2)}/MMBtu` : "$2.91/MMBtu"}, ${hh ? `${hh.daily_change > 0 ? "+" : ""}${hh.daily_change.toFixed(2)}% d/d` : "+1.75% d/d"})** (as of ${formatAsOf(hh?.last_updated ?? "2026-07-15")}, ${hh?.source ?? "EIA"}) sits at a wide discount to the **JKM Asia LNG proxy ($11.90/MMBtu, +1.54% d/d)** (as of 2026-07-15, API placeholder / IEA).`,
-      `- **Feedgas & Liquefaction Ramp:** US LNG export terminals are running near capacity while new liquefaction trains ramp; Asian spot buyers remain price-sensitive above **$12/MMBtu** and European storage refill pace is the swing factor (as of 2026-07-14, IEA Gas Market Report).`
-    );
-  } else {
-    sections.push(
-      `### 2. What Moved / Drivers`,
-      `- **Prompt Tightness vs Deferred Contradiction:** **Brent ($${brent.price.toFixed(2)}/bbl)** and **WTI ($${wti.price.toFixed(2)}/bbl)** (as of ${formatAsOf(brent.last_updated)}, ${brent.source}) are supported at the front by a fourth US crude draw in five weeks (**-2.1 mb w/w** to **443.7 mb**, EIA WPSR as of 2026-07-02) and Cushing tightness (**24.8 mb**).`,
-      `- **Refining & Freight Friction:** Rotterdam's **400 kb/d** CDU outage (confirmed, as of 2026-07-04) and Red Sea / shadow-fleet sanctions (**~300 kb/d** affected, OFAC as of 2026-07-02) keep compliant tanker rates elevated (**TD3C WS 68, +1.2σ**).`,
-      `- **Positioning Asymmetry:** Brent managed money is stretched at the **82nd percentile (+310k lots)** while ICE Gasoil sits at the **8th percentile (-45k lots)** (ICE COT as of 2026-07-01).`
-    );
-  }
-
-  // 3. Desk View (Bull / Bear / Conviction / Invalidation)
-  sections.push(
-    `### 3. Desk View`,
-    `- **Bull Case ($79.50–$84.00/bbl Brent · WTI M1/M2 +$0.65–$0.90/bbl):** Continued US commercial and Cushing draws, prolonged Rotterdam CDU repair (>4 weeks), and firmer shadow-fleet enforcement force Gasoil short-covering (**8th percentile**) and pull prompt crude higher. **Conviction: Medium.**`,
-    `- **Bear Case ($71.00–$75.50/bbl Brent · M1/M7 spread compression by $0.75–$1.25/bbl):** Unsold West African cargoes (**+2.3σ** loading anomaly) clear via lower differentials, OPEC+ confirms the **+250 kb/d/month** Q4 unwind, and **82nd-percentile** Brent fund length liquidates into macro/PMI softness. **Conviction: Medium.**`,
-    `- **Explicit Invalidation:** Bull view invalidated if US commercial crude builds >3.0 mb for two consecutive weeks or Cushing recovers above 27.5 mb. Bear view invalidated if OPEC+ formally defers the Q4 unwind or Hormuz/Red Sea transit losses exceed 500 kb/d.`
-  );
-
-  // 4. Watchpoints & Invalidation
-  sections.push(
-    `### 4. Watchpoints & Invalidation`,
-    `- **EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET):** Watch Cushing vs the **24.0 mb** operational cushion and ARA/US distillate stock changes.`,
-    `- **Physical Differentials & Curves:** Monitor **Brent M1/M2 (+$0.45/bbl)** vs **Forties/WAF differentials** — if M1/M2 stalls while WAF stays discounted, Brent fund length (**310k lots**) is at elevated liquidation risk.`,
-    `- **Event Triggers:** Rotterdam refinery restart timeline (2–4 week window), NHC US Gulf tropical tracks (**up to 1.5 mb/d** offshore production / **2.0 mb/d** refining in cone), and Saudi OSP announcements.`
-  );
-
-  // 5. Investment Implications (Always included when equities/scenarios asked, concise otherwise)
-  if (topic === "equities" || topic === "scenarios") {
-    const watchSample = watchlistCompanies.slice(0, 4);
-    const intelSample = companyIntel.slice(0, 2);
-    sections.push(
-      `### 5. Investment Implications (Scenario-Framed — Monitored Names, Not Recommendations)`,
-      `- **Integrated Majors & Upstream (${watchSample.map((w) => `${w.ticker} [${w.exchange}]`).join(", ")}):** Dividend coverage and buyback resilience hold down to **$60/bbl Brent** in stress scenarios; upside sensitivity is highest to sustained **$80+/bbl** flat price (as of ${watchSample[0]?.last_updated ?? "2026-07-04"}, ${watchSample[0]?.source ?? "Company filings"}).`,
-      `- **Crude Tankers & OFS (SMPL-G, SMPL-E):** Compliant VLCC/Suezmax owners benefit from ton-mile elongation (Red Sea Cape routing + shadow-fleet sanctions, **TD3C +1.2σ**), with rate-volatility risk if floating storage (**78 mb**, as of 2026-07-02) unwinds rapidly.`,
-      `- **Refining & Distillate Crack Scenario:** Crowded Gasoil shorts (**8th percentile**) vs the **400 kb/d** Rotterdam outage favour distillate crack normalisation toward seasonal averages unless European industrial PMIs deteriorate further.`,
-      ...(intelSample.length
-        ? [
-            `- **Company Notes on File:** ${intelSample.map((c) => `**${c.company} (${c.ticker})** — catalyst: _${c.catalyst}_; key risk: _${c.risk}_ (as of ${c.last_updated})`).join(" | ")}.`,
-          ]
-        : [])
-    );
-  } else {
-    sections.push(
-      `### 5. Investment Implications (Scenario Framework)`,
-      `- **Structure vs Flat Price:** WTI prompt structure (**M1/M2 +$0.55/bbl**) carries cleaner physical backing than deferred Brent (**M1/M7 +$2.10/bbl**, **82nd percentile** crowding).`,
-      `- **Crack & Equity Read-Through:** Compliant tanker and international OFS themes remain supported by ton-mile friction and offshore capex; middle-distillate cracks carry asymmetric upside if ARA stocks draw during the Rotterdam outage.`
-    );
-  }
-
-  // 6. Sources & Freshness
-  sections.push(
-    `### 6. Sources & Freshness`,
-    `- **Freshness & Delays:** ${freshnessBanner}`,
-    `- **Primary Sources Cited:** EIA.gov (Daily Spot ` +
-      `RBRTE/RWTC/RNGWHHD as of ${formatAsOf(brent.last_updated)}; Weekly Petroleum Status Report WCESTUS1/W_EPC0_SAX_YCUOK_MBBL as of ${usStocks.last_updated}), IEA Oil Market Report (as of ${oecd.last_updated}), OPEC MOMR (as of 2026-07-01), CFTC & ICE COT (as of 2026-07-01, Tuesday positions released Friday), Baker Hughes Rig Count (as of ${rigCount?.last_updated ?? "2026-07-14"}), OFAC & NHC public advisories (as of 2026-07-02..04).`
-  );
-
-  // 7. Mandatory Disclaimer & Interactive Footer
-  sections.push(
+  const footer = [
     `---`,
     `**Disclaimer:** ${CRUDE_ORACLE_MANDATORY_DISCLAIMER}`,
     ``,
-    `**${CRUDE_ORACLE_INTERACTIVE_FOOTER}**`
-  );
-
-  return {
+    `**${CRUDE_ORACLE_INTERACTIVE_FOOTER}**`,
+  ];
+  const payload = (sections: string[]): AgentResponsePayload => ({
     reply: sections.join("\n\n"),
     topic,
     focus,
@@ -432,5 +397,110 @@ export function generateDeskLeadResponse(
     eiaLive: feed.eia,
     promptVersion: CRUDE_ORACLE_PROMPT_VERSION,
     quickOptions: CRUDE_ORACLE_QUICK_PROMPTS,
-  };
+  });
+
+  if (topic === "advice_refusal") {
+    return payload([
+      `### Desk Policy — Analytical Framework Only (No Personalised Advice)`,
+      `I don’t give personalised investment advice, portfolio allocations, or buy/sell/hold instructions. You need a regulated financial adviser for capital allocation decisions. What I **will** give you is the framework, the published figures with their dates, and the conditions to test your own thesis against.`,
+      `### 1. Market Snapshot`,
+      ...(alertLine ? [alertLine, ""] : []),
+      tableMarkdown,
+      `### 2. What Moved / Drivers`,
+      ...spreadBullet,
+      ...eiaStocksBullet(),
+      ...cftcWtiBullet(),
+      ...stockBullets().slice(0, 2),
+      ...DESK_VIEW.map((line) => (line === `### 3. Desk View` ? `### 3. Desk View (Framework & Scenarios)` : line)),
+      ...WATCHPOINTS,
+      `- **Questions for your own research:** What is your time horizon, and are you analysing flat price, timespreads, or energy equities?`,
+      `### 5. Sources & Freshness`,
+      `- ${freshnessBanner}`,
+      `- ${recordsBanner}`,
+      ...footer,
+    ]);
+  }
+
+  const sections: string[] = [];
+
+  // 1. Market Snapshot
+  sections.push(
+    `### 1. Market Snapshot`,
+    `Session focus: **${focus}**.`,
+    ...(alertLine ? [alertLine] : []),
+    tableMarkdown
+  );
+
+  // 2. What Moved / Drivers
+  if (topic === "inventories") {
+    sections.push(`### 2. What Moved / Drivers (Inventories & Balance)`, ...eiaStocksBullet(), ...stockBullets(), balanceBullet());
+  } else if (topic === "geopolitics") {
+    sections.push(`### 2. What Moved / Drivers (Geopolitics & Supply Risk)`, ...eventBullets());
+  } else if (topic === "positioning") {
+    sections.push(
+      `### 2. What Moved / Drivers (Curve, Cracks & Positioning)`,
+      ...cftcWtiBullet(),
+      ...otherPositioningBullets(),
+      ...crackBullets()
+    );
+  } else if (topic === "gas_lng") {
+    sections.push(
+      `### 2. What Moved / Drivers (Gas & LNG)`,
+      ...priceBullet(hh),
+      `- **Not on file:** I hold no licensed JKM or TTF price and no LNG feedgas series, so I quote none. Check the exchange or the IEA Gas Market Report directly.`
+    );
+  } else {
+    sections.push(
+      `### 2. What Moved / Drivers`,
+      ...priceBullet(brent),
+      ...priceBullet(wti),
+      ...spreadBullet,
+      ...eiaStocksBullet(),
+      ...cftcWtiBullet(),
+      ...stockBullets().slice(0, 2),
+      ...eventBullets().slice(0, 2)
+    );
+  }
+
+  // 3–4. Desk View and Watchpoints
+  sections.push(...DESK_VIEW, ...WATCHPOINTS);
+
+  // 5. Investment Implications
+  if (topic === "equities" || topic === "scenarios") {
+    const watchSample = watchlistCompanies.slice(0, 4);
+    const intelSample = companyIntel.slice(0, 2);
+    sections.push(
+      `### 5. Investment Implications (Scenario-Framed — Monitored Names, Not Recommendations)`,
+      ...(watchSample.length
+        ? [
+            `- **Names on the watchlist:** ${watchSample.map((w) => `${w.company} (${w.ticker}, ${w.exchange}) — theme: _${w.investment_theme}_; risk: _${w.risk}_`).join(" | ")} (as of ${watchSample[0].last_updated}, ${watchSample[0].source}, ${watchSample[0].data_type}).`,
+          ]
+        : []),
+      ...(intelSample.length
+        ? [
+            `- **Company notes on file:** ${intelSample.map((c) => `**${c.company} (${c.ticker})** — catalyst: _${c.catalyst}_; key risk: _${c.risk}_ (as of ${c.last_updated})`).join(" | ")}.`,
+          ]
+        : []),
+      `- **How to read these:** They are monitored names with a stated theme and risk, not buy or sell ideas. I quote no price sensitivity or break-even for any company.`
+    );
+  } else {
+    sections.push(
+      `### 5. Investment Implications (Scenario Framework)`,
+      `- **Structure vs flat price:** A prompt spread backed by drawing stocks is better supported than one that is not. Compare the timespreads in the Curve Dashboard with the stock prints above, by date.`,
+      `- **Equity read-through:** See the Watchlist and Company Intel pages for monitored names; ask me for "equity impacts" to list them here.`
+    );
+  }
+
+  // 6. Sources & Freshness
+  sections.push(
+    `### 6. Sources & Freshness`,
+    `- **Prices:** ${freshnessBanner}`,
+    `- **Desk records:** ${recordsBanner}`,
+    `- **Automated prints:** CFTC Disaggregated Commitments of Traders and EIA Weekly Petroleum Status Report, quoted only when the scheduled pull has loaded them, each with its own report date.`
+  );
+
+  // 7. Mandatory Disclaimer & Interactive Footer
+  sections.push(...footer);
+
+  return payload(sections);
 }
