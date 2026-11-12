@@ -6,6 +6,7 @@
 import balanceEngineJson from "../../data/balance-engine.json";
 import curveMonitorJson from "../../data/curve-monitor.json";
 import positioningJson from "../../data/positioning-engine.json";
+import { getMarketSnapshot } from "@/lib/market-snapshot";
 import newsToBarrelsJson from "../../data/news-to-barrels.json";
 import flowMapJson from "../../data/flow-map.json";
 import hypothesisJson from "../../data/hypothesis-builder.json";
@@ -197,6 +198,24 @@ export function buildMarketSnapshotTable(prices: MarketPrice[]): {
   };
 }
 
+/** NYMEX WTI managed money from the automated CFTC pull; nothing is said when it has not loaded. */
+function cftcWtiLine(): string | null {
+  const row = getMarketSnapshot().cftc.rows[0];
+  if (!row) return null;
+  const n = (value: number) => value.toLocaleString("en-GB");
+  const signed = (value: number) => `${value > 0 ? "+" : value < 0 ? "-" : ""}${n(Math.abs(value))}`;
+  const change =
+    row.netChange == null || row.previousReportDate == null
+      ? ""
+      : `, ${signed(row.netChange)} vs ${row.previousReportDate}`;
+  return `NYMEX WTI managed money: net ${signed(row.net)} contracts${change}; long ${n(row.long)}, short ${n(row.short)} (CFTC Disaggregated COT as of ${row.reportDate}, delayed)`;
+}
+
+function cftcWtiBullet(): string[] {
+  const line = cftcWtiLine();
+  return line ? [`- **WTI positioning (CFTC print):** ${line}.`] : [];
+}
+
 export function buildDeskContextBlock(feed: PublishedPrices): string {
   const { tableMarkdown } = buildMarketSnapshotTable(feed.prices);
   const stocks = balanceEngineJson.stocks
@@ -205,9 +224,12 @@ export function buildDeskContextBlock(feed: PublishedPrices): string {
   const supply = balanceEngineJson.supply
     .map((s) => `- ${s.metric}: ${s.value} ${s.unit} (${s.change}) — ${s.note} [as of ${s.last_updated}; ${s.source}]`)
     .join("\n");
-  const cot = positioningJson.positioning
-    .map((p) => `- ${p.instrument}: ${p.net_position} (${p.change}, ${p.percentile}, ${p.stance}) [as of ${p.last_updated}; ${p.source}]`)
-    .join("\n");
+  const cot = [
+    ...(cftcWtiLine() ? [`- ${cftcWtiLine()}`] : []),
+    ...positioningJson.positioning.map(
+      (p) => `- ${p.instrument}: ${p.net_position} (${p.change}, ${p.percentile}, ${p.stance}) [indicative desk value, last reviewed ${p.last_updated}; ${p.source}]`
+    ),
+  ].join("\n");
   const events = newsToBarrelsJson.events
     .map((e) => `- ${e.headline} (${e.date}, ${e.status}, confidence: ${e.confidence}): ${e.affected_capacity} ${e.capacity_type}. Watch: ${e.watch} [${e.source}]`)
     .join("\n");
@@ -330,7 +352,7 @@ export function generateDeskLeadResponse(
       `### 2. What Moved / Drivers (Curve, Cracks & Positioning)`,
       `- **Brent Long Crowding (82nd Percentile — Confidence: High):** ICE COT managed money holds **+310k contracts** (**+25k w/w**, as of 2026-07-01, ICE COT). Prompt **Brent M1/M2 (+$0.45/bbl)** confirms the front, but **M1/M7 (+$2.10/bbl)** is contradicted by **+2.3σ** West African unsold loadings (Modules 2–3, as of 2026-07-04).`,
       `- **ICE Gasoil Short Squeeze Setup (8th Percentile — Confidence: Medium):** Speculators sit heavily short at **-45k contracts** (**-6k w/w**, as of 2026-07-01, ICE COT) just as the **400 kb/d** Rotterdam outage tightens European distillate supply. Diesel crack is at **+$16.0/bbl** vs Brent (Module 3, as of 2026-07-04).`,
-      `- **WTI Uncrowded & Supported (65th Percentile — Confidence: High):** NYMEX WTI managed money is at **+185k contracts** (**+12k w/w**, CFTC COT as of 2026-07-01) with **WTI M1/M2 (+$0.55/bbl)** and **Midland–Cushing (+$1.10/bbl)** backed by hub draws and USGC export queues (**+1.6σ**).`
+      ...cftcWtiBullet()
     );
   } else if (topic === "gas_lng") {
     sections.push(
@@ -381,7 +403,7 @@ export function generateDeskLeadResponse(
   } else {
     sections.push(
       `### 5. Investment Implications (Scenario Framework)`,
-      `- **Structure vs Flat Price:** WTI prompt structure (**M1/M2 +$0.55/bbl**, low crowding at **65th percentile**) carries cleaner physical backing than deferred Brent (**M1/M7 +$2.10/bbl**, **82nd percentile** crowding).`,
+      `- **Structure vs Flat Price:** WTI prompt structure (**M1/M2 +$0.55/bbl**) carries cleaner physical backing than deferred Brent (**M1/M7 +$2.10/bbl**, **82nd percentile** crowding).`,
       `- **Crack & Equity Read-Through:** Compliant tanker and international OFS themes remain supported by ton-mile friction and offshore capex; middle-distillate cracks carry asymmetric upside if ARA stocks draw during the Rotterdam outage.`
     );
   }

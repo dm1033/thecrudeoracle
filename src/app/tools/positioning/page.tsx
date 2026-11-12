@@ -6,6 +6,7 @@ import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 import { CftcManagedMoneySnapshot } from "@/components/MarketSnapshot";
+import { formatLongDate } from "@/lib/daily-note";
 
 export const metadata: Metadata = pageMeta(
   "CFTC positioning and crowd risk",
@@ -68,6 +69,19 @@ const CHECK_STYLE: Record<string, { glyph: string; cls: string }> = {
   no: { glyph: "✗", cls: "text-gain" },
 };
 
+function latestDate(dates: string[]): string {
+  return formatLongDate([...dates].sort().at(-1) ?? "");
+}
+
+function StaleNotice({ what, dates }: { what: string; dates: string[] }) {
+  return (
+    <p className="mt-3 max-w-3xl rounded border border-risk/40 bg-risk/10 px-3 py-2 text-sm text-risk">
+      <strong className="font-semibold">Not current.</strong> {what} were last reviewed on {latestDate(dates)} and
+      have not been updated since. Treat them as an illustration of the method, not as today&apos;s positioning.
+    </p>
+  );
+}
+
 function PositioningTable() {
   return (
     <div className="overflow-x-auto rounded-lg border border-ink-700">
@@ -81,7 +95,7 @@ function PositioningTable() {
             <th scope="col" className="text-center">3-yr percentile</th>
             <th scope="col" className="text-center">Stance</th>
             <th scope="col">Desk note</th>
-            <th scope="col" className="whitespace-nowrap">Updated</th>
+            <th scope="col" className="whitespace-nowrap">Last reviewed</th>
           </tr>
         </thead>
         <tbody>
@@ -150,7 +164,7 @@ function CrowdRiskCard({ c }: { c: CrowdRisk }) {
       </p>
       <footer className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-ink-700 pt-2 text-[11px] text-steel-500">
         <span>Source: {c.source}</span>
-        <span>Updated: {c.last_updated}</span>
+        <span>Last reviewed: {c.last_updated}</span>
         <span className="rounded bg-steel-500/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-steel-400">
           {c.data_type}
         </span>
@@ -166,12 +180,13 @@ function PositioningContent() {
 
       <section aria-labelledby="pos-h">
         <h2 id="pos-h" className="h2">
-          Managed-money positioning
+          Other markets: desk positioning notes
         </h2>
         <p className="mt-1 max-w-3xl text-sm text-steel-500">
-          From the public CFTC Commitments of Traders and ICE COT reports. Published with a lag
-          (Tuesday data, Friday release) — directional, not real-time.
+          Indicative desk values in the format of the public CFTC and ICE COT reports, entered by
+          hand. NYMEX WTI is not in this table: its figures come from the automated CFTC print above.
         </p>
+        <StaleNotice what="These rows" dates={positioning.map((row) => row.last_updated)} />
         <div className="mt-4">
           <PositioningTable />
         </div>
@@ -183,9 +198,10 @@ function PositioningContent() {
         </h2>
         <p className="mt-1 max-w-3xl text-sm text-steel-500">
           Three questions per market: is positioning stretched, is structure confirming, do
-          physical flows support it? A ✓ marks a crowding condition that is live.
+          physical flows support it? A ✓ marks a crowding condition that was live when the card was last reviewed.
         </p>
-        <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        <StaleNotice what="These cards" dates={crowdRisk.map((c) => c.last_updated)} />
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
           {crowdRisk.map((c) => (
             <CrowdRiskCard key={c.id} c={c} />
           ))}
