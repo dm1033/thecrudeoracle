@@ -1,0 +1,53 @@
+name: Update public data monitor
+
+# Rebuilds public/data/oracle_intelligence.json from free public sources.
+# CFTC and GDELT need no key. EIA, FRED and AGSI+ modules are skipped, and
+# shown on the site as "not loaded", until their repository secret is set.
+on:
+  schedule:
+    # Morning: EU gas storage and overnight news volume
+    - cron: '15 6 * * *'
+    # After the EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET)
+    - cron: '35 15 * * 3'
+    # After the CFTC Commitments of Traders release (Fridays 15:30 ET)
+    - cron: '15 20 * * 5'
+    # After the US close: daily spot and FRED series
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oracle-intelligence-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch public data
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          AGSI_API_KEY: ${{ secrets.AGSI_API_KEY }}
+        run: python3 scripts/build_oracle_intelligence.py
+
+      # No [skip ci]: the site imports this file at build time, so the push
+      # must trigger a deploy. The script only rewrites the file when a
+      # module's data changed, so quiet runs commit nothing.
+      - name: Commit the file if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/oracle_intelligence.json
+          git diff --staged --quiet && exit 0
+          git commit -m "chore(data): update public data monitor"
+          git pull --rebase --quiet
+          git push

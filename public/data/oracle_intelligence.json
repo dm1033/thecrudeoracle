@@ -1,0 +1,14 @@
+{
+  "schema_version": "3.0.0",
+  "generated_utc": null,
+  "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
+  "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+  "modules": {
+    "prices": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
+    "inventories": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
+    "positioning": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
+    "macro": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
+    "news": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
+    "gas_storage": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" }
+  }
+}

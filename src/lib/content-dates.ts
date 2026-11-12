@@ -7,6 +7,7 @@ import flowMap from "../../data/flow-map.json";
 import curveMonitor from "../../data/curve-monitor.json";
 import newsToBarrels from "../../data/news-to-barrels.json";
 import positioning from "../../data/positioning-engine.json";
+import { monitorLastData } from "@/lib/oracle-intelligence";
 import hypothesis from "../../data/hypothesis-builder.json";
 import portfolio from "../../data/virtual-portfolio.json";
 import watchlist from "../../data/investment-watchlist.json";
@@ -42,6 +43,7 @@ const fund = portfolio.meta.last_published;
 const watch = watchlist.meta.last_published;
 const companies = companyIntel.meta.last_published;
 const notes = research.meta.last_published;
+const monitorAt = monitorLastData();
 const tools = latest(balance, flows, curve, news, positioningAt, hypothesisAt);
 
 /**
@@ -62,6 +64,7 @@ export const ROUTE_LASTMOD: Record<string, string> = {
   "/tools/news-to-barrels": news,
   "/tools/positioning": positioningAt,
   "/tools/hypothesis-builder": hypothesisAt,
+  ...(monitorAt ? { "/tools/public-data-monitor": monitorAt } : {}),
   "/portfolio": fund,
   "/portfolio/dashboard": fund,
   "/paper-book": paperBook.generated_at,

@@ -67,6 +67,15 @@ const MODULES = [
     status: "live",
   },
   {
+    id: 11,
+    title: "Public Data Monitor",
+    approach: "Everyone — the free public record",
+    description:
+      "EIA spot prices and stocks, CFTC futures positioning, the Federal Reserve dollar index and real yields, EU gas storage and oil-supply news volume on one screen. Fetched automatically from free public sources, each card dated and sourced, with no estimate filled in where a feed has not loaded.",
+    href: "/tools/public-data-monitor",
+    status: "live",
+  },
+  {
     id: 7,
     title: "Geopolitical Risk Matrix",
     approach: "Event / macro traders",
@@ -146,7 +155,7 @@ export default function ToolsPage() {
                     disabled
                     className="btn-secondary mt-5 w-full cursor-not-allowed opacity-60"
                   >
-                    Coming to premium members
+                    In development
                   </button>
                 )}
               </div>
