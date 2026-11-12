@@ -1,14 +1,50 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": null,
+  "generated_utc": "2026-11-12T11:32:24Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
-    "prices": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
-    "inventories": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
-    "positioning": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
-    "macro": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
-    "news": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" },
-    "gas_storage": { "status": "not_loaded", "reason": "the scheduled pull has not run yet" }
+    "prices": {
+      "status": "not_loaded",
+      "reason": "the EIA_API_KEY repository secret is not set"
+    },
+    "inventories": {
+      "status": "not_loaded",
+      "reason": "the EIA_API_KEY repository secret is not set"
+    },
+    "positioning": {
+      "status": "ok",
+      "fetched_utc": "2026-11-12T11:32:24Z",
+      "as_of": "2026-11-03",
+      "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
+      "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
+      "data_type": "delayed",
+      "values": {
+        "managed_money_long": 147382,
+        "managed_money_short": 125654,
+        "managed_money_net": 21728,
+        "managed_money_net_pct_open_interest": 1.14,
+        "open_interest": 1908732,
+        "producer_merchant_net": 369347,
+        "net_change": -9400,
+        "previous_report_date": "2026-10-27",
+        "net_position_in_range_pct": 39.5,
+        "reports_in_range": 52,
+        "range_low_net": -37010,
+        "range_high_net": 111731
+      }
+    },
+    "macro": {
+      "status": "not_loaded",
+      "reason": "the FRED_API_KEY repository secret is not set"
+    },
+    "news": {
+      "status": "not_loaded",
+      "reason": "api.gdeltproject.org answered HTTP 429"
+    },
+    "gas_storage": {
+      "status": "not_loaded",
+      "reason": "the AGSI_API_KEY repository secret is not set"
+    }
   }
 }
