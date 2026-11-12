@@ -44,6 +44,7 @@ describe("CrudeOracle Investment Agent — Master System Prompt (v2026-10-30)", 
     expect(classifyQueryTopic("Check CFTC COT managed money positioning and diesel cracks")).toBe("positioning");
     expect(classifyQueryTopic("Scenario analysis if OPEC cuts another 500 kb/d")).toBe("scenarios");
     expect(classifyQueryTopic("Henry Hub and JKM LNG winter spread")).toBe("gas_lng");
+    expect(classifyQueryTopic("Give me today's crude & gas market snapshot and key drivers.")).toBe("snapshot");
   });
 
   it("produces the standard 7-part response structure with cited sources, timestamps, bull/bear cases, invalidation, and disclaimer", async () => {

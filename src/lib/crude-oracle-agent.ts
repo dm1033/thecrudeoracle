@@ -121,6 +121,8 @@ export function isPersonalizedAdviceRequest(query: string): boolean {
 export function classifyQueryTopic(query: string): QueryTopic {
   if (isPersonalizedAdviceRequest(query)) return "advice_refusal";
   const q = query.toLowerCase();
+  // "crude & gas market snapshot" is the opening prompt: it must not be read as a gas-only question.
+  if (/\bmarket\s+snapshot\b/.test(q)) return "snapshot";
   if (/\b(inventor(?:y|ies)|stock(?:s|pile)?|cushing|spr|eia\s+print|draw|build|balance\s+engine)\b/.test(q)) {
     return "inventories";
   }
