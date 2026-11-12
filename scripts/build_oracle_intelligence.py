@@ -71,15 +71,21 @@ def fetch_json(url, params=None, headers=None, timeout=25):
         url = f"{url}?{urllib.parse.urlencode(params)}"
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
     host = urllib.parse.urlsplit(url).netloc
-    try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            return json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        raise NotLoaded(f"{host} answered HTTP {exc.code}") from None
-    except (urllib.error.URLError, TimeoutError, OSError):
-        raise NotLoaded(f"{host} could not be reached") from None
-    except ValueError:
-        raise NotLoaded(f"{host} did not return JSON") from None
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            # Rate limited or briefly unavailable: wait and try again, a few times.
+            if exc.code in (429, 502, 503) and attempt < 3:
+                time.sleep(15 * (attempt + 1))
+                continue
+            raise NotLoaded(f"{host} answered HTTP {exc.code}") from None
+        except (urllib.error.URLError, TimeoutError, OSError):
+            raise NotLoaded(f"{host} could not be reached") from None
+        except ValueError:
+            raise NotLoaded(f"{host} did not return JSON") from None
+    raise NotLoaded(f"{host} did not answer")
 
 
 def number(value):
@@ -241,30 +247,41 @@ def build_positioning():
     if not isinstance(rows, list):
         raise NotLoaded("CFTC did not return a list of reports")
 
+    def first(row, *columns):
+        for column in columns:
+            value = number(row.get(column))
+            if value is not None and value >= 0:
+                return value
+        return None
+
     reports = []
     for row in rows:
         if not isinstance(row, dict):
             continue
-        fields = {
-            key: number(row.get(column))
-            for key, column in (
-                ("long", "m_money_positions_long_all"),
-                ("short", "m_money_positions_short_all"),
-                ("open_interest", "open_interest_all"),
-                ("producer_long", "prod_merc_positions_long_all"),
-                ("producer_short", "prod_merc_positions_short_all"),
-            )
-        }
         date = row.get("report_date_as_yyyy_mm_dd")
-        # A report missing any field is dropped, never read as zero.
-        if not isinstance(date, str) or any(v is None or v < 0 for v in fields.values()):
+        long_ = first(row, "m_money_positions_long_all")
+        short = first(row, "m_money_positions_short_all")
+        open_interest = first(row, "open_interest_all")
+        # A report missing a core field is dropped, never read as zero.
+        if not isinstance(date, str) or long_ is None or short is None or not open_interest:
             continue
-        if fields["open_interest"] == 0:
-            continue
-        reports.append({"date": date[:10], **{k: int(v) for k, v in fields.items()}})
+        report = {"date": date[:10], "long": int(long_), "short": int(short), "open_interest": int(open_interest)}
+        # The dataset is not consistent about the _all suffix, so both spellings are tried.
+        producer_long = first(row, "prod_merc_positions_long_all", "prod_merc_positions_long")
+        producer_short = first(row, "prod_merc_positions_short_all", "prod_merc_positions_short")
+        if producer_long is not None and producer_short is not None:
+            report["producer_net"] = int(producer_long) - int(producer_short)
+        reports.append(report)
     reports.sort(key=lambda r: r["date"], reverse=True)
     if not reports:
-        raise NotLoaded(f"CFTC returned no usable reports for contract {CFTC_WTI_CONTRACT}")
+        sample = rows[0] if rows and isinstance(rows[0], dict) else {}
+        columns = sorted(k for k in sample if "m_money_positions" in k or "open_interest_all" in k or "report_date" in k)
+        raise NotLoaded(
+            f"CFTC returned no usable reports for contract {CFTC_WTI_CONTRACT} ({len(rows)} rows; columns seen: {columns})"
+        )
+    if "producer_net" not in reports[0]:
+        sample = rows[0] if isinstance(rows[0], dict) else {}
+        warn(f"positioning: producer/merchant net left out; columns seen: {sorted(k for k in sample if 'prod_merc' in k)}")
 
     latest = reports[0]
     net = latest["long"] - latest["short"]
@@ -273,9 +290,10 @@ def build_positioning():
         "managed_money_short": latest["short"],
         "managed_money_net": net,
         "managed_money_net_pct_open_interest": round(100 * net / latest["open_interest"], 2),
-        "producer_merchant_net": latest["producer_long"] - latest["producer_short"],
         "open_interest": latest["open_interest"],
     }
+    if "producer_net" in latest:
+        values["producer_merchant_net"] = latest["producer_net"]
     if len(reports) > 1:
         previous = reports[1]
         values["net_change"] = net - (previous["long"] - previous["short"])
