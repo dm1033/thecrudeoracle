@@ -246,11 +246,6 @@ def build_positioning():
     )
     if not isinstance(rows, list):
         raise NotLoaded("CFTC did not return a list of reports")
-    # TEMPORARY DIAGNOSTIC: remove after checking the producer/merchant columns.
-    if rows and isinstance(rows[0], dict):
-        r0 = rows[0]
-        keep = sorted(k for k in r0 if any(t in k for t in ("prod_merc_positions", "swap", "m_money_positions", "other_rept_positions", "nonrept_positions", "open_interest_all", "tot_rept_positions", "report_date", "market_and_exchange")) and not k.endswith(("_old", "_other")))
-        print("DIAG " + json.dumps({k: r0[k] for k in keep}))
 
     def first(row, *columns):
         for column in columns:
