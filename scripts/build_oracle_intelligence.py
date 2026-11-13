@@ -5,7 +5,7 @@ Builds public/data/oracle_intelligence.json from free public sources:
 
   EIA Open Data API v2   spot prices, product spots, weekly stocks   EIA_API_KEY
   CFTC public reporting  disaggregated Commitments of Traders        no key
-  FRED API               broad dollar index, 10-year real yield      FRED_API_KEY
+  FRED                   broad dollar index, 10-year real yield      key optional
   GDELT DOC 2.0 API      news volume on oil supply chokepoints       no key
   GIE AGSI+              EU gas storage                              AGSI_API_KEY
 
@@ -316,25 +316,57 @@ def build_positioning():
 
 # --- FRED --------------------------------------------------------------------
 
+def fetch_text(url, params=None, timeout=25):
+    if params:
+        url = f"{url}?{urllib.parse.urlencode(params)}"
+    host = urllib.parse.urlsplit(url).netloc
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return response.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as exc:
+        raise NotLoaded(f"{host} answered HTTP {exc.code}") from None
+    except (urllib.error.URLError, TimeoutError, OSError):
+        raise NotLoaded(f"{host} could not be reached") from None
+
+
 def fred_series(series_id, limit=80):
-    if not FRED_API_KEY:
-        raise NotLoaded("the FRED_API_KEY repository secret is not set")
-    payload = fetch_json(
-        "https://api.stlouisfed.org/fred/series/observations",
-        {"series_id": series_id, "api_key": FRED_API_KEY, "file_type": "json", "sort_order": "desc", "limit": limit},
-    )
-    observations = payload.get("observations") if isinstance(payload, dict) else None
-    if not isinstance(observations, list):
-        raise NotLoaded(f"FRED returned no observations for {series_id}")
+    """Newest-first (date, value). Uses the FRED API with a key, else FRED's public CSV download."""
     points = {}
-    for obs in observations:
-        if isinstance(obs, dict) and isinstance(obs.get("date"), str):
-            value = number(obs.get("value"))
-            if value is not None:
-                points[obs["date"][:10]] = value
+    if FRED_API_KEY:
+        payload = fetch_json(
+            "https://api.stlouisfed.org/fred/series/observations",
+            {"series_id": series_id, "api_key": FRED_API_KEY, "file_type": "json", "sort_order": "desc", "limit": limit},
+        )
+        observations = payload.get("observations") if isinstance(payload, dict) else None
+        if not isinstance(observations, list):
+            raise NotLoaded(f"FRED returned no observations for {series_id}")
+        for obs in observations:
+            if isinstance(obs, dict) and isinstance(obs.get("date"), str):
+                value = number(obs.get("value"))
+                if value is not None:
+                    points[obs["date"][:10]] = value
+    else:
+        start = (datetime.date.today() - datetime.timedelta(days=200)).isoformat()
+        text = fetch_text("https://fred.stlouisfed.org/graph/fredgraph.csv", {"id": series_id, "cosd": start})
+        lines = text.strip().splitlines()
+        # First line is the header: a date column, then the series id.
+        if not lines or series_id not in lines[0]:
+            raise NotLoaded(f"FRED did not return a CSV for {series_id}")
+        for line in lines[1:]:
+            parts = line.split(",")
+            if len(parts) != 2:
+                continue
+            day, value = parts[0].strip(), number(parts[1])
+            try:
+                datetime.date.fromisoformat(day)
+            except ValueError:
+                continue
+            if value is not None:  # FRED writes "." or blank for a day with no print
+                points[day] = value
     if not points:
         raise NotLoaded(f"FRED returned no usable observations for {series_id}")
-    return sorted(points.items(), reverse=True)
+    return sorted(points.items(), reverse=True)[:limit]
 
 
 def change_correlation(series_a, series_b, window=30):
@@ -358,6 +390,12 @@ def build_macro(wti_history):
         "real_yield_10y_pct": round(real_yield[0][1], 2),
         "real_yield_date": real_yield[0][0],
     }
+    if not wti_history:
+        # No EIA key in this run: FRED republishes the same EIA daily WTI spot series.
+        try:
+            wti_history = fred_series("DCOILWTICO")
+        except NotLoaded as exc:
+            warn(f"macro: correlations left out ({exc})")
     if wti_history:
         for key, series in (("wti_vs_broad_dollar", dollar), ("wti_vs_real_yield_10y", real_yield)):
             correlation, days = change_correlation(wti_history, series)
@@ -408,7 +446,7 @@ def build_news():
         "search_terms": ["Strait of Hormuz", "Bab el-Mandeb", "Red Sea tanker", "OPEC quota", "Suez Canal", "Libya oilfield"],
     }
 
-    time.sleep(6)  # GDELT asks for no more than one request every five seconds.
+    time.sleep(30)  # GDELT asks for one request every five seconds; shared runners need a wider gap.
     headlines = []
     try:
         listing = fetch_json(

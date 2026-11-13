@@ -1,8 +1,10 @@
 name: Update public data monitor
 
 # Rebuilds public/data/oracle_intelligence.json from free public sources.
-# CFTC and GDELT need no key. EIA, FRED and AGSI+ modules are skipped, and
-# shown on the site as "not loaded", until their repository secret is set.
+# CFTC, GDELT and FRED need no key (FRED uses its API when FRED_API_KEY is
+# set, its public CSV download otherwise). EIA and AGSI+ modules are skipped
+# here until their repository secret is set; the site reads EIA directly when
+# this file has no EIA data.
 on:
   schedule:
     # Morning: EU gas storage and overnight news volume

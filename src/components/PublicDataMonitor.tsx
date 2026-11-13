@@ -3,9 +3,9 @@ import DataMeta from "@/components/DataMeta";
 import { formatLongDate } from "@/lib/daily-note";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
 import {
-  getMonitorFeed,
   headlines,
   num,
+  type MonitorFeed,
   type MonitorModule,
 } from "@/lib/oracle-intelligence";
 
@@ -88,8 +88,7 @@ function Card({
   );
 }
 
-export default function PublicDataMonitor() {
-  const feed = getMonitorFeed();
+export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -99,7 +98,7 @@ export default function PublicDataMonitor() {
         about="EIA daily spot prices. The 3-2-1 crack is two barrels of New York Harbor gasoline plus one of diesel, less three of WTI, per barrel. EIA spot series run one to three business days behind."
         module={feed.prices}
         staleAfterHours={192}
-        needs="Needs the EIA_API_KEY repository secret."
+        needs="Needs a working EIA API key on the site or in the scheduled job."
       >
         {(v) => {
           const brent = num(v, "brent_usd_bbl");
@@ -125,7 +124,7 @@ export default function PublicDataMonitor() {
         about="Commercial crude excluding the Strategic Petroleum Reserve, and Cushing, from the EIA weekly report. The z-score is this week against the average and spread of the weeks counted, not a seasonal norm."
         module={feed.inventories}
         staleAfterHours={288}
-        needs="Needs the EIA_API_KEY repository secret."
+        needs="Needs a working EIA API key on the site or in the scheduled job."
       >
         {(v) => (
           <dl className="grid grid-cols-2 gap-2">
@@ -205,7 +204,7 @@ export default function PublicDataMonitor() {
         about="Plain averages of the EIA daily WTI spot price. The daily move is the average absolute day-to-day change over 30 trading days. These describe the past; they are not levels to trade against."
         module={feed.prices}
         staleAfterHours={192}
-        needs="Needs the EIA_API_KEY repository secret."
+        needs="Needs a working EIA API key on the site or in the scheduled job."
       >
         {(v) => {
           const wti = num(v, "wti_usd_bbl");
@@ -229,7 +228,7 @@ export default function PublicDataMonitor() {
         about="The Federal Reserve's broad dollar index and the 10-year inflation-indexed Treasury yield. Correlations are between day-to-day changes in WTI and each series, on the days both have a print. A correlation is not a cause."
         module={feed.macro}
         staleAfterHours={192}
-        needs="Needs the FRED_API_KEY repository secret."
+        
       >
         {(v) => {
           const dollar = num(v, "broad_dollar_index");

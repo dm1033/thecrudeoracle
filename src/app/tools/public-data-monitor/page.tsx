@@ -4,7 +4,9 @@ import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PublicDataMonitor from "@/components/PublicDataMonitor";
-import { getMonitorFeed } from "@/lib/oracle-intelligence";
+import { getMonitorFeedWithLiveEia } from "@/lib/monitor-live";
+
+export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
   "Public data monitor",
@@ -40,8 +42,8 @@ const SOURCES = [
   },
 ];
 
-export default function PublicDataMonitorPage() {
-  const feed = getMonitorFeed();
+export default async function PublicDataMonitorPage() {
+  const feed = await getMonitorFeedWithLiveEia();
   return (
     <>
       <PageHeader
@@ -50,7 +52,7 @@ export default function PublicDataMonitorPage() {
         intro="The figures a market desk checks first, taken only from free public sources and refreshed automatically. Every card shows the date of its data and where it came from. A card with nothing behind it says so."
       />
       <div className="container-site space-y-10 py-10">
-        <PublicDataMonitor />
+        <PublicDataMonitor feed={feed} />
 
         <section aria-labelledby="pdm-method" className="card text-sm leading-relaxed text-steel-400">
           <h2 id="pdm-method" className="text-base font-semibold text-white">
@@ -59,7 +61,8 @@ export default function PublicDataMonitorPage() {
           <ul className="mt-3 list-disc space-y-1.5 pl-5">
             <li>All data is delayed. Nothing here is a live exchange price.</li>
             <li>
-              A scheduled job fetches each source up to four times a day. A card keeps its last successful fetch until a
+              A scheduled job fetches each source up to four times a day; EIA figures are also read directly when the
+              page is rebuilt, every two hours. A card keeps its last successful fetch until a
               newer one arrives, and is marked stale when its data is older than the source&apos;s normal cycle.
             </li>
             <li>
