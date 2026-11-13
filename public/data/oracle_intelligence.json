@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-13T14:34:49Z",
+  "generated_utc": "2026-11-13T18:44:44Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-13T14:34:49Z",
+      "fetched_utc": "2026-11-13T18:44:44Z",
       "as_of": "2026-11-03",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -28,6 +28,8 @@
         "producer_merchant_net": 369347,
         "net_change": -9400,
         "previous_report_date": "2026-10-27",
+        "net_change_vs_usual": -0.65,
+        "net_changes_compared": 51,
         "net_position_in_range_pct": 39.5,
         "reports_in_range": 52,
         "range_low_net": -37010,
@@ -36,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-13T14:34:49Z",
+      "fetched_utc": "2026-11-13T18:44:44Z",
       "as_of": "2026-11-10",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -46,6 +48,18 @@
         "broad_dollar_date": "2026-11-06",
         "real_yield_10y_pct": 2.78,
         "real_yield_date": "2026-11-10",
+        "broad_dollar_change": {
+          "change": 0.37,
+          "previous_date": "2026-11-05",
+          "vs_usual": 1.27,
+          "changes_compared": 78
+        },
+        "real_yield_10y_change": {
+          "change": 0.12,
+          "previous_date": "2026-11-09",
+          "vs_usual": 2.83,
+          "changes_compared": 78
+        },
         "wti_vs_broad_dollar_correlation": 0.25,
         "wti_vs_broad_dollar_days": 30,
         "wti_vs_real_yield_10y_correlation": -0.23,
@@ -54,7 +68,7 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-13T14:34:49Z",
+      "fetched_utc": "2026-11-13T18:44:44Z",
       "as_of": "2026-11-12T07:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
