@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { pageMeta } from "@/lib/seo";
-import { supplySignals, riskSignals } from "@/lib/data";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
-import SignalCardView from "@/components/SignalCardView";
+import { DataCardGrid } from "@/components/DataCardView";
+import { getDashboardCards } from "@/lib/dashboard-cards";
 import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
   "OPEC & Supply Risk Monitor",
-  "OPEC and OPEC+ monitoring, spare capacity, inventories, rig counts, tanker disruption and geopolitical supply risk for crude oil investors — with sources and update times.",
+  "OPEC crude production and spare capacity as EIA estimates them, US crude stocks and a count of supply-route news coverage. Public data with sources and dates. Not financial advice.",
   "/opec-supply-risk"
 );
 
@@ -25,17 +25,21 @@ const FAQ_ITEMS = [
   },
   {
     q: "How do you track supply risk?",
-    a: "We monitor OPEC communications, public agency data (EIA, IEA), rig counts, tanker routing disruptions and export infrastructure news, and summarise the investment-relevant signal daily for premium members. Sources are cited on every card.",
+    a: "This page shows published figures only: US crude stocks from the EIA weekly report, OPEC production and spare capacity from the EIA Short-Term Energy Outlook, and a count of news coverage of supply routes from the GDELT Project. It does not publish a risk rating. Rig counts and tanker tracking are not shown because no free feed that may be republished is connected.",
   },
 ];
 
-export default function OpecSupplyRiskPage() {
+export const revalidate = 7200;
+
+export default async function OpecSupplyRiskPage() {
+  const cards = await getDashboardCards();
+  const news = cards.context.filter((card) => card.id === "supply-news");
   return (
     <>
       <PageHeader
         eyebrow="Supply Side · Risk Monitor"
         title="OPEC / Supply Risk"
-        intro="The supply side of the ledger: OPEC+ policy, inventories, rig activity, spare capacity, shipping disruption and the geopolitical risk premium — monitored continuously, summarised daily."
+        intro="The supply side from public data: US crude stocks, OPEC production and spare capacity as EIA estimates them, and how much news coverage oil supply routes are getting. Each figure carries its source and date."
       />
       <div className="container-site space-y-10 py-10">
         <figure className="overflow-hidden rounded-lg border border-ink-700">
@@ -57,24 +61,23 @@ export default function OpecSupplyRiskPage() {
 
         <section aria-labelledby="supply-h">
           <h2 id="supply-h" className="h2">
-            Supply signals
+            Supply figures
           </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {supplySignals.map((s) => (
-              <SignalCardView key={s.id} card={s} />
-            ))}
-          </div>
+          <p className="mt-1 text-sm text-steel-500">
+            US stocks from the EIA weekly report; OPEC production and spare capacity from EIA&apos;s monthly outlook.
+          </p>
+          <DataCardGrid cards={cards.supply} empty="Supply figures: not loaded. No stored figure is shown in their place." />
         </section>
 
-        <section aria-labelledby="georisk-h">
-          <h2 id="georisk-h" className="h2">
-            Risk premium
+        <section aria-labelledby="news-h">
+          <h2 id="news-h" className="h2">
+            Supply-route news coverage
           </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {riskSignals.map((s) => (
-              <SignalCardView key={s.id} card={s} />
-            ))}
-          </div>
+          <p className="mt-1 max-w-3xl text-sm text-steel-500">
+            How much the world&apos;s online news is covering oil supply routes and OPEC quotas, against the last week.
+            The site does not publish a geopolitical risk rating or an OPEC alert.
+          </p>
+          <DataCardGrid cards={news} empty="News coverage: not loaded." />
         </section>
 
         <p className="max-w-3xl text-sm leading-relaxed text-steel-400">
@@ -84,8 +87,8 @@ export default function OpecSupplyRiskPage() {
 
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA
-          heading="Get supply risk alerts as they develop"
-          body="The daily briefing covers OPEC+ decisions, inventory surprises and disruption alerts in context — what changed, why it matters, and what it means for the names on the watchlist."
+          heading="Get the morning note"
+          body="The latest EIA prices and stock figures, what changed and what is due next. Facts with sources, no trading calls."
         />
         <DisclaimerBlock />
       </div>

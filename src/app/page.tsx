@@ -2,9 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import FrontScreen from "@/components/FrontScreen";
-import { riskSignals, supplySignals } from "@/lib/data";
 import MarketCard from "@/components/MarketCard";
-import SignalCardView from "@/components/SignalCardView";
+import DataCardView from "@/components/DataCardView";
+import { getDashboardCards, pickCards } from "@/lib/dashboard-cards";
 import BottomLineCard from "@/components/BottomLineCard";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
@@ -71,14 +71,14 @@ const FAQ_ITEMS = [
   },
   {
     q: "How often is the intelligence updated?",
-    a: "The daily briefing, dashboard signals and bottom line are updated every trading day. Watchlist and company intelligence notes are refreshed as events warrant, each stamped with its last-updated date.",
+    a: "Prices, stocks and the dashboard figures are read from public sources such as the EIA and refresh as those sources publish, each with its own date. Watchlist and company intelligence notes are refreshed as events warrant, each stamped with its last-updated date.",
   },
 ];
 
 export default async function HomePage() {
-  const feed = await getPublishedPrices();
+  const [feed, cards] = await Promise.all([getPublishedPrices(), getDashboardCards()]);
   const heroPrices = feed.prices.slice(0, 6);
-  const previewSignals = [...riskSignals.slice(0, 2), supplySignals[1], supplySignals[2]];
+  const previewCards = pickCards(cards, ["us-crude", "steo-cops_opec", "steo-patc_world", "wti-positioning", "supply-news", "cushing"], 4);
   const brent = feed.prices.find((price) => price.ticker === "BRN");
   const wti = feed.prices.find((price) => price.ticker === "WTI");
   const board: BoardQuote | null =
@@ -129,8 +129,8 @@ export default async function HomePage() {
           ))}
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {previewSignals.map((s) => (
-            <SignalCardView key={s.id} card={s} />
+          {previewCards.map((card) => (
+            <DataCardView key={card.id} card={card} />
           ))}
         </div>
         <div className="mt-4 grid gap-4 lg:grid-cols-3">

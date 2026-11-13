@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
-import { riskSignals } from "@/lib/data";
 import { getPublishedPrices } from "@/lib/published-prices";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import MarketCard from "@/components/MarketCard";
-import SignalCardView from "@/components/SignalCardView";
 import FAQ from "@/components/FAQ";
 import { HenryHubChart } from "@/components/charts/Charts";
 import UnlicensedMarks from "@/components/UnlicensedMarks";
@@ -38,7 +36,6 @@ export default async function GasLngPage() {
   const feed = await getPublishedPrices();
   const gas = feed.prices.filter((p) => ["HH", "JKM*"].includes(p.ticker));
   const gasUpdated = gas.reduce((best, price) => (price.last_updated > best ? price.last_updated : best), gas[0]?.last_updated ?? "");
-  const lngSignal = riskSignals.find((s) => s.id === "lng-signal");
 
   return (
     <>
@@ -69,7 +66,13 @@ export default async function GasLngPage() {
           <div className="lg:col-span-2">
             <HenryHubChart points={feed.henryHubHistory.map((point) => ({ date: point.date, hh: point.value }))} />
           </div>
-          {lngSignal && <SignalCardView card={lngSignal} />}
+          <div className="card text-sm leading-relaxed text-steel-400">
+            <h3 className="text-sm font-semibold text-white">LNG and European storage</h3>
+            <p className="mt-2">
+              No LNG or European gas-storage figure is shown. LNG price markers are licensed, and the storage feed
+              from Gas Infrastructure Europe is not connected.
+            </p>
+          </div>
         </section>
 
         <section className="prose-dark max-w-3xl">

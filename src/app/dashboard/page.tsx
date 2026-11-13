@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
-import { supplySignals, demandSignals, riskSignals, watchlistCompanies } from "@/lib/data";
+import { watchlistCompanies } from "@/lib/data";
 import MarketCard from "@/components/MarketCard";
-import SignalCardView from "@/components/SignalCardView";
+import { DataCardGrid } from "@/components/DataCardView";
+import { getDashboardCards } from "@/lib/dashboard-cards";
 import BottomLineCard from "@/components/BottomLineCard";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
@@ -32,7 +33,7 @@ const INTEL_GROUPS = [
 ];
 
 export default async function DashboardPage() {
-  const feed = await getPublishedPrices();
+  const [feed, cards] = await Promise.all([getPublishedPrices(), getDashboardCards()]);
   const intelRows = INTEL_GROUPS.flatMap((group) => {
     const company = watchlistCompanies.find(
       (row) =>
@@ -47,7 +48,7 @@ export default async function DashboardPage() {
       <PageHeader
         eyebrow="Full Dashboard · Free For Everyone"
         title="Daily Oil Dashboard"
-        intro="Brent, WTI and Henry Hub from the EIA daily spot, plus supply, demand and risk cards. Dubai, NBP and TTF are not on this board."
+        intro="Brent, WTI and Henry Hub from the EIA daily spot, plus supply, demand, news and positioning figures from public data. Dubai, NBP and TTF are not on this board."
       />
       <div className="container-site space-y-10 py-10">
         <section aria-labelledby="mp-h">
@@ -68,35 +69,32 @@ export default async function DashboardPage() {
 
         <section aria-labelledby="supply-h">
           <h2 id="supply-h" className="h2">
-            Supply data
+            Supply
           </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {supplySignals.map((s) => (
-              <SignalCardView key={s.id} card={s} />
-            ))}
-          </div>
+          <p className="mt-1 text-sm text-steel-500">
+            US stocks from the EIA weekly report; production and spare capacity from EIA&apos;s monthly outlook.
+          </p>
+          <DataCardGrid cards={cards.supply} empty="Supply figures: not loaded. No stored figure is shown in their place." />
         </section>
 
         <section aria-labelledby="demand-h">
           <h2 id="demand-h" className="h2">
-            Demand signals
+            Demand
           </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {demandSignals.map((s) => (
-              <SignalCardView key={s.id} card={s} />
-            ))}
-          </div>
+          <p className="mt-1 text-sm text-steel-500">
+            Consumption from EIA&apos;s monthly outlook, and the refining spread from EIA daily spot prices.
+          </p>
+          <DataCardGrid cards={cards.demand} empty="Demand figures: not loaded. No stored figure is shown in their place." />
         </section>
 
-        <section aria-labelledby="riskgrid-h">
-          <h2 id="riskgrid-h" className="h2">
-            Risk monitor
+        <section aria-labelledby="context-h">
+          <h2 id="context-h" className="h2">
+            News, positioning and macro
           </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {riskSignals.map((s) => (
-              <SignalCardView key={s.id} card={s} />
-            ))}
-          </div>
+          <p className="mt-1 text-sm text-steel-500">
+            Counts and published figures only. The site does not publish a geopolitical risk rating or an OPEC alert.
+          </p>
+          <DataCardGrid cards={cards.context} empty="News, positioning and macro figures: not loaded." />
         </section>
 
         <section aria-labelledby="charts-h">

@@ -25,7 +25,7 @@ const TASKS: { title: string; file: string; what: string }[] = [
   {
     title: "Update signals & bottom line",
     file: "data/dashboard-signals.json",
-    what: "Refresh `supply`, `demand` and `risk` card values/details, and rewrite the six `bottom_line` fields. Update every `last_updated` you touch.",
+    what: "The dashboard, home page and OPEC page no longer read this file: their cards are built from public feeds each time the site is built. The file is now only quoted by the Desk Bot as a dated July record. Figures added here will not appear on the dashboard.",
   },
   {
     title: "Update the watchlist",
