@@ -113,6 +113,36 @@ def sample_std(values):
     return math.sqrt(sum((v - m) ** 2 for v in values) / (len(values) - 1))
 
 
+def change_stats(values, limit=250, minimum=20):
+    """Latest change in a newest-first series, and how it compares with earlier changes.
+
+    Returns (change, vs_usual, compared). `vs_usual` is the latest change divided
+    by the standard deviation of the earlier changes: 1.0 is a typical-sized
+    move, 2.0 is about twice the usual. It is None when there are fewer than
+    `minimum` earlier changes or they have no spread.
+    """
+    if len(values) < 2:
+        return None, None, 0
+    change = values[0] - values[1]
+    earlier = [values[i] - values[i + 1] for i in range(1, min(len(values) - 1, limit + 1))]
+    if len(earlier) < minimum:
+        return change, None, len(earlier)
+    spread = sample_std(earlier)
+    return change, (round(change / spread, 2) if spread > 0 else None), len(earlier)
+
+
+def change_block(points, digits):
+    """A change record for a newest-first list of (date, value), or None."""
+    change, vs_usual, compared = change_stats([v for _, v in points])
+    if change is None:
+        return None
+    block = {"change": round(change, digits), "previous_date": points[1][0]}
+    if vs_usual is not None:
+        block["vs_usual"] = vs_usual
+        block["changes_compared"] = compared
+    return block
+
+
 def pearson(xs, ys):
     mx, my = mean(xs), mean(ys)
     num = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
@@ -176,10 +206,19 @@ def build_prices():
         moves = [abs(wti_closes[i] - wti_closes[i + 1]) for i in range(30)]
         values["wti_30d_average_daily_move_usd_bbl"] = round(mean(moves), 2)
 
+    changes = {}
+    for name, series in (("brent", brent), ("wti", wti)):
+        block = change_block(series, 2)
+        if block:
+            changes[name] = block
+
     try:
-        hub = eia_series("natural-gas/pri/fut", "RNGWHHD", "daily", 10)
+        hub = eia_series("natural-gas/pri/fut", "RNGWHHD", "daily", 260)
         values["henry_hub_usd_mmbtu"] = round(hub[0][1], 2)
         values["henry_hub_date"] = hub[0][0]
+        block = change_block(hub, 2)
+        if block:
+            changes["henry_hub"] = block
     except NotLoaded as exc:
         warn(f"prices: Henry Hub left out ({exc})")
 
@@ -197,6 +236,9 @@ def build_prices():
     except NotLoaded as exc:
         warn(f"prices: 3-2-1 crack left out ({exc})")
 
+    if changes:
+        values["changes"] = changes
+
     return {
         "as_of": max(brent[0][0], wti[0][0]),
         "source_name": "U.S. Energy Information Administration, Open Data API v2",
@@ -213,6 +255,10 @@ def stock_block(points):
     if len(points) > 1:
         block["change_million_barrels"] = round((latest - points[1][1]) / 1000, 3)
         block["previous_week_ending"] = points[1][0]
+        _, vs_usual, compared = change_stats([v for _, v in points], limit=52)
+        if vs_usual is not None:
+            block["change_vs_usual"] = vs_usual
+            block["changes_compared"] = compared
     history = [v for _, v in points[:52]]
     if len(history) >= 26:
         spread = sample_std(history)
@@ -305,6 +351,10 @@ def build_positioning():
         previous = reports[1]
         values["net_change"] = net - (previous["long"] - previous["short"])
         values["previous_report_date"] = previous["date"]
+        _, vs_usual, compared = change_stats([r["long"] - r["short"] for r in reports], limit=52)
+        if vs_usual is not None:
+            values["net_change_vs_usual"] = vs_usual
+            values["net_changes_compared"] = compared
     nets = [r["long"] - r["short"] for r in reports[:52]]
     if len(nets) >= 26 and max(nets) > min(nets):
         # Where the latest net sits between the lowest and highest net of the period.
@@ -407,6 +457,10 @@ def build_macro(wti_history):
         "real_yield_10y_pct": round(real_yield[0][1], 2),
         "real_yield_date": real_yield[0][0],
     }
+    for key, series, digits in (("broad_dollar", dollar, 2), ("real_yield_10y", real_yield, 2)):
+        block = change_block(series, digits)
+        if block:
+            values[f"{key}_change"] = block
     if not wti_history:
         # No EIA key in this run: FRED republishes the same EIA daily WTI spot series.
         try:

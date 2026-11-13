@@ -52,6 +52,37 @@ function sampleStd(values: number[]): number {
   return Math.sqrt(values.reduce((sum, v) => sum + (v - m) ** 2, 0) / (values.length - 1));
 }
 
+/**
+ * Latest change in a newest-first series and how it compares with earlier
+ * changes. `vsUsual` is the change divided by the standard deviation of the
+ * earlier changes; null with fewer than `minimum` earlier changes or no spread.
+ * Mirrors change_stats in scripts/build_oracle_intelligence.py.
+ */
+export function changeStats(
+  values: number[],
+  limit = 250,
+  minimum = 20
+): { change: number; vsUsual: number | null; compared: number } | null {
+  if (values.length < 2) return null;
+  const change = values[0] - values[1];
+  const earlier: number[] = [];
+  for (let i = 1; i < Math.min(values.length - 1, limit + 1); i += 1) earlier.push(values[i] - values[i + 1]);
+  if (earlier.length < minimum) return { change, vsUsual: null, compared: earlier.length };
+  const spread = sampleStd(earlier);
+  return { change, vsUsual: spread > 0 ? round(change / spread, 2) : null, compared: earlier.length };
+}
+
+function changeBlock(observations: EiaObservation[], digits: number): Record<string, unknown> | null {
+  const stats = changeStats(observations.map((o) => o.value));
+  if (!stats) return null;
+  const block: Record<string, unknown> = { change: round(stats.change, digits), previous_date: observations[1].date };
+  if (stats.vsUsual != null) {
+    block.vs_usual = stats.vsUsual;
+    block.changes_compared = stats.compared;
+  }
+  return block;
+}
+
 function note(what: string, error: unknown): void {
   console.warn(`[monitor] ${what}: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
 }
@@ -83,11 +114,20 @@ export function pricesFromObservations(input: {
     values.wti_30d_average_daily_move_usd_bbl = round(mean(moves), 2);
   }
 
+  const changes: Record<string, unknown> = {};
+  const brentChange = changeBlock(input.brent, 2);
+  if (brentChange) changes.brent = brentChange;
+  const wtiChange = changeBlock(input.wti, 2);
+  if (wtiChange) changes.wti = wtiChange;
+
   const hub = input.hub?.[0];
   if (hub) {
     values.henry_hub_usd_mmbtu = round(hub.value, 2);
     values.henry_hub_date = hub.date;
+    const hubChange = changeBlock(input.hub ?? [], 2);
+    if (hubChange) changes.henry_hub = hubChange;
   }
+  if (Object.keys(changes).length) values.changes = changes;
 
   const gasoline = input.gasoline?.[0];
   const diesel = input.diesel?.[0];
@@ -107,6 +147,11 @@ export function stockBlock(observations: EiaObservation[]): Record<string, unkno
   if (previous) {
     block.change_million_barrels = round(latest.value - previous.value, 3);
     block.previous_week_ending = previous.date;
+    const stats = changeStats(observations.map((o) => o.value), 52);
+    if (stats?.vsUsual != null) {
+      block.change_vs_usual = stats.vsUsual;
+      block.changes_compared = stats.compared;
+    }
   }
   const history = observations.slice(0, 52).map((o) => o.value);
   if (history.length >= 26) {
@@ -136,7 +181,7 @@ async function livePrices(fetchedUtc: string): Promise<MonitorModule | null> {
   const [brent, wti, hub, gasoline, diesel] = await Promise.all([
     getDailySpotSeries(EIA_SERIES.BRENT_SPOT, { length: 260 }),
     getDailySpotSeries(EIA_SERIES.WTI_SPOT, { length: 260 }),
-    optional("Henry Hub", () => getDailySpotSeries(EIA_SERIES.HENRY_HUB_SPOT, { length: 10 })),
+    optional("Henry Hub", () => getDailySpotSeries(EIA_SERIES.HENRY_HUB_SPOT, { length: 260 })),
     optional("NY Harbor gasoline", () => getDailySpotSeries(NYH_GASOLINE, { length: 10 })),
     optional("NY Harbor diesel", () => getDailySpotSeries(NYH_DIESEL, { length: 10 })),
   ]);

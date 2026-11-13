@@ -86,12 +86,12 @@ const MODULES = [
   },
   {
     id: 8,
-    title: "What Changed Today?",
+    title: "What Changed",
     approach: "Everyone — the decision screen",
     description:
-      "One screen that answers the only question that matters each morning: what changed, why, and which module saw it first. Dashboards report; this decides what deserves your attention.",
-    href: "/tools",
-    status: "in development",
+      "The latest move in oil prices, US crude stocks, futures positioning, the dollar and real yields on one screen, ranked by how unusual each is against that series' own history. Delayed public data, each line dated and sourced, with nothing estimated.",
+    href: "/tools/what-changed",
+    status: "live",
   },
   {
     id: 9,
