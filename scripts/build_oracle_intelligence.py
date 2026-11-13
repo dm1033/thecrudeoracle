@@ -55,7 +55,7 @@ GDELT_QUERY = (
 
 
 HEADLINE_TERMS = re.compile(
-    r"\\b(hormuz|opec|suez|red sea|bab[ -]el[ -]mandeb|tankers?|crude|oil(field|fields)?|pipeline|refiner(y|ies))\\b",
+    r"\b(hormuz|opec|suez|red sea|bab[ -]el[ -]mandeb|tankers?|crude|oil(field|fields)?|pipeline|refiner(y|ies))\b",
     re.IGNORECASE,
 )
 
