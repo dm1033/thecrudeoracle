@@ -17,7 +17,7 @@ const MODULES = [
     title: "Global Balance Engine",
     approach: "Fundamental / balance traders",
     description:
-      "The entire oil balance on one screen: OPEC and non-OPEC supply, sanctioned barrels, outages and SPR flows against refinery runs, China/India imports and OECD demand — reconciled through US, OECD and floating stocks, with an implied surplus/deficit read.",
+      "World oil supply, demand and stocks from the EIA Short-Term Energy Outlook: OPEC and non-OPEC production, US crude output, OPEC spare capacity, OECD and non-OECD consumption and OECD commercial stocks. Each line shows the latest estimated month, a year earlier and EIA's forecast.",
     href: "/tools/balance-engine",
     status: "live",
   },
