@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-13T02:19:56Z",
+  "generated_utc": "2026-11-13T13:26:12Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-13T02:19:56Z",
+      "fetched_utc": "2026-11-13T13:26:12Z",
       "as_of": "2026-11-03",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -36,18 +36,18 @@
     },
     "macro": {
       "status": "not_loaded",
-      "reason": "the FRED_API_KEY repository secret is not set"
+      "reason": "fred.stlouisfed.org could not be reached"
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-13T02:19:56Z",
+      "fetched_utc": "2026-11-13T13:26:12Z",
       "as_of": "2026-11-12T07:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
-        "share_last_24h_vs_7d_average": 0.79,
-        "timeline_points": 67,
+        "share_last_24h_vs_7d_average": 0.75,
+        "timeline_points": 57,
         "search_terms": [
           "Strait of Hormuz",
           "Bab el-Mandeb",
@@ -56,7 +56,38 @@
           "Suez Canal",
           "Libya oilfield"
         ],
-        "headlines": []
+        "headlines": [
+          {
+            "title": "Trump bluntly tells JD Vance to shift focus from Iran",
+            "domain": "twincities.com",
+            "url": "https://www.twincities.com/2026/11/12/us-iran-war-trump-vance-focus/",
+            "seen_utc": "2026-11-13T00:45:00Z"
+          },
+          {
+            "title": "Ontario gasoline , diesel prices expected to climb",
+            "domain": "northumberlandnews.com",
+            "url": "https://www.northumberlandnews.com/news/ontario-gas-price-prediction-for-nov-13-14/article_3a987cc8-8db6-5e61-9a96-a5485cd02c2f.html",
+            "seen_utc": "2026-11-13T00:45:00Z"
+          },
+          {
+            "title": "Israel hits Gaza hospital and France turns away a settler leader , and other Mideast news",
+            "domain": "krmg.com",
+            "url": "https://krmg.com/2026/11/12/israel-hits-gaza-hospital-and-france-turns-away-a-settler-leader-and-other-mideast-news/",
+            "seen_utc": "2026-11-13T00:45:00Z"
+          },
+          {
+            "title": "Ontario gasoline , diesel prices expected to climb",
+            "domain": "cambridgetimes.ca",
+            "url": "https://www.cambridgetimes.ca/news/ontario-gas-price-prediction-for-nov-13-14/article_f3075fd7-8ec3-5d45-a525-b086d5ed9899.html",
+            "seen_utc": "2026-11-13T00:45:00Z"
+          },
+          {
+            "title": "Tackling LPG sector challenges effectively - Pakistan Observer",
+            "domain": "pakobserver.net",
+            "url": "https://pakobserver.net/tackling-lpg-sector-challenges-effectively/",
+            "seen_utc": "2026-11-13T00:45:00Z"
+          }
+        ]
       }
     },
     "gas_storage": {
