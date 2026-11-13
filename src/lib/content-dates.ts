@@ -60,7 +60,6 @@ export const ROUTE_LASTMOD: Record<string, string> = {
   "/tools": tools!,
   "/tools/balance-engine": balance,
   "/tools/flow-map": flows!,
-  "/tools/curve-monitor": curve,
   "/tools/news-to-barrels": news,
   "/tools/positioning": positioningAt,
   "/tools/hypothesis-builder": hypothesisAt,

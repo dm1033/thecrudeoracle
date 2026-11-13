@@ -32,10 +32,10 @@ const MODULES = [
   },
   {
     id: 3,
-    title: "Futures Curve & Spread Dashboard",
+    title: "Curve, Spreads & Cracks",
     approach: "Curve / relative-value traders",
     description:
-      "Brent and WTI forward curves, M1/M2 through 6-month timespreads, the Brent–WTI differential and Midland–Cushing, gasoline/diesel/jet cracks and freight-adjusted arbs. Brent–Dubai is not shown.",
+      "Brent and WTI spot prices, the Brent–WTI spread, New York Harbor gasoline and diesel cracks and the 3-2-1 crack, worked from EIA daily prices with a 60-day chart. Every figure carries its own date.",
     href: "/tools/curve-monitor",
     status: "live",
   },

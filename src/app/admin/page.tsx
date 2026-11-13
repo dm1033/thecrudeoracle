@@ -48,9 +48,9 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Refresh `loadings`, `discharges` and `signals` rows, rewrite `flow_summary`, and maintain `anomalies`: each needs severity (info/watch/alert), sigma vs 30-day baseline, observed vs baseline values, a plain-English explanation, contributing factors (direction up/down/flat) and a 'so what' implication. Remove anomalies that have normalised.",
   },
   {
-    title: "Update the Curve & Spread Dashboard",
+    title: "Curve record for the Desk Bot",
     file: "data/curve-monitor.json",
-    what: "Refresh `flat_price`, `timespreads`, `differentials`, `cracks`, `arbitrage` rows and the `forward_curves` M1–M12 arrays. Each row needs the three verdicts: valuation (cheap/fair/expensive vs 5-yr seasonal range), momentum (tightening/loosening/stable over 20 sessions), physical_check (supported/contradicted/mixed vs Modules 1–2) plus a desk note explaining any contradiction. Rewrite `curve_summary`.",
+    what: "The Curve, Spreads & Cracks page no longer reads this file: it takes its prices from EIA each time it is built. The file is now only quoted by the Desk Bot as a dated desk record. Do not add figures here expecting them to appear on the curve page.",
   },
   {
     title: "Update News-to-Barrels events",
