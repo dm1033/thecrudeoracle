@@ -34,25 +34,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      # TEMPORARY, branch only: report which monitor cards are loaded on the live site.
-      - name: Check the live page
-        continue-on-error: true
-        run: |
-          curl -sS -m 40 -A "public-data-monitor-check/1.0" -o live.html -w "HTTP %{http_code}\n" https://www.thecrudeoracle.com/tools/public-data-monitor || true
-          python3 - <<'PY'
-          import re, html
-          s = open("live.html", encoding="utf-8", errors="replace").read()
-          print("bytes", len(s))
-          ids = ["pdm-prices", "pdm-inventories", "pdm-positioning", "pdm-trend", "pdm-macro", "pdm-gas", "pdm-news"]
-          pos = sorted((s.find(f'id="{i}"'), i) for i in ids)
-          for n, (at, i) in enumerate(pos):
-              if at < 0:
-                  print("LIVE", i, "MISSING"); continue
-              end = pos[n + 1][0] if n + 1 < len(pos) else at + 6000
-              text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s[at:end])))
-              print("LIVE", i, "|", "NOT LOADED" if "Not loaded" in text else "loaded", "|", text[text.find(">") + 1:][:520])
-          PY
-
       - name: Fetch public data
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
