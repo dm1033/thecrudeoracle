@@ -33,6 +33,7 @@ import datetime
 import json
 import math
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -50,6 +51,12 @@ CFTC_WTI_CONTRACT = "067651"  # NYMEX WTI Physical
 GDELT_QUERY = (
     '("Strait of Hormuz" OR "Bab el-Mandeb" OR "Red Sea tanker" OR "OPEC quota" '
     'OR "Suez Canal" OR "Libya oilfield") sourcelang:english'
+)
+
+
+HEADLINE_TERMS = re.compile(
+    r"\\b(hormuz|opec|suez|red sea|bab[ -]el[ -]mandeb|tankers?|crude|oil(field|fields)?|pipeline|refiner(y|ies))\\b",
+    re.IGNORECASE,
 )
 
 
@@ -316,18 +323,28 @@ def build_positioning():
 
 # --- FRED --------------------------------------------------------------------
 
-def fetch_text(url, params=None, timeout=25):
+def fetch_text(url, params=None, timeout=60):
     if params:
         url = f"{url}?{urllib.parse.urlencode(params)}"
     host = urllib.parse.urlsplit(url).netloc
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            return response.read().decode("utf-8", "replace")
-    except urllib.error.HTTPError as exc:
-        raise NotLoaded(f"{host} answered HTTP {exc.code}") from None
-    except (urllib.error.URLError, TimeoutError, OSError):
-        raise NotLoaded(f"{host} could not be reached") from None
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "text/csv,*/*"})
+    reason = "did not answer"
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return response.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as exc:
+            raise NotLoaded(f"{host} answered HTTP {exc.code}") from None
+        except TimeoutError:
+            reason = f"timed out after {timeout}s"
+        except urllib.error.URLError as exc:
+            timed_out = isinstance(exc.reason, TimeoutError) or "timed out" in str(exc.reason)
+            reason = f"timed out after {timeout}s" if timed_out else f"connection failed ({exc.reason.__class__.__name__})"
+        except OSError as exc:
+            reason = f"connection failed ({exc.__class__.__name__})"
+        if attempt == 0:
+            time.sleep(5)
+    raise NotLoaded(f"{host} {reason}")
 
 
 def fred_series(series_id, limit=80):
@@ -451,7 +468,7 @@ def build_news():
     try:
         listing = fetch_json(
             base,
-            {"query": GDELT_QUERY, "mode": "artlist", "maxrecords": 15, "sort": "datedesc", "timespan": "3d", "format": "json"},
+            {"query": GDELT_QUERY, "mode": "artlist", "maxrecords": 50, "sort": "datedesc", "timespan": "3d", "format": "json"},
         )
         seen = set()
         for article in (listing.get("articles") if isinstance(listing, dict) else None) or []:
@@ -462,6 +479,10 @@ def build_news():
                 continue
             title = " ".join(title.split())
             if not title or not url.startswith("https://") or domain in seen:
+                continue
+            # GDELT matches the article body, so many hits are only loosely related.
+            # Keep a headline only when the headline itself is about oil supply.
+            if not HEADLINE_TERMS.search(title):
                 continue
             seen.add(domain)
             try:
