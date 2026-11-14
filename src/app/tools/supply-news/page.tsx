@@ -91,9 +91,14 @@ export default function SupplyNewsPage() {
               <h2 id="terms-h" className="h2">
                 By search term
               </h2>
+              <p className="mt-1 max-w-3xl text-sm text-steel-500">
+                {terms.length} of {searchTerms.length || 6} search terms have figures. GDELT limits how often it can
+                be asked, so the terms are refreshed a few at a time and each row carries its own date. A term with no
+                recent figure is left out.
+              </p>
               {terms.length ? (
                 <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
-                  <table className="table-dark min-w-[640px]">
+                  <table className="table-dark min-w-[820px]">
                     <caption className="sr-only">Share of online news coverage for each search term</caption>
                     <thead className="bg-ink-900">
                       <tr>
@@ -101,6 +106,7 @@ export default function SupplyNewsPage() {
                         <th scope="col" className="text-right">Last 24 hours</th>
                         <th scope="col" className="text-right">7-day average</th>
                         <th scope="col" className="text-right">Last 24 hours vs average</th>
+                        <th scope="col" className="text-right">Data to</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -115,6 +121,10 @@ export default function SupplyNewsPage() {
                             <span className="num font-semibold text-white">{row.ratio.toFixed(2)}×</span>
                             <span className="mt-0.5 block text-[10px] text-steel-500">{compare(row.ratio)}</span>
                           </td>
+                          <td className="whitespace-nowrap text-right text-xs text-steel-400">
+                            {formatLondonTimestamp(row.asOf)}
+                            <span className="mt-0.5 block text-[10px] text-steel-500">fetched {formatLondonTimestamp(row.fetchedUtc)}</span>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -122,7 +132,7 @@ export default function SupplyNewsPage() {
                 </div>
               ) : (
                 <p className="mt-4 max-w-3xl rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm text-steel-400">
-                  The breakdown by search term did not load on the last update, so only the combined figure is shown.
+                  No search term has a recent figure of its own, so only the combined figure is shown.
                 </p>
               )}
             </section>

@@ -51,6 +51,7 @@ CFTC_WTI_CONTRACT = "067651"  # NYMEX WTI Physical
 GDELT_TERMS = ["Strait of Hormuz", "Bab el-Mandeb", "Red Sea tanker", "OPEC quota", "Suez Canal", "Libya oilfield"]
 GDELT_QUERY = "(" + " OR ".join(f'"{term}"' for term in GDELT_TERMS) + ") sourcelang:english"
 GDELT_BASE = "https://api.gdeltproject.org/api/v2/doc/doc"
+GDELT_TERM_MAX_AGE_HOURS = 72  # A per-term figure older than this is dropped rather than carried forward.
 GDELT_GAP_SECONDS = 30  # GDELT asks for one request every five seconds; shared runners need a wider gap.
 
 
@@ -516,19 +517,37 @@ def coverage_summary(points):
     if week_average <= 0 or not last_day:
         return None
     return {
+        "as_of": newest.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "share_last_24h_pct": round(mean(last_day), 4),
         "share_7d_average_pct": round(week_average, 4),
         "share_last_24h_vs_7d_average": round(mean(last_day) / week_average, 2),
     }
 
 
-def build_news():
+def recent_terms(previous_module, now):
+    """Per-term figures from the last file that are still recent enough to show, keyed by term."""
+    values = previous_module.get("values") if isinstance(previous_module, dict) else None
+    kept = {}
+    for entry in (values.get("terms") if isinstance(values, dict) else None) or []:
+        if not isinstance(entry, dict) or entry.get("term") not in GDELT_TERMS:
+            continue
+        try:
+            fetched = datetime.datetime.strptime(entry["fetched_utc"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
+        except (KeyError, TypeError, ValueError):
+            continue
+        if now - fetched <= datetime.timedelta(hours=GDELT_TERM_MAX_AGE_HOURS):
+            kept[entry["term"]] = entry
+    return kept
+
+
+def build_news(previous_module=None):
     base = GDELT_BASE
     points = gdelt_timeline(GDELT_QUERY)
     newest = points[-1][0]
     summary = coverage_summary(points)
     if summary is None:
         raise NotLoaded("GDELT returned an empty timeline")
+    summary.pop("as_of")
 
     values = {
         **summary,
@@ -570,9 +589,12 @@ def build_news():
         warn(f"news: headlines left out ({exc})")
     values["headlines"] = headlines
 
-    # One search term at a time. Each is optional; stop at the first refusal rather than keep asking.
-    terms = []
-    for term in GDELT_TERMS:
+    # One search term at a time. GDELT often refuses after a request or two, so each run
+    # starts with the terms whose figures are oldest and stops at the first refusal. Figures
+    # from earlier runs are kept, each with its own dates, until they are too old to show.
+    fetched_now = now_utc()
+    terms = recent_terms(previous_module, datetime.datetime.now(datetime.timezone.utc))
+    for term in sorted(GDELT_TERMS, key=lambda t: terms[t]["fetched_utc"] if t in terms else ""):
         time.sleep(GDELT_GAP_SECONDS)
         try:
             term_summary = coverage_summary(gdelt_timeline(f'"{term}" sourcelang:english'))
@@ -580,8 +602,8 @@ def build_news():
             warn(f"news: per-term coverage stopped at '{term}' ({exc})")
             break
         if term_summary is not None:
-            terms.append({"term": term, **term_summary})
-    values["terms"] = terms
+            terms[term] = {"term": term, **term_summary, "fetched_utc": fetched_now}
+    values["terms"] = [terms[term] for term in GDELT_TERMS if term in terms]
 
     return {
         "as_of": newest.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -670,7 +692,7 @@ def main():
     modules["inventories"] = run("inventories", build_inventories)
     modules["positioning"] = run("positioning", build_positioning)
     modules["macro"] = run("macro", lambda: build_macro(wti_history))
-    modules["news"] = run("news", build_news)
+    modules["news"] = run("news", lambda: build_news(previous.get("news")))
     modules["gas_storage"] = run("gas_storage", build_gas_storage)
 
     changed = {k: comparable(v) for k, v in modules.items()} != {k: comparable(v) for k, v in previous.items()}

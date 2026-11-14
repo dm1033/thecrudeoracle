@@ -122,13 +122,16 @@ describe("news coverage helpers", () => {
     expect(
       newsTerms({
         terms: [
-          { term: " Strait of Hormuz ", share_last_24h_pct: 0.03, share_7d_average_pct: 0.04, share_last_24h_vs_7d_average: 0.75 },
+          { term: " Strait of Hormuz ", share_last_24h_pct: 0.03, share_7d_average_pct: 0.04, share_last_24h_vs_7d_average: 0.75, as_of: "2026-11-12T07:00:00Z", fetched_utc: "2026-11-14T10:00:00Z" },
+          { term: "Red Sea tanker", share_last_24h_pct: 0.03, share_7d_average_pct: 0.04, share_last_24h_vs_7d_average: 0.75 },
           { term: "Suez Canal", share_last_24h_pct: 0.01, share_7d_average_pct: 0, share_last_24h_vs_7d_average: 1 },
           { term: "OPEC quota", share_last_24h_pct: 0.01 },
           { term: "", share_last_24h_pct: 0.01, share_7d_average_pct: 0.01, share_last_24h_vs_7d_average: 1 },
         ],
       })
-    ).toEqual([{ term: "Strait of Hormuz", last24hPct: 0.03, weekAveragePct: 0.04, ratio: 0.75 }]);
+    ).toEqual([
+      { term: "Strait of Hormuz", last24hPct: 0.03, weekAveragePct: 0.04, ratio: 0.75, asOf: "2026-11-12T07:00:00Z", fetchedUtc: "2026-11-14T10:00:00Z" },
+    ]);
     expect(newsTerms({ terms: "x" })).toEqual([]);
   });
 });

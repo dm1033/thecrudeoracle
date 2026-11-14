@@ -137,6 +137,10 @@ export interface NewsTerm {
   weekAveragePct: number;
   /** Last 24 hours divided by the seven-day average. */
   ratio: number;
+  /** Time of the newest point in this term's own series. */
+  asOf: string;
+  /** When this term's figures were fetched. Terms are refreshed a few at a time. */
+  fetchedUtc: string;
 }
 
 /** Coverage for each search term on its own, when the feed loaded it. */
@@ -148,7 +152,8 @@ export function newsTerms(values: Record<string, unknown>): NewsTerm[] {
     const week = num(item, "share_7d_average_pct");
     const ratio = num(item, "share_last_24h_vs_7d_average");
     if (last == null || week == null || ratio == null || last < 0 || week <= 0) return [];
-    return [{ term: item.term.trim(), last24hPct: last, weekAveragePct: week, ratio }];
+    if (!isDateLike(item.as_of) || !isDateLike(item.fetched_utc)) return [];
+    return [{ term: item.term.trim(), last24hPct: last, weekAveragePct: week, ratio, asOf: item.as_of, fetchedUtc: item.fetched_utc }];
   });
 }
 
