@@ -48,10 +48,10 @@ OUTPUT_PATH = os.environ.get("ORACLE_OUTPUT_PATH") or "public/data/oracle_intell
 SCHEMA_VERSION = "3.0.0"
 USER_AGENT = "public-data-monitor/3.0"
 CFTC_WTI_CONTRACT = "067651"  # NYMEX WTI Physical
-GDELT_QUERY = (
-    '("Strait of Hormuz" OR "Bab el-Mandeb" OR "Red Sea tanker" OR "OPEC quota" '
-    'OR "Suez Canal" OR "Libya oilfield") sourcelang:english'
-)
+GDELT_TERMS = ["Strait of Hormuz", "Bab el-Mandeb", "Red Sea tanker", "OPEC quota", "Suez Canal", "Libya oilfield"]
+GDELT_QUERY = "(" + " OR ".join(f'"{term}"' for term in GDELT_TERMS) + ") sourcelang:english"
+GDELT_BASE = "https://api.gdeltproject.org/api/v2/doc/doc"
+GDELT_GAP_SECONDS = 30  # GDELT asks for one request every five seconds; shared runners need a wider gap.
 
 
 HEADLINE_TERMS = re.compile(
@@ -488,9 +488,9 @@ def gdelt_time(text):
     return datetime.datetime.strptime(text, "%Y%m%dT%H%M%SZ").replace(tzinfo=datetime.timezone.utc)
 
 
-def build_news():
-    base = "https://api.gdeltproject.org/api/v2/doc/doc"
-    timeline = fetch_json(base, {"query": GDELT_QUERY, "mode": "timelinevol", "timespan": "7d", "format": "json"})
+def gdelt_timeline(query):
+    """Coverage share over the last seven days for one query: sorted (time, percent of all coverage) points."""
+    timeline = fetch_json(GDELT_BASE, {"query": query, "mode": "timelinevol", "timespan": "7d", "format": "json"})
     series = timeline.get("timeline") if isinstance(timeline, dict) else None
     points = []
     if isinstance(series, list) and series and isinstance(series[0], dict):
@@ -505,19 +505,39 @@ def build_news():
     if len(points) < 24:
         raise NotLoaded("GDELT returned too few timeline points")
     points.sort()
+    return points
+
+
+def coverage_summary(points):
+    """Last-24-hour and seven-day average share from sorted points, or None when the week is empty."""
     newest = points[-1][0]
     last_day = [v for when, v in points if newest - when < datetime.timedelta(hours=24)]
     week_average = mean([v for _, v in points])
     if week_average <= 0 or not last_day:
+        return None
+    return {
+        "share_last_24h_pct": round(mean(last_day), 4),
+        "share_7d_average_pct": round(week_average, 4),
+        "share_last_24h_vs_7d_average": round(mean(last_day) / week_average, 2),
+    }
+
+
+def build_news():
+    base = GDELT_BASE
+    points = gdelt_timeline(GDELT_QUERY)
+    newest = points[-1][0]
+    summary = coverage_summary(points)
+    if summary is None:
         raise NotLoaded("GDELT returned an empty timeline")
 
     values = {
-        "share_last_24h_vs_7d_average": round(mean(last_day) / week_average, 2),
+        **summary,
         "timeline_points": len(points),
-        "search_terms": ["Strait of Hormuz", "Bab el-Mandeb", "Red Sea tanker", "OPEC quota", "Suez Canal", "Libya oilfield"],
+        "timeline": [{"t": when.strftime("%Y-%m-%dT%H:%M:%SZ"), "share_pct": round(value, 4)} for when, value in points],
+        "search_terms": list(GDELT_TERMS),
     }
 
-    time.sleep(30)  # GDELT asks for one request every five seconds; shared runners need a wider gap.
+    time.sleep(GDELT_GAP_SECONDS)
     headlines = []
     try:
         listing = fetch_json(
@@ -544,11 +564,24 @@ def build_news():
             except (TypeError, ValueError):
                 continue
             headlines.append({"title": title[:200], "domain": domain[:80], "url": url[:500], "seen_utc": seen_at})
-            if len(headlines) == 5:
+            if len(headlines) == 10:
                 break
     except NotLoaded as exc:
         warn(f"news: headlines left out ({exc})")
     values["headlines"] = headlines
+
+    # One search term at a time. Each is optional; stop at the first refusal rather than keep asking.
+    terms = []
+    for term in GDELT_TERMS:
+        time.sleep(GDELT_GAP_SECONDS)
+        try:
+            term_summary = coverage_summary(gdelt_timeline(f'"{term}" sourcelang:english'))
+        except NotLoaded as exc:
+            warn(f"news: per-term coverage stopped at '{term}' ({exc})")
+            break
+        if term_summary is not None:
+            terms.append({"term": term, **term_summary})
+    values["terms"] = terms
 
     return {
         "as_of": newest.strftime("%Y-%m-%dT%H:%M:%SZ"),

@@ -112,6 +112,46 @@ export function headlines(values: Record<string, unknown>): MonitorHeadline[] {
   });
 }
 
+export interface NewsTimelinePoint {
+  /** ISO timestamp. */
+  t: string;
+  /** Share of all online news GDELT monitors that matched, in percent. */
+  sharePct: number;
+}
+
+/** The seven-day coverage series from the news module. Malformed points are dropped. */
+export function newsTimeline(values: Record<string, unknown>): NewsTimelinePoint[] {
+  const list = Array.isArray(values.timeline) ? values.timeline : [];
+  return list
+    .flatMap((item) => {
+      if (!isRecord(item) || !isDateLike(item.t)) return [];
+      const share = typeof item.share_pct === "number" && Number.isFinite(item.share_pct) && item.share_pct >= 0 ? item.share_pct : null;
+      return share == null ? [] : [{ t: item.t, sharePct: share }];
+    })
+    .sort((a, b) => a.t.localeCompare(b.t));
+}
+
+export interface NewsTerm {
+  term: string;
+  last24hPct: number;
+  weekAveragePct: number;
+  /** Last 24 hours divided by the seven-day average. */
+  ratio: number;
+}
+
+/** Coverage for each search term on its own, when the feed loaded it. */
+export function newsTerms(values: Record<string, unknown>): NewsTerm[] {
+  const list = Array.isArray(values.terms) ? values.terms : [];
+  return list.flatMap((item) => {
+    if (!isRecord(item) || typeof item.term !== "string" || !item.term.trim()) return [];
+    const last = num(item, "share_last_24h_pct");
+    const week = num(item, "share_7d_average_pct");
+    const ratio = num(item, "share_last_24h_vs_7d_average");
+    if (last == null || week == null || ratio == null || last < 0 || week <= 0) return [];
+    return [{ term: item.term.trim(), last24hPct: last, weekAveragePct: week, ratio }];
+  });
+}
+
 /** The newest data date across loaded modules, for the sitemap. Null when none has loaded. */
 export function monitorLastData(feed: MonitorFeed = getMonitorFeed()): string | null {
   const dates = MONITOR_MODULES.flatMap((name) => {

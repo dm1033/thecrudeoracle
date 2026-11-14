@@ -77,12 +77,12 @@ const MODULES = [
   },
   {
     id: 7,
-    title: "Geopolitical Risk Matrix",
-    approach: "Event / macro traders",
+    title: "Supply-Route News Monitor",
+    approach: "Event / macro watchers",
     description:
-      "Chokepoints, sanction regimes, election and OPEC+ event calendar with scenario impact ranges — the risk premium, mapped and monitored.",
-    href: "/tools",
-    status: "in development",
+      "How much of the world's online news mentions Hormuz, the Red Sea, Suez, OPEC quotas and Libyan oilfields, against the last seven days, with a chart, a breakdown by search term and recent headlines. A count of coverage from the GDELT Project. It is not a risk rating: no free feed measures risk.",
+    href: "/tools/supply-news",
+    status: "live",
   },
   {
     id: 8,

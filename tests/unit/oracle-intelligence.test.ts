@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { MONITOR_MODULES, headlines, monitorLastData, num, parseMonitorFeed } from "@/lib/oracle-intelligence";
+import { MONITOR_MODULES, headlines, monitorLastData, num, parseMonitorFeed, newsTerms, newsTimeline } from "@/lib/oracle-intelligence";
 
 const ok = (values: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({
   status: "ok",
@@ -95,5 +95,40 @@ describe("public/data/oracle_intelligence.json", () => {
     for (const banned of ["interactive brokers", "pepperstone", "ic markets", "ninjatrader", "fp markets", "plus500", "avatrade", "tradestation", "bullish", "bearish", "squeeze", "golden cross", "resistance"]) {
       expect(text, banned).not.toContain(banned);
     }
+  });
+});
+
+describe("news coverage helpers", () => {
+  it("reads the timeline oldest first and drops malformed points", () => {
+    expect(
+      newsTimeline({
+        timeline: [
+          { t: "2026-11-12T06:00:00Z", share_pct: 0.05 },
+          { t: "2026-11-12T03:00:00Z", share_pct: 0.04 },
+          { t: "not a date", share_pct: 0.1 },
+          { t: "2026-11-12T09:00:00Z", share_pct: -1 },
+          { t: "2026-11-12T12:00:00Z", share_pct: "0.2" },
+          "junk",
+        ],
+      })
+    ).toEqual([
+      { t: "2026-11-12T03:00:00Z", sharePct: 0.04 },
+      { t: "2026-11-12T06:00:00Z", sharePct: 0.05 },
+    ]);
+    expect(newsTimeline({})).toEqual([]);
+  });
+
+  it("reads per-term coverage only when every figure is present", () => {
+    expect(
+      newsTerms({
+        terms: [
+          { term: " Strait of Hormuz ", share_last_24h_pct: 0.03, share_7d_average_pct: 0.04, share_last_24h_vs_7d_average: 0.75 },
+          { term: "Suez Canal", share_last_24h_pct: 0.01, share_7d_average_pct: 0, share_last_24h_vs_7d_average: 1 },
+          { term: "OPEC quota", share_last_24h_pct: 0.01 },
+          { term: "", share_last_24h_pct: 0.01, share_7d_average_pct: 0.01, share_last_24h_vs_7d_average: 1 },
+        ],
+      })
+    ).toEqual([{ term: "Strait of Hormuz", last24hPct: 0.03, weekAveragePct: 0.04, ratio: 0.75 }]);
+    expect(newsTerms({ terms: "x" })).toEqual([]);
   });
 });

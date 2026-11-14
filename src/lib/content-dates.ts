@@ -56,7 +56,7 @@ export const ROUTE_LASTMOD: Record<string, string> = {
   "/tools/news-to-barrels": news,
   "/tools/positioning": positioningAt,
   "/tools/hypothesis-builder": hypothesisAt,
-  ...(monitorAt ? { "/tools/public-data-monitor": monitorAt, "/tools/what-changed": monitorAt } : {}),
+  ...(monitorAt ? { "/tools/public-data-monitor": monitorAt, "/tools/what-changed": monitorAt, "/tools/supply-news": monitorAt } : {}),
   "/portfolio": fund,
   "/portfolio/dashboard": fund,
   "/paper-book": paperBook.generated_at,

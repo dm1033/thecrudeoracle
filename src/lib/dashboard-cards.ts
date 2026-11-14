@@ -104,7 +104,7 @@ function newsCard(feed: MonitorFeed): DataCard | null {
     asOf: news.asOf,
     dataType: "delayed",
     staleAfterHours: 72,
-    href: "/tools/public-data-monitor",
+    href: "/tools/supply-news",
   };
 }
 
