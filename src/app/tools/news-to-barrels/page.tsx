@@ -4,11 +4,12 @@ import { pageMeta } from "@/lib/seo";
 import newsData from "../../../../data/news-to-barrels.json";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
+import ArchiveNotice from "@/components/ArchiveNotice";
 import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
   "News-to-barrels event impact",
-  "Module 4 of The Crude Oracle trader toolkit: AI-assisted analysis that converts oil market news into estimated barrel impact — affected capacity, the full impact chain across crude, products, cracks and differentials, and an honest confidence grade.",
+  "Archive of July 2026 sample events showing how a headline is sized in barrels: affected capacity, the impact chain and a confidence grade. Not current and not updated. Not financial advice.",
   "/tools/news-to-barrels"
 );
 
@@ -166,11 +167,11 @@ function NewsContent() {
 
       <section aria-labelledby="events-h">
         <h2 id="events-h" className="h2">
-          Active event board
+          Event board as it stood in July 2026
         </h2>
         <p className="mt-1 max-w-3xl text-sm text-steel-500">
-          Newest first. Events stay on the board until resolved; confidence and impact chains are
-          revised as facts firm up.
+          Newest first. These events are not being revised. Their status and confidence are as written in July
+          and may since have changed.
         </p>
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
           {events.map((e) => (
@@ -198,11 +199,16 @@ export default function NewsToBarrelsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 4"
+        eyebrow="Trader Toolkit · Module 4 · July 2026 archive"
         title="News-to-Barrels AI"
         intro="Headlines are noise until they're sized. Every market-moving event is converted into estimated barrel impact: affected capacity, the full impact chain across crude, products, cracks and differentials — and an honest confidence grade with watchpoints."
       />
       <div className="container-site space-y-10 py-10">
+        <ArchiveNotice
+          what="The events"
+          lastUpdated={newsData.meta.last_published}
+          why="The site has no licensed news or outage feed, so no new events are added."
+        />
         <PremiumGate
           title="News-to-Barrels analysis is for premium subscribers"
           preview={<EventCard e={events[0]} />}

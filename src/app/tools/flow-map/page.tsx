@@ -5,6 +5,7 @@ import flowData from "../../../../data/flow-map.json";
 import PageHeader from "@/components/PageHeader";
 import BalanceTable, { type BalanceRow } from "@/components/BalanceTable";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
+import ArchiveNotice from "@/components/ArchiveNotice";
 import PremiumGate from "@/components/PremiumGate";
 import { formatUpdated } from "@/lib/data";
 import { loadWatchedVessel } from "@/lib/tankermap-feed";
@@ -180,11 +181,16 @@ export default async function FlowMapPage({
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 2"
+        eyebrow="Trader Toolkit · Module 2 · July 2026 archive"
         title="Physical Flow Map"
         intro="Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, congestion and freight — with a TankerMap hull on the map and a desk note attached to that position."
       />
       <div className="container-site space-y-10 py-10">
+        <ArchiveNotice
+          what="The flow tables and anomalies"
+          lastUpdated={flowData.meta.last_published}
+          why="Tanker tracking at this level needs a licensed feed, which is not connected."
+        />
         <PremiumGate
           title="The Physical Flow Map is for premium subscribers"
           preview={

@@ -4,11 +4,12 @@ import { pageMeta } from "@/lib/seo";
 import hypoData from "../../../../data/hypothesis-builder.json";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
+import ArchiveNotice from "@/components/ArchiveNotice";
 import PremiumGate from "@/components/PremiumGate";
 
 export const metadata: Metadata = pageMeta(
   "Falsifiable trade hypotheses",
-  "Module 6 of The Crude Oracle trader toolkit: structured research hypotheses assembled from physical flows, inventories, curve structure, positioning and news — each with evidence, explicit invalidation conditions and an evidence-weight confidence score. Never buy/sell signals.",
+  "Archive of July 2026 sample research hypotheses, each with evidence and explicit invalidation conditions. Not current and not updated. Never buy or sell signals. Not financial advice.",
   "/tools/hypothesis-builder"
 );
 
@@ -187,11 +188,16 @@ export default function HypothesisBuilderPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trader Toolkit · Module 6"
+        eyebrow="Trader Toolkit · Module 6 · July 2026 archive"
         title="Trade Hypothesis Builder"
         intro="Not signals — scenarios. When the modules disagree, this tool turns the dislocation into a structured hypothesis: evidence, explicit invalidation conditions and an honest confidence score."
       />
       <div className="container-site space-y-10 py-10">
+        <ArchiveNotice
+          what="The hypotheses"
+          lastUpdated={hypoData.meta.last_published}
+          why="They were built on July sample figures that the site no longer publishes."
+        />
         <PremiumGate
           title="The Hypothesis Builder is for premium subscribers"
           preview={<HypothesisCard h={hypotheses[0]} />}

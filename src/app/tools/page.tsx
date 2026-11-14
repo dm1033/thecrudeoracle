@@ -26,9 +26,9 @@ const MODULES = [
     title: "Physical Flow Map",
     approach: "Physical / flow traders",
     description:
-      "Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, port congestion and freight — plus a watched hull from TankerMap public AIS, with a desk note attached to the position. Anomalies still say why a flow is unusual, in σ against its 30-day norm.",
+      "July 2026 archive, not current. Sample tables of tanker loadings, discharges and flow anomalies that show the method. Tanker tracking at this level needs a licensed feed, which is not connected, so the tables are not updated.",
     href: "/tools/flow-map",
-    status: "live",
+    status: "archive",
   },
   {
     id: 3,
@@ -44,16 +44,16 @@ const MODULES = [
     title: "News-to-Barrels AI",
     approach: "News / event-driven traders",
     description:
-      "AI-assisted analysis that converts headlines into estimated barrel impact: affected capacity in kb/d, the impact chain across crude demand, product flows, cracks and differentials, and an honest confidence grade with watchpoints.",
+      "July 2026 archive, not current. Sample events showing how a headline is sized in barrels: affected capacity, the impact chain and a confidence grade. The site has no licensed news or outage feed, so no new events are added.",
     href: "/tools/news-to-barrels",
-    status: "live",
+    status: "archive",
   },
   {
     id: 5,
     title: "Positioning & Crowd-Risk Engine",
     approach: "Flow / momentum traders",
     description:
-      "Managed-money positioning from public CFTC and ICE COT reports, graded through a three-part crowding checklist — stretched positioning, structure confirmation, physical support — into an explicit liquidation-risk call.",
+      "NYMEX WTI managed-money positioning from the CFTC Commitments of Traders report, loaded automatically with twelve weeks of history. Desk notes on other markets are from July and are marked as not current on the page.",
     href: "/tools/positioning",
     status: "live",
   },
@@ -62,9 +62,9 @@ const MODULES = [
     title: "Trade Hypothesis Builder",
     approach: "Systematic / discretionary researchers",
     description:
-      "Structured, falsifiable research hypotheses built from dislocations between the modules: evidence with strength grades, explicit invalidation conditions, an evidence-weight confidence score and instruments to research. Never buy/sell signals.",
+      "July 2026 archive, not current. Sample research hypotheses with evidence and explicit invalidation conditions, built on July sample figures the site no longer publishes. Never buy or sell signals.",
     href: "/tools/hypothesis-builder",
-    status: "live",
+    status: "archive",
   },
   {
     id: 11,
@@ -125,19 +125,20 @@ export default function ToolsPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {MODULES.map((m) => {
             const live = m.status === "live";
+            const archive = m.status === "archive";
             return (
               <div
                 key={m.id}
-                className={`card flex flex-col ${live ? "border-gold-600/50" : "opacity-80"}`}
+                className={`card flex flex-col ${live ? "border-gold-600/50" : archive ? "border-risk/40" : "opacity-80"}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="eyebrow">Module {m.id}</span>
                   <span
                     className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                      live ? "bg-gain/15 text-gain" : "bg-steel-500/15 text-steel-400"
+                      live ? "bg-gain/15 text-gain" : archive ? "bg-risk/15 text-risk" : "bg-steel-500/15 text-steel-400"
                     }`}
                   >
-                    {m.status}
+                    {archive ? "July archive" : m.status}
                   </span>
                 </div>
                 <h2 className="mt-2 text-lg font-bold text-white">{m.title}</h2>
@@ -148,6 +149,10 @@ export default function ToolsPage() {
                 {live ? (
                   <Link href={m.href} className="btn-primary mt-5 w-full">
                     Open {m.title} →
+                  </Link>
+                ) : archive ? (
+                  <Link href={m.href} className="btn-secondary mt-5 w-full">
+                    Open the archive →
                   </Link>
                 ) : (
                   <button

@@ -13,7 +13,7 @@ import { getPublishedPrices } from "@/lib/published-prices";
 
 export const metadata: Metadata = pageMeta(
   "Daily crude market briefing",
-  "The Crude Oracle Daily Briefing: oil price summary, gas signal, supply risk, demand, OPEC update, inventories, geopolitical risk, energy equities and the bottom line — every trading day.",
+  "The current note is generated from the latest EIA spot prints. The written briefings below it are a July 2026 archive and are marked as not current. Not financial advice.",
   "/daily-briefing"
 );
 
@@ -95,7 +95,7 @@ export default async function DailyBriefingPage() {
     <>
       <JsonLd data={{ "@context": "https://schema.org", "@graph": articles }} />
       <PageHeader
-        eyebrow="Updated Every Trading Day"
+        eyebrow="Current note from EIA prints · older editions archived"
         title="The Crude Oracle Daily Briefing"
         intro="The current note is generated from the EIA spot prints. Older editions are an archive and are not today's prices."
       />
