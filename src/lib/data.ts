@@ -1,5 +1,4 @@
 import marketPricesJson from "../../data/market-prices.json";
-import dashboardSignalsJson from "../../data/dashboard-signals.json";
 import dailyBriefingJson from "../../data/daily-briefing.json";
 import watchlistJson from "../../data/investment-watchlist.json";
 import companyIntelJson from "../../data/company-intelligence.json";
@@ -22,30 +21,6 @@ export interface MarketPrice {
   source: string;
   source_url: string;
   last_updated: string;
-  data_type: string;
-}
-
-export interface SignalCard {
-  id: string;
-  label: string;
-  value: string;
-  signal: string;
-  detail: string;
-  source: string;
-  source_url: string;
-  last_updated: string;
-  data_type: string;
-}
-
-export interface BottomLine {
-  what_moved: string;
-  why_it_moved: string;
-  what_matters_next: string;
-  biggest_risk: string;
-  biggest_opportunity: string;
-  watch_tomorrow: string;
-  last_updated: string;
-  source: string;
   data_type: string;
 }
 
@@ -122,11 +97,6 @@ export interface ResearchNote {
 
 export const marketPrices: MarketPrice[] = marketPricesJson.prices;
 export const marketPricesMeta = marketPricesJson.meta;
-
-export const supplySignals: SignalCard[] = dashboardSignalsJson.supply;
-export const demandSignals: SignalCard[] = dashboardSignalsJson.demand;
-export const riskSignals: SignalCard[] = dashboardSignalsJson.risk;
-export const bottomLine: BottomLine = dashboardSignalsJson.bottom_line;
 
 export const briefings: Briefing[] = dailyBriefingJson.briefings;
 export const latestBriefing: Briefing = dailyBriefingJson.briefings[0];

@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import CrudeOracleBot from "@/components/CrudeOracleBot";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import { pageMeta } from "@/lib/seo";
+import { getDeskData } from "@/lib/desk-data";
 import { getPublishedPrices } from "@/lib/published-prices";
 import {
   CRUDE_ORACLE_MASTER_SYSTEM_PROMPT,
@@ -19,11 +20,12 @@ export const metadata: Metadata = pageMeta(
 );
 
 export default async function DeskAgentPage() {
-  const feed = await getPublishedPrices();
+  const [feed, data] = await Promise.all([getPublishedPrices(), getDeskData()]);
   const initial = generateDeskLeadResponse(
     "Give me today's crude & gas market snapshot and key drivers.",
     feed,
-    []
+    [],
+    data
   );
 
   return (
@@ -31,7 +33,7 @@ export default async function DeskAgentPage() {
       <PageHeader
         eyebrow={`Onscreen Bot Deployment · Version ${CRUDE_ORACLE_PROMPT_VERSION}`}
         title="CrudeOracle — The Desk Lead"
-        intro="Punchy, terminal-grade market intelligence grounded in our EIA Open Data feed, global S&D Balance Engine, CFTC/ICE COT positioning, and News-to-Barrels event tracker. Every figure carries its source, timestamp, and delay label. Informational analysis only — never investment advice."
+        intro="Oil and gas market questions answered from public data: EIA prices, stocks and world balance, CFTC positioning and a count of supply-route news coverage. Every figure carries its source, date and delay label. Informational analysis only, never investment advice."
       />
 
       <div className="container-site space-y-10 py-10">

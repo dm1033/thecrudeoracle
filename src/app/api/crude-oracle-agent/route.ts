@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPublishedPrices } from "@/lib/published-prices";
+import { getDeskData } from "@/lib/desk-data";
 import {
   CRUDE_ORACLE_INTERACTIVE_FOOTER,
   CRUDE_ORACLE_MANDATORY_DISCLAIMER,
@@ -23,11 +24,12 @@ function usableXaiKey(): string | null {
 }
 
 export async function GET() {
-  const feed = await getPublishedPrices();
+  const [feed, data] = await Promise.all([getPublishedPrices(), getDeskData()]);
   const initial = generateDeskLeadResponse(
     "Give me today's crude & gas market snapshot and key drivers.",
     feed,
-    []
+    [],
+    data
   );
   return NextResponse.json({
     agent: "CrudeOracle",
@@ -67,11 +69,11 @@ export async function POST(req: Request) {
     )
     .slice(-8);
 
-  const feed = await getPublishedPrices();
+  const [feed, data] = await Promise.all([getPublishedPrices(), getDeskData()]);
 
   // Always enforce the deterministic guardrail for personalised advice requests
   if (isPersonalizedAdviceRequest(message)) {
-    return NextResponse.json(generateDeskLeadResponse(message, feed, history));
+    return NextResponse.json(generateDeskLeadResponse(message, feed, history, data));
   }
 
   const xaiKey = usableXaiKey();
@@ -79,7 +81,7 @@ export async function POST(req: Request) {
     try {
       const base = (process.env.XAI_API_BASE ?? "https://api.x.ai/v1").replace(/\/$/, "");
       const model = process.env.XAI_MODEL ?? "grok-4";
-      const contextBlock = buildDeskContextBlock(feed);
+      const contextBlock = buildDeskContextBlock(feed, data);
       const res = await fetch(`${base}/chat/completions`, {
         method: "POST",
         headers: {
@@ -129,5 +131,5 @@ export async function POST(req: Request) {
     }
   }
 
-  return NextResponse.json(generateDeskLeadResponse(message, feed, history));
+  return NextResponse.json(generateDeskLeadResponse(message, feed, history, data));
 }

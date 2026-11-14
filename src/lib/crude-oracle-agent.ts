@@ -3,21 +3,11 @@
  * For Onscreen Bot Deployment | Version 30 Oct 2026
  */
 
-import balanceEngineJson from "../../data/balance-engine.json";
-import curveMonitorJson from "../../data/curve-monitor.json";
-import positioningJson from "../../data/positioning-engine.json";
 import { getMarketSnapshot } from "@/lib/market-snapshot";
-import newsToBarrelsJson from "../../data/news-to-barrels.json";
-import flowMapJson from "../../data/flow-map.json";
-import hypothesisJson from "../../data/hypothesis-builder.json";
-import {
-  demandSignals,
-  riskSignals,
-  supplySignals,
-  watchlistCompanies,
-  companyIntel,
-  type MarketPrice,
-} from "@/lib/data";
+import { watchlistCompanies, companyIntel, type MarketPrice } from "@/lib/data";
+import type { CurveFeed } from "@/lib/curve";
+import type { DashboardCards, DataCard } from "@/lib/dashboard-cards";
+import { isSampleInstrument } from "@/lib/sample-marks";
 import type { PublishedPrices } from "@/lib/published-prices";
 import { LICENSED_DATA_REQUIRED, isPlaceholderPrice, priceFigureShown, priceFigureTooOld } from "@/lib/price-stamp";
 
@@ -95,6 +85,18 @@ export interface AgentChatMessage {
   role: "user" | "assistant";
   content: string;
 }
+
+/**
+ * Figures the bot may quote beyond the price board, all read from public
+ * feeds at request time. Anything that did not load is absent, and the bot
+ * then says nothing about it.
+ */
+export interface DeskData {
+  cards: DashboardCards;
+  curve: CurveFeed | null;
+}
+
+export const EMPTY_DESK_DATA: DeskData = { cards: { supply: [], demand: [], context: [] }, curve: null };
 
 export interface AgentResponsePayload {
   reply: string;
@@ -177,17 +179,10 @@ export function buildMarketSnapshotTable(prices: MarketPrice[]): {
   const rows = prices.slice(0, 5);
   // Same rule as the price cards: no figure for a placeholder or a print older than 30 days.
   const bigMover = rows.find((p) => priceFigureShown(p) && Math.abs(p.daily_change) >= 2.0);
-  // An event is only an "active" alert while its record is recent; an old one is listed in the drivers with its date.
-  const confirmedOutage = newsToBarrelsJson.events.find(
-    (e) => e.status === "confirmed" && !priceFigureTooOld(e.last_updated)
-  );
-
   let alertLine: string | null = null;
   if (bigMover) {
     const dir = bigMover.daily_change > 0 ? "surged" : "dropped";
     alertLine = `> **ALERT:** **${bigMover.asset} (${bigMover.ticker})** ${dir} **${bigMover.daily_change > 0 ? "+" : ""}${bigMover.daily_change.toFixed(2)}% d/d** to **$${bigMover.price.toFixed(2)}** (as of ${formatAsOf(bigMover.last_updated)}, ${bigMover.source}).`;
-  } else if (confirmedOutage) {
-    alertLine = `> **ALERT — ACTIVE PHYSICAL EVENT:** **${confirmedOutage.headline}** (${confirmedOutage.affected_capacity} ${confirmedOutage.capacity_type}, status: **${confirmedOutage.status}**, as of ${confirmedOutage.last_updated}, ${confirmedOutage.source}).`;
   }
 
   const lines = [
@@ -224,46 +219,43 @@ function cftcWtiBullet(): string[] {
   return line ? [`- **WTI positioning (CFTC print):** ${line}.`] : [];
 }
 
-export function buildDeskContextBlock(feed: PublishedPrices): string {
+function cardLine(card: DataCard): string {
+  return `${card.label}: ${card.value}. ${card.detail} [${card.sourceName}, as of ${card.asOf.slice(0, 10)}, ${card.dataType}]`;
+}
+
+function spreadLines(curve: CurveFeed | null): string[] {
+  if (!curve) return [];
+  return curve.spreads.map((spread) => {
+    const change = spread.change == null ? "" : `, ${spread.change > 0 ? "+" : ""}${spread.change.toFixed(2)} on the day before`;
+    return `${spread.label}: $${spread.latest.value.toFixed(2)}/bbl${change}. ${spread.method} [worked from EIA daily spot prices for ${spread.latest.date}, delayed]`;
+  });
+}
+
+const NOT_LOADED = "- Not loaded. Say nothing about this section and quote no figure for it.";
+
+export function buildDeskContextBlock(feed: PublishedPrices, data: DeskData = EMPTY_DESK_DATA): string {
   const { tableMarkdown } = buildMarketSnapshotTable(feed.prices);
-  const stocks = balanceEngineJson.stocks
-    .map((s) => `- ${s.metric}: ${s.value} ${s.unit} (${s.change}) [as of ${s.last_updated}; ${s.source}; ${s.data_type}]`)
-    .join("\n");
-  const supply = balanceEngineJson.supply
-    .map((s) => `- ${s.metric}: ${s.value} ${s.unit} (${s.change}) — ${s.note} [as of ${s.last_updated}; ${s.source}]`)
-    .join("\n");
-  const cot = [
-    ...(cftcWtiLine() ? [`- ${cftcWtiLine()}`] : []),
-    ...positioningJson.positioning.map(
-      (p) => `- ${p.instrument}: ${p.net_position} (${p.change}, ${p.percentile}, ${p.stance}) [indicative desk value, last reviewed ${p.last_updated}; ${p.source}]`
-    ),
-  ].join("\n");
-  const events = newsToBarrelsJson.events
-    .map((e) => `- ${e.headline} (${e.date}, ${e.status}, confidence: ${e.confidence}): ${e.affected_capacity} ${e.capacity_type}. Watch: ${e.watch} [${e.source}]`)
-    .join("\n");
+  const list = (lines: string[]) => (lines.length ? lines.map((line) => `- ${line}`).join("\n") : NOT_LOADED);
+  const cftc = cftcWtiLine();
 
   return [
     `Feed status: EIA live overlay = ${feed.eia ? `YES (as of ${feed.eiaUpdated})` : `NO (using published desk marks as of ${feed.manualUpdated})`}`,
+    "Only the figures below are verified. Quote no other figure. There is no event, outage, tanker or OPEC-decision feed: do not describe any such event as current.",
     "",
     "### Prices",
     tableMarkdown,
     "",
-    "### Inventories & Balance (Module 1)",
-    `Implied Global Balance: ${balanceEngineJson.balance_summary.implied_balance} ${balanceEngineJson.balance_summary.unit} (Supply ${balanceEngineJson.balance_summary.total_supply} vs Demand ${balanceEngineJson.balance_summary.total_demand} ${balanceEngineJson.balance_summary.unit}, as of ${balanceEngineJson.balance_summary.last_updated.slice(0, 10)})`,
-    stocks,
+    "### Supply: US stocks (EIA weekly) and production (EIA Short-Term Energy Outlook)",
+    list(data.cards.supply.map(cardLine)),
     "",
-    "### Supply & OPEC+",
-    supply,
+    "### Demand (EIA Short-Term Energy Outlook)",
+    list(data.cards.demand.map(cardLine)),
     "",
-    "### Curve & Cracks (Module 3)",
-    `- Brent state: ${curveMonitorJson.curve_summary.brent_state}; WTI state: ${curveMonitorJson.curve_summary.wti_state} (as of ${curveMonitorJson.curve_summary.last_updated.slice(0, 10)})`,
-    ...curveMonitorJson.cracks.map((c) => `- ${c.instrument}: ${c.value} ${c.unit} (${c.change}, valuation: ${c.valuation}, physical: ${c.physical_check}) [as of ${c.last_updated}]`),
+    "### Spreads and cracks (EIA daily spot prices)",
+    list(spreadLines(data.curve)),
     "",
-    "### Positioning (Module 5)",
-    cot,
-    "",
-    "### News-to-Barrels Events (Module 4)",
-    events,
+    "### Positioning, news coverage and macro",
+    list([...(cftc ? [cftc] : []), ...data.cards.context.map(cardLine)]),
   ].join("\n");
 }
 
@@ -277,54 +269,21 @@ export function buildDeskContextBlock(feed: PublishedPrices): string {
  * conviction label. A line with no record behind it is left out.
  */
 
-type DeskRecord = { last_updated: string; source: string; data_type: string };
-
-function stamp(record: DeskRecord): string {
-  return `desk record as of ${formatAsOf(record.last_updated)}, ${record.source}, ${record.data_type}`;
-}
-
-function stockBullets(): string[] {
-  return balanceEngineJson.stocks.map(
-    (s) => `- **${s.metric}:** ${s.value} ${s.unit} (${s.change}) — ${stamp(s)}.`
+function cardBullets(cards: DataCard[]): string[] {
+  return cards.map(
+    (card) => `- **${card.label}:** ${card.value}. ${card.detail} — ${card.sourceName}, as of ${formatAsOf(card.asOf)}, ${card.dataType}.`
   );
 }
 
-function balanceBullet(): string {
-  const b = balanceEngineJson.balance_summary;
-  return `- **Implied global balance:** ${b.implied_balance} ${b.unit} (supply ${b.total_supply} vs demand ${b.total_demand} ${b.unit}) — ${stamp({ ...b, data_type: "sample assessment" })}.`;
+function spreadBullets(curve: CurveFeed | null): string[] {
+  return spreadLines(curve).map((line) => {
+    const split = line.indexOf(":");
+    return `- **${line.slice(0, split)}:**${line.slice(split + 1)}`;
+  });
 }
 
-function eventBullets(): string[] {
-  return newsToBarrelsJson.events.map(
-    (e) =>
-      `- **${e.headline}** (${e.region}; status: ${e.status}; confidence: ${e.confidence}): ${e.affected_capacity} ${e.capacity_type}. Watch: ${e.watch} — ${stamp(e)}.`
-  );
-}
-
-function crackBullets(): string[] {
-  return curveMonitorJson.cracks.map(
-    (c) =>
-      `- **${c.instrument}:** ${c.value} ${c.unit} (${c.change}; valuation ${c.valuation}; physical check ${c.physical_check}) — ${stamp(c)}.`
-  );
-}
-
-function otherPositioningBullets(): string[] {
-  return positioningJson.positioning.map(
-    (p) =>
-      `- **${p.instrument}:** ${p.net_position} (${p.change}, ${p.percentile}, ${p.stance}) — indicative desk value, last reviewed ${p.last_updated}, ${p.source}. Not current.`
-  );
-}
-
-function eiaStocksBullet(): string[] {
-  const row = getMarketSnapshot().eia.rows[0];
-  if (!row) return [];
-  const change =
-    row.changeMillionBarrels == null || row.previousWeekEnding == null
-      ? ""
-      : ` (${row.changeMillionBarrels > 0 ? "+" : ""}${row.changeMillionBarrels.toFixed(3)} vs ${row.previousWeekEnding})`;
-  return [
-    `- **US commercial crude stocks (EIA print):** ${row.millionBarrels.toFixed(3)} million barrels${change} — EIA Weekly Petroleum Status Report, week ending ${row.weekEnding}, delayed.`,
-  ];
+function only(cards: DataCard[], ids: string[]): DataCard[] {
+  return ids.flatMap((id) => cards.filter((card) => card.id === id));
 }
 
 function priceBullet(p: MarketPrice | undefined): string[] {
@@ -332,18 +291,6 @@ function priceBullet(p: MarketPrice | undefined): string[] {
   return [
     `- **${p.asset} (${p.ticker}):** ${formatPriceCell(p)}, ${formatDeltaCell(p)} — as of ${formatAsOf(p.last_updated)}, ${p.source}, ${p.data_type}.`,
   ];
-}
-
-function latestRecordDate(): string {
-  return [
-    ...balanceEngineJson.stocks.map((s) => s.last_updated),
-    ...newsToBarrelsJson.events.map((e) => e.last_updated),
-    ...curveMonitorJson.cracks.map((c) => c.last_updated),
-    ...positioningJson.positioning.map((p) => p.last_updated),
-  ]
-    .map(formatAsOf)
-    .sort()
-    .at(-1) ?? "unknown";
 }
 
 const DESK_VIEW: string[] = [
@@ -357,13 +304,14 @@ const WATCHPOINTS: string[] = [
   `### 4. Watchpoints & Invalidation`,
   `- **EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET):** commercial crude, Cushing, gasoline and distillate stock changes.`,
   `- **CFTC Commitments of Traders (Fridays 15:30 ET):** managed-money long, short and net in NYMEX WTI.`,
-  `- **Events on file:** the status and duration of each event listed in the News-to-Barrels tool, checked against the operator or official source.`,
+  `- **EIA Short-Term Energy Outlook (monthly):** world production, consumption and OPEC spare capacity estimates, which EIA revises.`,
 ];
 
 export function generateDeskLeadResponse(
   query: string,
   feed: PublishedPrices,
-  history: AgentChatMessage[] = []
+  history: AgentChatMessage[] = [],
+  data: DeskData = EMPTY_DESK_DATA
 ): AgentResponsePayload {
   const topic = classifyQueryTopic(query);
   const focus = inferSessionFocus(history, query);
@@ -379,11 +327,13 @@ export function generateDeskLeadResponse(
         ]
       : [];
 
-  const recordDate = latestRecordDate();
   const freshnessBanner = feed.eia
     ? `Live EIA Open Data spot overlay active (latest print **${formatAsOf(feed.eiaUpdated ?? feed.manualUpdated)}**; EIA daily spot series publish with a 1–3 business-day lag).`
     : `No live EIA API key configured in this environment — last known published desk marks shown as of **${formatAsOf(feed.manualUpdated)}** (delayed/manual).`;
-  const recordsBanner = `Lines marked "desk record" are hand-entered sample or indicative values; the newest is dated **${recordDate}**. They show how the desk reads the market and are not current. Verify every figure against the primary release before acting.`;
+  const recordsBanner = `Every figure above is read from a public feed when you ask, and carries that feed's own date and source. A feed that did not load is left out and no stored figure takes its place. I hold no event, outage or tanker feed, so I describe none.`;
+  const { supply, demand, context } = data.cards;
+  const stockCards = only(supply, ["us-crude", "cushing"]);
+  const newsCards = only(context, ["supply-news"]);
 
   const footer = [
     `---`,
@@ -410,9 +360,8 @@ export function generateDeskLeadResponse(
       tableMarkdown,
       `### 2. What Moved / Drivers`,
       ...spreadBullet,
-      ...eiaStocksBullet(),
+      ...cardBullets(stockCards),
       ...cftcWtiBullet(),
-      ...stockBullets().slice(0, 2),
       ...DESK_VIEW.map((line) => (line === `### 3. Desk View` ? `### 3. Desk View (Framework & Scenarios)` : line)),
       ...WATCHPOINTS,
       `- **Questions for your own research:** What is your time horizon, and are you analysing flat price, timespreads, or energy equities?`,
@@ -435,15 +384,26 @@ export function generateDeskLeadResponse(
 
   // 2. What Moved / Drivers
   if (topic === "inventories") {
-    sections.push(`### 2. What Moved / Drivers (Inventories & Balance)`, ...eiaStocksBullet(), ...stockBullets(), balanceBullet());
+    sections.push(
+      `### 2. What Moved / Drivers (Inventories & Balance)`,
+      ...cardBullets(supply),
+      ...cardBullets(only(demand, ["steo-patc_world", "steo-patc_oecd", "steo-patc_non_oecd"])),
+      ...(supply.length ? [] : [`- **Not loaded:** the EIA stock and balance figures could not be read just now, so I quote none.`])
+    );
   } else if (topic === "geopolitics") {
-    sections.push(`### 2. What Moved / Drivers (Geopolitics & Supply Risk)`, ...eventBullets());
+    sections.push(
+      `### 2. What Moved / Drivers (Geopolitics & Supply Risk)`,
+      ...cardBullets(newsCards),
+      ...cardBullets(only(supply, ["steo-cops_opec", "steo-copr_opec"])),
+      `- **Not on file:** I hold no feed of outages, attacks, sanctions or OPEC decisions, so I report none as current. The news figure above counts coverage; it does not measure risk. Check official and operator sources for events.`
+    );
   } else if (topic === "positioning") {
     sections.push(
       `### 2. What Moved / Drivers (Curve, Cracks & Positioning)`,
       ...cftcWtiBullet(),
-      ...otherPositioningBullets(),
-      ...crackBullets()
+      ...spreadBullets(data.curve),
+      ...(data.curve?.spreads.length ? [] : cardBullets(only(demand, ["crack-321"]))),
+      `- **Not on file:** positioning in Brent and products, and any futures curve. Those need licensed exchange data, so I quote none.`
     );
   } else if (topic === "gas_lng") {
     sections.push(
@@ -457,10 +417,10 @@ export function generateDeskLeadResponse(
       ...priceBullet(brent),
       ...priceBullet(wti),
       ...spreadBullet,
-      ...eiaStocksBullet(),
+      ...cardBullets(stockCards),
       ...cftcWtiBullet(),
-      ...stockBullets().slice(0, 2),
-      ...eventBullets().slice(0, 2)
+      ...cardBullets(only(supply, ["steo-cops_opec"])),
+      ...cardBullets(newsCards)
     );
   }
 
@@ -469,8 +429,9 @@ export function generateDeskLeadResponse(
 
   // 5. Investment Implications
   if (topic === "equities" || topic === "scenarios") {
-    const watchSample = watchlistCompanies.slice(0, 4);
-    const intelSample = companyIntel.slice(0, 2);
+    // Sample and placeholder names are withheld here as they are on the watchlist pages.
+    const watchSample = watchlistCompanies.filter((w) => !isSampleInstrument([w.ticker, w.company, w.investment_theme])).slice(0, 4);
+    const intelSample = companyIntel.filter((c) => !isSampleInstrument([c.ticker, c.company, c.catalyst])).slice(0, 2);
     sections.push(
       `### 5. Investment Implications (Scenario-Framed — Monitored Names, Not Recommendations)`,
       ...(watchSample.length
@@ -483,12 +444,15 @@ export function generateDeskLeadResponse(
             `- **Company notes on file:** ${intelSample.map((c) => `**${c.company} (${c.ticker})** — catalyst: _${c.catalyst}_; key risk: _${c.risk}_ (as of ${c.last_updated})`).join(" | ")}.`,
           ]
         : []),
+      ...(watchSample.length || intelSample.length
+        ? []
+        : [`- **No names on file:** no company is published on the watchlist at present, so I list none.`]),
       `- **How to read these:** They are monitored names with a stated theme and risk, not buy or sell ideas. I quote no price sensitivity or break-even for any company.`
     );
   } else {
     sections.push(
       `### 5. Investment Implications (Scenario Framework)`,
-      `- **Structure vs flat price:** A prompt spread backed by drawing stocks is better supported than one that is not. Compare the timespreads in the Curve Dashboard with the stock prints above, by date.`,
+      `- **Structure vs flat price:** A prompt spread backed by drawing stocks is better supported than one that is not. Compare the spreads on the Curve, Spreads & Cracks page with the stock prints above, by date.`,
       `- **Equity read-through:** See the Watchlist and Company Intel pages for monitored names; ask me for "equity impacts" to list them here.`
     );
   }
@@ -497,8 +461,7 @@ export function generateDeskLeadResponse(
   sections.push(
     `### 6. Sources & Freshness`,
     `- **Prices:** ${freshnessBanner}`,
-    `- **Desk records:** ${recordsBanner}`,
-    `- **Automated prints:** CFTC Disaggregated Commitments of Traders and EIA Weekly Petroleum Status Report, quoted only when the scheduled pull has loaded them, each with its own report date.`
+    `- **Other figures:** ${recordsBanner}`
   );
 
   // 7. Mandatory Disclaimer & Interactive Footer

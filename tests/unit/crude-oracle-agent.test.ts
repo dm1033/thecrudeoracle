@@ -4,12 +4,15 @@ import {
   CRUDE_ORACLE_MANDATORY_DISCLAIMER,
   CRUDE_ORACLE_MASTER_SYSTEM_PROMPT,
   CRUDE_ORACLE_PROMPT_VERSION,
+  buildDeskContextBlock,
   buildMarketSnapshotTable,
   classifyQueryTopic,
   generateDeskLeadResponse,
   inferSessionFocus,
   isPersonalizedAdviceRequest,
+  type DeskData,
 } from "@/lib/crude-oracle-agent";
+import type { DataCard } from "@/lib/dashboard-cards";
 import { getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
 
 describe("CrudeOracle Investment Agent — Master System Prompt (v2026-10-30)", () => {
@@ -111,7 +114,8 @@ describe("CrudeOracle Investment Agent — Master System Prompt (v2026-10-30)", 
     for (const query of queries) {
       const { reply } = generateDeskLeadResponse(query, feed, []);
       for (const text of banned) expect(reply, `"${text}" in reply to: ${query}`).not.toContain(text);
-      expect(reply).toContain("not current");
+      expect(reply, "no hand-entered July record may be quoted").not.toContain("desk record");
+      expect(reply).not.toContain("SMPL-");
       expect(reply, "a months-old event must not be raised as an active alert").not.toContain("ACTIVE PHYSICAL EVENT");
       expect(reply).toContain(CRUDE_ORACLE_MANDATORY_DISCLAIMER);
     }
@@ -129,16 +133,70 @@ describe("CrudeOracle Investment Agent — Master System Prompt (v2026-10-30)", 
     expect(buildMarketSnapshotTable(placeholder).tableMarkdown).not.toContain("123.45");
   });
 
-  it("stamps every hand-entered figure as a dated desk record", async () => {
+  it("quotes live feed figures with their own source and date, and nothing when a feed is absent", async () => {
     resetPublishedPricesCache();
     const feed = await getPublishedPrices();
-    const { reply } = generateDeskLeadResponse("Latest EIA crude inventories and Cushing draw", feed, []);
-    const stockLines = reply.split("\n").filter((line) => line.startsWith("- **") && line.includes(" mb "));
-    expect(stockLines.length).toBeGreaterThan(0);
-    for (const line of stockLines) expect(line).toMatch(/desk record as of \d{4}-\d{2}-\d{2}/);
+    const card = (id: string, label: string, value: string): DataCard => ({
+      id,
+      label,
+      value,
+      detail: "Change on the previous report: +4.7 mb.",
+      sourceName: "EIA Weekly Petroleum Status Report",
+      sourceUrl: null,
+      asOf: "2026-11-06",
+      dataType: "delayed",
+      staleAfterHours: 240,
+      href: "/eia-weekly",
+    });
+    const data: DeskData = {
+      cards: {
+        supply: [card("us-crude", "US commercial crude stocks", "414.4 mb")],
+        demand: [],
+        context: [{ ...card("supply-news", "Oil supply-route news coverage", "0.74× its 7-day average"), sourceName: "The GDELT Project, DOC 2.0 API", asOf: "2026-11-12T07:00:00Z" }],
+      },
+      curve: {
+        spots: [],
+        spreads: [
+          {
+            key: "crack_321",
+            label: "3-2-1 crack against WTI",
+            method: "Two barrels of gasoline plus one of diesel, divided by three, minus WTI spot, same day.",
+            latest: { date: "2026-11-11", value: 36.86 },
+            previous: { date: "2026-11-10", value: 36.86 },
+            change: 0,
+            monthAgo: null,
+          },
+        ],
+        history: [],
+        futures: null,
+        futuresLastDate: null,
+        asOf: "2026-11-11",
+        fetchedAt: "2026-11-14T00:00:00Z",
+      },
+    };
+
+    const stocks = generateDeskLeadResponse("Latest EIA crude inventories and Cushing draw", feed, [], data).reply;
+    expect(stocks).toContain("- **US commercial crude stocks:** 414.4 mb. Change on the previous report: +4.7 mb. — EIA Weekly Petroleum Status Report, as of 2026-11-06");
+
+    const risk = generateDeskLeadResponse("Deep dive on Hormuz and Red Sea Houthi risk", feed, [], data).reply;
+    expect(risk).toContain("0.74× its 7-day average");
+    expect(risk).toContain("I hold no feed of outages, attacks, sanctions or OPEC decisions");
+
+    const cracks = generateDeskLeadResponse("Check CFTC COT managed money positioning and diesel cracks", feed, [], data).reply;
+    expect(cracks).toContain("- **3-2-1 crack against WTI:** $36.86/bbl");
+    expect(cracks).toContain("worked from EIA daily spot prices for 2026-11-11");
+
+    const context = buildDeskContextBlock(feed, data);
+    expect(context).toContain("US commercial crude stocks: 414.4 mb.");
+    expect(context).toContain("do not describe any such event as current");
+
+    const empty = generateDeskLeadResponse("Latest EIA crude inventories and Cushing draw", feed, []).reply;
+    expect(empty).toContain("could not be read just now, so I quote none");
+    expect(empty).not.toContain(" mb ");
+    expect(buildDeskContextBlock(feed)).toContain("Not loaded. Say nothing about this section");
   });
 
-  it("surfaces an ALERT line when a price moves >= 2% or a confirmed physical outage is active", async () => {
+  it("surfaces an ALERT line when a price moves >= 2% and never raises a stored event as an alert", async () => {
     resetPublishedPricesCache();
     const feed = await getPublishedPrices();
     const spiked = feed.prices.map((p) =>

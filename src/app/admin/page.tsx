@@ -23,11 +23,6 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Edit `price`, `daily_change`, `weekly_change`, `monthly_change`, `trend`, and set `last_updated` (ISO timestamp) for each asset. Set `data_type` honestly: manual / delayed / indicative / API placeholder.",
   },
   {
-    title: "Update signals & bottom line",
-    file: "data/dashboard-signals.json",
-    what: "The dashboard, home page and OPEC page no longer read this file: their cards are built from public feeds each time the site is built. The file is now only quoted by the Desk Bot as a dated July record. Figures added here will not appear on the dashboard.",
-  },
-  {
     title: "Update the watchlist",
     file: "data/investment-watchlist.json",
     what: "Edit or add company objects. Required fields include thesis, catalyst, risk, source and last_updated. Every entry is displayed with a 'Watchlist, not recommendation' label — write accordingly.",
@@ -38,19 +33,14 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Add or update a company object with production, reserves, financial health, valuation, management, catalyst, risk, `latest_update` and `sources`.",
   },
   {
-    title: "Update the Balance Engine",
+    title: "Balance Engine file (no longer shown)",
     file: "data/balance-engine.json",
-    what: "Refresh `supply`, `demand` and `stocks` rows (value, change, trend, impact, note, last_updated) and recompute `balance_summary` (total_supply, total_demand, implied_balance = supply − demand). Impact flags read from the price's perspective: less supply / more demand = bullish.",
+    what: "The Balance Engine page and the Desk Bot no longer read this file: both take EIA figures each time the site is built. Only the scheduled EIA price job still writes its two US stock rows here. Figures added by hand will not appear on the site.",
   },
   {
     title: "Update the Flow Map",
     file: "data/flow-map.json",
     what: "Refresh `loadings`, `discharges` and `signals` rows, rewrite `flow_summary`, and maintain `anomalies`: each needs severity (info/watch/alert), sigma vs 30-day baseline, observed vs baseline values, a plain-English explanation, contributing factors (direction up/down/flat) and a 'so what' implication. Remove anomalies that have normalised.",
-  },
-  {
-    title: "Curve record for the Desk Bot",
-    file: "data/curve-monitor.json",
-    what: "The Curve, Spreads & Cracks page no longer reads this file: it takes its prices from EIA each time it is built. The file is now only quoted by the Desk Bot as a dated desk record. Do not add figures here expecting them to appear on the curve page.",
   },
   {
     title: "Update News-to-Barrels events",
