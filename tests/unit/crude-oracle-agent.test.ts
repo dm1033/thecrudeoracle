@@ -75,7 +75,7 @@ describe("CrudeOracle Desk Bot — master system prompt and reply engine", () =>
     expect(classifyQueryTopic("Give me today's crude & gas market snapshot and key drivers.")).toBe("snapshot");
   });
 
-  it("produces the standard 7-part response structure with cited sources, timestamps, bull/bear cases, invalidation, and disclaimer", async () => {
+  it("produces the same structure the master prompt asks a model for, with sources, dates and the disclaimer", async () => {
     resetPublishedPricesCache();
     const feed = await getPublishedPrices();
     const res = generateDeskLeadResponse(
@@ -88,14 +88,12 @@ describe("CrudeOracle Desk Bot — master system prompt and reply engine", () =>
     expect(res.reply).toContain("| Asset | Price | Δ (d/d · w/w) | As-of | Source & Type |");
     expect(res.reply).toContain("Brent Crude (BRN)");
     expect(res.reply).toContain("WTI Crude (WTI)");
-    expect(res.reply).toContain("### 2. What Moved / Drivers");
-    expect(res.reply).toContain("### 3. Desk View");
-    expect(res.reply).toContain("Bull Case");
-    expect(res.reply).toContain("Bear Case");
-    expect(res.reply).toContain("Explicit Invalidation");
-    expect(res.reply).toContain("### 4. Watchpoints & Invalidation");
-    expect(res.reply).toContain("### 5. Investment Implications");
-    expect(res.reply).toContain("### 6. Sources & Freshness");
+    expect(res.reply).toContain("### 2. What the data shows");
+    expect(res.reply).toContain("### 3. Conditions to watch");
+    expect(res.reply).toContain("A tighter reading would look like");
+    expect(res.reply).toContain("A looser reading would look like");
+    expect(res.reply).toContain("### 4. Not available");
+    expect(res.reply).toContain("### 5. Sources and dates");
     expect(res.reply).toContain(CRUDE_ORACLE_MANDATORY_DISCLAIMER);
     expect(res.reply).toContain(CRUDE_ORACLE_INTERACTIVE_FOOTER);
   });
@@ -135,6 +133,16 @@ describe("CrudeOracle Desk Bot — master system prompt and reply engine", () =>
       "512 rigs",
       "93.4%",
       "The tape is firm",
+      "Bull Case",
+      "Bear Case",
+      "Desk View",
+      "Investment Implications",
+      "equity impacts",
+      "ALERT",
+      "surged",
+      "dropped",
+      "Session focus",
+      "thesis",
     ];
     for (const query of queries) {
       const { reply } = generateDeskLeadResponse(query, feed, []);
@@ -205,7 +213,8 @@ describe("CrudeOracle Desk Bot — master system prompt and reply engine", () =>
 
     const risk = generateDeskLeadResponse("Deep dive on Hormuz and Red Sea Houthi risk", feed, [], data).reply;
     expect(risk).toContain("0.74× its 7-day average");
-    expect(risk).toContain("I hold no feed of outages, attacks, sanctions or OPEC decisions");
+    expect(risk).toContain("I hold no feed of outages, attacks, sanctions, tanker movements or OPEC decisions");
+    expect(risk).toContain("It does not measure risk.");
 
     const cracks = generateDeskLeadResponse("Check CFTC COT managed money positioning and diesel cracks", feed, [], data).reply;
     expect(cracks).toContain("- **3-2-1 crack against WTI:** $36.86/bbl");
@@ -221,15 +230,16 @@ describe("CrudeOracle Desk Bot — master system prompt and reply engine", () =>
     expect(buildDeskContextBlock(feed)).toContain("Not loaded. Say nothing about this section");
   });
 
-  it("surfaces an ALERT line when a price moves >= 2% and never raises a stored event as an alert", async () => {
+  it("states a daily move of 2% or more plainly, without alarm words", async () => {
     resetPublishedPricesCache();
     const feed = await getPublishedPrices();
     const spiked = feed.prices.map((p) =>
       p.ticker === "BRN" ? { ...p, daily_change: 3.45, data_type: "delayed", last_updated: new Date().toISOString() } : p
     );
     const snap = buildMarketSnapshotTable(spiked);
-    expect(snap.alertLine).toContain("**ALERT:**");
-    expect(snap.alertLine).toContain("+3.45% d/d");
+    expect(snap.alertLine).toContain("**Larger daily move:**");
+    expect(snap.alertLine).toContain("changed **+3.45% on the day**");
+    expect(snap.alertLine).not.toMatch(/ALERT|surged|dropped|plunged|soared/);
   });
 
   it("tracks session focus across multi-turn conversation history", () => {

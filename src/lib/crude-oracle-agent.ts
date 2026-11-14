@@ -4,10 +4,9 @@
  */
 
 import { getMarketSnapshot } from "@/lib/market-snapshot";
-import { watchlistCompanies, companyIntel, type MarketPrice } from "@/lib/data";
+import type { MarketPrice } from "@/lib/data";
 import type { CurveFeed } from "@/lib/curve";
 import type { DashboardCards, DataCard } from "@/lib/dashboard-cards";
-import { isSampleInstrument } from "@/lib/sample-marks";
 import type { PublishedPrices } from "@/lib/published-prices";
 import { LICENSED_DATA_REQUIRED, isPlaceholderPrice, priceFigureShown, priceFigureTooOld } from "@/lib/price-stamp";
 
@@ -177,8 +176,8 @@ export function buildMarketSnapshotTable(prices: MarketPrice[]): {
   const bigMover = rows.find((p) => priceFigureShown(p) && Math.abs(p.daily_change) >= 2.0);
   let alertLine: string | null = null;
   if (bigMover) {
-    const dir = bigMover.daily_change > 0 ? "surged" : "dropped";
-    alertLine = `> **ALERT:** **${bigMover.asset} (${bigMover.ticker})** ${dir} **${bigMover.daily_change > 0 ? "+" : ""}${bigMover.daily_change.toFixed(2)}% d/d** to **$${bigMover.price.toFixed(2)}** (as of ${formatAsOf(bigMover.last_updated)}, ${bigMover.source}).`;
+    // A plain statement of the move. No adjectives: the reader can see the size.
+    alertLine = `> **Larger daily move:** ${bigMover.asset} (${bigMover.ticker}) changed **${bigMover.daily_change > 0 ? "+" : ""}${bigMover.daily_change.toFixed(2)}% on the day** to **$${bigMover.price.toFixed(2)}** (as of ${formatAsOf(bigMover.last_updated)}, ${bigMover.source}).`;
   }
 
   const lines = [
@@ -289,19 +288,19 @@ function priceBullet(p: MarketPrice | undefined): string[] {
   ];
 }
 
-const DESK_VIEW: string[] = [
-  `### 3. Desk View`,
-  `- **Bull Case (conditions, not a forecast):** Weekly EIA prints keep showing commercial crude and Cushing draws, prompt timespreads stay backwardated, and a confirmed supply or refining disruption lasts longer than first reported.`,
-  `- **Bear Case (conditions, not a forecast):** Stocks start building, prompt timespreads weaken toward contango, producers add supply faster than demand absorbs it, and speculative length is cut.`,
-  `- **Explicit Invalidation:** Either case is dropped when the next primary print contradicts it — check the latest EIA weekly stocks and the CFTC positioning print against the dates shown above before relying on any line here. I give no price target and no conviction level.`,
-];
-
-const WATCHPOINTS: string[] = [
-  `### 4. Watchpoints & Invalidation`,
+const CONDITIONS: string[] = [
+  `### 3. Conditions to watch`,
+  `- **A tighter reading would look like:** US commercial crude and Cushing stocks falling in the next EIA weekly report, and the crack spreads widening. These are conditions to check, not a forecast.`,
+  `- **A looser reading would look like:** stocks rising in the next EIA weekly report, the crack spreads narrowing, and managed-money net length in WTI falling in the next CFTC report. Again, conditions to check, not a forecast.`,
   `- **EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET):** commercial crude, Cushing, gasoline and distillate stock changes.`,
   `- **CFTC Commitments of Traders (Fridays 15:30 ET):** managed-money long, short and net in NYMEX WTI.`,
   `- **EIA Short-Term Energy Outlook (monthly):** world production, consumption and OPEC spare capacity estimates, which EIA revises.`,
+  `- I give no forecast, no price target and no view on what anyone should do.`,
 ];
+
+const NOT_AVAILABLE_ALWAYS = `- **Licensed markets:** futures curves, exchange settlement prices, positioning in Brent and products, and the Dubai, TTF, NBP and Asian LNG markers need a licence and are not shown.`;
+const NOT_AVAILABLE_EVENTS = `- **Events:** I hold no feed of outages, attacks, sanctions, tanker movements or OPEC decisions, so I describe none as current. Check official and operator sources.`;
+const NOT_AVAILABLE_COMPANIES = `- **Companies:** I do not suggest companies or shares and I do not estimate how any company is affected. The Watchlist page shows what the site publishes.`;
 
 export function generateDeskLeadResponse(
   query: string,
@@ -324,9 +323,9 @@ export function generateDeskLeadResponse(
       : [];
 
   const freshnessBanner = feed.eia
-    ? `Live EIA Open Data spot overlay active (latest print **${formatAsOf(feed.eiaUpdated ?? feed.manualUpdated)}**; EIA daily spot series publish with a 1–3 business-day lag).`
-    : `No live EIA API key configured in this environment — last known published desk marks shown as of **${formatAsOf(feed.manualUpdated)}** (delayed/manual).`;
-  const recordsBanner = `Every figure above is read from a public feed when you ask, and carries that feed's own date and source. A feed that did not load is left out and no stored figure takes its place. I hold no event, outage or tanker feed, so I describe none.`;
+    ? `EIA daily spot prices, latest date **${formatAsOf(feed.eiaUpdated ?? feed.manualUpdated)}**. EIA publishes them a few days after the trading day.`
+    : `EIA prices could not be read just now. The table shows the last stored prices, dated **${formatAsOf(feed.manualUpdated)}**; anything older than 30 days is withheld.`;
+  const recordsBanner = `Every figure above is read from a public feed when you ask, and carries that feed's own date and source. A feed that did not load is left out and no stored figure takes its place. All of it is delayed.`;
   const { supply, demand, context } = data.cards;
   const stockCards = only(supply, ["us-crude", "cushing"]);
   const newsCards = only(context, ["supply-news"]);
@@ -347,23 +346,24 @@ export function generateDeskLeadResponse(
     quickOptions: CRUDE_ORACLE_QUICK_PROMPTS,
   });
 
+  const sources = [`### 5. Sources and dates`, `- **Prices:** ${freshnessBanner}`, `- **Other figures:** ${recordsBanner}`];
+
   if (topic === "advice_refusal") {
     return payload([
-      `### Desk Policy — Analytical Framework Only (No Personalised Advice)`,
-      `I don’t give personalised investment advice, portfolio allocations, or buy/sell/hold instructions. You need a regulated financial adviser for capital allocation decisions. What I **will** give you is the framework, the published figures with their dates, and the conditions to test your own thesis against.`,
+      `### I can't give personal advice`,
+      `I don’t give personalised investment advice, portfolio allocations, or buy, sell or hold instructions. For decisions about your own money, speak to a regulated financial adviser. What I can give you is the published figures with their sources and dates.`,
       `### 1. Market Snapshot`,
       ...(alertLine ? [alertLine, ""] : []),
       tableMarkdown,
-      `### 2. What Moved / Drivers`,
+      `### 2. What the data shows`,
       ...spreadBullet,
       ...cardBullets(stockCards),
       ...cftcWtiBullet(),
-      ...DESK_VIEW.map((line) => (line === `### 3. Desk View` ? `### 3. Desk View (Framework & Scenarios)` : line)),
-      ...WATCHPOINTS,
-      `- **Questions for your own research:** What is your time horizon, and are you analysing flat price, timespreads, or energy equities?`,
-      `### 5. Sources & Freshness`,
-      `- ${freshnessBanner}`,
-      `- ${recordsBanner}`,
+      ...CONDITIONS,
+      `### 4. Not available`,
+      NOT_AVAILABLE_COMPANIES,
+      NOT_AVAILABLE_ALWAYS,
+      ...sources,
       ...footer,
     ]);
   }
@@ -371,45 +371,39 @@ export function generateDeskLeadResponse(
   const sections: string[] = [];
 
   // 1. Market Snapshot
-  sections.push(
-    `### 1. Market Snapshot`,
-    `Session focus: **${focus}**.`,
-    ...(alertLine ? [alertLine] : []),
-    tableMarkdown
-  );
+  sections.push(`### 1. Market Snapshot`, ...(alertLine ? [alertLine] : []), tableMarkdown);
 
-  // 2. What Moved / Drivers
+  // 2. What the data shows, and 4. what is not available, by topic
+  const notAvailable: string[] = [];
   if (topic === "inventories") {
     sections.push(
-      `### 2. What Moved / Drivers (Inventories & Balance)`,
+      `### 2. What the data shows (stocks and world balance)`,
       ...cardBullets(supply),
-      ...cardBullets(only(demand, ["steo-patc_world", "steo-patc_oecd", "steo-patc_non_oecd"])),
-      ...(supply.length ? [] : [`- **Not loaded:** the EIA stock and balance figures could not be read just now, so I quote none.`])
+      ...cardBullets(only(demand, ["steo-patc_world", "steo-patc_oecd", "steo-patc_non_oecd"]))
     );
+    if (!supply.length) notAvailable.push(`- **Not loaded:** the EIA stock and balance figures could not be read just now, so I quote none.`);
   } else if (topic === "geopolitics") {
     sections.push(
-      `### 2. What Moved / Drivers (Geopolitics & Supply Risk)`,
+      `### 2. What the data shows (supply and news coverage)`,
       ...cardBullets(newsCards),
       ...cardBullets(only(supply, ["steo-cops_opec", "steo-copr_opec"])),
-      `- **Not on file:** I hold no feed of outages, attacks, sanctions or OPEC decisions, so I report none as current. The news figure above counts coverage; it does not measure risk. Check official and operator sources for events.`
+      `- The news figure counts how much is being written. It does not measure risk.`
     );
+    notAvailable.push(NOT_AVAILABLE_EVENTS);
   } else if (topic === "positioning") {
     sections.push(
-      `### 2. What Moved / Drivers (Curve, Cracks & Positioning)`,
+      `### 2. What the data shows (spreads, cracks and positioning)`,
       ...cftcWtiBullet(),
       ...spreadBullets(data.curve),
-      ...(data.curve?.spreads.length ? [] : cardBullets(only(demand, ["crack-321"]))),
-      `- **Not on file:** positioning in Brent and products, and any futures curve. Those need licensed exchange data, so I quote none.`
+      ...(data.curve?.spreads.length ? [] : cardBullets(only(demand, ["crack-321"])))
     );
   } else if (topic === "gas_lng") {
-    sections.push(
-      `### 2. What Moved / Drivers (Gas & LNG)`,
-      ...priceBullet(hh),
-      `- **Not on file:** I hold no licensed JKM or TTF price and no LNG feedgas series, so I quote none. Check the exchange or the IEA Gas Market Report directly.`
-    );
+    sections.push(`### 2. What the data shows (gas)`, ...priceBullet(hh));
+    if (!priceBullet(hh).length) notAvailable.push(`- **Not loaded:** the Henry Hub price could not be read just now, so I quote none.`);
+    notAvailable.push(`- **LNG:** I hold no LNG price, cargo or feedgas series, so I quote none.`);
   } else {
     sections.push(
-      `### 2. What Moved / Drivers`,
+      `### 2. What the data shows`,
       ...priceBullet(brent),
       ...priceBullet(wti),
       ...spreadBullet,
@@ -418,49 +412,23 @@ export function generateDeskLeadResponse(
       ...cardBullets(only(supply, ["steo-cops_opec"])),
       ...cardBullets(newsCards)
     );
+    if (topic === "equities") notAvailable.push(NOT_AVAILABLE_COMPANIES);
+    if (topic === "scenarios") {
+      notAvailable.push(`- **Scenarios:** I do not estimate what prices would do if an event happened. The conditions above are the published figures to watch.`);
+    }
+    notAvailable.push(NOT_AVAILABLE_EVENTS);
   }
 
-  // 3–4. Desk View and Watchpoints
-  sections.push(...DESK_VIEW, ...WATCHPOINTS);
+  // 3. Conditions to watch
+  sections.push(...CONDITIONS);
 
-  // 5. Investment Implications
-  if (topic === "equities" || topic === "scenarios") {
-    // Sample and placeholder names are withheld here as they are on the watchlist pages.
-    const watchSample = watchlistCompanies.filter((w) => !isSampleInstrument([w.ticker, w.company, w.investment_theme])).slice(0, 4);
-    const intelSample = companyIntel.filter((c) => !isSampleInstrument([c.ticker, c.company, c.catalyst])).slice(0, 2);
-    sections.push(
-      `### 5. Investment Implications (Scenario-Framed — Monitored Names, Not Recommendations)`,
-      ...(watchSample.length
-        ? [
-            `- **Names on the watchlist:** ${watchSample.map((w) => `${w.company} (${w.ticker}, ${w.exchange}) — theme: _${w.investment_theme}_; risk: _${w.risk}_`).join(" | ")} (as of ${watchSample[0].last_updated}, ${watchSample[0].source}, ${watchSample[0].data_type}).`,
-          ]
-        : []),
-      ...(intelSample.length
-        ? [
-            `- **Company notes on file:** ${intelSample.map((c) => `**${c.company} (${c.ticker})** — catalyst: _${c.catalyst}_; key risk: _${c.risk}_ (as of ${c.last_updated})`).join(" | ")}.`,
-          ]
-        : []),
-      ...(watchSample.length || intelSample.length
-        ? []
-        : [`- **No names on file:** no company is published on the watchlist at present, so I list none.`]),
-      `- **How to read these:** They are monitored names with a stated theme and risk, not buy or sell ideas. I quote no price sensitivity or break-even for any company.`
-    );
-  } else {
-    sections.push(
-      `### 5. Investment Implications (Scenario Framework)`,
-      `- **Structure vs flat price:** A prompt spread backed by drawing stocks is better supported than one that is not. Compare the spreads on the Curve, Spreads & Cracks page with the stock prints above, by date.`,
-      `- **Equity read-through:** See the Watchlist and Company Intel pages for monitored names; ask me for "equity impacts" to list them here.`
-    );
-  }
+  // 4. Not available
+  sections.push(`### 4. Not available`, ...notAvailable, NOT_AVAILABLE_ALWAYS);
 
-  // 6. Sources & Freshness
-  sections.push(
-    `### 6. Sources & Freshness`,
-    `- **Prices:** ${freshnessBanner}`,
-    `- **Other figures:** ${recordsBanner}`
-  );
+  // 5. Sources and dates
+  sections.push(...sources);
 
-  // 7. Mandatory Disclaimer & Interactive Footer
+  // Disclaimer and closing line
   sections.push(...footer);
 
   return payload(sections);
