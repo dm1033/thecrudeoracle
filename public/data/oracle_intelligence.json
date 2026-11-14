@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-14T10:02:09Z",
+  "generated_utc": "2026-11-14T10:35:56Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-14T10:02:09Z",
+      "fetched_utc": "2026-11-14T10:35:56Z",
       "as_of": "2026-11-03",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-14T10:02:09Z",
+      "fetched_utc": "2026-11-14T10:35:56Z",
       "as_of": "2026-11-12",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,7 +68,7 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-14T10:02:09Z",
+      "fetched_utc": "2026-11-14T10:35:56Z",
       "as_of": "2026-11-12T07:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
@@ -338,14 +338,7 @@
             "seen_utc": "2026-11-12T03:45:00Z"
           }
         ],
-        "terms": [
-          {
-            "term": "Strait of Hormuz",
-            "share_last_24h_pct": 0.3087,
-            "share_7d_average_pct": 0.4374,
-            "share_last_24h_vs_7d_average": 0.71
-          }
-        ]
+        "terms": []
       }
     },
     "gas_storage": {
