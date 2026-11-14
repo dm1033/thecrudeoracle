@@ -22,6 +22,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/tools/public-data-monitor", priority: 0.8, changeFrequency: "daily" },
   { path: "/tools/what-changed", priority: 0.8, changeFrequency: "daily" },
   { path: "/tools/supply-news", priority: 0.7, changeFrequency: "daily" },
+  { path: "/tools/event-study", priority: 0.7, changeFrequency: "weekly" },
   { path: "/portfolio", priority: 0.9, changeFrequency: "daily" },
   { path: "/portfolio/dashboard", priority: 0.8, changeFrequency: "daily" },
   { path: "/paper-book", priority: 0.9, changeFrequency: "daily" },

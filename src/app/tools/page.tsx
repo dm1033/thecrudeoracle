@@ -104,12 +104,12 @@ const MODULES = [
   },
   {
     id: 10,
-    title: "Scenario & Backtest Lab",
-    approach: "Risk managers / systematic researchers",
+    title: "Stock Report Event Study",
+    approach: "Researchers / anyone asking what happened last time",
     description:
-      "Monte Carlo scenarios for supply disruption, demand shocks and OPEC decisions, plus event studies: how did spreads, cracks and positioning actually behave around past inventory surprises, meetings and hurricanes?",
-    href: "/tools",
-    status: "in development",
+      "What WTI and the Brent–WTI spread did in the days after the largest weekly builds and draws in US crude stocks, from about five years of EIA data, with the sample size on every line and the weeks listed. A description of the past, not a forecast. The site runs no simulations or scenarios.",
+    href: "/tools/event-study",
+    status: "live",
   },
 ] as const;
 
