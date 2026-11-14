@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-14T10:35:56Z",
+  "generated_utc": "2026-11-14T13:30:39Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-14T10:35:56Z",
+      "fetched_utc": "2026-11-14T13:30:39Z",
       "as_of": "2026-11-03",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-14T10:35:56Z",
+      "fetched_utc": "2026-11-14T13:30:39Z",
       "as_of": "2026-11-12",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,21 +68,17 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-14T10:35:56Z",
+      "fetched_utc": "2026-11-14T13:30:39Z",
       "as_of": "2026-11-12T07:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
         "share_last_24h_pct": 0.3323,
-        "share_7d_average_pct": 0.4508,
-        "share_last_24h_vs_7d_average": 0.74,
-        "timeline_points": 47,
+        "share_7d_average_pct": 0.4579,
+        "share_last_24h_vs_7d_average": 0.73,
+        "timeline_points": 46,
         "timeline": [
-          {
-            "t": "2026-11-07T11:00:00Z",
-            "share_pct": 0.1255
-          },
           {
             "t": "2026-11-07T16:00:00Z",
             "share_pct": 0.1484
@@ -276,69 +272,25 @@
           "Suez Canal",
           "Libya oilfield"
         ],
-        "headlines": [
+        "headlines": [],
+        "terms": [
           {
-            "title": "Russia Oil Revenues Hit Five - Month High on Crude Rally , IEA Says",
-            "domain": "gcaptain.com",
-            "url": "https://gcaptain.com/russia-oil-revenues-hit-five-month-high-on-crude-rally-iea-says/",
-            "seen_utc": "2026-11-13T18:00:00Z"
+            "term": "Strait of Hormuz",
+            "as_of": "2026-11-12T07:00:00Z",
+            "share_last_24h_pct": 0.3087,
+            "share_7d_average_pct": 0.4442,
+            "share_last_24h_vs_7d_average": 0.69,
+            "fetched_utc": "2026-11-14T13:34:55Z"
           },
           {
-            "title": "Nigeria 10 - Month Oil Output Reaches 502m Barrels , Still Below 2026 Budget Benchmark",
-            "domain": "leadership.ng",
-            "url": "https://leadership.ng/nigerias-10-month-oil-output-reaches-502m-barrels-still-below-2026-budget-benchmark/",
-            "seen_utc": "2026-11-12T07:00:00Z"
-          },
-          {
-            "title": "Strait of Hormuz Latest : Iran Vows Waterway Will Never Return to Pre - War Status as More Tankers Hit Mines",
-            "domain": "ibtimes.com.au",
-            "url": "https://www.ibtimes.com.au/iran-strait-hormuz-prewar-status-shipping-concerns-1878465",
-            "seen_utc": "2026-11-12T07:00:00Z"
-          },
-          {
-            "title": "Strait of Hormuz Crisis : Iran Rejects Pre - War Status Amid US Peace Talks Stalemate",
-            "domain": "openthemagazine.com",
-            "url": "https://openthemagazine.com/world/strait-of-hormuz-crisis-iran-says-key-oil-route-will-never-return-to-pre-war-status-as-us-peace-talks-stall",
-            "seen_utc": "2026-11-12T07:00:00Z"
-          },
-          {
-            "title": "Cheonghae Unit would answer to on - site commander in multinational operations near Hormuz",
-            "domain": "hani.co.kr",
-            "url": "https://www.hani.co.kr/arti/english_edition/e_national/1287006.html",
-            "seen_utc": "2026-11-12T06:45:00Z"
-          },
-          {
-            "title": "Oil slips as hopes of Iran peace efforts weigh on markets",
-            "domain": "tradearabia.com",
-            "url": "https://tradearabia.com:443/News/489620/Oil-slips-as-hopes-of-Iran-peace-efforts-weigh-on-markets",
-            "seen_utc": "2026-11-12T06:45:00Z"
-          },
-          {
-            "title": "Oil slicks seen from space : the devastating impact of boat strikes on fragile Gulf ecosystems",
-            "domain": "peakoil.com",
-            "url": "https://peakoil.com/enviroment/oil-slicks-seen-from-space-the-devastating-impact-of-boat-strikes-on-fragile-gulf-ecosystems",
-            "seen_utc": "2026-11-12T06:45:00Z"
-          },
-          {
-            "title": "UAE Business : Oil slips as hopes of Iran peace efforts weigh on markets",
-            "domain": "gdnonline.com",
-            "url": "https://www.gdnonline.com:443/Details/1412618",
-            "seen_utc": "2026-11-12T06:45:00Z"
-          },
-          {
-            "title": "Gas prices fall below $4 as more oil flows , but experts warn relief may not last",
-            "domain": "wxyz.com",
-            "url": "https://www.wxyz.com/science-and-tech/energy/gas-prices-fall-below-4-as-more-oil-flows-but-experts-warn-relief-may-not-last",
-            "seen_utc": "2026-11-12T03:45:00Z"
-          },
-          {
-            "title": "Oil slicks seen from space : the devastating impact of boat strikes on fragile Gulf ecosystems",
-            "domain": "theguardian.com",
-            "url": "https://www.theguardian.com/world/2026/nov/12/oil-slicks-seen-from-space-the-devastating-impact-of-boat-strikes-on-fragile-gulf-ecosystems",
-            "seen_utc": "2026-11-12T03:45:00Z"
+            "term": "Bab el-Mandeb",
+            "as_of": "2026-11-12T07:00:00Z",
+            "share_last_24h_pct": 0.0175,
+            "share_7d_average_pct": 0.0186,
+            "share_last_24h_vs_7d_average": 0.94,
+            "fetched_utc": "2026-11-14T13:34:55Z"
           }
-        ],
-        "terms": []
+        ]
       }
     },
     "gas_storage": {
