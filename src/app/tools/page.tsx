@@ -7,7 +7,7 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 
 export const metadata: Metadata = pageMeta(
   "Tools by trading approach",
-  "The Crude Oracle trader toolkit: purpose-built oil market tools matched to your approach — fundamental balance, curve and spreads, positioning and risk. Module 1: the Global Balance Engine.",
+  "Free oil market tools built on public data: world balance, spreads and cracks, WTI positioning, what changed, supply-route news coverage and a stock report event study. Sourced and dated. Not financial advice.",
   "/tools"
 );
 
@@ -94,15 +94,6 @@ const MODULES = [
     status: "live",
   },
   {
-    id: 9,
-    title: "Nowcast Engine",
-    approach: "Fundamental traders who can't wait for the EIA",
-    description:
-      "Inventory and demand nowcasts ahead of official EIA/IEA/OPEC releases, plus an IEA-vs-OPEC disagreement tracker — with the nowcast error history published honestly.",
-    href: "/tools",
-    status: "in development",
-  },
-  {
     id: 10,
     title: "Stock Report Event Study",
     approach: "Researchers / anyone asking what happened last time",
@@ -119,7 +110,7 @@ export default function ToolsPage() {
       <PageHeader
         eyebrow="Trader Toolkit"
         title="Tools, matched to your trading approach"
-        intro="An oil market intelligence toolkit that converts physical flows, inventories, positioning and news into explainable market scenarios — decision intelligence, not another wall of dashboards. Pick the module that matches how you take risk."
+        intro="Oil market tools built on public data from EIA, the CFTC, the Federal Reserve and the GDELT Project. Each one shows published figures with their source and date. None gives a forecast or a trading signal. Tools marked July archive are not updated."
       />
       <div className="container-site space-y-10 py-10">
         <div className="grid gap-4 md:grid-cols-2">
@@ -170,7 +161,7 @@ export default function ToolsPage() {
 
         <SubscribeCTA
           heading="The toolkit is 100% free"
-          body="Every module — current and future — is free, alongside the dashboard, daily briefings, watchlist and research archive."
+          body="Every tool is free, alongside the dashboard, the morning note and the watchlist."
         />
         <DisclaimerBlock />
       </div>
