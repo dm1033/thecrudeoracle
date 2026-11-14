@@ -1,7 +1,7 @@
 {
   "source": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "license": "CC-BY-4.0",
-  "updated_at_utc": "2026-11-11T23:40:39Z",
+  "updated_at_utc": "2026-11-14T01:03:32Z",
   "eia_us_crude_stocks": {
     "updated_at_utc": null,
     "rows": [],
@@ -10,7 +10,7 @@
     "origin": "U.S. Energy Information Administration, API v2"
   },
   "cftc_wti_managed_money": {
-    "updated_at_utc": "2026-11-11T23:40:39Z",
+    "updated_at_utc": "2026-11-14T01:03:32Z",
     "rows": [
       {
         "report_date": "2026-11-03",
