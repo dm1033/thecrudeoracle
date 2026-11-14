@@ -30,7 +30,7 @@ export function loadJson<T = unknown>(name: string): T {
  */
 export const ALLOWED_DATA_TYPES = ["live", "delayed", "manual", "API placeholder", "indicative"] as const;
 
-/** Signal type used across dashboard-signals.json (src/lib/data.ts `Signal`). */
+/** Signal labels still used by the archived tool files. */
 export const ALLOWED_SIGNALS = ["bullish", "bearish", "neutral", "risk"] as const;
 
 /** BalanceTable trend glyphs (src/components/BalanceTable.tsx TREND_GLYPH). */

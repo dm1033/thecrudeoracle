@@ -353,7 +353,6 @@ async function makeScratchDataDir(label) {
   const dir = join(tmpdir(), `eia-verify-${label}-${process.pid}-${Date.now()}`);
   await mkdir(dir, { recursive: true });
   await cp(join(PROJECT_ROOT, "data", "market-prices.json"), join(dir, "market-prices.json"));
-  await cp(join(PROJECT_ROOT, "data", "balance-engine.json"), join(dir, "balance-engine.json"));
   return dir;
 }
 
@@ -376,7 +375,6 @@ function runUpdateScript({ dataDir, fixtureDir, extraArgs = [] }) {
   check("update-eia-data.mjs exits 0 against a full valid fixture set", res1.status === 0, `status=${res1.status}\n${res1.stderr}`);
 
   const afterFirst = await readFile(join(dataDir, "market-prices.json"), "utf8");
-  const afterFirstBalance = await readFile(join(dataDir, "balance-engine.json"), "utf8");
   check("market-prices.json changed after a successful run", afterFirst !== before);
 
   const parsedPrices = JSON.parse(afterFirst);
@@ -395,24 +393,11 @@ function runUpdateScript({ dataDir, fixtureDir, extraArgs = [] }) {
     parsedPrices.prices.find((p) => p.ticker === "HH").data_type === "manual"
   );
 
-  const parsedBalance = JSON.parse(afterFirstBalance);
-  const usRow = parsedBalance.stocks.find((r) => r.metric === "US commercial crude stocks");
-  const cushingRow = parsedBalance.stocks.find((r) => r.metric === "Cushing (WTI delivery hub)");
-  check("US commercial crude stocks row updated", usRow.data_type === "delayed", usRow.data_type);
-  check("Cushing stocks row updated", cushingRow.data_type === "delayed", cushingRow.data_type);
-  check(
-    "Cushing 'note' (hand-authored commentary) preserved verbatim",
-    cushingRow.note === "Approaching operational minimums; supportive for WTI timespreads."
-  );
-  check("OECD industry stocks row untouched (not an EIA target)", parsedBalance.stocks.find((r) => r.metric === "OECD industry stocks").data_type === "manual");
-
   // --- Idempotency: identical upstream data re-run produces byte-identical output ---
   const res2 = runUpdateScript({ dataDir, fixtureDir: freshDir });
   check("second run against identical fixtures also exits 0", res2.status === 0, `status=${res2.status}`);
   const afterSecond = await readFile(join(dataDir, "market-prices.json"), "utf8");
-  const afterSecondBalance = await readFile(join(dataDir, "balance-engine.json"), "utf8");
   check("idempotent re-run: market-prices.json is byte-identical", afterSecond === afterFirst);
-  check("idempotent re-run: balance-engine.json is byte-identical", afterSecondBalance === afterFirstBalance);
 
   await rm(dataDir, { recursive: true, force: true });
 
@@ -425,23 +410,18 @@ function runUpdateScript({ dataDir, fixtureDir, extraArgs = [] }) {
   check("--dry-run leaves market-prices.json untouched", dryAfter === dryBefore);
   await rm(dryDir, { recursive: true, force: true });
 
-  // --- Refuse-to-write: 1 of 4 series fails validation ---
+  // --- Refuse-to-write: 1 of 2 series fails validation ---
   const brokenDir = join(tmpdir(), `eia-verify-broken-fixtures-${process.pid}-${Date.now()}`);
   await mkdir(brokenDir, { recursive: true });
   await cp(join(freshDir, "RWTC.json"), join(brokenDir, "RWTC.json"));
-  await cp(join(freshDir, "RBRTE.json"), join(brokenDir, "RBRTE.json"));
-  await cp(join(freshDir, "WCESTUS1.json"), join(brokenDir, "WCESTUS1.json"));
-  await cp(join(FIXTURES_MALFORMED, "all_null_values.json"), join(brokenDir, "W_EPC0_SAX_YCUOK_MBBL.json"));
+  await cp(join(FIXTURES_MALFORMED, "all_null_values.json"), join(brokenDir, "RBRTE.json"));
 
   const brokenDataDir = await makeScratchDataDir("broken");
   const brokenBeforePrices = await readFile(join(brokenDataDir, "market-prices.json"), "utf8");
-  const brokenBeforeBalance = await readFile(join(brokenDataDir, "balance-engine.json"), "utf8");
   const brokenRes = runUpdateScript({ dataDir: brokenDataDir, fixtureDir: brokenDir });
-  check("update-eia-data.mjs exits non-zero when 1/4 series is unusable", brokenRes.status !== 0, `status=${brokenRes.status}`);
+  check("update-eia-data.mjs exits non-zero when 1/2 series is unusable", brokenRes.status !== 0, `status=${brokenRes.status}`);
   const brokenAfterPrices = await readFile(join(brokenDataDir, "market-prices.json"), "utf8");
-  const brokenAfterBalance = await readFile(join(brokenDataDir, "balance-engine.json"), "utf8");
   check("refused write leaves market-prices.json byte-identical (all-or-nothing)", brokenAfterPrices === brokenBeforePrices);
-  check("refused write leaves balance-engine.json byte-identical (all-or-nothing)", brokenAfterBalance === brokenBeforeBalance);
   await rm(brokenDataDir, { recursive: true, force: true });
   await rm(brokenDir, { recursive: true, force: true });
 

@@ -224,7 +224,7 @@ export const EIA_SERIES = {
     frequency: "weekly",
     description: "Weekly U.S. Ending Stocks excluding SPR of Crude Oil (thousand barrels)",
     expectedUnits: "MBBL",
-    outputUnit: "mb", // million barrels — matches data/balance-engine.json "unit": "mb"
+    outputUnit: "mb", // million barrels
     unitConversion: toMillionBarrels,
     sourcePageUrl: "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WCESTUS1&f=W",
     confidence: "high",

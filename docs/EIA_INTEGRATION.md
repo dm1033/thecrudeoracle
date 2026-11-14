@@ -19,13 +19,12 @@ a human runs it once against the live API and checks the output.
 |---|---|---|---|
 | `data/market-prices.json` | `prices[].price/.daily_change/.weekly_change/.monthly_change/.trend/.source/.source_url/.last_updated/.data_type` for `ticker: "WTI"` | `RWTC` — Cushing, OK WTI Spot Price FOB | Daily |
 | `data/market-prices.json` | same fields, for `ticker: "BRN"` | `RBRTE` — Europe Brent Spot Price FOB | Daily |
-| `data/balance-engine.json` | `stocks[].value/.change/.trend/.source/.source_url/.last_updated/.data_type` for `metric: "US commercial crude stocks"` | `WCESTUS1` — Weekly U.S. Ending Stocks excluding SPR of Crude Oil | Weekly |
-| `data/balance-engine.json` | same fields, for `metric: "Cushing (WTI delivery hub)"` | `W_EPC0_SAX_YCUOK_MBBL` — Weekly Cushing, OK Ending Stocks excluding SPR of Crude Oil | Weekly |
 
 Nothing else is touched — Dubai Crude, NBP, TTF, Henry Hub, the JKM/DXY
-placeholders, every other `balance-engine.json` supply/demand/stocks row,
-and hand-authored fields on the four rows above (`note`, `impact` on the
-stock rows) are all left exactly as they were. `data_type` is set to
+placeholders are all left exactly as they were. Weekly stocks (`WCESTUS1`,
+`W_EPC0_SAX_YCUOK_MBBL`) are no longer written to a file: since November
+2026 the site reads them from EIA when it is built, and
+`data/balance-engine.json` has been deleted. `data_type` is set to
 `"delayed"` — the one existing value (see `src/lib/data.ts`'s `DataType`
 union: `"live" | "delayed" | "manual" | "API placeholder"`) that's honest
 for an automated pull of a real but non-real-time public feed: WTI/Brent
@@ -107,8 +106,8 @@ EIA_API_KEY=test EIA_FIXTURE_DIR=scripts/fixtures/live-run \
 When `EIA_FIXTURE_DIR` is set, HTTP calls are served from local JSON files
 (`<dir>/<SERIES_ID>.json`) instead of `https://api.eia.gov` — the script
 prints a loud banner so the fixture-served run can never be mistaken for a
-real one. `EIA_DATA_DIR` overrides which directory's `market-prices.json` /
-`balance-engine.json` get updated, so a fixture run never has to touch the
+real one. `EIA_DATA_DIR` overrides which directory's `market-prices.json`
+gets updated, so a fixture run never has to touch the
 real `data/` directory. **Never combine a real `EIA_DATA_DIR` (the repo's
 own `data/`) with `EIA_FIXTURE_DIR`** — that would write synthetic test
 numbers into the live site's data files.
@@ -136,10 +135,10 @@ required):
   the `ClassifiedFetchError` comment in `src/lib/eia.ts`.) All exercised by
   monkey-patching `globalThis.fetch`, no real network call is made.
 - The full `update-eia-data.mjs` pipeline end-to-end, spawned as a real
-  child process against scratch copies of the actual `data/market-prices.json`
-  / `data/balance-engine.json`: a full valid run, a byte-identical
-  re-run (idempotency), `--dry-run` making no changes, a run with 1 of 4
-  series deliberately broken leaving both files byte-identical to before
+  child process against a scratch copy of the actual `data/market-prices.json`:
+  a full valid run, a byte-identical
+  re-run (idempotency), `--dry-run` making no changes, a run with 1 of 2
+  series deliberately broken leaving the file byte-identical to before
   (the all-or-nothing / refuse-to-write guarantee), and a missing-API-key
   run failing closed with an actionable error message.
 

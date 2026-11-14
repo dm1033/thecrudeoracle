@@ -33,11 +33,6 @@ const TASKS: { title: string; file: string; what: string }[] = [
     what: "Add or update a company object with production, reserves, financial health, valuation, management, catalyst, risk, `latest_update` and `sources`.",
   },
   {
-    title: "Balance Engine file (no longer shown)",
-    file: "data/balance-engine.json",
-    what: "The Balance Engine page and the Desk Bot no longer read this file: both take EIA figures each time the site is built. Only the scheduled EIA price job still writes its two US stock rows here. Figures added by hand will not appear on the site.",
-  },
-  {
     title: "Update the Flow Map",
     file: "data/flow-map.json",
     what: "Refresh `loadings`, `discharges` and `signals` rows, rewrite `flow_summary`, and maintain `anomalies`: each needs severity (info/watch/alert), sigma vs 30-day baseline, observed vs baseline values, a plain-English explanation, contributing factors (direction up/down/flat) and a 'so what' implication. Remove anomalies that have normalised.",

@@ -23,11 +23,8 @@ Rules:
 - `data_type` must be honest. Only mark `live` if the feed is properly licensed.
 - Keep `source` and `source_url` pointing at where you actually took the number.
 
-### 2. Signals + bottom line — `data/dashboard-signals.json`
-- Update any `supply`, `demand`, `risk` card whose story changed: `value`,
-  `detail`, `signal` (`bullish` | `bearish` | `neutral` | `risk`), `last_updated`.
-- Rewrite all six `bottom_line` fields daily (what moved / why / what's next /
-  biggest risk / biggest opportunity / watch tomorrow) and its `last_updated`.
+### 2. Dashboard cards — nothing to edit
+The dashboard cards, Global Balance Engine, Curve page, What Changed, Public Data Monitor and the Desk Bot are no longer edited by hand. They read public feeds (EIA, CFTC, FRED, GDELT) when the site is built and show nothing for a feed that fails. The old files `dashboard-signals.json`, `balance-engine.json` and `curve-monitor.json` have been deleted. News-to-Barrels, Flow Map and Hypothesis Builder are a July 2026 archive and are marked as such on the site.
 
 ### 3. Daily briefing — `data/daily-briefing.json`
 Add a **new object at the TOP of the `briefings` array** (copy yesterday's as a
@@ -37,18 +34,6 @@ inventory_signal, geopolitical_risk, equities_to_watch, uk_energy_note,
 one_chart, bottom_line` — plus `date`, `headline`, `sources`, `last_updated`,
 and `status: "published"` (use `"draft"` to keep it hidden).
 Older entries stay below and become the archive automatically.
-
-### 3b. Balance Engine — `data/balance-engine.json`
-The Global Balance Engine (`/tools/balance-engine`) reads this file.
-- Update any `supply` / `demand` / `stocks` row that changed: `value`,
-  `change` (e.g. "+0.1 m/m"), `trend` (`up`|`down`|`flat`|`mixed`),
-  `impact` (`bullish`|`bearish`|`neutral` — from the PRICE's perspective:
-  less supply or more demand = bullish), `note`, `last_updated`.
-- Recompute `balance_summary`: `total_supply`, `total_demand`,
-  `implied_balance` = supply − demand (negative = deficit/stock draws),
-  and rewrite `comment`.
-- Weekly rows (EIA stocks) update Wednesdays; monthly rows (OPEC MOMR,
-  IEA OMR) update on report days.
 
 ### 4. Charts — `data/chart-data.json`
 Append today's point to each series you track (`brent_wti_30d`,

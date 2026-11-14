@@ -2,9 +2,9 @@
 /**
  * scripts/update-eia-data.mjs
  * ----------------------------------------------------------------------------
- * Fetches the four EIA series this site cares about (WTI spot, Brent spot,
- * US commercial crude stocks, Cushing stocks) and updates the matching
- * records in data/market-prices.json and data/balance-engine.json.
+ * Fetches the two EIA daily spot series (WTI and Brent) and updates the
+ * matching records in data/market-prices.json. Weekly stocks are no longer
+ * written to a file: the site reads them from EIA when it is built.
  *
  * Usage:
  *   EIA_API_KEY=xxxxx node scripts/update-eia-data.mjs [--dry-run]
@@ -104,8 +104,6 @@ const {
   EIA_SERIES,
   getWtiSpot,
   getBrentSpot,
-  getUsCommercialCrudeStocks,
-  getCushingStocks,
   EiaConfigError,
 } = eia;
 
@@ -117,8 +115,6 @@ const {
 const BOUNDS = {
   price: { min: 0, max: 400 }, // USD/bbl
   pctChange: { min: -50, max: 50 }, // percent, daily/weekly/monthly
-  usStocksMb: { min: 100, max: 900 }, // million barrels
-  cushingStocksMb: { min: 1, max: 90 }, // million barrels
   maxObservationAgeDaysDaily: 10,
   maxObservationAgeDaysWeekly: 21,
 };
@@ -193,38 +189,6 @@ function applyDailyPriceUpdate(marketPrices, ticker, result, seriesDef) {
   );
 }
 
-function applyStockUpdate(balance, metricName, result, seriesDef, boundsKey) {
-  const row = balance.stocks.find((r) => r.metric === metricName);
-  if (!row) {
-    throw new ScriptValidationError(`metric '${metricName}' not found in balance-engine.json stocks — refusing to guess`);
-  }
-
-  assertObservationFresh(result.latest.date, BOUNDS.maxObservationAgeDaysWeekly, `${metricName} latest observation`);
-
-  const newValueMb = round(result.latest.value, 1);
-  assertInRange(newValueMb, BOUNDS[boundsKey], `${metricName} value`);
-
-  const changeAbs = result.changeAbs;
-  const changeStr = changeAbs === null ? row.change : `${changeAbs >= 0 ? "+" : ""}${changeAbs.toFixed(1)} w/w`;
-  const trend = changeAbs === null ? row.trend : changeAbs > 0 ? "up" : changeAbs < 0 ? "down" : "flat";
-
-  const before = { value: row.value, data_type: row.data_type };
-
-  row.value = newValueMb.toFixed(1);
-  row.change = changeStr;
-  row.trend = trend;
-  row.source = `EIA Weekly Petroleum Status Report — Open Data API (${seriesDef.seriesId})`;
-  row.source_url = seriesDef.sourcePageUrl;
-  row.last_updated = result.latest.date;
-  row.data_type = "delayed";
-  // `note` and `impact` are hand-authored editorial judgement — left untouched.
-
-  return (
-    `${row.metric}: value ${before.value} -> ${row.value} mb, ` +
-    `data_type ${before.data_type} -> ${row.data_type}, observed ${result.latest.date}`
-  );
-}
-
 // ----------------------------------------------------------------------------
 // Atomic write: temp file in the same directory, then rename (atomic on a
 // same-filesystem rename). A crash mid-write leaves only an orphan .tmp file,
@@ -257,20 +221,6 @@ const TARGETS = [
     kind: "daily",
     fetcher: () => getBrentSpot(),
     apply: (result, marketPrices) => applyDailyPriceUpdate(marketPrices, "BRN", result, EIA_SERIES.BRENT_SPOT),
-  },
-  {
-    name: `US commercial crude stocks (${EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS.seriesId})`,
-    kind: "weekly",
-    fetcher: () => getUsCommercialCrudeStocks(),
-    apply: (result, balance) =>
-      applyStockUpdate(balance, "US commercial crude stocks", result, EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS, "usStocksMb"),
-  },
-  {
-    name: `Cushing stocks (${EIA_SERIES.CUSHING_CRUDE_STOCKS.seriesId})`,
-    kind: "weekly",
-    fetcher: () => getCushingStocks(),
-    apply: (result, balance) =>
-      applyStockUpdate(balance, "Cushing (WTI delivery hub)", result, EIA_SERIES.CUSHING_CRUDE_STOCKS, "cushingStocksMb"),
   },
 ];
 
@@ -305,14 +255,12 @@ async function main() {
   }
 
   const marketPricesPath = join(DATA_DIR, "market-prices.json");
-  const balancePath = join(DATA_DIR, "balance-engine.json");
   const marketPrices = JSON.parse(await readFile(marketPricesPath, "utf8"));
-  const balance = JSON.parse(await readFile(balancePath, "utf8"));
 
   const changeLog = [];
   try {
     for (const { target, result } of fetchResults) {
-      changeLog.push(target.apply(result, target.kind === "daily" ? marketPrices : balance));
+      changeLog.push(target.apply(result, marketPrices));
     }
   } catch (err) {
     console.error(`\n[eia] Post-fetch validation failed while applying updates: ${err instanceof Error ? err.message : String(err)}`);
@@ -330,10 +278,8 @@ async function main() {
   }
 
   await writeJsonAtomic(marketPricesPath, marketPrices);
-  await writeJsonAtomic(balancePath, balance);
 
   console.log(`\n[eia] Wrote ${marketPricesPath}`);
-  console.log(`[eia] Wrote ${balancePath}`);
   console.log(
     `[eia] Source: ${FIXTURE_DIR ? "LOCAL FIXTURES (synthetic test data)" : "EIA Open Data API (https://api.eia.gov)"}. ` +
       `On first production run, spot-check the written values against ` +

@@ -43,12 +43,13 @@ npm run build      # production build
 All market content lives in `/data/*.json` and renders automatically:
 
 - `market-prices.json` — price cards (asset, price, changes, trend, source, last_updated, data_type)
-- `dashboard-signals.json` — supply / demand / risk signals + daily bottom line
 - `daily-briefing.json` — 11-section daily briefings (first entry = today)
 - `investment-watchlist.json` — watchlist companies by category
 - `company-intelligence.json` — structured company notes
 - `chart-data.json` — chart series (Brent/WTI, gas, inventories, rigs, OPEC, heatmap)
 - `research-library.json` — research note index (free/premium, draft/published)
+
+Dashboard cards, the Balance Engine, the Curve page, What Changed, the Public Data Monitor and the Desk Bot are not in these files: they read public feeds (EIA, CFTC, FRED, GDELT) when the site is built.
 
 **Daily update:** edit JSON → commit → push → auto-deploy.
 Full instructions: [`docs/DAILY_UPDATE_GUIDE.md`](docs/DAILY_UPDATE_GUIDE.md) and `/admin`.
