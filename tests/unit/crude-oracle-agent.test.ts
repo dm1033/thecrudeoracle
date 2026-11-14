@@ -15,14 +15,39 @@ import {
 import type { DataCard } from "@/lib/dashboard-cards";
 import { getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
 
-describe("CrudeOracle Investment Agent — Master System Prompt (v2026-10-30)", () => {
-  it("pins the 2026-10-30 prompt version and mandatory operating rules", () => {
-    expect(CRUDE_ORACLE_PROMPT_VERSION).toBe("2026-10-30");
-    expect(CRUDE_ORACLE_MASTER_SYSTEM_PROMPT).toContain("You are CrudeOracle, the Desk Lead");
-    expect(CRUDE_ORACLE_MASTER_SYSTEM_PROMPT).toContain("Always fetch fresh data first.");
-    expect(CRUDE_ORACLE_MASTER_SYSTEM_PROMPT).toContain("Cite everything.");
-    expect(CRUDE_ORACLE_MASTER_SYSTEM_PROMPT).toContain(CRUDE_ORACLE_MANDATORY_DISCLAIMER);
-    expect(CRUDE_ORACLE_MASTER_SYSTEM_PROMPT).toContain(CRUDE_ORACLE_INTERACTIVE_FOOTER);
+describe("CrudeOracle Desk Bot — master system prompt and reply engine", () => {
+  it("pins the prompt version and the rules the model must follow", () => {
+    expect(CRUDE_ORACLE_PROMPT_VERSION).toBe("2026-11-14");
+    const prompt = CRUDE_ORACLE_MASTER_SYSTEM_PROMPT;
+    expect(prompt).toContain("You are CrudeOracle, the Desk Lead");
+    expect(prompt).toContain("Use only the Verified Desk Data Layer");
+    expect(prompt).toContain("No investment advice and no trading signals.");
+    expect(prompt).toContain("No company recommendations.");
+    expect(prompt).toContain("No events from memory.");
+    expect(prompt).toContain("regulated financial adviser");
+    expect(prompt).toContain(CRUDE_ORACLE_MANDATORY_DISCLAIMER);
+    expect(prompt).toContain(CRUDE_ORACLE_INTERACTIVE_FOOTER);
+  });
+
+  it("does not ask the model for signals, tools it lacks or third-party sources", () => {
+    const prompt = CRUDE_ORACLE_MASTER_SYSTEM_PROMPT;
+    for (const text of [
+      "Reuters",
+      "Platts",
+      "Argus",
+      "Bloomberg",
+      "OilPrice",
+      "web_search",
+      "x_keyword_search",
+      "Conviction level.",
+      "Equity or commodity ideas",
+      "Assign confidence",
+      "top-tier trader",
+      "The tape is",
+      "XOM",
+    ]) {
+      expect(prompt, text).not.toContain(text);
+    }
   });
 
   it("detects personalised advice requests and politely declines while providing an analytical framework", async () => {

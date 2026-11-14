@@ -15,7 +15,7 @@ export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
   "Desk Bot: oil & gas market intelligence",
-  "Interactive terminal-grade oil & gas market intelligence bot powered by the CrudeOracle Master System Prompt (v30 Oct 2026): cited EIA/OPEC/IEA/COT data, bull/bear scenarios, invalidation levels and strict non-advisory risk controls.",
+  "Ask about oil and gas market data: EIA prices, stocks and world balance, CFTC positioning and supply-route news coverage. Every figure is sourced and dated. No trading signals. Not financial advice.",
   "/desk-agent"
 );
 
@@ -48,7 +48,7 @@ export default async function DeskAgentPage() {
             <div>
               <p className="eyebrow">Master System Prompt Specification</p>
               <h2 className="h2 mt-1">
-                CrudeOracle Investment Agent — Master System Prompt (v{CRUDE_ORACLE_PROMPT_VERSION})
+                CrudeOracle Desk Bot — Master System Prompt (v{CRUDE_ORACLE_PROMPT_VERSION})
               </h2>
             </div>
             <span className="rounded border border-gold-500/40 bg-gold-500/10 px-2.5 py-1 font-mono text-xs font-semibold text-gold-400">

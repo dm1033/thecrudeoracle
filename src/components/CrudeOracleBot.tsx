@@ -303,9 +303,9 @@ export default function CrudeOracleBot({
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-ink-950">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <p className="eyebrow">Master System Prompt · Version 30 Oct 2026</p>
+              <p className="eyebrow">Master System Prompt · Version 14 Nov 2026</p>
               <h3 className="text-sm font-bold text-white">
-                CrudeOracle Investment Agent — Onscreen Bot Specification
+                CrudeOracle Desk Bot — Onscreen Bot Specification
               </h3>
             </div>
             <button
@@ -383,7 +383,7 @@ export default function CrudeOracleBot({
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask the Desk Lead: Brent/WTI tape, inventories, Hormuz, COT crowding, majors…"
+                placeholder="Ask about prices, stocks, spreads, WTI positioning or the world balance…"
                 aria-label="Ask CrudeOracle Desk Lead"
                 className="flex-1 rounded-md border border-ink-600 bg-ink-950 px-3 py-2 text-xs sm:text-sm text-white placeholder:text-steel-500 focus:border-gold-400 focus:outline-none"
               />
