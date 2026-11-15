@@ -4,14 +4,15 @@ import PageHeader from "@/components/PageHeader";
 import AudienceMetrics from "@/components/AudienceMetrics";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SlotBooking from "@/components/SlotBooking";
-import { RATE_PACKAGES } from "@/lib/rate-card";
+import JsonLd from "@/components/JsonLd";
+import { RATE_PACKAGES, sponsorOffersJsonLd } from "@/lib/rate-card";
 import { SPONSOR_SLOTS } from "@/lib/sponsor-slots";
 import { pageMeta } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
   "Media kit",
-  "What The Crude Oracle is, who it is for, the sponsorship inventory, and how sponsored placements are labelled. No audience numbers are published until they are measured.",
+  "What The Crude Oracle is, who it is for, and the sponsorship inventory. Every slot is $100 per month (USD). No audience numbers are published until they are measured.",
   "/media-kit"
 );
 
@@ -23,8 +24,9 @@ export default function MediaKitPage() {
       <PageHeader
         eyebrow="Sponsorship"
         title="Media kit"
-        intro="What the site is, who it is written for, and the indicative inventory. Audience counts stay off this page until they are measured."
+        intro="What the site is, who it is written for, and the sponsorship inventory. Every slot is $100 per month (USD). Audience counts stay off this page until they are measured."
       />
+      <JsonLd data={sponsorOffersJsonLd()} />
       <div className="print-sheet container-site space-y-10 py-10">
         <p className="no-print text-sm text-steel-500">This page is laid out for printing. Use the browser print command for a PDF.</p>
 
@@ -71,18 +73,18 @@ export default function MediaKitPage() {
             Inventory
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
-            The same indicative rate card as the <Link href="/advertise">advertise</Link> page. Every price is marked
-            from. None of them is a quote, and none of them is based on a published audience figure. A slot that is
-            not on the site yet is listed so the rate is visible before that page exists.
+            The same rate card as the <Link href="/advertise">advertise</Link> page. Every slot is $100 per month
+            (USD). None of the prices is based on a published audience figure. A slot that is not on the site yet is
+            listed so the price is visible before that page exists.
           </p>
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
             <table className="table-dark min-w-[760px]">
-              <caption className="sr-only">Indicative sponsorship slots</caption>
+              <caption className="sr-only">Sponsorship slots at $100 per month</caption>
               <thead>
                 <tr>
                   <th scope="col">Slot</th>
                   <th scope="col">Where</th>
-                  <th scope="col">From</th>
+                  <th scope="col">Price</th>
                   <th scope="col">Book</th>
                 </tr>
               </thead>
@@ -93,7 +95,7 @@ export default function MediaKitPage() {
                       {slot.name}
                     </th>
                     <td>{slot.placement}</td>
-                    <td className="whitespace-nowrap">from {slot.price}, indicative</td>
+                    <td className="whitespace-nowrap">{slot.price}</td>
                     <td className="no-print">
                       <SlotBooking slot={slot} />
                     </td>
@@ -107,7 +109,7 @@ export default function MediaKitPage() {
               <article key={pack.name} className="card">
                 <h3 className="text-base font-semibold text-white">{pack.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-steel-400">{pack.includes}</p>
-                <p className="mt-4 text-sm font-semibold text-gold-400">from {pack.from}, indicative</p>
+                <p className="mt-4 text-sm font-semibold text-gold-400">{pack.price}</p>
               </article>
             ))}
           </div>

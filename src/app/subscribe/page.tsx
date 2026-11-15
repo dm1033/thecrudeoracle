@@ -45,7 +45,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How is the site funded if it's free?",
-    a: "The Crude Oracle is currently run as an open intelligence project. Sponsorship enquiries go to the advertise page. Sponsors do not see or influence content before publication — that rule is the editorial policy.",
+    a: "The Crude Oracle is currently run as an open intelligence project. Every sponsorship slot is $100 per month (USD). Enquiries go to the advertise page. Sponsors do not see or influence content before publication — that rule is the editorial policy.",
   },
 ];
 
