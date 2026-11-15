@@ -38,7 +38,6 @@ export const revalidate = 7200;
 export default async function CrudeOilPricesPage() {
   const feed = await getPublishedPrices();
   const crude = feed.prices.filter((p) => ["BRN", "WTI"].includes(p.ticker));
-  const dxy = feed.prices.find((p) => p.ticker === "DXY*");
 
   return (
     <>
@@ -72,7 +71,6 @@ export default async function CrudeOilPricesPage() {
             {crude.map((p) => (
               <MarketCard key={p.ticker} price={p} />
             ))}
-            {dxy && <MarketCard price={dxy} />}
           </div>
         </section>
 

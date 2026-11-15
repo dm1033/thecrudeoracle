@@ -247,7 +247,7 @@ export default async function HomePage() {
       </section>
 
       <section className="container-site grid gap-6 py-14 lg:grid-cols-2">
-        <PresentedBy location="home_presented_by" />
+        <PresentedBy location="home_presented_by" enquireHref="/advertise#price-board" />
         <BeehiivSignup location="homepage" />
       </section>
 

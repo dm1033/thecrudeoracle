@@ -47,10 +47,10 @@ const ROWS: { dataset: string; source: string; terms: string; frequency: string 
     frequency: "Not updated here.",
   },
   {
-    dataset: "LNG Asia marker (JKM) and US dollar index",
-    source: "Not shown. The card names the series and does not print a number.",
-    terms: "JKM is a Platts assessment and is not licensed for this site. The dollar index is not licensed either. The card reads: not available – licensed data required.",
-    frequency: "Not updated here.",
+    dataset: "LNG Asia marker (JKM) and the ICE US Dollar Index",
+    source: "Not shown. No row is published for either series.",
+    terms: "JKM is a Platts assessment and is not licensed for this site. The ICE dollar index is not licensed either. The desk shows the Federal Reserve broad dollar index (FRED DTWEXBGS) when that public series is loaded. That index is not the ICE dollar index.",
+    frequency: "Not updated here. The FRED broad index follows the public-data monitor.",
   },
   {
     dataset: "Brent vs WTI chart and Henry Hub chart",

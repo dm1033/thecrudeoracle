@@ -92,9 +92,15 @@ frontend code; the full Checkout/webhook setup uses env vars only (`.env.example
 - No unlicensed real-time exchange data; licensed-data placeholders only
 - Original design — no third-party terminal branding or trade dress
 
+## Pull requests and automated data
+
+CI (`.github/workflows/ci.yml`) typechecks, tests, checks visitor-facing data for the word placeholder, and builds on every pull request and on every push to `main`.
+
+Scheduled data jobs open pull requests on `bot/*` branches. They do not push to `main`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch-protection setting that makes that rule stick.
+
 ## Automated Repository Datasets
 The `data/market_snapshot.json` file is updated automatically via GitHub Actions following official U.S. government release schedules:
-* **U.S. Commercial Crude Oil Inventories, excluding the SPR (Wednesdays, 10:30 AM ET):** Pulled directly from the U.S. Energy Information Administration (EIA API v2, Series `WCESTUS1`). Needs the `EIA_API_KEY` repository secret; without it this section is skipped and the CFTC section is still written.
+* **U.S. Commercial Crude Oil Inventories, excluding the SPR (Wednesdays, 10:30 AM ET):** Pulled directly from the U.S. Energy Information Administration (EIA API v2, Series `WCESTUS1`). Needs the `EIA_API_KEY` repository secret; without it this section is skipped and the CFTC section is still written. The job opens a pull request. It does not commit to `main`.
 * **Hedge Fund / Managed Money Positioning (Fridays, 3:30 PM ET):** Pulled from the CFTC Disaggregated Futures-Only Commitments of Traders (COT) Socrata endpoint (`72hh-3qpy`, NYMEX WTI Physical contract `067651`).
 
 ## Curated Energy Trading & Media Directory

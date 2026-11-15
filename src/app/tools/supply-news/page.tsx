@@ -6,7 +6,7 @@ import DataMeta from "@/components/DataMeta";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import CoverageChart from "@/components/charts/CoverageChart";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
-import { getMonitorFeed, headlines, newsTerms, newsTimeline, num } from "@/lib/oracle-intelligence";
+import { getMonitorFeed, headlines, newsTermStatuses, newsTimeline, num } from "@/lib/oracle-intelligence";
 
 export const metadata: Metadata = pageMeta(
   "Oil supply-route news monitor",
@@ -36,7 +36,8 @@ export default function SupplyNewsPage() {
   const last = values ? num(values, "share_last_24h_pct") : null;
   const week = values ? num(values, "share_7d_average_pct") : null;
   const timeline = values ? newsTimeline(values) : [];
-  const terms = values ? newsTerms(values) : [];
+  const termRows = values ? newsTermStatuses(values) : [];
+  const termsWithFigures = termRows.filter((row) => row.figures);
   const items = values ? headlines(values) : [];
   const searchTerms =
     values && Array.isArray(values.search_terms) ? values.search_terms.filter((t): t is string => typeof t === "string") : [];
@@ -92,11 +93,11 @@ export default function SupplyNewsPage() {
                 By search term
               </h2>
               <p className="mt-1 max-w-3xl text-sm text-steel-500">
-                {terms.length} of {searchTerms.length || 6} search terms have figures. GDELT limits how often it can
-                be asked, so the terms are refreshed a few at a time and each row carries its own date. A term with no
-                recent figure is left out.
+                {termsWithFigures.length} of {termRows.length || searchTerms.length || 6} search terms have figures.
+                GDELT limits how often it can be asked. A term it did not return is listed here and is not given a
+                number.
               </p>
-              {terms.length ? (
+              {termRows.length ? (
                 <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
                   <table className="table-dark min-w-[820px]">
                     <caption className="sr-only">Share of online news coverage for each search term</caption>
@@ -110,29 +111,42 @@ export default function SupplyNewsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {terms.map((row) => (
-                        <tr key={row.term}>
-                          <th scope="row" className="font-medium text-steel-200">
-                            {row.term}
-                          </th>
-                          <td className="num text-right">{pct(row.last24hPct)}</td>
-                          <td className="num text-right">{pct(row.weekAveragePct)}</td>
-                          <td className="text-right">
-                            <span className="num font-semibold text-white">{row.ratio.toFixed(2)}×</span>
-                            <span className="mt-0.5 block text-[10px] text-steel-500">{compare(row.ratio)}</span>
-                          </td>
-                          <td className="whitespace-nowrap text-right text-xs text-steel-400">
-                            {formatLondonTimestamp(row.asOf)}
-                            <span className="mt-0.5 block text-[10px] text-steel-500">fetched {formatLondonTimestamp(row.fetchedUtc)}</span>
-                          </td>
-                        </tr>
-                      ))}
+                      {termRows.map((row) =>
+                        row.figures ? (
+                          <tr key={row.term}>
+                            <th scope="row" className="font-medium text-steel-200">
+                              {row.term}
+                            </th>
+                            <td className="num text-right">{pct(row.figures.last24hPct)}</td>
+                            <td className="num text-right">{pct(row.figures.weekAveragePct)}</td>
+                            <td className="text-right">
+                              <span className="num font-semibold text-white">{row.figures.ratio.toFixed(2)}×</span>
+                              <span className="mt-0.5 block text-[10px] text-steel-500">{compare(row.figures.ratio)}</span>
+                            </td>
+                            <td className="whitespace-nowrap text-right text-xs text-steel-400">
+                              {formatLondonTimestamp(row.figures.asOf)}
+                              <span className="mt-0.5 block text-[10px] text-steel-500">
+                                fetched {formatLondonTimestamp(row.figures.fetchedUtc)}
+                              </span>
+                            </td>
+                          </tr>
+                        ) : (
+                          <tr key={row.term}>
+                            <th scope="row" className="font-medium text-steel-200">
+                              {row.term}
+                            </th>
+                            <td colSpan={4} className="text-sm text-steel-400">
+                              No figure. GDELT did not return this term on the last successful fetch, so none is shown.
+                            </td>
+                          </tr>
+                        )
+                      )}
                     </tbody>
                   </table>
                 </div>
               ) : (
                 <p className="mt-4 max-w-3xl rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm text-steel-400">
-                  No search term has a recent figure of its own, so only the combined figure is shown.
+                  No search term is listed on the last update, so only the combined figure is shown.
                 </p>
               )}
             </section>

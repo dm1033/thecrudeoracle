@@ -4,6 +4,7 @@ import {
   brentWtiSpread,
   buildDailyNote,
   describeChange,
+  missingPrintExplanation,
   seriesWindow,
   type PricePoint,
 } from "@/lib/daily-note";
@@ -203,5 +204,13 @@ describe("daily feed without a key", () => {
     else process.env.EIA_API_KEY = saved;
     if (savedAlt === undefined) delete process.env.EIA_API;
     else process.env.EIA_API = savedAlt;
+  });
+});
+
+describe("missing EIA print", () => {
+  it("names the newest print and does not invent the missing day", () => {
+    expect(missingPrintExplanation("2026-11-12", "2026-11-11")).toContain("has not published a Brent print for 12 Nov 2026");
+    expect(missingPrintExplanation("2026-11-12", "2026-11-11")).toContain("newest print is 11 Nov 2026");
+    expect(missingPrintExplanation("2026-11-12", "2026-11-11")).not.toMatch(/\$\d/);
   });
 });

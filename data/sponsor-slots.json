@@ -1,0 +1,144 @@
+{
+  "slots": [
+    {
+      "id": "price-board",
+      "name": "Price board, presented by",
+      "description": "Indicative founding rate. Not a quote, and not based on a published audience figure.",
+      "placement": "Homepage and price cards",
+      "price": "$200/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "daily-note-primary",
+      "name": "Daily note, primary",
+      "description": "Indicative founding rate for the morning note. Not a quote.",
+      "placement": "Five sends a week, when the note is running",
+      "price": "$150/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "daily-note-secondary",
+      "name": "Daily note, secondary",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "Footer of that email",
+      "price": "$50/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "eia-inventory-day",
+      "name": "EIA inventory day, presented by",
+      "description": "Indicative founding rate for the Wednesday stocks page. Not a quote.",
+      "placement": "Wednesday page, email and social card",
+      "price": "$100/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "friday-positioning",
+      "name": "Friday positioning, presented by",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "Friday pages",
+      "price": "$100/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "monthly-balances",
+      "name": "Monthly balances digest",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "Monthly digest",
+      "price": "$75/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "north-sea",
+      "name": "North Sea / UK energy security takeover",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "That section and related articles",
+      "price": "$150/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "lng-gas-shipping",
+      "name": "LNG, gas and shipping takeover",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "That section and related articles",
+      "price": "$100/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "calculator",
+      "name": "Calculator sponsor, each",
+      "description": "Indicative founding rate. The calculator pages are not on the site yet.",
+      "placement": "Calculator pages, once they exist",
+      "price": "$40/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "release-calendar",
+      "name": "Release calendar, presented by",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "Calendar page",
+      "price": "$50/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "embeddable-widget",
+      "name": "Embeddable widget co-brand",
+      "description": "Indicative founding rate. Third-party embeds are not on the site yet.",
+      "placement": "Third-party embeds, once they exist",
+      "price": "$100/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "social-card",
+      "name": "Social card sponsor",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "Social charts",
+      "price": "$50/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "jobs-events",
+      "name": "Jobs or events listing",
+      "description": "Indicative founding rate. The listing page is not on the site yet.",
+      "placement": "A listing, when that page exists",
+      "price": "$50 per listing",
+      "period": "listing",
+      "stripePaymentLink": "",
+      "available": true
+    },
+    {
+      "id": "sunday-week-ahead",
+      "name": "Sunday week-ahead email",
+      "description": "Indicative founding rate. Not a quote.",
+      "placement": "One weekly send",
+      "price": "$75/week",
+      "period": "week",
+      "stripePaymentLink": "",
+      "available": true
+    }
+  ]
+}

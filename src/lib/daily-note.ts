@@ -151,6 +151,19 @@ export function brentWtiSpread(brent: readonly PricePoint[], wti: readonly Price
   return shared;
 }
 
+/** What to say when a calendar date has no Brent print. Does not invent a price. */
+export function missingPrintExplanation(date: string, latestDate: string | null): string {
+  const asked = formatLongDate(date);
+  if (!latestDate) {
+    return `EIA has no Brent print for ${asked} in the figures loaded, so this page does not fill one in.`;
+  }
+  const latest = formatLongDate(latestDate);
+  if (date > latestDate) {
+    return `EIA has not published a Brent print for ${asked}. The newest print is ${latest}. This page does not fill the gap.`;
+  }
+  return `EIA has no Brent print for ${asked}. The newest print loaded is ${latest}. Weekends and US holidays often have no print.`;
+}
+
 export function isNoteDate(value: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);

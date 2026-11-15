@@ -1,20 +1,11 @@
+import { SPONSOR_SLOTS } from "@/lib/sponsor-slots";
+
 /** Indicative founding rates. Every figure is a starting point, not a quote and not a traffic claim. */
-export const RATE_SLOTS: { slot: string; where: string; from: string }[] = [
-  { slot: "Price board, presented by", where: "Homepage and price cards", from: "$200/week" },
-  { slot: "Daily note, primary", where: "Five sends a week, when the note is running", from: "$150/week" },
-  { slot: "Daily note, secondary", where: "Footer of that email", from: "$50/week" },
-  { slot: "EIA inventory day, presented by", where: "Wednesday page, email and social card", from: "$100/week" },
-  { slot: "Friday positioning, presented by", where: "Friday pages", from: "$100/week" },
-  { slot: "Monthly balances digest", where: "Monthly digest", from: "$75/week" },
-  { slot: "North Sea / UK energy security takeover", where: "That section and related articles", from: "$150/week" },
-  { slot: "LNG, gas and shipping takeover", where: "That section and related articles", from: "$100/week" },
-  { slot: "Calculator sponsor, each", where: "Calculator pages, once they exist", from: "$40/week" },
-  { slot: "Release calendar, presented by", where: "Calendar page", from: "$50/week" },
-  { slot: "Embeddable widget co-brand", where: "Third-party embeds, once they exist", from: "$100/week" },
-  { slot: "Social card sponsor", where: "Social charts", from: "$50/week" },
-  { slot: "Jobs or events listing", where: "A listing, when that page exists", from: "$50 per listing" },
-  { slot: "Sunday week-ahead email", where: "One weekly send", from: "$75/week" },
-];
+export const RATE_SLOTS: { slot: string; where: string; from: string }[] = SPONSOR_SLOTS.map((slot) => ({
+  slot: slot.name,
+  where: slot.placement,
+  from: slot.price,
+}));
 
 export const RATE_PACKAGES: { name: string; includes: string; from: string }[] = [
   {

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "Price board. Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) are overlaid from the EIA Open Data API when a key is set. Dubai, NBP and TTF are not published. Remaining rows are labelled placeholders.",
+    "description": "Price board. Brent (RBRTE), WTI (RWTC) and Henry Hub (RNGWHHD) are overlaid from the EIA Open Data API when a key is set. Dubai, NBP, TTF, JKM and the ICE dollar index are not published.",
     "last_published": "2026-07-15T07:00:00Z",
     "status": "published"
   },
@@ -46,34 +46,6 @@
       "source_url": "https://www.eia.gov/naturalgas/",
       "last_updated": "2026-07-15T07:00:00Z",
       "data_type": "manual"
-    },
-    {
-      "asset": "LNG Asia Marker (JKM proxy)",
-      "ticker": "JKM*",
-      "price": 11.9,
-      "currency": "USD/MMBtu",
-      "daily_change": 1.54,
-      "weekly_change": 1.5,
-      "monthly_change": 3.0,
-      "trend": "up",
-      "source": "API placeholder — licensed assessment required",
-      "source_url": "https://www.iea.org/data-and-statistics",
-      "last_updated": "2026-07-15T07:00:00Z",
-      "data_type": "API placeholder"
-    },
-    {
-      "asset": "US Dollar Index",
-      "ticker": "DXY*",
-      "price": 103.4,
-      "currency": "index",
-      "daily_change": -0.19,
-      "weekly_change": -0.2,
-      "monthly_change": -1.0,
-      "trend": "down",
-      "source": "API placeholder (e.g. Alpha Vantage / Polygon.io)",
-      "source_url": "https://www.federalreserve.gov/releases/h10/",
-      "last_updated": "2026-07-15T07:00:00Z",
-      "data_type": "API placeholder"
     }
   ]
 }

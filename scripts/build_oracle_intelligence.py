@@ -589,21 +589,31 @@ def build_news(previous_module=None):
         warn(f"news: headlines left out ({exc})")
     values["headlines"] = headlines
 
-    # One search term at a time. GDELT often refuses after a request or two, so each run
-    # starts with the terms whose figures are oldest and stops at the first refusal. Figures
-    # from earlier runs are kept, each with its own dates, until they are too old to show.
+    # One search term at a time, with a gap between calls. A refusal is recorded
+    # for that term and the next term is still requested. Stopping early used to
+    # leave the same terms without figures on every later run, because the terms
+    # with no stored figure were always asked first. Earlier figures are kept,
+    # each with its own dates, until they are too old to show.
     fetched_now = now_utc()
     terms = recent_terms(previous_module, datetime.datetime.now(datetime.timezone.utc))
-    for term in sorted(GDELT_TERMS, key=lambda t: terms[t]["fetched_utc"] if t in terms else ""):
+    missing = {}
+    for term in GDELT_TERMS:
         time.sleep(GDELT_GAP_SECONDS)
         try:
             term_summary = coverage_summary(gdelt_timeline(f'"{term}" sourcelang:english'))
         except NotLoaded as exc:
-            warn(f"news: per-term coverage stopped at '{term}' ({exc})")
-            break
-        if term_summary is not None:
-            terms[term] = {"term": term, **term_summary, "fetched_utc": fetched_now}
+            warn(f"news: per-term coverage missed '{term}' ({exc})")
+            if term not in terms:
+                missing[term] = str(exc)
+            continue
+        if term_summary is None:
+            if term not in terms:
+                missing[term] = "GDELT returned an empty week for this term"
+            continue
+        terms[term] = {"term": term, **term_summary, "fetched_utc": fetched_now}
+        missing.pop(term, None)
     values["terms"] = [terms[term] for term in GDELT_TERMS if term in terms]
+    values["terms_without_figures"] = [{"term": term, "reason": missing[term]} for term in GDELT_TERMS if term in missing]
 
     return {
         "as_of": newest.strftime("%Y-%m-%dT%H:%M:%SZ"),

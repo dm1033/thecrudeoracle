@@ -38,7 +38,7 @@ export type DailyNoteResult =
       archiveDates: string[];
     }
   | { status: "unavailable" }
-  | { status: "missing" };
+  | { status: "missing"; latestDate: string | null };
 
 interface MemoryEntry {
   at: number;
@@ -162,7 +162,7 @@ export async function loadDailyNote(date: string): Promise<DailyNoteResult> {
     henryHub: feed.history.henryHub,
     exact: true,
   });
-  if (!note) return { status: "missing" };
+  if (!note) return { status: "missing", latestDate: archiveDates[0] ?? null };
   return {
     status: "ready",
     note,

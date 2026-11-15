@@ -163,7 +163,10 @@ describe("CrudeOracle Desk Bot — master system prompt and reply engine", () =>
     expect(snap.tableMarkdown).toContain("withheld");
     expect(snap.alertLine ?? "").not.toContain("9.87");
     const placeholder = feed.prices.map((p) => ({ ...p, data_type: "API placeholder", last_updated: new Date().toISOString(), price: 123.45 }));
-    expect(buildMarketSnapshotTable(placeholder).tableMarkdown).not.toContain("123.45");
+    const hidden = buildMarketSnapshotTable(placeholder).tableMarkdown;
+    expect(hidden).not.toContain("123.45");
+    expect(hidden.toLowerCase()).not.toContain("placeholder");
+    expect(hidden).toBe("No published price row is on the board.");
   });
 
   it("quotes live feed figures with their own source and date, and nothing when a feed is absent", async () => {

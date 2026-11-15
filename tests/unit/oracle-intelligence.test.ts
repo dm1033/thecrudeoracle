@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { MONITOR_MODULES, headlines, monitorLastData, num, parseMonitorFeed, newsTerms, newsTimeline } from "@/lib/oracle-intelligence";
+import { MONITOR_MODULES, headlines, monitorLastData, num, parseMonitorFeed, newsTerms, newsTermStatuses, newsTimeline } from "@/lib/oracle-intelligence";
 
 const ok = (values: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({
   status: "ok",
@@ -133,5 +133,36 @@ describe("news coverage helpers", () => {
       { term: "Strait of Hormuz", last24hPct: 0.03, weekAveragePct: 0.04, ratio: 0.75, asOf: "2026-11-12T07:00:00Z", fetchedUtc: "2026-11-14T10:00:00Z" },
     ]);
     expect(newsTerms({ terms: "x" })).toEqual([]);
+  });
+
+  it("keeps a search term that has no figure, and does not invent one", () => {
+    expect(
+      newsTermStatuses({
+        search_terms: ["Strait of Hormuz", "Suez Canal"],
+        terms: [
+          {
+            term: "Strait of Hormuz",
+            share_last_24h_pct: 0.03,
+            share_7d_average_pct: 0.04,
+            share_last_24h_vs_7d_average: 0.75,
+            as_of: "2026-11-12T07:00:00Z",
+            fetched_utc: "2026-11-14T10:00:00Z",
+          },
+        ],
+      })
+    ).toEqual([
+      {
+        term: "Strait of Hormuz",
+        figures: {
+          term: "Strait of Hormuz",
+          last24hPct: 0.03,
+          weekAveragePct: 0.04,
+          ratio: 0.75,
+          asOf: "2026-11-12T07:00:00Z",
+          fetchedUtc: "2026-11-14T10:00:00Z",
+        },
+      },
+      { term: "Suez Canal", figures: null },
+    ]);
   });
 });

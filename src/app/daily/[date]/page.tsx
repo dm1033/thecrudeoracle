@@ -27,8 +27,8 @@ export function generateMetadata({ params }: { params: { date: string } }): Meta
 export default async function DailyArchivePage({ params }: { params: { date: string } }) {
   if (!isNoteDate(params.date)) notFound();
   const result = await loadDailyNote(params.date);
-  if (result.status === "unavailable") return <DailyNoteUnavailable date={params.date} />;
-  if (result.status !== "ready") notFound();
+  if (result.status === "unavailable") return <DailyNoteUnavailable date={params.date} feedDown />;
+  if (result.status === "missing") return <DailyNoteUnavailable date={params.date} latestDate={result.latestDate} />;
   return (
     <DailyNoteView
       note={result.note}

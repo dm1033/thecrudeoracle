@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Typecheck
+        run: npm run lint
+      - name: Test
+        run: npm run test:run
+      - name: Visitor-facing placeholder check
+        run: node scripts/check-visitor-placeholders.mjs
+      - name: Build
+        run: npm run build
+        env:
+          EIA_API_KEY: ""
