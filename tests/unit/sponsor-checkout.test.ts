@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { adsText } from "@/lib/advertising";
-import { SPONSOR_SLOTS, slotArtworkMailto, slotCheckout, slotCheckoutNote, slotClientReferenceId } from "@/lib/sponsor-slots";
+import { SPONSOR_SLOTS, sharedSponsorPrice, slotArtworkMailto, slotCheckout, slotCheckoutNote, slotClientReferenceId } from "@/lib/sponsor-slots";
 
 const EMAIL = "intelligence@thecrudeoracle.com";
 const PAYMENT_LINK = "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00";
@@ -9,7 +9,8 @@ describe("sponsor slot checkout", () => {
   it("falls back to the enquiry mailto when the payment link is empty", () => {
     const published = SPONSOR_SLOTS.find((item) => item.id === "price-board");
     expect(published).toBeDefined();
-    expect(published?.price).toBe("$200/week");
+    expect(published?.price).toBe("$100/month");
+    expect(published?.period).toBe("month");
     const slot = { ...published!, stripePaymentLink: "" };
     const checkout = slotCheckout(slot, EMAIL);
     expect(checkout.external).toBe(false);
@@ -27,11 +28,13 @@ describe("sponsor slot checkout", () => {
     expect(slotCheckout({ ...slot, available: false }, EMAIL).external).toBe(false);
   });
 
-  it("keeps the published indicative figures and points every slot at the shared payment link", () => {
-    expect(SPONSOR_SLOTS.find((slot) => slot.id === "calculator")?.price).toBe("$40/week");
-    expect(SPONSOR_SLOTS.find((slot) => slot.id === "eia-inventory-day")?.price).toBe("$100/week");
-    expect(SPONSOR_SLOTS.find((slot) => slot.id === "daily-note-primary")?.price).toBe("$150/week");
-    expect(SPONSOR_SLOTS.find((slot) => slot.id === "jobs-events")?.price).toBe("$50 per listing");
+  it("prices every slot at $100 per month and points every slot at the shared payment link", () => {
+    expect(sharedSponsorPrice()).toBe("$100/month");
+    for (const id of ["calculator", "eia-inventory-day", "daily-note-primary", "jobs-events", "price-board"]) {
+      const slot = SPONSOR_SLOTS.find((item) => item.id === id);
+      expect(slot?.price).toBe("$100/month");
+      expect(slot?.period).toBe("month");
+    }
     expect(SPONSOR_SLOTS.length).toBeGreaterThan(0);
     expect(SPONSOR_SLOTS.every((slot) => slot.stripePaymentLink === PAYMENT_LINK)).toBe(true);
     for (const slot of SPONSOR_SLOTS) {

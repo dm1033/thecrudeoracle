@@ -5,7 +5,7 @@ export interface SponsorSlot {
   name: string;
   description: string;
   placement: string;
-  /** Published indicative figure, already including its unit, such as "$200/week". */
+  /** Published figure, already including its unit, such as "$100/month". */
   price: string;
   period: string;
   /** Stripe Payment Link. One link is shared by every slot. */
@@ -14,6 +14,21 @@ export interface SponsorSlot {
 }
 
 export const SPONSOR_SLOTS: SponsorSlot[] = slotsFile.slots;
+
+/** The price every slot publishes, or null when the file does not agree with itself. */
+export function sharedSponsorPrice(): string | null {
+  const [first, ...rest] = SPONSOR_SLOTS;
+  if (!first) return null;
+  const uniform = rest.every((slot) => slot.price === first.price && slot.period === first.period);
+  return uniform ? first.price : null;
+}
+
+/** Slot named by an advertise-page hash, such as `/advertise#daily-note-primary`. */
+export function sponsorSlotFromHref(href: string): SponsorSlot | undefined {
+  const id = href.split("#")[1]?.split(/[?&]/)[0];
+  if (!id) return undefined;
+  return SPONSOR_SLOTS.find((slot) => slot.id === id);
+}
 
 const STRIPE_LINK = /^https:\/\/\S+$/;
 /** Stripe drops a client_reference_id that is not alphanumeric, a dash or an underscore, or that is longer than 200 characters. */

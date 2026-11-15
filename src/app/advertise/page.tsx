@@ -4,13 +4,14 @@ import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import { AdvertiseCtaLink, TrackOnMount } from "@/components/analytics-events";
 import SlotBooking from "@/components/SlotBooking";
-import { RATE_PACKAGES } from "@/lib/rate-card";
+import JsonLd from "@/components/JsonLd";
+import { RATE_PACKAGES, sponsorOffersJsonLd } from "@/lib/rate-card";
 import { SITE } from "@/lib/site";
 import { SPONSOR_SLOTS } from "@/lib/sponsor-slots";
 
 export const metadata: Metadata = pageMeta(
   "Advertise",
-  "Indicative sponsorship slots and founding packages for The Crude Oracle. Prices are marked from and are not a quote. Sponsored content is labelled Sponsored.",
+  "Every sponsorship slot on The Crude Oracle is $100 per month (USD). Sponsored content is labelled Sponsored.",
   "/advertise"
 );
 
@@ -20,10 +21,11 @@ export default function AdvertisePage() {
   return (
     <>
       <TrackOnMount name="advertise_view" />
+      <JsonLd data={sponsorOffersJsonLd()} />
       <PageHeader
         eyebrow="Sponsorship"
         title="Advertise"
-        intro="Indicative founding rates. Every price is marked from. None of them is a quote, and none of them is based on a published audience figure."
+        intro="Every sponsorship slot is $100 per month (USD)."
       />
       <div className="container-site space-y-10 py-10">
         <div className="prose-dark max-w-3xl">
@@ -32,13 +34,12 @@ export default function AdvertisePage() {
             <AdvertiseCtaLink href={MAILTO} location="advertise_intro">
               {SITE.contactEmail}
             </AdvertiseCtaLink>
-            . Say who you are, which slot you want, and the period you have in mind.
+            . Say who you are, which slot you want, and how many months you have in mind.
           </p>
           <p>
-            These figures are indicative starting points for a site that does not publish traffic,
-            subscriber or revenue numbers. They are assumptions to test with buyers, invoiced monthly
-            in advance on an 8–12 week minimum if a founding rate is agreed. They are not market data.
-            The same inventory is on the <Link href="/media-kit">media kit</Link>, which is the page to print.
+            Every slot is $100 per month, invoiced monthly in advance. The site does not publish traffic,
+            subscriber or revenue numbers, and these prices are not market data. The same inventory is on
+            the <Link href="/media-kit">media kit</Link>, which is the page to print.
           </p>
         </div>
 
@@ -47,17 +48,17 @@ export default function AdvertisePage() {
             Slots
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
-            The low end of each indicative range. A slot that is not on the site yet is listed so the
-            rate is visible before that page exists.
+            Every slot is $100 per month. A slot that is not on the site yet is listed so the price is
+            visible before that page exists.
           </p>
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
             <table className="table-dark min-w-[760px]">
-              <caption className="sr-only">Indicative sponsorship slots</caption>
+              <caption className="sr-only">Sponsorship slots at $100 per month</caption>
               <thead>
                 <tr>
                   <th scope="col">Slot</th>
                   <th scope="col">Where</th>
-                  <th scope="col">From</th>
+                  <th scope="col">Price</th>
                   <th scope="col">Book</th>
                 </tr>
               </thead>
@@ -69,7 +70,7 @@ export default function AdvertisePage() {
                       <span className="mt-1 block text-xs font-normal text-steel-500">{slot.description}</span>
                     </th>
                     <td>{slot.placement}</td>
-                    <td className="whitespace-nowrap">from {slot.price}, indicative</td>
+                    <td className="whitespace-nowrap">{slot.price}</td>
                     <td>
                       <SlotBooking slot={slot} />
                     </td>
@@ -91,14 +92,14 @@ export default function AdvertisePage() {
             Packages
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
-            Illustrative combinations of the slot prices above. The weekly totals are indicative, not a quote.
+            Each slot in a package is $100 per month. The figure on the card is the sum of the slots named.
           </p>
           <div className="mt-4 grid gap-4 lg:grid-cols-3">
             {RATE_PACKAGES.map((pack) => (
               <article key={pack.name} className="card">
                 <h3 className="text-base font-semibold text-white">{pack.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-steel-400">{pack.includes}</p>
-                <p className="mt-4 text-sm font-semibold text-gold-400">from {pack.from}, indicative</p>
+                <p className="mt-4 text-sm font-semibold text-gold-400">{pack.price}</p>
               </article>
             ))}
           </div>
