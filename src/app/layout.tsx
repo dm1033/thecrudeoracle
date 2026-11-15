@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
+import AdvertisingScripts from "@/components/AdvertisingScripts";
 import CrudeOracleBot from "@/components/CrudeOracleBot";
 import { SITE } from "@/lib/site";
 
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={siteSchema} />
         <Analytics />
         <SpeedInsights />
+        <AdvertisingScripts />
       </body>
     </html>
   );

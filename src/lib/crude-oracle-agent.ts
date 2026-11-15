@@ -8,7 +8,8 @@ import type { MarketPrice } from "@/lib/data";
 import type { CurveFeed } from "@/lib/curve";
 import type { DashboardCards, DataCard } from "@/lib/dashboard-cards";
 import type { PublishedPrices } from "@/lib/published-prices";
-import { LICENSED_DATA_REQUIRED, isPlaceholderPrice, priceFigureShown, priceFigureTooOld } from "@/lib/price-stamp";
+import { getMonitorFeed, num } from "@/lib/oracle-intelligence";
+import { LICENSED_DATA_REQUIRED, isPlaceholderPrice, priceFigureShown } from "@/lib/price-stamp";
 
 export const CRUDE_ORACLE_PROMPT_VERSION = "2026-11-14";
 
@@ -171,8 +172,11 @@ export function buildMarketSnapshotTable(prices: MarketPrice[]): {
   tableMarkdown: string;
   alertLine: string | null;
 } {
-  const rows = prices.slice(0, 5);
-  // Same rule as the price cards: no figure for a placeholder or a print older than 30 days.
+  const rows = prices.filter((price) => !isPlaceholderPrice(price)).slice(0, 5);
+  if (!rows.length) {
+    return { tableMarkdown: "No published price row is on the board.", alertLine: null };
+  }
+  // Same rule as the price cards: no figure for a print older than 30 days.
   const bigMover = rows.find((p) => priceFigureShown(p) && Math.abs(p.daily_change) >= 2.0);
   let alertLine: string | null = null;
   if (bigMover) {
@@ -214,6 +218,29 @@ function cftcWtiBullet(): string[] {
   return line ? [`- **WTI positioning (CFTC print):** ${line}.`] : [];
 }
 
+/** Fed broad dollar index from the public-data file. Not the ICE dollar index, and only when that file has a figure. */
+export function broadDollarBullet(): string[] {
+  const macro = getMonitorFeed().macro;
+  if (macro.status !== "ok") return [];
+  const index = num(macro.values, "broad_dollar_index");
+  const date = macro.values.broad_dollar_date;
+  if (index == null || typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}/.test(date)) return [];
+  const changeRecord = macro.values.broad_dollar_change;
+  let change = "";
+  if (changeRecord && typeof changeRecord === "object" && !Array.isArray(changeRecord)) {
+    const record = changeRecord as Record<string, unknown>;
+    const points = num(record, "change");
+    const previous = record.previous_date;
+    if (points != null && typeof previous === "string" && /^\d{4}-\d{2}-\d{2}/.test(previous)) {
+      const sign = points > 0 ? "+" : "";
+      change = `, ${sign}${points.toFixed(2)} index points from ${previous.slice(0, 10)}`;
+    }
+  }
+  return [
+    `- **US broad dollar index (FRED DTWEXBGS):** ${index.toFixed(2)}${change}. ${macro.sourceName}, as of ${date.slice(0, 10)}, delayed. This is the Federal Reserve broad index, not the ICE US Dollar Index.`,
+  ];
+}
+
 function cardLine(card: DataCard): string {
   return `${card.label}: ${card.value}. ${card.detail} [${card.sourceName}, as of ${card.asOf.slice(0, 10)}, ${card.dataType}]`;
 }
@@ -250,7 +277,7 @@ export function buildDeskContextBlock(feed: PublishedPrices, data: DeskData = EM
     list(spreadLines(data.curve)),
     "",
     "### Positioning, news coverage and macro",
-    list([...(cftc ? [cftc] : []), ...data.cards.context.map(cardLine)]),
+    list([...(cftc ? [cftc] : []), ...broadDollarBullet().map((line) => line.replace(/^- /, "")), ...data.cards.context.map(cardLine)]),
   ].join("\n");
 }
 
@@ -407,6 +434,7 @@ export function generateDeskLeadResponse(
       ...priceBullet(brent),
       ...priceBullet(wti),
       ...spreadBullet,
+      ...broadDollarBullet(),
       ...cardBullets(stockCards),
       ...cftcWtiBullet(),
       ...cardBullets(only(supply, ["steo-cops_opec"])),

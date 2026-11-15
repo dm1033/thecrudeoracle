@@ -8,6 +8,7 @@ import { EIA_SERIES } from "@/lib/eia";
 import {
   DAILY_NOTE_SPONSOR,
   formatLongDate,
+  missingPrintExplanation,
   type DailyNote,
   type DailyNoteSeries,
   type PeriodChange,
@@ -129,28 +130,48 @@ function SeriesRow({ series }: { series: DailyNoteSeries }) {
 function SponsorAndNewsletter() {
   return (
     <>
-      <PresentedBy sponsor={DAILY_NOTE_SPONSOR} location="daily_sponsor_slot" />
+      <PresentedBy sponsor={DAILY_NOTE_SPONSOR} location="daily_sponsor_slot" enquireHref="/advertise#daily-note-primary" />
       <BeehiivSignup location="daily_note" />
     </>
   );
 }
 
-export function DailyNoteUnavailable({ date }: { date?: string }) {
-  const title = date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? `Daily note, ${formatLongDate(date)}` : "Daily note";
+export function DailyNoteUnavailable({
+  date,
+  latestDate,
+  feedDown = false,
+}: {
+  date?: string;
+  latestDate?: string | null;
+  /** True when the EIA feed itself did not load. That is not the same as a date with no print. */
+  feedDown?: boolean;
+}) {
+  const dated = Boolean(date && /^\d{4}-\d{2}-\d{2}$/.test(date));
+  const title = dated && date ? `Daily note, ${formatLongDate(date)}` : "Daily note";
   const releases = upcomingReleases(new Date());
+  const gap = !feedDown && dated && date;
   return (
     <>
       <PageHeader
         eyebrow="Morning note"
         title={title}
-        intro="EIA daily spot only. When the feed is not available, this page does not fill in a price."
+        intro="EIA daily spot only. When EIA has not published a print, this page does not fill in a price."
       />
       <div className="container-site space-y-8 py-10">
         <section className="max-w-3xl space-y-4">
-          <p className="text-lg font-semibold text-white">Latest EIA print: not loaded</p>
+          <p className="text-lg font-semibold text-white">{gap ? "No EIA print for this date" : "Latest EIA print: not loaded"}</p>
           <p className="text-sm leading-relaxed text-steel-300">
-            EIA daily spot is not available for this note. No Brent, WTI or Henry Hub price is shown.
+            {gap
+              ? missingPrintExplanation(date, latestDate ?? null)
+              : "EIA daily spot is not available for this note. No Brent, WTI or Henry Hub price is shown."}
           </p>
+          {latestDate ? (
+            <p className="text-sm text-steel-200">
+              <Link href={`/daily/${latestDate}`} className="font-semibold text-gold-400 hover:text-gold-300">
+                Open the note for {formatLongDate(latestDate)}
+              </Link>
+            </p>
+          ) : null}
           <p className="text-sm text-steel-400">
             Series used when the feed is up: Brent RBRTE, WTI RWTC, Henry Hub RNGWHHD. EIA publishes them with a lag of
             one to two business days after the trade date. Weekends and US holidays can make the calendar gap longer.

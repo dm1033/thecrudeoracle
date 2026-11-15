@@ -3,8 +3,10 @@ import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import { AdvertiseCtaLink, TrackOnMount } from "@/components/analytics-events";
-import { RATE_PACKAGES, RATE_SLOTS } from "@/lib/rate-card";
+import SlotBooking from "@/components/SlotBooking";
+import { RATE_PACKAGES } from "@/lib/rate-card";
 import { SITE } from "@/lib/site";
+import { SPONSOR_SLOTS } from "@/lib/sponsor-slots";
 
 export const metadata: Metadata = pageMeta(
   "Advertise",
@@ -49,28 +51,39 @@ export default function AdvertisePage() {
             rate is visible before that page exists.
           </p>
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
-            <table className="table-dark min-w-[640px]">
+            <table className="table-dark min-w-[760px]">
               <caption className="sr-only">Indicative sponsorship slots</caption>
               <thead>
                 <tr>
                   <th scope="col">Slot</th>
                   <th scope="col">Where</th>
                   <th scope="col">From</th>
+                  <th scope="col">Book</th>
                 </tr>
               </thead>
               <tbody>
-                {RATE_SLOTS.map((row) => (
-                  <tr key={row.slot}>
+                {SPONSOR_SLOTS.map((slot) => (
+                  <tr key={slot.id} id={slot.id}>
                     <th scope="row" className="font-medium text-steel-200">
-                      {row.slot}
+                      {slot.name}
+                      <span className="mt-1 block text-xs font-normal text-steel-500">{slot.description}</span>
                     </th>
-                    <td>{row.where}</td>
-                    <td className="whitespace-nowrap">from {row.from}, indicative</td>
+                    <td>{slot.placement}</td>
+                    <td className="whitespace-nowrap">from {slot.price}, indicative</td>
+                    <td>
+                      <SlotBooking slot={slot} />
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p className="mt-4 max-w-3xl text-sm text-steel-400">
+            Book this slot opens a Stripe Payment Link when one is set for that row. Until then it opens an email to{" "}
+            {SITE.contactEmail} with the slot name in the subject. After payment, use Send artwork and details on the
+            same row. That email is how the name, link and artwork reach the desk. Every live placement is labelled
+            Sponsored.
+          </p>
         </section>
 
         <section aria-labelledby="packages-h">

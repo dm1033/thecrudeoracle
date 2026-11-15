@@ -7,9 +7,11 @@ import { AdvertiseCtaLink, SponsoredLink } from "@/components/analytics-events";
 export default function PresentedBy({
   sponsor,
   location,
+  enquireHref = "/advertise",
 }: {
   sponsor?: { name: string; href: string } | null;
   location: string;
+  enquireHref?: string;
 }) {
   return (
     <aside aria-label="Presented by" className="rounded-lg border border-dashed border-gold-600/70 bg-ink-900 p-5">
@@ -21,7 +23,7 @@ export default function PresentedBy({
           {sponsor.name}
         </SponsoredLink>
       ) : (
-        <AdvertiseCtaLink href="/advertise" location={location} rel="sponsored" className="mt-1 inline-block text-lg font-semibold text-white underline">
+        <AdvertiseCtaLink href={enquireHref} location={location} rel="sponsored" className="mt-1 inline-block text-lg font-semibold text-white underline">
           Your brand here
         </AdvertiseCtaLink>
       )}

@@ -143,6 +143,37 @@ export interface NewsTerm {
   fetchedUtc: string;
 }
 
+export interface NewsTermStatus {
+  term: string;
+  /** Null when this search term has no figure of its own in the file. */
+  figures: NewsTerm | null;
+}
+
+/**
+ * Every requested search term, in file order. A term GDELT did not return is
+ * included with `figures: null` so the page can say so instead of hiding it.
+ */
+export function newsTermStatuses(values: Record<string, unknown>): NewsTermStatus[] {
+  const figured = newsTerms(values);
+  const byTerm = new Map(figured.map((row) => [row.term, row]));
+  const requested = Array.isArray(values.search_terms)
+    ? values.search_terms.flatMap((term) => (typeof term === "string" && term.trim() ? [term.trim()] : []))
+    : [];
+  const names = requested.length ? requested : figured.map((row) => row.term);
+  const seen = new Set<string>();
+  const rows: NewsTermStatus[] = [];
+  for (const term of names) {
+    if (seen.has(term)) continue;
+    seen.add(term);
+    rows.push({ term, figures: byTerm.get(term) ?? null });
+  }
+  for (const row of figured) {
+    if (seen.has(row.term)) continue;
+    rows.push({ term: row.term, figures: row });
+  }
+  return rows;
+}
+
 /** Coverage for each search term on its own, when the feed loaded it. */
 export function newsTerms(values: Record<string, unknown>): NewsTerm[] {
   const list = Array.isArray(values.terms) ? values.terms : [];

@@ -14,6 +14,7 @@ import {
   type EiaObservation,
 } from "@/lib/eia";
 import { marketPrices, type MarketPrice } from "@/lib/data";
+import { isPlaceholderPrice } from "@/lib/price-stamp";
 import type { TapePrint } from "@/lib/desk-tape";
 
 /** In-process copy of the shared snapshot. Fresh reads do not touch the network. */
@@ -74,9 +75,13 @@ function newestIso(prices: MarketPrice[]): string {
   return prices.reduce((best, price) => (price.last_updated > best ? price.last_updated : best), prices[0]?.last_updated ?? "");
 }
 
+function publishedBoard(prices: MarketPrice[]): MarketPrice[] {
+  return prices.filter((price) => !isPlaceholderPrice(price));
+}
+
 function manualBoard(): PublishedPrices {
   return {
-    prices: marketPrices,
+    prices: publishedBoard(marketPrices),
     eia: false,
     manualUpdated: newestIso(marketPrices),
     eiaUpdated: null,
@@ -247,12 +252,14 @@ async function probeSpots(): Promise<SpotProbe> {
     return { ok: false, reason: reasons.join("; "), latestPeriod, value: null };
   }
 
-  const prices = marketPrices.map((price) => {
-    if (price.ticker === "BRN") return brentMark;
-    if (price.ticker === "WTI") return wtiMark;
-    if (price.ticker === "HH" && hubMark) return hubMark;
-    return price;
-  });
+  const prices = publishedBoard(
+    marketPrices.map((price) => {
+      if (price.ticker === "BRN") return brentMark;
+      if (price.ticker === "WTI") return wtiMark;
+      if (price.ticker === "HH" && hubMark) return hubMark;
+      return price;
+    })
+  );
   const manual = prices.filter((price) => price.data_type !== "delayed");
   const value: PublishedPrices = {
     prices,

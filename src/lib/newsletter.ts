@@ -3,8 +3,11 @@ export type NewsletterConfig =
   | { provider: "buttondown"; apiKey: string }
   | { provider: "unconfigured" };
 
-/** Public sign-up page. The daily note links here. No API key. */
-export const BEEHIIV_PUBLIC_URL = "https://thes-newsletter-dc1bd0.beehiiv.com/";
+/**
+ * Public sign-up page. Beehiiv's hosted page has no keyless embed or subscribe
+ * endpoint, so the site links here instead of posting an address from the browser.
+ */
+export const BEEHIIV_PUBLIC_URL = "https://thes-newsletter-dc1bd0.beehiiv.com/subscribe";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

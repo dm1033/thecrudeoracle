@@ -8,6 +8,8 @@ export const dynamic = "force-dynamic";
  * so the Weekly Petroleum Status Report is picked up after 15:30 UTC (10:30 a.m. US Eastern
  * in winter, an hour after the summer release).
  * Morning schedules are UTC: 06:00 UTC is 07:00 London during BST, 07:00 UTC is 07:00 London during GMT.
+ * Weekday 22:30 UTC is after the US afternoon, so a spot EIA posts that evening is on the site
+ * before the next London morning. The route only clears the cache. It does not write a price.
  * When CRON_SECRET is set, the caller must send Authorization: Bearer <CRON_SECRET>.
  * When it is unset, the route still revalidates so the project does not need a new secret to build or run.
  */

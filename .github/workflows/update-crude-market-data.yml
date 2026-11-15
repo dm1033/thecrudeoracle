@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   fetch-and-commit:
@@ -31,12 +32,10 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python scripts/fetch_oil_data.py
 
-      # No [skip ci]: the site imports this file at build time, so the push
-      # must trigger a deploy for the new rows to appear.
-      - name: Commit and push updated JSON
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/market_snapshot.json
-          git diff --staged --quiet || git commit -m "chore(data): automated EIA & CFTC crude update"
-          git push
+      - name: Open a pull request if the snapshot changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_MESSAGE: "chore(data): automated EIA and CFTC crude update"
+          PR_TITLE: "chore(data): automated EIA and CFTC crude update"
+          PR_BODY: "Automated EIA and CFTC snapshot. Review the figures before merging. Bots do not push to main."
+        run: bash scripts/open-data-pr.sh bot/crude-market-data data/market_snapshot.json
