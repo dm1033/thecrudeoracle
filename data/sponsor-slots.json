@@ -7,7 +7,7 @@
       "placement": "Homepage and price cards",
       "price": "$200/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -17,7 +17,7 @@
       "placement": "Five sends a week, when the note is running",
       "price": "$150/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -27,7 +27,7 @@
       "placement": "Footer of that email",
       "price": "$50/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -37,7 +37,7 @@
       "placement": "Wednesday page, email and social card",
       "price": "$100/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -47,7 +47,7 @@
       "placement": "Friday pages",
       "price": "$100/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -57,7 +57,7 @@
       "placement": "Monthly digest",
       "price": "$75/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -67,7 +67,7 @@
       "placement": "That section and related articles",
       "price": "$150/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -77,7 +77,7 @@
       "placement": "That section and related articles",
       "price": "$100/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -87,7 +87,7 @@
       "placement": "Calculator pages, once they exist",
       "price": "$40/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -97,7 +97,7 @@
       "placement": "Calendar page",
       "price": "$50/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -107,7 +107,7 @@
       "placement": "Third-party embeds, once they exist",
       "price": "$100/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -117,7 +117,7 @@
       "placement": "Social charts",
       "price": "$50/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -127,7 +127,7 @@
       "placement": "A listing, when that page exists",
       "price": "$50 per listing",
       "period": "listing",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     },
     {
@@ -137,7 +137,7 @@
       "placement": "One weekly send",
       "price": "$75/week",
       "period": "week",
-      "stripePaymentLink": "",
+      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
       "available": true
     }
   ]
