@@ -31,9 +31,9 @@ export const metadata: Metadata = pageMeta(
 
 const MEMBER_BENEFITS = [
   ["Daily market briefings", "Concise, source-backed crude oil and gas briefings every trading day — what moved, why, and what matters next."],
-  ["Oil and gas watchlists", "Curated watchlists across upstream, LNG, midstream, services, shipping and North Sea names. Monitored, never recommended."],
-  ["Supply risk alerts", "OPEC+ decisions, inventory surprises, shipping disruption and geopolitical risk flagged as they develop."],
-  ["Company intelligence", "Structured notes on production, reserves, balance sheets, valuation context and catalysts."],
+  ["Oil and gas watchlists — coming soon", "The watchlist page is open. No company names are published yet. Sample tickers stay off the page."],
+  ["Supply and news figures", "US stocks, OPEC production and spare capacity, and a count of supply-route news coverage. Each figure has a source and a date. There is no alert product."],
+  ["Company intelligence — coming soon", "Company notes are not published yet. The page says so, and it does not show sample profiles as if they were real."],
   ["Investment themes", "Multi-week themes across the energy complex, explained in plain English with the evidence behind them."],
   ["Concise explanations", "Terminal-grade data, explained clearly — no noise, no filler, no jargon walls."],
   ["Research library", "A growing archive of deep-dive notes on supply, demand, LNG, shipping and UK energy security."],
@@ -45,8 +45,8 @@ const PRICING_FEATURES = [
   "Full terminal-grade dashboard",
   "Daily crude oil briefing",
   "Crude and gas market intelligence",
-  "Investment watchlist",
-  "Company intelligence",
+  "Investment watchlist — no names published yet",
+  "Company notes — none published yet",
   "Supply and demand alerts",
   "OPEC / geopolitical risk monitoring",
   "Research archive",
@@ -71,7 +71,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How often is the intelligence updated?",
-    a: "Prices, stocks and the dashboard figures are read from public sources such as the EIA and refresh as those sources publish, each with its own date. Watchlist and company intelligence notes are refreshed as events warrant, each stamped with its last-updated date.",
+    a: "Prices, stocks and the dashboard figures are read from public sources such as the EIA and refresh as those sources publish, each with its own date. They are delayed. The watchlist and company-note pages are open, and they currently publish no names or notes.",
   },
 ];
 
@@ -147,7 +147,7 @@ export default async function HomePage() {
                 <li>· Brent, WTI and Henry Hub from the EIA daily spot</li>
                 <li>· Supply, demand and risk signal grids</li>
                 <li>· Daily briefing and bottom line</li>
-                <li>· Investment watchlist and company intelligence</li>
+                <li>· Watchlist and company notes — none published yet</li>
                 <li>· Research archive and charts</li>
               </ul>
             </div>
@@ -198,7 +198,7 @@ export default async function HomePage() {
               />
             </div>
             <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
-              Global supply, demand and risk — monitored continuously, summarised daily.
+              Global supply, demand and risk — read from public releases, summarised on this site.
             </figcaption>
           </figure>
           <figure className="group overflow-hidden rounded-lg border border-ink-700">

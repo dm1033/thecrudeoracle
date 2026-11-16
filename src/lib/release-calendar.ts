@@ -12,6 +12,8 @@ const LONDON = "Europe/London";
 export interface ReleaseEvent {
   id: "eia-wpsr" | "baker-hughes" | "cftc-cot";
   title: string;
+  /** UTC instant of the release. */
+  at: string;
   whenEt: string;
   whenUk: string;
   href: string;
@@ -174,37 +176,84 @@ function nextMatch(now: Date, matches: (ymd: Ymd) => boolean, hour: number, minu
   throw new Error("No release found in the next three weeks");
 }
 
+function releaseEvent(
+  id: ReleaseEvent["id"],
+  title: string,
+  instant: Date,
+  href: string,
+  detail: string,
+): ReleaseEvent {
+  return {
+    id,
+    title,
+    at: instant.toISOString(),
+    whenEt: clock(instant, NEW_YORK, "ET"),
+    whenUk: clock(instant, LONDON, "UK"),
+    href,
+    detail,
+  };
+}
+
+const WPSR_DETAIL =
+  "Wednesday 10:30 ET, or Thursday when a US federal holiday falls on the Monday or the Wednesday of that week.";
+const RIGS_DETAIL = "Friday 1:00pm ET. Link only. This note does not republish rig-count figures.";
+const COT_DETAIL = "Friday 3:30pm ET. Positions are as of the previous Tuesday.";
+
+function wpsrEvent(instant: Date): ReleaseEvent {
+  return releaseEvent(
+    "eia-wpsr",
+    "EIA Weekly Petroleum Status Report",
+    instant,
+    "https://www.eia.gov/petroleum/supply/weekly/",
+    WPSR_DETAIL,
+  );
+}
+
+function rigsEvent(instant: Date): ReleaseEvent {
+  return releaseEvent("baker-hughes", "Baker Hughes rig count", instant, "https://rigcount.bakerhughes.com/", RIGS_DETAIL);
+}
+
+function cotEvent(instant: Date): ReleaseEvent {
+  return releaseEvent(
+    "cftc-cot",
+    "CFTC Commitments of Traders",
+    instant,
+    "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm",
+    COT_DETAIL,
+  );
+}
+
 export function upcomingReleases(now: Date): ReleaseEvent[] {
   const eia = nextMatch(now, isWpsrDate, 10, 30);
   const rigs = nextMatch(now, (ymd) => weekday(ymd) === 5, 13, 0);
   const cot = nextMatch(now, (ymd) => weekday(ymd) === 5, 15, 30);
-  return [
-    {
-      id: "eia-wpsr",
-      title: "EIA Weekly Petroleum Status Report",
-      whenEt: clock(eia, NEW_YORK, "ET"),
-      whenUk: clock(eia, LONDON, "UK"),
-      href: "https://www.eia.gov/petroleum/supply/weekly/",
-      detail:
-        "Wednesday 10:30 ET, or Thursday when a US federal holiday falls on the Monday or the Wednesday of that week.",
-    },
-    {
-      id: "baker-hughes",
-      title: "Baker Hughes rig count",
-      whenEt: clock(rigs, NEW_YORK, "ET"),
-      whenUk: clock(rigs, LONDON, "UK"),
-      href: "https://rigcount.bakerhughes.com/",
-      detail: "Friday 1:00pm ET. Link only. This note does not republish rig-count figures.",
-    },
-    {
-      id: "cftc-cot",
-      title: "CFTC Commitments of Traders",
-      whenEt: clock(cot, NEW_YORK, "ET"),
-      whenUk: clock(cot, LONDON, "UK"),
-      href: "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm",
-      detail: "Friday 3:30pm ET.",
-    },
-  ];
+  return [wpsrEvent(eia), rigsEvent(rigs), cotEvent(cot)];
+}
+
+/**
+ * Coming WPSR, Baker Hughes and CFTC releases inside a horizon.
+ * Times come from the same rules as `upcomingReleases`. The Short-Term
+ * Energy Outlook is monthly and is not given a clock time here.
+ */
+export function calendarReleases(now: Date, horizonDays = 35): ReleaseEvent[] {
+  const start = zonedParts(now, NEW_YORK);
+  const startYmd = { year: start.year, month: start.month, day: start.day };
+  const events: ReleaseEvent[] = [];
+  const cutoff = now.getTime() - 60_000;
+  for (let i = 0; i < horizonDays; i++) {
+    const ymd = addDays(startYmd, i);
+    if (isWpsrDate(ymd)) {
+      const instant = zonedTimeToUtc(ymd, 10, 30, NEW_YORK);
+      if (instant.getTime() >= cutoff) events.push(wpsrEvent(instant));
+    }
+    if (weekday(ymd) === 5) {
+      const rigs = zonedTimeToUtc(ymd, 13, 0, NEW_YORK);
+      const cot = zonedTimeToUtc(ymd, 15, 30, NEW_YORK);
+      if (rigs.getTime() >= cutoff) events.push(rigsEvent(rigs));
+      if (cot.getTime() >= cutoff) events.push(cotEvent(cot));
+    }
+  }
+  return events.sort((a, b) => a.at.localeCompare(b.at));
 }
 
 export function formatLondonTimestamp(iso: string): string {

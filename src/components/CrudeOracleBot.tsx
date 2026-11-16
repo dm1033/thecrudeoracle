@@ -4,11 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  CRUDE_ORACLE_MASTER_SYSTEM_PROMPT,
   CRUDE_ORACLE_PROMPT_VERSION,
   CRUDE_ORACLE_QUICK_PROMPTS,
   type AgentChatMessage,
-} from "@/lib/crude-oracle-agent";
+} from "@/lib/desk-bot-public";
 
 function formatInline(text: string): React.ReactNode[] {
   const parts = text.split(/(\*\*[^*]+\*\*|_[^_]+_|`[^`]+`)/g);
@@ -146,8 +145,6 @@ export default function CrudeOracleBot({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(mode === "embedded");
-  const [showPromptModal, setShowPromptModal] = useState(false);
-  const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [focusLabel, setFocusLabel] = useState("Crude & Global Barrel Complex");
@@ -233,14 +230,6 @@ export default function CrudeOracleBot({
     }
   }
 
-  function handleCopyPrompt() {
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(CRUDE_ORACLE_MASTER_SYSTEM_PROMPT);
-      setCopiedPrompt(true);
-      setTimeout(() => setCopiedPrompt(false), 2500);
-    }
-  }
-
   const panelContent = (
     <div
       className={`flex flex-col overflow-hidden rounded-xl border border-gold-600/50 bg-ink-950 shadow-2xl shadow-black/80 ${
@@ -254,7 +243,7 @@ export default function CrudeOracleBot({
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-700 bg-ink-900 px-4 py-3">
         <div className="flex items-center gap-2.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gain shadow-[0_0_8px_#22c55e]" />
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-gold-500" />
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold tracking-wide text-white">CrudeOracle — Desk Lead</span>
@@ -264,19 +253,12 @@ export default function CrudeOracleBot({
             </div>
             <p className="text-[11px] text-steel-400">
               Focus: <span className="font-semibold text-steel-200">{focusLabel}</span> ·{" "}
-              {eiaLive ? "EIA Spot Overlay Active" : "Published Desk Marks (Delayed)"}
+              {eiaLive ? "EIA daily spot, delayed" : "Published desk marks, delayed"}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setShowPromptModal((v) => !v)}
-            className="rounded border border-ink-600 bg-ink-800 px-2 py-1 text-[11px] font-medium text-steel-300 hover:border-gold-500 hover:text-white"
-          >
-            {showPromptModal ? "Back to Terminal" : "System Prompt"}
-          </button>
           {mode === "floating" && (
             <>
               <Link
@@ -298,31 +280,7 @@ export default function CrudeOracleBot({
         </div>
       </div>
 
-      {/* System Prompt Inspector View */}
-      {showPromptModal ? (
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-ink-950">
-          <div className="flex items-center justify-between gap-2">
-            <div>
-              <p className="eyebrow">Master System Prompt · Version 14 Nov 2026</p>
-              <h3 className="text-sm font-bold text-white">
-                CrudeOracle Desk Bot — Onscreen Bot Specification
-              </h3>
-            </div>
-            <button
-              type="button"
-              onClick={handleCopyPrompt}
-              className="rounded bg-gold-500 px-3 py-1.5 text-xs font-semibold text-ink-950 hover:bg-gold-400"
-            >
-              {copiedPrompt ? "Copied ✓" : "Copy System Prompt"}
-            </button>
-          </div>
-          <pre className="whitespace-pre-wrap rounded-lg border border-ink-700 bg-ink-900 p-3 font-mono text-xs leading-relaxed text-steel-300">
-            {CRUDE_ORACLE_MASTER_SYSTEM_PROMPT}
-          </pre>
-        </div>
-      ) : (
-        <>
-          {/* Quick Interactive Drill-Down Bar */}
+      {/* Quick Interactive Drill-Down Bar */}
           <div className="flex items-center gap-1.5 overflow-x-auto border-b border-ink-800 bg-ink-900/60 px-3 py-2">
             <span className="shrink-0 font-mono text-[10px] uppercase tracking-wider text-steel-500">
               Desk Drills:
@@ -399,8 +357,6 @@ export default function CrudeOracleBot({
               Information only — not investment advice. Every print carries source, as-of date &amp; delay label.
             </p>
           </form>
-        </>
-      )}
     </div>
   );
 
@@ -417,10 +373,10 @@ export default function CrudeOracleBot({
           aria-label="Open CrudeOracle Desk Lead Bot"
           className="fixed bottom-4 right-4 z-50 flex items-center gap-2.5 rounded-full border border-gold-500 bg-ink-950/95 px-4 py-2.5 text-xs font-bold text-white shadow-2xl shadow-black/80 transition-transform hover:scale-[1.02] hover:border-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400"
         >
-          <span className="h-2.5 w-2.5 rounded-full bg-gain shadow-[0_0_8px_#22c55e]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-gold-500" />
           <span>CrudeOracle Desk Bot</span>
-          <span className="rounded bg-gold-500 px-1.5 py-0.5 font-mono text-[10px] font-bold text-ink-950">
-            LIVE
+          <span className="rounded bg-ink-800 px-1.5 py-0.5 font-mono text-[10px] font-bold text-gold-400">
+            Delayed data
           </span>
         </button>
       )}

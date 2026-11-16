@@ -6,7 +6,8 @@ import DataMeta from "@/components/DataMeta";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import CoverageChart from "@/components/charts/CoverageChart";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
-import { getMonitorFeed, headlines, newsTermStatuses, newsTimeline, num } from "@/lib/oracle-intelligence";
+import { getMonitorFeed, headlineNote, headlines, newsTermStatuses, newsTimeline, num } from "@/lib/oracle-intelligence";
+import { visitorModuleReason } from "@/components/PublicDataMonitor";
 
 export const metadata: Metadata = pageMeta(
   "Oil supply-route news monitor",
@@ -179,7 +180,7 @@ export default function SupplyNewsPage() {
                 </ul>
               ) : (
                 <p className="mt-4 max-w-3xl rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm text-steel-400">
-                  No headlines loaded on the last update.
+                  {values ? headlineNote(values) ?? "No headlines were available on the last update. The coverage figures above do not depend on them." : "No headlines were available on the last update."}
                 </p>
               )}
             </section>
@@ -189,7 +190,7 @@ export default function SupplyNewsPage() {
             <p className="text-lg font-semibold text-white">News coverage: not loaded</p>
             <p className="mt-2 text-steel-400">
               The GDELT Project feed could not be read on the last update
-              {news.status === "not_loaded" && news.reason ? ` (${news.reason})` : ""}. No figure is shown until it can.
+              {news.status === "not_loaded" && news.reason ? ` (${visitorModuleReason(news.reason)})` : ""}. No figure is shown until it can.
             </p>
           </section>
         )}

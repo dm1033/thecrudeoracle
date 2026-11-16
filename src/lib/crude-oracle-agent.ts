@@ -10,23 +10,15 @@ import type { DashboardCards, DataCard } from "@/lib/dashboard-cards";
 import type { PublishedPrices } from "@/lib/published-prices";
 import { getMonitorFeed, num } from "@/lib/oracle-intelligence";
 import { LICENSED_DATA_REQUIRED, isPlaceholderPrice, priceFigureShown } from "@/lib/price-stamp";
+import { CRUDE_ORACLE_PROMPT_VERSION, CRUDE_ORACLE_QUICK_PROMPTS, type AgentChatMessage } from "@/lib/desk-bot-public";
 
-export const CRUDE_ORACLE_PROMPT_VERSION = "2026-11-14";
+export { CRUDE_ORACLE_PROMPT_VERSION, CRUDE_ORACLE_QUICK_PROMPTS, type AgentChatMessage };
 
 export const CRUDE_ORACLE_MANDATORY_DISCLAIMER =
   "Information only — not investment advice, a recommendation, or an offer to buy/sell. Past performance is not indicative of future results. Verify all data with primary sources. AI-generated analysis may contain errors. Markets are volatile; capital is at risk. Consult a regulated financial adviser. Data may be delayed or indicative.";
 
 export const CRUDE_ORACLE_INTERACTIVE_FOOTER =
   "Next? Latest inventories | Spreads and cracks | Positioning | World balance | Something else?";
-
-export const CRUDE_ORACLE_QUICK_PROMPTS: { label: string; query: string }[] = [
-  { label: "Market Snapshot", query: "Give me today's crude & gas market snapshot and key drivers." },
-  { label: "Latest Inventories", query: "Latest inventories: US crude and Cushing stocks, and the world balance." },
-  { label: "Spreads & Cracks", query: "Show the Brent-WTI spread and the gasoline and diesel crack spreads." },
-  { label: "Positioning", query: "What does the latest CFTC managed money positioning in WTI show?" },
-  { label: "Supply & News", query: "OPEC spare capacity and how much news coverage Hormuz and the Red Sea are getting." },
-  { label: "Gas", query: "What is the latest Henry Hub gas price?" },
-];
 
 export const CRUDE_ORACLE_MASTER_SYSTEM_PROMPT = `You are CrudeOracle, the Desk Lead: the oil and gas market data desk of The Crude Oracle. You explain what published public data shows, in plain language, for readers who follow oil and gas markets. You are not an adviser and you do not trade.
 
@@ -76,11 +68,6 @@ export type QueryTopic =
   | "positioning"
   | "gas_lng"
   | "snapshot";
-
-export interface AgentChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
 
 /**
  * Figures the bot may quote beyond the price board, all read from public
@@ -261,7 +248,7 @@ export function buildDeskContextBlock(feed: PublishedPrices, data: DeskData = EM
   const cftc = cftcWtiLine();
 
   return [
-    `Feed status: EIA live overlay = ${feed.eia ? `YES (as of ${feed.eiaUpdated})` : `NO (using published desk marks as of ${feed.manualUpdated})`}`,
+    `Feed status: EIA delayed spot = ${feed.eia ? `connected (as of ${feed.eiaUpdated})` : `not connected (published desk marks as of ${feed.manualUpdated})`}`,
     "Only the figures below are verified. Quote no other figure. There is no event, outage, tanker or OPEC-decision feed: do not describe any such event as current.",
     "",
     "### Prices",

@@ -38,8 +38,16 @@ export interface WeeklyStockLine {
   changeMillionBarrels: number | null;
 }
 
+export interface WeeklyHistoryRow {
+  weekEnding: string;
+  millionBarrels: number;
+  changeMillionBarrels: number | null;
+}
+
 export interface WeeklySnapshot {
   lines: WeeklyStockLine[];
+  /** Recent US commercial crude weeks, newest first, from the same read as `lines`. */
+  crudeHistory: WeeklyHistoryRow[];
   /** Week-ending date of the US crude row. The page's "latest print" date. */
   weekEnding: string;
   fetchedAt: string;
@@ -90,9 +98,17 @@ function lineFrom(name: string, def: EiaSeriesDef, result: WeeklySeriesResult): 
 
 async function loadReport(): Promise<WeeklySnapshot> {
   if (!readEiaApiKey()) throw new Error("EIA API key is not set");
-  const opts = { length: 8, timeoutMs: 8_000, maxRetries: 0 };
-  const settled = await Promise.allSettled(WEEKLY_SERIES.map((series) => getWeeklyStockSeries(series.def, opts)));
+  const settled = await Promise.allSettled(
+    WEEKLY_SERIES.map((series) =>
+      getWeeklyStockSeries(series.def, {
+        length: series.def === EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS ? 12 : 8,
+        timeoutMs: 8_000,
+        maxRetries: 0,
+      }),
+    ),
+  );
   const lines: WeeklyStockLine[] = [];
+  let crudeHistory: WeeklyHistoryRow[] = [];
   const failures: string[] = [];
   settled.forEach((item, index) => {
     const series = WEEKLY_SERIES[index];
@@ -103,6 +119,16 @@ async function loadReport(): Promise<WeeklySnapshot> {
     }
     try {
       lines.push(lineFrom(series.name, series.def, item.value));
+      if (series.def === EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS) {
+        crudeHistory = item.value.observations.map((obs, obsIndex) => {
+          const previous = item.value.observations[obsIndex + 1];
+          return {
+            weekEnding: obs.date.slice(0, 10),
+            millionBarrels: round3(obs.value),
+            changeMillionBarrels: previous ? round3(obs.value - previous.value) : null,
+          };
+        });
+      }
     } catch (err) {
       const detail = err instanceof Error ? err.message : String(err);
       logEiaFallback("out-of-range", detail);
@@ -118,10 +144,10 @@ async function loadReport(): Promise<WeeklySnapshot> {
     logEiaFallback("stale data", `US crude stocks week ${crude.weekEnding} is outside the ${MAX_AGE_DAYS}-day window`);
     throw new Error(`EIA weekly crude stocks ${crude.weekEnding} are outside the ${MAX_AGE_DAYS}-day window`);
   }
-  return { lines, weekEnding: crude.weekEnding, fetchedAt: new Date().toISOString() };
+  return { lines, crudeHistory, weekEnding: crude.weekEnding, fetchedAt: new Date().toISOString() };
 }
 
-const loadCachedReport = unstable_cache(loadReport, ["eia-weekly-wpsr-v1"], {
+const loadCachedReport = unstable_cache(loadReport, ["eia-weekly-wpsr-v2"], {
   revalidate: EIA_DATA_REVALIDATE_SECONDS,
   tags: ["eia-weekly", "eia-spot"],
 });
@@ -148,7 +174,12 @@ async function refresh(): Promise<WeeklySnapshot> {
 }
 
 function servable(report: WeeklySnapshot, now = Date.now()): boolean {
-  return report.lines.length === WEEKLY_SERIES.length && fresh(report.weekEnding, now);
+  return (
+    report.lines.length === WEEKLY_SERIES.length &&
+    Array.isArray(report.crudeHistory) &&
+    report.crudeHistory.length > 0 &&
+    fresh(report.weekEnding, now)
+  );
 }
 
 /**

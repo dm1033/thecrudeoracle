@@ -93,8 +93,8 @@
     {
       "id": "release-calendar",
       "name": "Release calendar, presented by",
-      "description": "USD 100 per month.",
-      "placement": "Calendar page",
+      "description": "USD 100 per month for the release calendar.",
+      "placement": "Release calendar (/calendar)",
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",

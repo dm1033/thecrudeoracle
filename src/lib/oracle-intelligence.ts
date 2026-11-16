@@ -101,6 +101,12 @@ export function dateAt(values: Record<string, unknown>, path: string): string | 
   return isDateLike(current) ? current : null;
 }
 
+/** Why the headline list is empty, when the file says so. */
+export function headlineNote(values: Record<string, unknown>): string | null {
+  const note = values.headlines_note;
+  return typeof note === "string" && note.trim() ? note.trim() : null;
+}
+
 export function headlines(values: Record<string, unknown>): MonitorHeadline[] {
   const list = Array.isArray(values.headlines) ? values.headlines : [];
   return list.flatMap((item) => {

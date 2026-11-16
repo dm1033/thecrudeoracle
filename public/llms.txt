@@ -18,8 +18,9 @@ The Crude Oracle provides market commentary, educational content and investment 
 - [Gas / LNG](https://www.thecrudeoracle.com/gas-lng): Henry Hub from the EIA. NBP, TTF and JKM are not given a figure
 - [OPEC / Supply Risk](https://www.thecrudeoracle.com/opec-supply-risk): Producer and supply-risk monitor
 - [Paper fund](https://www.thecrudeoracle.com/portfolio): Withheld until every line is a real mark. Sample tickers are not shown
-- [Watchlist](https://www.thecrudeoracle.com/watchlist): Monitored energy names, not recommendations
-- [Company intelligence](https://www.thecrudeoracle.com/company-intelligence): Structured company notes
+- [Watchlist](https://www.thecrudeoracle.com/watchlist): Coming soon. No company names are published
+- [Company intelligence](https://www.thecrudeoracle.com/company-intelligence): Coming soon. No company notes are published
+- [Release calendar](https://www.thecrudeoracle.com/calendar): Next EIA weekly, CFTC and Baker Hughes release times. STEO is monthly and is not given a guessed clock time
 - [Trader toolkit](https://www.thecrudeoracle.com/tools): Balance, flows, curve, positioning, news and hypotheses
 - [Research library](https://www.thecrudeoracle.com/research-library): Deep-dive notes
 - [Oil Truth](https://www.thecrudeoracle.com/oil-truth): What crude oil is and why it still matters

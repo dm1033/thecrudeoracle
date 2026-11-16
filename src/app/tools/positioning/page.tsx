@@ -198,7 +198,7 @@ function PositioningContent() {
         </h2>
         <p className="mt-1 max-w-3xl text-sm text-steel-500">
           Three questions per market: is positioning stretched, is structure confirming, do
-          physical flows support it? A ✓ marks a crowding condition that was live when the card was last reviewed.
+          physical flows support it? A tick marks a crowding condition that was recorded when the card was last reviewed.
         </p>
         <StaleNotice what="These cards" dates={crowdRisk.map((c) => c.last_updated)} />
         <div className="mt-4 grid gap-4 lg:grid-cols-2">

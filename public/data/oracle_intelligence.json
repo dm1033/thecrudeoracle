@@ -6,11 +6,11 @@
   "modules": {
     "prices": {
       "status": "not_loaded",
-      "reason": "the EIA_API_KEY repository secret is not set"
+      "reason": "EIA figures are unavailable"
     },
     "inventories": {
       "status": "not_loaded",
-      "reason": "the EIA_API_KEY repository secret is not set"
+      "reason": "EIA figures are unavailable"
     },
     "positioning": {
       "status": "ok",
@@ -260,7 +260,26 @@
           "Suez Canal",
           "Libya oilfield"
         ],
-        "headlines": [],
+        "headlines": [
+          {
+            "title": "Iran navy says three tankers on fire after hitting mines in Hormuz",
+            "domain": "bdnews24.com",
+            "url": "https://bdnews24.com/world/middle-east/47mh9vo0tx",
+            "seen_utc": "2026-11-15T07:45:00Z"
+          },
+          {
+            "title": "Oil markets stay flush despite tanker attacks",
+            "domain": "economictimes.indiatimes.com",
+            "url": "https://economictimes.indiatimes.com/industry/energy/oil-gas/oil-markets-stay-flush-despite-tanker-attacks/articleshow/135841578.cms",
+            "seen_utc": "2026-11-14T20:00:00Z"
+          },
+          {
+            "title": "Russia Oil Revenues Hit Five - Month High on Crude Rally , IEA Says",
+            "domain": "gcaptain.com",
+            "url": "https://gcaptain.com/russia-oil-revenues-hit-five-month-high-on-crude-rally-iea-says/",
+            "seen_utc": "2026-11-13T18:00:00Z"
+          }
+        ],
         "terms": [
           {
             "term": "Strait of Hormuz",
@@ -283,7 +302,7 @@
     },
     "gas_storage": {
       "status": "not_loaded",
-      "reason": "the AGSI_API_KEY repository secret is not set"
+      "reason": "EU gas storage is unavailable"
     }
   }
 }

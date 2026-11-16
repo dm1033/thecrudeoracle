@@ -13,7 +13,7 @@ import VesselWatch from "@/components/VesselWatch";
 
 export const metadata: Metadata = pageMeta(
   "Physical tanker flow map",
-  "Module 2 of The Crude Oracle trader toolkit: tanker loadings and discharges, destination changes, dark AIS gaps, floating storage, port congestion and freight — with a TankerMap vessel layer and a desk note attached to the hull.",
+  "July 2026 archive, not current. Sample tanker-flow tables. Not updated. A TankerMap hull can still be read on this page and is labelled delayed.",
   "/tools/flow-map"
 );
 
@@ -182,8 +182,8 @@ export default async function FlowMapPage({
     <>
       <PageHeader
         eyebrow="Trader Toolkit · Module 2 · July 2026 archive"
-        title="Physical Flow Map"
-        intro="Tankers loaded and discharged, destination changes, dark AIS gaps, floating storage, congestion and freight — with a TankerMap hull on the map and a desk note attached to that position."
+        title="Physical Flow Map — July 2026 archive"
+        intro="Archive, not a current flow picture. The tables below were written in July 2026 and are not updated. A TankerMap hull, when one is shown, is a separate delayed position and is labelled as such."
       />
       <div className="container-site space-y-10 py-10">
         <ArchiveNotice

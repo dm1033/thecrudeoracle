@@ -61,8 +61,8 @@ export default function AboutPage() {
               plain English, no jargon walls, no filler.
             </li>
             <li>
-              <strong>Independent:</strong> we monitor companies; we never recommend them. Every
-              watchlist entry carries a &ldquo;watchlist, not recommendation&rdquo; label.
+              <strong>Independent:</strong> we do not recommend companies. No watchlist names or company
+              notes are published yet. A name, when one is published, is monitored and not a recommendation.
             </li>
             <li>
               <strong>Honest about data:</strong> Brent, WTI and Henry Hub are delayed EIA daily

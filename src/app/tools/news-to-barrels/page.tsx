@@ -200,8 +200,8 @@ export default function NewsToBarrelsPage() {
     <>
       <PageHeader
         eyebrow="Trader Toolkit · Module 4 · July 2026 archive"
-        title="News-to-Barrels AI"
-        intro="Headlines are noise until they're sized. Every market-moving event is converted into estimated barrel impact: affected capacity, the full impact chain across crude, products, cracks and differentials — and an honest confidence grade with watchpoints."
+        title="News-to-Barrels — July 2026 archive"
+        intro="Archive, not current events. These sample events were written in July 2026 and are not updated. They show how a headline was sized in barrels. They do not describe today's market."
       />
       <div className="container-site space-y-10 py-10">
         <ArchiveNotice
