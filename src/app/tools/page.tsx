@@ -129,7 +129,7 @@ export default function ToolsPage() {
                       live ? "bg-gain/15 text-gain" : archive ? "bg-risk/15 text-risk" : "bg-steel-500/15 text-steel-400"
                     }`}
                   >
-                    {archive ? "July archive" : m.status}
+                    {archive ? "Archived · July 2026" : "Open"}
                   </span>
                 </div>
                 <h2 className="mt-2 text-lg font-bold text-white">{m.title}</h2>
@@ -161,7 +161,7 @@ export default function ToolsPage() {
 
         <SubscribeCTA
           heading="The toolkit is 100% free"
-          body="Every tool is free, alongside the dashboard, the morning note and the watchlist."
+          body="Every tool is free, alongside the dashboard and the morning note. The watchlist has no names published yet."
         />
         <DisclaimerBlock />
       </div>

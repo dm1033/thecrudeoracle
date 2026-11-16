@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { MONITOR_MODULES, headlines, monitorLastData, num, parseMonitorFeed, newsTerms, newsTermStatuses, newsTimeline } from "@/lib/oracle-intelligence";
+import { MONITOR_MODULES, headlineNote, headlines, monitorLastData, num, parseMonitorFeed, newsTerms, newsTermStatuses, newsTimeline } from "@/lib/oracle-intelligence";
+import { visitorModuleReason } from "@/components/PublicDataMonitor";
 
 const ok = (values: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({
   status: "ok",
@@ -25,6 +26,16 @@ describe("parseMonitorFeed", () => {
   it("keeps the stated reason for a module that has not loaded", () => {
     const feed = parseMonitorFeed({ modules: { macro: { status: "not_loaded", reason: "the FRED_API_KEY repository secret is not set" } } });
     expect(feed.macro).toEqual({ status: "not_loaded", reason: "the FRED_API_KEY repository secret is not set" });
+  });
+
+  it("reads a headline note and leaves the stored reason unchanged", () => {
+    const feed = parseMonitorFeed({
+      modules: { news: ok({ headlines: [], headlines_note: "  Headlines were not available on the last fetch.  " }) },
+    });
+    expect(feed.news.status).toBe("ok");
+    if (feed.news.status === "ok") expect(headlineNote(feed.news.values)).toBe("Headlines were not available on the last fetch.");
+    expect(visitorModuleReason("the AGSI_API_KEY repository secret is not set")).toBe("The public feed did not return a figure.");
+    expect(visitorModuleReason("EU gas storage is unavailable")).toBe("EU gas storage is unavailable");
   });
 
   it("rejects an ok module with no data date, no values or no source", () => {

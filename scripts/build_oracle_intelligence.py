@@ -59,6 +59,11 @@ HEADLINE_TERMS = re.compile(
     r"\b(hormuz|opec|suez|red sea|bab[ -]el[ -]mandeb|tankers?|crude|oil(field|fields)?|pipeline|refiner(y|ies))\b",
     re.IGNORECASE,
 )
+# The published file is checked for these words. A headline that contains one is dropped.
+BANNED_HEADLINE = re.compile(
+    r"interactive brokers|pepperstone|ic markets|ninjatrader|fp markets|plus500|avatrade|tradestation|bullish|bearish|squeeze|golden cross|resistance",
+    re.IGNORECASE,
+)
 
 
 class NotLoaded(Exception):
@@ -156,7 +161,8 @@ def pearson(xs, ys):
 def eia_series(route, series_id, frequency, length):
     """Newest-first list of (period, value) for one EIA v2 series."""
     if not EIA_API_KEY:
-        raise NotLoaded("the EIA_API_KEY repository secret is not set")
+        warn("EIA_API_KEY is not set")
+        raise NotLoaded("EIA figures are unavailable")
     payload = fetch_json(
         f"https://api.eia.gov/v2/{route}/data/",
         {
@@ -540,6 +546,56 @@ def recent_terms(previous_module, now):
     return kept
 
 
+def collect_headlines(listing):
+    """Oil-supply headlines from a GDELT artlist payload. Raises NotLoaded when the payload is not a list."""
+    articles = listing.get("articles") if isinstance(listing, dict) else None
+    if not isinstance(articles, list):
+        raise NotLoaded("GDELT article list was not usable")
+    headlines = []
+    seen = set()
+    for article in articles:
+        if not isinstance(article, dict):
+            continue
+        title, url, domain = article.get("title"), article.get("url"), article.get("domain")
+        if not (isinstance(title, str) and isinstance(url, str) and isinstance(domain, str)):
+            continue
+        title = " ".join(title.split())
+        if not title or not url.startswith("https://") or domain in seen:
+            continue
+        # GDELT matches the article body, so many hits are only loosely related.
+        # Keep a headline only when the headline itself is about oil supply.
+        if not HEADLINE_TERMS.search(title) or BANNED_HEADLINE.search(title):
+            continue
+        seen.add(domain)
+        try:
+            seen_at = gdelt_time(article.get("seendate")).strftime("%Y-%m-%dT%H:%M:%SZ")
+        except (TypeError, ValueError):
+            continue
+        headlines.append({"title": title[:200], "domain": domain[:80], "url": url[:500], "seen_utc": seen_at})
+        if len(headlines) == 10:
+            break
+    return headlines
+
+
+def previous_headlines(previous_module):
+    """Headlines already stored, kept only when each field is still well formed."""
+    values = previous_module.get("values") if isinstance(previous_module, dict) else None
+    items = values.get("headlines") if isinstance(values, dict) else None
+    if not isinstance(items, list):
+        return []
+    kept = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        title, url, domain, seen_at = item.get("title"), item.get("url"), item.get("domain"), item.get("seen_utc")
+        if not all(isinstance(part, str) and part.strip() for part in (title, url, domain, seen_at)):
+            continue
+        if not url.startswith("https://"):
+            continue
+        kept.append({"title": title[:200], "domain": domain[:80], "url": url[:500], "seen_utc": seen_at})
+    return kept
+
+
 def build_news(previous_module=None):
     base = GDELT_BASE
     points = gdelt_timeline(GDELT_QUERY)
@@ -558,36 +614,26 @@ def build_news(previous_module=None):
 
     time.sleep(GDELT_GAP_SECONDS)
     headlines = []
+    headlines_note = None
     try:
         listing = fetch_json(
             base,
-            {"query": GDELT_QUERY, "mode": "artlist", "maxrecords": 50, "sort": "datedesc", "timespan": "3d", "format": "json"},
+            {"query": GDELT_QUERY, "mode": "artlist", "maxrecords": 75, "sort": "datedesc", "timespan": "3d", "format": "json"},
         )
-        seen = set()
-        for article in (listing.get("articles") if isinstance(listing, dict) else None) or []:
-            if not isinstance(article, dict):
-                continue
-            title, url, domain = article.get("title"), article.get("url"), article.get("domain")
-            if not (isinstance(title, str) and isinstance(url, str) and isinstance(domain, str)):
-                continue
-            title = " ".join(title.split())
-            if not title or not url.startswith("https://") or domain in seen:
-                continue
-            # GDELT matches the article body, so many hits are only loosely related.
-            # Keep a headline only when the headline itself is about oil supply.
-            if not HEADLINE_TERMS.search(title):
-                continue
-            seen.add(domain)
-            try:
-                seen_at = gdelt_time(article.get("seendate")).strftime("%Y-%m-%dT%H:%M:%SZ")
-            except (TypeError, ValueError):
-                continue
-            headlines.append({"title": title[:200], "domain": domain[:80], "url": url[:500], "seen_utc": seen_at})
-            if len(headlines) == 10:
-                break
+        headlines = collect_headlines(listing)
+        if not headlines:
+            headlines_note = "No recent headline matched the oil-supply terms. The coverage figure does not depend on headlines."
     except NotLoaded as exc:
-        warn(f"news: headlines left out ({exc})")
+        warn(f"news: headline list was not usable ({exc})")
+        headlines = previous_headlines(previous_module)
+        headlines_note = (
+            "Headlines are from the previous fetch. A newer article list was not available."
+            if headlines
+            else "Headlines were not available on the last fetch. The coverage figure does not depend on them."
+        )
     values["headlines"] = headlines
+    if headlines_note:
+        values["headlines_note"] = headlines_note
 
     # One search term at a time, with a gap between calls. A refusal is recorded
     # for that term and the next term is still requested. Stopping early used to
@@ -628,7 +674,8 @@ def build_news(previous_module=None):
 
 def build_gas_storage():
     if not AGSI_API_KEY:
-        raise NotLoaded("the AGSI_API_KEY repository secret is not set")
+        warn("AGSI_API_KEY is not set")
+        raise NotLoaded("EU gas storage is unavailable")
     payload = fetch_json("https://agsi.gie.eu/api", {"type": "eu", "size": 5}, headers={"x-key": AGSI_API_KEY})
     rows = payload.get("data") if isinstance(payload, dict) else None
     best = None

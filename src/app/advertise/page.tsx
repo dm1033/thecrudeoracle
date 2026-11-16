@@ -82,8 +82,8 @@ export default function AdvertisePage() {
           <p className="mt-4 max-w-3xl text-sm text-steel-400">
             Book this slot opens one Stripe Payment Link for every row. At checkout, enter the slot name and the
             amount shown on that row. The payment also records the slot id. After payment, use Send artwork and
-            details on the same row. That email is how the name, link and artwork reach the desk. Every live
-            placement is labelled Sponsored.
+            details on the same row. That email is how the name, link and artwork reach the desk. Every
+            placement on the site is labelled Sponsored.
           </p>
         </section>
 

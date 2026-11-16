@@ -160,7 +160,7 @@ export default async function EiaWeeklyPage() {
             </Link>
           </section>
         )}
-        <EiaCrudeStocksSnapshot />
+        <EiaCrudeStocksSnapshot rows={feed?.report.crudeHistory} fetchedAt={feed?.report.fetchedAt ?? null} />
         <PresentedBy location="eia_weekly_sponsor" enquireHref="/advertise#eia-inventory-day" />
         <p className="text-sm font-medium text-steel-200">Not financial advice.</p>
         <DisclaimerBlock />

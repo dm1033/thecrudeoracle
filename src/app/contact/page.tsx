@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import PageHeader from "@/components/PageHeader";
 import ContactForm from "./ContactForm";
@@ -32,8 +33,12 @@ export default function ContactPage() {
                   {SITE.contactEmail}
                 </a>
               </p>
-              <p className="mt-2 text-xs text-steel-500">
-                (Placeholder address — configure your real inbox before launch.)
+              <p className="mt-2 text-xs leading-relaxed text-steel-500">
+                The form opens an email to that address. Sponsorship and artwork use the same address from the{" "}
+                <Link href="/advertise" className="text-gold-400 underline">
+                  advertise page
+                </Link>
+                .
               </p>
             </div>
             <div className="card p-6">

@@ -9,16 +9,16 @@ import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
   "Free Access — The Crude Oracle is now 100% free",
-  "The Crude Oracle has removed its paywall. The full oil and gas intelligence dashboard, daily briefings, investment watchlist, company intelligence and analysis tools are free for everyone.",
+  "The Crude Oracle has removed its paywall. The dashboard, daily briefings and public-data tools are free. The watchlist and company notes are not published yet.",
   "/subscribe"
 );
 
 const INCLUDED = [
   ["Full terminal-grade dashboard", "/dashboard", "Brent, WTI and Henry Hub from the EIA daily spot, with supply, demand and risk signal grids. Dubai, NBP and TTF are not shown."],
   ["Daily crude oil briefing", "/daily-briefing", "What moved, why, and what matters next — every trading day, source-backed."],
-  ["Investment watchlist", "/watchlist", "Monitored names across 12 energy segments. Monitored, never recommended."],
-  ["Company intelligence", "/company-intelligence", "Structured notes on production, reserves, balance sheets and catalysts."],
-  ["Analysis tools", "/tools", "Balance engine, curve monitor, flow map, positioning, news-to-barrels and hypothesis builder."],
+  ["Investment watchlist", "/watchlist", "Coming soon. No company names are published. Sample tickers are not shown."],
+  ["Company intelligence", "/company-intelligence", "Coming soon. No company notes are published."],
+  ["Analysis tools", "/tools", "Balance, curve, positioning and the public-data tools use delayed public sources. Flow map, news-to-barrels and the hypothesis builder are a July 2026 archive."],
   ...(PAPER_FUND_PUBLISHED
     ? [["$100,000,000 paper fund", "/portfolio", "The live paper fund: every open line, the closed trade, and the profit on each. Virtual capital. Wins and losses both."] as const]
     : []),

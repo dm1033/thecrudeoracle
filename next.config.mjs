@@ -12,6 +12,7 @@ const nextConfig = {
       { source: "/premium-dashboard", destination: "/dashboard", permanent: true },
       { source: "/subscription-terms", destination: "/terms-of-use", permanent: true },
       { source: "/login", destination: "/", permanent: true },
+      { source: "/release-calendar", destination: "/calendar", permanent: false },
     ];
   },
 };

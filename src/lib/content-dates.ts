@@ -68,4 +68,5 @@ export const ROUTE_LASTMOD: Record<string, string> = {
   "/advertise": "2026-10-29T00:00:00Z",
   "/media-kit": "2026-10-29T00:00:00Z",
   "/corrections": "2026-10-29T00:00:00Z",
+  "/calendar": "2026-11-15T00:00:00Z",
 };

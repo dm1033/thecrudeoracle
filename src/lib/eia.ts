@@ -627,6 +627,8 @@ export interface WeeklySeriesResult {
   latest: EiaObservation;
   previous: EiaObservation | null;
   changeAbs: number | null; // in outputUnit (e.g. million barrels), one decimal
+  /** Newest first, including `latest`. */
+  observations: EiaObservation[];
 }
 
 /** Pure — derives week-over-week absolute change from a newest-first list of weekly observations. */
@@ -640,6 +642,7 @@ export function buildWeeklySeriesResult(observations: readonly EiaObservation[])
     latest,
     previous,
     changeAbs: previous ? round(latest.value - previous.value, 1) : null,
+    observations: [...observations],
   };
 }
 

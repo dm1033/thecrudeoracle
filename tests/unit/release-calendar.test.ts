@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isUsFederalHoliday, upcomingReleases } from "@/lib/release-calendar";
+import { calendarReleases, isUsFederalHoliday, upcomingReleases } from "@/lib/release-calendar";
 
 describe("US federal holidays", () => {
   it("marks the holidays that move the Wednesday EIA release", () => {
@@ -44,5 +44,16 @@ describe("upcoming releases", () => {
 
     const thanksgivingWeek = upcomingReleases(new Date("2026-11-23T15:00:00Z"))[0];
     expect(thanksgivingWeek.whenEt).toBe("Wed 25 Nov 2026, 10:30 ET");
+  });
+});
+
+describe("calendar page window", () => {
+  it("lists the next Wednesday petroleum report after 15 Nov 2026, in time order", () => {
+    const events = calendarReleases(new Date("2026-11-15T12:00:00Z"));
+    expect(events.length).toBeGreaterThan(1);
+    expect(events.map((event) => event.at)).toEqual([...events].map((event) => event.at).sort());
+    const eia = events.find((event) => event.id === "eia-wpsr");
+    expect(eia?.whenEt).toBe("Wed 18 Nov 2026, 10:30 ET");
+    expect(events.some((event) => event.id === "cftc-cot" && event.whenEt.startsWith("Fri 20 Nov 2026"))).toBe(true);
   });
 });

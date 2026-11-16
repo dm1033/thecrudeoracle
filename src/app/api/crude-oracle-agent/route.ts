@@ -35,7 +35,6 @@ export async function GET() {
     agent: "CrudeOracle",
     role: "Desk Lead",
     promptVersion: CRUDE_ORACLE_PROMPT_VERSION,
-    systemPrompt: CRUDE_ORACLE_MASTER_SYSTEM_PROMPT,
     eiaLive: feed.eia,
     quickOptions: CRUDE_ORACLE_QUICK_PROMPTS,
     initialBriefing: initial,

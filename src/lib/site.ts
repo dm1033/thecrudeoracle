@@ -16,7 +16,7 @@ export const SITE = {
 // The Crude Oracle is free — the paid subscription has been retired and the
 // Stripe payment integration (webhook, billing portal, subscription link) removed.
 export const FREE_ANNOUNCEMENT =
-  "The Crude Oracle is now 100% free. Every dashboard, daily briefing, watchlist, company note and tool — no paywall, no card, no catch.";
+  "The Crude Oracle is free. The dashboard, the morning note and the public-data tools are open — no paywall and no card. The watchlist and company notes are not published yet.";
 
 export const FINANCIAL_DISCLAIMER_SHORT =
   "The Crude Oracle provides market commentary, educational content and investment research for information purposes only. It is not financial advice, investment advice, tax advice or a recommendation to buy, sell or hold any security, commodity, derivative, fund or financial product. Users must conduct their own research and consult a regulated financial adviser where appropriate. Trading and investing involve risk, including loss of capital.";
@@ -70,4 +70,5 @@ export const NAV_FOOTER_COMPANY: NavItem[] = [
   { label: "Free Access", href: "/subscribe" },
   { label: "Account", href: "/account" },
   { label: "Contact", href: "/contact" },
+  { label: "Release calendar", href: "/calendar" },
 ];

@@ -189,8 +189,8 @@ export default function HypothesisBuilderPage() {
     <>
       <PageHeader
         eyebrow="Trader Toolkit · Module 6 · July 2026 archive"
-        title="Trade Hypothesis Builder"
-        intro="Not signals — scenarios. When the modules disagree, this tool turns the dislocation into a structured hypothesis: evidence, explicit invalidation conditions and an honest confidence score."
+        title="Trade Hypothesis Builder — July 2026 archive"
+        intro="Archive, not current research. These sample hypotheses were written in July 2026 and are not updated. They are not buy or sell signals, and they do not describe today's market."
       />
       <div className="container-site space-y-10 py-10">
         <ArchiveNotice

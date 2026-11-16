@@ -24,9 +24,7 @@ export default function ContactForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // FORM BACKEND PLACEHOLDER:
-    // Wire to Formspree, Netlify Forms, Resend, or an API route before launch.
-    // As a functional fallback we open the visitor's mail client pre-filled.
+    // Opens the visitor's mail client with the enquiry filled in.
     const body = [
       `Name: ${form.name}`,
       `Email: ${form.email}`,

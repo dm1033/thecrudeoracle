@@ -34,8 +34,10 @@ function tone(value: number): string {
 function NotLoaded({ what, detail }: { what: string; detail: string }) {
   return (
     <div className="mt-4 rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm leading-relaxed text-steel-300">
-      <p className="font-semibold text-white">{what}: not loaded yet</p>
-      <p className="mt-1 text-steel-400">{detail} No figure is shown until it has.</p>
+      <p className="font-semibold text-white">Data unavailable</p>
+      <p className="mt-1 text-steel-400">
+        {what}. {detail} No figure is shown.
+      </p>
     </div>
   );
 }
@@ -114,16 +116,25 @@ export function CftcManagedMoneySnapshot() {
       ) : (
         <NotLoaded
           what="CFTC WTI managed-money positions"
-          detail="The automated Friday pull from the CFTC public reporting API has not completed."
+          detail="CFTC managed-money positions are not in the latest snapshot."
         />
       )}
     </section>
   );
 }
 
-export function EiaCrudeStocksSnapshot() {
+export function EiaCrudeStocksSnapshot({
+  rows,
+  fetchedAt,
+}: {
+  /** Recent weeks from the same EIA read as the stocks table. Falls back to the snapshot file. */
+  rows?: { weekEnding: string; millionBarrels: number; changeMillionBarrels: number | null }[];
+  fetchedAt?: string | null;
+} = {}) {
   const { eia } = getMarketSnapshot();
-  const latest = eia.rows[0];
+  const tableRows = rows && rows.length > 0 ? rows : eia.rows;
+  const latest = tableRows[0];
+  const stampedAt = rows && rows.length > 0 ? fetchedAt ?? null : eia.fetchedAt;
 
   return (
     <section aria-labelledby="eia-snapshot-h">
@@ -150,7 +161,7 @@ export function EiaCrudeStocksSnapshot() {
                 </tr>
               </thead>
               <tbody>
-                {eia.rows.map((row) => (
+                {tableRows.map((row) => (
                   <tr key={row.weekEnding}>
                     <th scope="row" className="whitespace-nowrap font-medium text-steel-200">
                       {formatLongDate(row.weekEnding)}
@@ -170,8 +181,8 @@ export function EiaCrudeStocksSnapshot() {
               </tbody>
             </table>
           </div>
-          {eia.fetchedAt ? (
-            <p className="mt-2 text-xs text-steel-500">Fetched {formatLondonTimestamp(eia.fetchedAt)}.</p>
+          {stampedAt ? (
+            <p className="mt-2 text-xs text-steel-500">Fetched {formatLondonTimestamp(stampedAt)}.</p>
           ) : null}
           <DataMeta
             source="EIA Weekly Petroleum Status Report"
@@ -183,8 +194,8 @@ export function EiaCrudeStocksSnapshot() {
         </>
       ) : (
         <NotLoaded
-          what="Recent-weeks crude stocks history"
-          detail="The automated Wednesday pull from the EIA Open Data API has not completed."
+          what="Recent-weeks crude stocks"
+          detail="The EIA weekly history is not available."
         />
       )}
     </section>

@@ -4,6 +4,7 @@ import { formatLongDate } from "@/lib/daily-note";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
 import {
   headlines,
+  headlineNote,
   num,
   type MonitorFeed,
   type MonitorModule,
@@ -29,6 +30,12 @@ function whole(value: number): string {
   return value.toLocaleString("en-GB");
 }
 
+/** Reasons that name a secret or a repository setting stay off the page. */
+export function visitorModuleReason(reason: string): string {
+  if (/api[_ -]?key|secret|repository/i.test(reason)) return "The public feed did not return a figure.";
+  return reason;
+}
+
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
     <div className="rounded border border-ink-700 bg-ink-900 p-3">
@@ -45,7 +52,6 @@ function Card({
   about,
   module,
   staleAfterHours,
-  needs,
   children,
 }: {
   id: string;
@@ -53,7 +59,6 @@ function Card({
   about: string;
   module: MonitorModule;
   staleAfterHours: number;
-  needs?: string;
   children: (values: Record<string, unknown>) => ReactNode;
 }) {
   return (
@@ -78,10 +83,8 @@ function Card({
         </>
       ) : (
         <div className="mt-4 flex-1 rounded border border-ink-700 bg-ink-900 p-3 text-sm leading-relaxed text-steel-300">
-          <p className="font-semibold text-white">Not loaded</p>
-          <p className="mt-1 text-steel-400">
-            No figure is shown. Reason: {module.reason}.{needs ? ` ${needs}` : ""}
-          </p>
+          <p className="font-semibold text-white">Data unavailable</p>
+          <p className="mt-1 text-steel-400">No figure is shown. {visitorModuleReason(module.reason)}</p>
         </div>
       )}
     </section>
@@ -98,7 +101,6 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
         about="EIA daily spot prices. The 3-2-1 crack is two barrels of New York Harbor gasoline plus one of diesel, less three of WTI, per barrel. EIA spot series run one to three business days behind."
         module={feed.prices}
         staleAfterHours={192}
-        needs="Needs a working EIA API key on the site or in the scheduled job."
       >
         {(v) => {
           const brent = num(v, "brent_usd_bbl");
@@ -124,7 +126,6 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
         about="Commercial crude excluding the Strategic Petroleum Reserve, and Cushing, from the EIA weekly report. The z-score is this week against the average and spread of the weeks counted, not a seasonal norm."
         module={feed.inventories}
         staleAfterHours={288}
-        needs="Needs a working EIA API key on the site or in the scheduled job."
       >
         {(v) => (
           <dl className="grid grid-cols-2 gap-2">
@@ -204,7 +205,6 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
         about="Plain averages of the EIA daily WTI spot price. The daily move is the average absolute day-to-day change over 30 trading days. These describe the past; they are not levels to trade against."
         module={feed.prices}
         staleAfterHours={192}
-        needs="Needs a working EIA API key on the site or in the scheduled job."
       >
         {(v) => {
           const wti = num(v, "wti_usd_bbl");
@@ -258,7 +258,6 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
         about="How full European Union gas storage is, from the operators' transparency platform. The daily change is in percentage points."
         module={feed.gas_storage}
         staleAfterHours={96}
-        needs="Needs the AGSI_API_KEY repository secret."
       >
         {(v) => {
           const full = num(v, "eu_storage_pct_full");
@@ -284,6 +283,7 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
             const ratio = num(v, "share_last_24h_vs_7d_average");
             const terms = Array.isArray(v.search_terms) ? v.search_terms.filter((t): t is string => typeof t === "string") : [];
             const items = headlines(v);
+            const note = headlineNote(v);
             return (
               <div className="grid gap-4 lg:grid-cols-3">
                 <dl className="grid gap-2">
@@ -322,7 +322,9 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
                       ))}
                     </ul>
                   ) : (
-                    <p className="mt-2 text-sm text-steel-400">No headlines were returned on the last fetch.</p>
+                    <p className="mt-2 text-sm text-steel-400">
+                      {note ?? "No headlines were available on the last fetch. The coverage figure above does not depend on them."}
+                    </p>
                   )}
                 </div>
               </div>
