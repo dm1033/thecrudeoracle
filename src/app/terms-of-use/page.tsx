@@ -60,6 +60,11 @@ export default function TermsOfUsePage() {
             Sponsored, and a placement runs only once the desk has received and accepted the sponsor&apos;s
             details and artwork. Sponsors have no say over prices, data or editorial content.
           </p>
+          <p>
+            A sponsor can cancel at any time, with no notice period and no fee, by emailing{" "}
+            {SITE.contactEmail}. No further payment is taken after cancellation, and the placement runs to
+            the end of the month already paid for.
+          </p>
 
           <h2>6. Availability and changes</h2>
           <p>

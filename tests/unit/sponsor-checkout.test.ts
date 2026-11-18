@@ -3,7 +3,7 @@ import { adsText } from "@/lib/advertising";
 import { SPONSOR_SLOTS, sharedSponsorPrice, slotArtworkMailto, slotCheckout, slotCheckoutNote, slotClientReferenceId } from "@/lib/sponsor-slots";
 
 const EMAIL = "intelligence@thecrudeoracle.com";
-const PAYMENT_LINK = "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00";
+const PAYMENT_LINK = "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b";
 
 describe("sponsor slot checkout", () => {
   it("falls back to the enquiry mailto when the payment link is empty", () => {
@@ -91,6 +91,6 @@ describe("sponsor slots on sale", () => {
   it("opens for booking only the slots that have a placement on the site", async () => {
     const { SPONSOR_SLOTS } = await import("@/lib/sponsor-slots");
     const open = SPONSOR_SLOTS.filter((slot) => slot.available).map((slot) => slot.id).sort();
-    expect(open).toEqual(["daily-note-primary", "eia-inventory-day", "price-board", "release-calendar"]);
+    expect(open).toEqual(["daily-note-primary", "daily-note-secondary", "eia-inventory-day", "price-board", "release-calendar"]);
   });
 });

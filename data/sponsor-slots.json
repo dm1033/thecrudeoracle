@@ -7,7 +7,7 @@
       "placement": "Homepage price board",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": true
     },
     {
@@ -17,18 +17,18 @@
       "placement": "Morning note page (/daily), and the email edition when it is sent",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": true
     },
     {
       "id": "daily-note-secondary",
       "name": "Daily note, secondary",
       "description": "USD 100 per month.",
-      "placement": "Footer of that email",
+      "placement": "Footer of the morning note email",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": false
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
+      "available": true
     },
     {
       "id": "eia-inventory-day",
@@ -37,7 +37,7 @@
       "placement": "Wednesday stocks page (/eia-weekly)",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": true
     },
     {
@@ -47,7 +47,7 @@
       "placement": "Friday pages",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -57,7 +57,7 @@
       "placement": "Monthly digest",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -67,7 +67,7 @@
       "placement": "That section and related articles",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -77,7 +77,7 @@
       "placement": "That section and related articles",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -87,7 +87,7 @@
       "placement": "Calculator pages, once they exist",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -97,7 +97,7 @@
       "placement": "Release calendar (/calendar)",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": true
     },
     {
@@ -107,7 +107,7 @@
       "placement": "Third-party embeds, once they exist",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -117,7 +117,7 @@
       "placement": "Social charts",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -127,7 +127,7 @@
       "placement": "A listing, when that page exists",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     },
     {
@@ -137,7 +137,7 @@
       "placement": "One weekly send",
       "price": "$100/month",
       "period": "month",
-      "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
+      "stripePaymentLink": "https://buy.stripe.com/aFa3cw3vb0LY2lfaFOgYU0b",
       "available": false
     }
   ]
