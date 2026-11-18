@@ -19,7 +19,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="Who We Are"
         title="About The Crude Oracle"
-        intro="A professional oil and gas intelligence platform built on one belief: serious investors deserve terminal-grade data, explained clearly, without the noise."
+        intro="A professional oil and gas intelligence platform built on one belief: serious investors deserve public oil and gas data that is sourced, dated and explained clearly, without the noise."
       />
       <div className="container-site space-y-10 py-10">
         <figure className="overflow-hidden rounded-lg border border-ink-700">

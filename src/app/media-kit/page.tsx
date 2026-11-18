@@ -74,8 +74,9 @@ export default function MediaKitPage() {
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
             The same rate card as the <Link href="/advertise">advertise</Link> page. Every slot is $100 per month
-            (USD). None of the prices is based on a published audience figure. A slot that is not on the site yet is
-            listed so the price is visible before that page exists.
+            (USD). None of the prices is based on a published audience figure. Four slots have a placement on the site
+            today and can be booked. The others show Not open, so the price is visible before that page or email exists.
+            A package that includes a slot not yet open starts once that placement exists.
           </p>
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
             <table className="table-dark min-w-[760px]">

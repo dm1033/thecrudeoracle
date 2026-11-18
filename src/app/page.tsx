@@ -42,7 +42,7 @@ const MEMBER_BENEFITS = [
 ] as const;
 
 const PRICING_FEATURES = [
-  "Full terminal-grade dashboard",
+  "Full market dashboard",
   "Daily crude oil briefing",
   "Crude and gas market intelligence",
   "Investment watchlist — no names published yet",
@@ -115,7 +115,7 @@ export default async function HomePage() {
       <section className="container-site py-14">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="eyebrow">Terminal-Grade Market Dashboard</p>
+            <p className="eyebrow">Market Dashboard</p>
             <h2 className="h2 mt-1">Today&apos;s market picture, at a glance</h2>
             <PriceFreshness feed={feed} />
           </div>
@@ -212,7 +212,7 @@ export default async function HomePage() {
               />
             </div>
             <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
-              Terminal-grade clarity — without the terminal-grade noise.
+              Sourced, dated and clear, without the noise.
             </figcaption>
           </figure>
         </div>

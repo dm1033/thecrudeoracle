@@ -37,7 +37,7 @@ export default function AdvertisePage() {
             . Say who you are, which slot you want, and how many months you have in mind.
           </p>
           <p>
-            Every slot is $100 per month, invoiced monthly in advance. The site does not publish traffic,
+            Every slot is $100 per month, paid monthly in advance. The site does not publish traffic,
             subscriber or revenue numbers, and these prices are not market data. The same inventory is on
             the <Link href="/media-kit">media kit</Link>, which is the page to print.
           </p>
@@ -48,8 +48,9 @@ export default function AdvertisePage() {
             Slots
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
-            Every slot is $100 per month. A slot that is not on the site yet is listed so the price is
-            visible before that page exists.
+            Every slot is $100 per month. Four slots have a placement on the site today and can be booked.
+            The others are listed so the price is visible, and show Not open until their page or email
+            exists. To ask about one of those, use the enquiry address above.
           </p>
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
             <table className="table-dark min-w-[760px]">
@@ -80,7 +81,7 @@ export default function AdvertisePage() {
             </table>
           </div>
           <p className="mt-4 max-w-3xl text-sm text-steel-400">
-            Book this slot opens one Stripe Payment Link for every row. At checkout, enter the slot name and the
+            Book this slot, on an open row, opens one Stripe Payment Link shared by every row. At checkout, enter the slot name and the
             amount shown on that row. The payment also records the slot id. After payment, use Send artwork and
             details on the same row. That email is how the name, link and artwork reach the desk. Every
             placement on the site is labelled Sponsored.
@@ -92,7 +93,8 @@ export default function AdvertisePage() {
             Packages
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
-            Each slot in a package is $100 per month. The figure on the card is the sum of the slots named.
+            Each slot in a package is $100 per month. The figure on the card is the sum of the slots named. A
+            package that includes a slot not yet open starts once that placement exists; enquire by email.
           </p>
           <div className="mt-4 grid gap-4 lg:grid-cols-3">
             {RATE_PACKAGES.map((pack) => (

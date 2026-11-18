@@ -4,7 +4,7 @@
       "id": "price-board",
       "name": "Price board, presented by",
       "description": "USD 100 per month. Not based on a published audience figure.",
-      "placement": "Homepage and price cards",
+      "placement": "Homepage price board",
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
@@ -14,7 +14,7 @@
       "id": "daily-note-primary",
       "name": "Daily note, primary",
       "description": "USD 100 per month for the morning note.",
-      "placement": "Five sends a week, when the note is running",
+      "placement": "Morning note page (/daily), and the email edition when it is sent",
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
@@ -28,13 +28,13 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "eia-inventory-day",
       "name": "EIA inventory day, presented by",
       "description": "USD 100 per month for the Wednesday stocks page.",
-      "placement": "Wednesday page, email and social card",
+      "placement": "Wednesday stocks page (/eia-weekly)",
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
@@ -48,7 +48,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "monthly-balances",
@@ -58,7 +58,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "north-sea",
@@ -68,7 +68,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "lng-gas-shipping",
@@ -78,7 +78,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "calculator",
@@ -88,7 +88,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "release-calendar",
@@ -108,7 +108,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "social-card",
@@ -118,7 +118,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "jobs-events",
@@ -128,7 +128,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     },
     {
       "id": "sunday-week-ahead",
@@ -138,7 +138,7 @@
       "price": "$100/month",
       "period": "month",
       "stripePaymentLink": "https://buy.stripe.com/cNi3cw8127TYdgq0lRaIM00",
-      "available": true
+      "available": false
     }
   ]
 }

@@ -37,13 +37,17 @@ describe("sponsor slot checkout", () => {
     }
     expect(SPONSOR_SLOTS.length).toBeGreaterThan(0);
     expect(SPONSOR_SLOTS.every((slot) => slot.stripePaymentLink === PAYMENT_LINK)).toBe(true);
-    for (const slot of SPONSOR_SLOTS) {
+    for (const slot of SPONSOR_SLOTS.filter((item) => item.available)) {
       const checkout = slotCheckout(slot, EMAIL);
       const url = new URL(checkout.href);
       expect(checkout.external).toBe(true);
       expect(`${url.origin}${url.pathname}`).toBe(PAYMENT_LINK);
       expect(url.searchParams.get("client_reference_id")).toBe(slot.id);
       expect(slotCheckoutNote(slot)).toBe(`At checkout, enter the slot name (${slot.name}) and amount shown.`);
+    }
+    // A slot that is not open falls back to the enquiry email, never the payment link.
+    for (const slot of SPONSOR_SLOTS.filter((item) => !item.available)) {
+      expect(slotCheckout(slot, EMAIL).external).toBe(false);
     }
   });
 
@@ -80,5 +84,13 @@ describe("advertising gate", () => {
     expect(adsText({ adsensePublisherId: "pub-1", advertisingConsent: true })).toBe(
       "google.com, pub-1, DIRECT, f08c47fec0942fa0\n"
     );
+  });
+});
+
+describe("sponsor slots on sale", () => {
+  it("opens for booking only the slots that have a placement on the site", async () => {
+    const { SPONSOR_SLOTS } = await import("@/lib/sponsor-slots");
+    const open = SPONSOR_SLOTS.filter((slot) => slot.available).map((slot) => slot.id).sort();
+    expect(open).toEqual(["daily-note-primary", "eia-inventory-day", "price-board", "release-calendar"]);
   });
 });

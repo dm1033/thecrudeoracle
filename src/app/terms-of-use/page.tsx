@@ -6,7 +6,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta(
   "Terms of Use",
-  "Terms of use for The Crude Oracle: licence, acceptable use, intellectual property, subscriptions and limitation of liability.",
+  "Terms of use for The Crude Oracle: licence, acceptable use, intellectual property, sponsorship payments and limitation of liability.",
   "/terms-of-use"
 );
 
@@ -22,8 +22,7 @@ export default function TermsOfUsePage() {
             &ldquo;Site&rdquo;). By using the Site you agree to these terms, the{" "}
             <Link href="/privacy-policy">Privacy Policy</Link>, the{" "}
             <Link href="/financial-disclaimer">Financial Disclaimer</Link>, the{" "}
-            <Link href="/data-disclaimer">Data Disclaimer</Link> and, if you subscribe, the{" "}
-            <Link href="/subscription-terms">Subscription Terms</Link>.
+            <Link href="/data-disclaimer">Data Disclaimer</Link>.
           </p>
 
           <h2>2. Information only — no advice</h2>
@@ -37,11 +36,10 @@ export default function TermsOfUsePage() {
           <h2>3. Licence and acceptable use</h2>
           <p>
             We grant you a personal, non-exclusive, non-transferable licence to access the Site
-            and, if subscribed, member content, for your own internal use. You must not:
+            for your own internal use. You must not:
           </p>
           <ul>
-            <li>share, resell, redistribute or republish member content without written permission;</li>
-            <li>share login credentials or circumvent access controls;</li>
+            <li>resell, redistribute or republish the Site&apos;s content without written permission;</li>
             <li>scrape, crawl or bulk-download content or data;</li>
             <li>use content to train commercial datasets or products without licence;</li>
             <li>use the Site unlawfully or to infringe third-party rights.</li>
@@ -54,10 +52,13 @@ export default function TermsOfUsePage() {
             publications remain the property of their owners.
           </p>
 
-          <h2>5. Subscriptions</h2>
+          <h2>5. Sponsorship</h2>
           <p>
-            Paid membership is provided under the <Link href="/subscription-terms">Subscription Terms</Link>.
-            Payments are processed by Stripe; we do not store card details.
+            The Site is free to read and has no paid membership. Businesses can buy sponsorship placements,
+            listed with their prices on the <Link href="/advertise">Advertise</Link> page. Payments are
+            processed by Stripe; we do not store card details. Every sponsored placement is labelled
+            Sponsored, and a placement runs only once the desk has received and accepted the sponsor&apos;s
+            details and artwork. Sponsors have no say over prices, data or editorial content.
           </p>
 
           <h2>6. Availability and changes</h2>

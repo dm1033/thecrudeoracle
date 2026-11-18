@@ -33,9 +33,11 @@ export default function SlotBooking({ slot }: { slot: SponsorSlot }) {
       ) : (
         <span className="text-sm text-steel-500">Not open</span>
       )}
-      <a href={artwork} className="text-xs font-semibold text-steel-300 underline decoration-ink-600 underline-offset-2 hover:text-gold-400">
-        Send artwork and details
-      </a>
+      {slot.available ? (
+        <a href={artwork} className="text-xs font-semibold text-steel-300 underline decoration-ink-600 underline-offset-2 hover:text-gold-400">
+          Send artwork and details
+        </a>
+      ) : null}
     </div>
   );
 }

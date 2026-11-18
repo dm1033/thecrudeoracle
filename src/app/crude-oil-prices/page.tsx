@@ -92,8 +92,8 @@ export default async function CrudeOilPricesPage() {
             story from a rally led by the prompt.
           </p>
           <p>
-            The Daily Briefing covers this context every trading day, free, together with the
-            supply, demand and positioning signals behind the move.
+            The morning note gives the latest EIA prints every trading day, free, and the dashboard
+            shows the supply, demand and positioning figures alongside them.
           </p>
         </section>
 

@@ -7,7 +7,7 @@ import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = pageMeta(
   "UK energy security analysis",
-  "UK energy security analysis: North Sea production decline, import dependency, LNG reliance, jobs and supply chains, fiscal and policy risk, and industrial competitiveness — with official source placeholders.",
+  "UK energy security analysis: North Sea production decline, import dependency, LNG reliance, jobs and supply chains, fiscal and policy risk, and industrial competitiveness with links to the official sources.",
   "/uk-energy-security"
 );
 
@@ -51,7 +51,7 @@ export default function UkEnergySecurityPage() {
             peaked around the turn of the century and has declined structurally since. Remaining
             output is concentrated in fewer, older hubs, with new supply dependent on near-field
             tie-backs and a small number of larger projects. Production, licensing and reserves
-            data are published by the North Sea Transition Authority (source placeholder below).
+            data are published by the North Sea Transition Authority (linked below).
           </p>
 
           <h2>Import dependency and domestic supply</h2>
@@ -100,8 +100,7 @@ export default function UkEnergySecurityPage() {
           <p>
             For investors, UK energy security is a bundle of tradable themes: UKCS producers priced
             for fiscal risk, LNG infrastructure and shipping, grid and storage investment, and the
-            companies exposed to industrial energy costs. Every daily briefing includes a UK /
-            North Sea note, free.
+            companies exposed to industrial energy costs.
           </p>
         </div>
 
@@ -110,8 +109,8 @@ export default function UkEnergySecurityPage() {
             Primary sources used for this coverage
           </h2>
           <p className="mt-1 text-xs text-steel-500">
-            Source placeholders — figures on this page are described qualitatively; verify current
-            data with the primary publications below.
+            This page describes the picture in words rather than figures. For current data, use the
+            primary publications below.
           </p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {SOURCES.map((s) => (
@@ -126,8 +125,8 @@ export default function UkEnergySecurityPage() {
 
         <FAQ items={FAQ_ITEMS} />
         <SubscribeCTA
-          heading="UK energy security, covered daily"
-          body="Every premium briefing includes a UK / North Sea note: production, policy, prices and the UKCS equities affected."
+          heading="Get the morning note"
+          body="The latest EIA prices and stock figures, what changed and what is due next. Free, with sources and dates."
         />
         <DisclaimerBlock />
       </div>

@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMeta(
 );
 
 const INCLUDED = [
-  ["Full terminal-grade dashboard", "/dashboard", "Brent, WTI and Henry Hub from the EIA daily spot, with supply, demand and risk signal grids. Dubai, NBP and TTF are not shown."],
+  ["Full market dashboard", "/dashboard", "Brent, WTI and Henry Hub from the EIA daily spot, with supply, demand and risk signal grids. Dubai, NBP and TTF are not shown."],
   ["Daily crude oil briefing", "/daily-briefing", "What moved, why, and what matters next — every trading day, source-backed."],
   ["Investment watchlist", "/watchlist", "Coming soon. No company names are published. Sample tickers are not shown."],
   ["Company intelligence", "/company-intelligence", "Coming soon. No company notes are published."],
