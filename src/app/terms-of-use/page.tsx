@@ -88,7 +88,7 @@ export default function TermsOfUsePage() {
             <Link href="/contact">contact page</Link>.
           </p>
 
-          <p className="text-sm text-steel-500">Last updated: 3 July 2026</p>
+          <p className="text-sm text-steel-500">Last updated: 18 November 2026</p>
         </div>
       </div>
     </>
