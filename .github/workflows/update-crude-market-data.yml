@@ -32,6 +32,7 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python scripts/fetch_oil_data.py
 
+      # Actions cannot open pull requests in this repo. open-data-pr.sh publishes to main when that happens.
       - name: Open a pull request if the snapshot changed
         env:
           GH_TOKEN: ${{ github.token }}
