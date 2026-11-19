@@ -31,6 +31,7 @@ jobs:
             exit 0
           fi
           node scripts/update-eia-data.mjs
+      # Actions cannot open pull requests in this repo. open-data-pr.sh publishes to main when that happens.
       - name: Open a pull request if the prices changed
         env:
           GH_TOKEN: ${{ github.token }}
