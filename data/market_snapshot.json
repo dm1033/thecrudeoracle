@@ -1,7 +1,7 @@
 {
   "source": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "license": "CC-BY-4.0",
-  "updated_at_utc": "2026-11-14T01:03:32Z",
+  "updated_at_utc": "2026-11-21T01:45:03Z",
   "eia_us_crude_stocks": {
     "updated_at_utc": null,
     "rows": [],
@@ -10,8 +10,26 @@
     "origin": "U.S. Energy Information Administration, API v2"
   },
   "cftc_wti_managed_money": {
-    "updated_at_utc": "2026-11-14T01:03:32Z",
+    "updated_at_utc": "2026-11-21T01:45:03Z",
     "rows": [
+      {
+        "report_date": "2026-11-17",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1869789,
+        "managed_money_long": 153611,
+        "managed_money_short": 137797,
+        "managed_money_spreading": 286444,
+        "managed_money_net": 15814
+      },
+      {
+        "report_date": "2026-11-10",
+        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "open_interest": 1917473,
+        "managed_money_long": 148092,
+        "managed_money_short": 122378,
+        "managed_money_spreading": 301481,
+        "managed_money_net": 25714
+      },
       {
         "report_date": "2026-11-03",
         "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
@@ -101,24 +119,6 @@
         "managed_money_short": 111019,
         "managed_money_spreading": 295613,
         "managed_money_net": 94281
-      },
-      {
-        "report_date": "2026-08-25",
-        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
-        "open_interest": 1906740,
-        "managed_money_long": 196882,
-        "managed_money_short": 112862,
-        "managed_money_spreading": 289511,
-        "managed_money_net": 84020
-      },
-      {
-        "report_date": "2026-08-18",
-        "contract": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
-        "open_interest": 1888960,
-        "managed_money_long": 195538,
-        "managed_money_short": 108059,
-        "managed_money_spreading": 267661,
-        "managed_money_net": 87479
       }
     ],
     "origin": "CFTC Disaggregated Futures-Only Commitments of Traders (72hh-3qpy)"
