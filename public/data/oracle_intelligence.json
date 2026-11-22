@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-21T01:29:03Z",
+  "generated_utc": "2026-11-22T01:51:59Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-21T01:29:03Z",
+      "fetched_utc": "2026-11-22T01:51:59Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-21T01:29:03Z",
+      "fetched_utc": "2026-11-22T01:51:59Z",
       "as_of": "2026-11-19",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,188 +68,112 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-15T01:28:50Z",
-      "as_of": "2026-11-14T20:00:00Z",
+      "fetched_utc": "2026-11-22T01:51:59Z",
+      "as_of": "2026-11-21T20:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
-        "share_last_24h_pct": 0.5462,
-        "share_7d_average_pct": 0.4535,
-        "share_last_24h_vs_7d_average": 1.2,
-        "timeline_points": 43,
+        "share_last_24h_pct": 0.4707,
+        "share_7d_average_pct": 0.4063,
+        "share_last_24h_vs_7d_average": 1.16,
+        "timeline_points": 24,
         "timeline": [
           {
-            "t": "2026-11-08T09:00:00Z",
-            "share_pct": 0.1651
+            "t": "2026-11-15T07:00:00Z",
+            "share_pct": 0.2749
           },
           {
-            "t": "2026-11-08T10:00:00Z",
-            "share_pct": 0.3642
+            "t": "2026-11-16T08:00:00Z",
+            "share_pct": 0.1754
           },
           {
-            "t": "2026-11-08T11:00:00Z",
-            "share_pct": 0.6036
+            "t": "2026-11-18T01:00:00Z",
+            "share_pct": 0.9372
           },
           {
-            "t": "2026-11-08T13:00:00Z",
-            "share_pct": 0.3985
+            "t": "2026-11-18T17:00:00Z",
+            "share_pct": 0.3161
           },
           {
-            "t": "2026-11-08T14:00:00Z",
-            "share_pct": 0.8289
+            "t": "2026-11-19T17:00:00Z",
+            "share_pct": 0.5282
           },
           {
-            "t": "2026-11-08T15:00:00Z",
-            "share_pct": 0.719
+            "t": "2026-11-19T19:00:00Z",
+            "share_pct": 0.4392
           },
           {
-            "t": "2026-11-08T16:00:00Z",
-            "share_pct": 0.7768
+            "t": "2026-11-19T23:00:00Z",
+            "share_pct": 0.3303
           },
           {
-            "t": "2026-11-08T17:00:00Z",
-            "share_pct": 0.3584
+            "t": "2026-11-20T00:00:00Z",
+            "share_pct": 0.2536
           },
           {
-            "t": "2026-11-08T18:00:00Z",
-            "share_pct": 0.1678
+            "t": "2026-11-20T01:00:00Z",
+            "share_pct": 0.3074
           },
           {
-            "t": "2026-11-08T19:00:00Z",
-            "share_pct": 0.2406
+            "t": "2026-11-20T02:00:00Z",
+            "share_pct": 0.1258
           },
           {
-            "t": "2026-11-08T20:00:00Z",
-            "share_pct": 0.1119
+            "t": "2026-11-20T03:00:00Z",
+            "share_pct": 0.2506
           },
           {
-            "t": "2026-11-08T21:00:00Z",
-            "share_pct": 0.4378
+            "t": "2026-11-20T04:00:00Z",
+            "share_pct": 0.5491
           },
           {
-            "t": "2026-11-09T00:00:00Z",
-            "share_pct": 0.3866
+            "t": "2026-11-20T05:00:00Z",
+            "share_pct": 0.1607
           },
           {
-            "t": "2026-11-09T01:00:00Z",
-            "share_pct": 0.7966
+            "t": "2026-11-20T06:00:00Z",
+            "share_pct": 0.3947
           },
           {
-            "t": "2026-11-09T02:00:00Z",
-            "share_pct": 0.5288
+            "t": "2026-11-20T21:00:00Z",
+            "share_pct": 0.324
           },
           {
-            "t": "2026-11-09T05:00:00Z",
-            "share_pct": 0.2645
+            "t": "2026-11-21T00:00:00Z",
+            "share_pct": 0.8214
           },
           {
-            "t": "2026-11-09T06:00:00Z",
-            "share_pct": 0.332
+            "t": "2026-11-21T06:00:00Z",
+            "share_pct": 0.0769
           },
           {
-            "t": "2026-11-09T07:00:00Z",
-            "share_pct": 0.7541
+            "t": "2026-11-21T10:00:00Z",
+            "share_pct": 0.4739
           },
           {
-            "t": "2026-11-10T00:00:00Z",
-            "share_pct": 0.9441
+            "t": "2026-11-21T11:00:00Z",
+            "share_pct": 0.1473
           },
           {
-            "t": "2026-11-10T01:00:00Z",
-            "share_pct": 1.3592
+            "t": "2026-11-21T12:00:00Z",
+            "share_pct": 0.3371
           },
           {
-            "t": "2026-11-10T02:00:00Z",
-            "share_pct": 0.7822
+            "t": "2026-11-21T13:00:00Z",
+            "share_pct": 0.6391
           },
           {
-            "t": "2026-11-10T03:00:00Z",
-            "share_pct": 0.6929
+            "t": "2026-11-21T14:00:00Z",
+            "share_pct": 0.9091
           },
           {
-            "t": "2026-11-10T04:00:00Z",
-            "share_pct": 0.2582
+            "t": "2026-11-21T16:00:00Z",
+            "share_pct": 0.8734
           },
           {
-            "t": "2026-11-10T05:00:00Z",
-            "share_pct": 0.3582
-          },
-          {
-            "t": "2026-11-10T06:00:00Z",
-            "share_pct": 0.6282
-          },
-          {
-            "t": "2026-11-10T22:00:00Z",
-            "share_pct": 0.2328
-          },
-          {
-            "t": "2026-11-11T00:00:00Z",
-            "share_pct": 0.5826
-          },
-          {
-            "t": "2026-11-11T01:00:00Z",
-            "share_pct": 0.6092
-          },
-          {
-            "t": "2026-11-11T02:00:00Z",
-            "share_pct": 0.4685
-          },
-          {
-            "t": "2026-11-11T03:00:00Z",
-            "share_pct": 0.4165
-          },
-          {
-            "t": "2026-11-11T04:00:00Z",
-            "share_pct": 0.2034
-          },
-          {
-            "t": "2026-11-11T05:00:00Z",
-            "share_pct": 0.2435
-          },
-          {
-            "t": "2026-11-11T06:00:00Z",
-            "share_pct": 0.1781
-          },
-          {
-            "t": "2026-11-12T00:00:00Z",
-            "share_pct": 0.3034
-          },
-          {
-            "t": "2026-11-12T01:00:00Z",
-            "share_pct": 0.3946
-          },
-          {
-            "t": "2026-11-12T03:00:00Z",
-            "share_pct": 0.3965
-          },
-          {
-            "t": "2026-11-12T04:00:00Z",
-            "share_pct": 0.2765
-          },
-          {
-            "t": "2026-11-12T05:00:00Z",
-            "share_pct": 0.1276
-          },
-          {
-            "t": "2026-11-12T06:00:00Z",
-            "share_pct": 0.5217
-          },
-          {
-            "t": "2026-11-12T07:00:00Z",
-            "share_pct": 0.3056
-          },
-          {
-            "t": "2026-11-13T00:00:00Z",
-            "share_pct": 0.2516
-          },
-          {
-            "t": "2026-11-13T18:00:00Z",
-            "share_pct": 0.186
-          },
-          {
-            "t": "2026-11-14T20:00:00Z",
-            "share_pct": 0.5462
+            "t": "2026-11-21T20:00:00Z",
+            "share_pct": 0.1052
           }
         ],
         "search_terms": [
@@ -280,22 +204,45 @@
             "seen_utc": "2026-11-13T18:00:00Z"
           }
         ],
+        "headlines_note": "Headlines are from the previous fetch. A newer article list was not available.",
         "terms": [
           {
             "term": "Strait of Hormuz",
-            "as_of": "2026-11-12T07:00:00Z",
-            "share_last_24h_pct": 0.3087,
-            "share_7d_average_pct": 0.4442,
-            "share_last_24h_vs_7d_average": 0.69,
-            "fetched_utc": "2026-11-14T13:34:55Z"
+            "as_of": "2026-11-21T20:00:00Z",
+            "share_last_24h_pct": 0.4707,
+            "share_7d_average_pct": 0.3911,
+            "share_last_24h_vs_7d_average": 1.2,
+            "fetched_utc": "2026-11-22T01:56:50Z"
           },
           {
+            "term": "OPEC quota",
+            "as_of": "2026-11-21T20:00:00Z",
+            "share_last_24h_pct": 0.0,
+            "share_7d_average_pct": 0.0009,
+            "share_last_24h_vs_7d_average": 0.0,
+            "fetched_utc": "2026-11-22T01:56:50Z"
+          },
+          {
+            "term": "Suez Canal",
+            "as_of": "2026-11-21T20:00:00Z",
+            "share_last_24h_pct": 0.0,
+            "share_7d_average_pct": 0.0097,
+            "share_last_24h_vs_7d_average": 0.0,
+            "fetched_utc": "2026-11-22T01:56:50Z"
+          }
+        ],
+        "terms_without_figures": [
+          {
             "term": "Bab el-Mandeb",
-            "as_of": "2026-11-12T07:00:00Z",
-            "share_last_24h_pct": 0.0175,
-            "share_7d_average_pct": 0.0186,
-            "share_last_24h_vs_7d_average": 0.94,
-            "fetched_utc": "2026-11-14T13:34:55Z"
+            "reason": "api.gdeltproject.org answered HTTP 429"
+          },
+          {
+            "term": "Red Sea tanker",
+            "reason": "GDELT returned too few timeline points"
+          },
+          {
+            "term": "Libya oilfield",
+            "reason": "GDELT returned too few timeline points"
           }
         ]
       }
