@@ -101,7 +101,7 @@ Scheduled data jobs open pull requests on `bot/*` branches. They do not push to 
 ## Automated Repository Datasets
 The `data/market_snapshot.json` file is updated automatically via GitHub Actions following official U.S. government release schedules:
 * **U.S. Commercial Crude Oil Inventories, excluding the SPR (Wednesdays, 10:30 AM ET):** Pulled directly from the U.S. Energy Information Administration (EIA API v2, Series `WCESTUS1`). Needs the `EIA_API_KEY` repository secret; without it this section is skipped and the CFTC section is still written. The job opens a pull request. It does not commit to `main`.
-* **Hedge Fund / Managed Money Positioning (Fridays, 3:30 PM ET):** Pulled from the CFTC Disaggregated Futures-Only Commitments of Traders (COT) Socrata endpoint (`72hh-3qpy`, NYMEX WTI Physical contract `067651`).
+* **Hedge Fund / Managed Money Positioning (usually Fridays, 3:30 PM ET; later when the CFTC release schedule says a holiday delay):** Pulled from the CFTC Disaggregated Futures-Only Commitments of Traders (COT) Socrata endpoint (`72hh-3qpy`, NYMEX WTI Physical contract `067651`).
 
 ## Curated Energy Trading & Media Directory
 

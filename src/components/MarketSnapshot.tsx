@@ -54,8 +54,9 @@ export function CftcManagedMoneySnapshot() {
       <p className="mt-1 max-w-3xl text-sm text-steel-500">
         Managed-money futures positions in NYMEX WTI (contract 067651) from the CFTC Disaggregated
         Commitments of Traders report, pulled automatically each Friday. Positions are as of the
-        Tuesday shown and released the following Friday, so this is delayed data. Net is long minus
-        short, in contracts.
+        Tuesday shown. CFTC usually releases them the following Friday at 3:30 p.m. ET, and on a
+        later day when its release schedule says a holiday delay, so this is delayed data. Net is
+        long minus short, in contracts.
       </p>
       {latest ? (
         <>

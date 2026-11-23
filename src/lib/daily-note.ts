@@ -213,6 +213,16 @@ function seriesSentence(series: DailyNoteSeries, unitPhrase: string): string {
   );
 }
 
+/**
+ * Brent (RBRTE) and WTI (RWTC) are daily observations posted in a weekly batch
+ * with the Weekly Petroleum Status Report. Checked 23 Nov 2026: FRED
+ * DCOILBRENTEU and DCOILWTICO (EIA source) ran through 17 Nov, were updated
+ * 18 Nov, and listed a next release of 25 Nov. Henry Hub (RNGWHHD) carried
+ * the same next release date that day.
+ */
+export const EIA_SPOT_CADENCE =
+  "EIA publishes a price for each trading day and posts the new days once a week, with the Weekly Petroleum Status Report: Wednesday, or Thursday when a US federal holiday moves that report.";
+
 /** Template sentences. The last line is the required disclaimer. No forecast language. */
 export function writeSummary(note: Omit<DailyNote, "summary">): string[] {
   const lines = [seriesSentence(note.brent, "per barrel"), seriesSentence(note.wti, "per barrel")];
@@ -231,7 +241,7 @@ export function writeSummary(note: Omit<DailyNote, "summary">): string[] {
     lines.push("Henry Hub is not loaded from EIA for this note, so no gas price is stated.");
   }
   lines.push(
-    "These figures are U.S. EIA daily spot prices. EIA publishes them with a lag of one to two business days after the trade date. Weekends and US holidays can make the calendar gap longer. The dates above are those trade dates."
+    `These figures are U.S. EIA daily spot prices. ${EIA_SPOT_CADENCE} The dates above are the trade dates, which are often several days behind that release.`
   );
   lines.push("Information only, not investment advice.");
   return lines;

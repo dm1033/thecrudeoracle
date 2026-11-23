@@ -5,6 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import FreshnessBadge from "@/components/FreshnessBadge";
 import { formatLongDate } from "@/lib/daily-note";
+import { EIA_SPOT_STALE_AFTER_HOURS } from "@/lib/price-stamp";
 import { getMonitorFeedWithLiveEia } from "@/lib/monitor-live";
 import { num } from "@/lib/oracle-intelligence";
 import { SIZE_LABEL, whatChanged, type ChangeItem, type ChangeSize } from "@/lib/what-changed";
@@ -80,7 +81,16 @@ function Row({ item }: { item: ChangeItem }) {
           )}
         </span>
         <span className="rounded bg-risk/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-risk">delayed</span>
-        <FreshnessBadge lastUpdated={`${item.asOf.slice(0, 10)}T00:00:00Z`} staleAfterHours={item.cadence === "daily" ? 192 : 288} />
+        <FreshnessBadge
+          lastUpdated={`${item.asOf.slice(0, 10)}T00:00:00Z`}
+          staleAfterHours={
+            item.id === "brent" || item.id === "wti" || item.id === "henry-hub"
+              ? EIA_SPOT_STALE_AFTER_HOURS
+              : item.cadence === "daily"
+                ? 192
+                : 288
+          }
+        />
       </div>
     </li>
   );
@@ -104,8 +114,9 @@ export default async function WhatChangedPage() {
             Latest moves, ranked
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-steel-500">
-            Each line compares the newest print with the one before it. All data is delayed: daily series by one to
-            three business days, weekly series by up to a week and a half.
+            Each line compares the newest print with the one before it. All data is delayed. EIA crude and Henry Hub
+            spots are posted weekly, so the newest trade date can be several days old. Other daily series can lag by
+            one to three business days, and weekly series by up to a week and a half.
           </p>
           {items.length ? (
             <ul className="mt-4 space-y-3">

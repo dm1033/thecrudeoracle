@@ -47,7 +47,7 @@ export function spotDeskNote(feed: PublishedPrices): string[] {
   }
 
   lines.push(
-    "EIA publishes these daily spots with a lag of several days after the trade date. Dubai, UK NBP and Dutch TTF are not shown."
+    "EIA posts these daily spots once a week, with the Weekly Petroleum Status Report. The dates above are trade dates. Dubai, UK NBP and Dutch TTF are not shown."
   );
   lines.push("Information only, not investment advice.");
   return lines;

@@ -1,7 +1,14 @@
 import type { MarketPrice } from "@/lib/data";
 import DataMeta from "@/components/DataMeta";
 import PriceStamp from "@/components/PriceStamp";
-import { isPlaceholderPrice, LICENSED_DATA_REQUIRED, priceFigureTooOld, priceSourceLabel } from "@/lib/price-stamp";
+import { nextEiaSpotUpdate } from "@/lib/release-calendar";
+import {
+  EIA_SPOT_STALE_AFTER_HOURS,
+  isPlaceholderPrice,
+  LICENSED_DATA_REQUIRED,
+  priceFigureTooOld,
+  priceSourceLabel,
+} from "@/lib/price-stamp";
 
 function Change({ label, value }: { label: string; value: number }) {
   const color = value > 0 ? "text-gain" : value < 0 ? "text-loss" : "text-steel-500";
@@ -28,6 +35,8 @@ export default function MarketCard({ price }: { price: MarketPrice }) {
     );
   }
   if (priceFigureTooOld(price.last_updated)) return null;
+  const sourceLabel = priceSourceLabel(price);
+  const eia = sourceLabel === "EIA";
   return (
     <div className="card card-hover">
       <div className="flex items-start justify-between gap-2">
@@ -45,12 +54,17 @@ export default function MarketCard({ price }: { price: MarketPrice }) {
         <Change label="Weekly" value={price.weekly_change} />
         <Change label="Monthly" value={price.monthly_change} />
       </div>
-      <PriceStamp lastUpdated={price.last_updated} sourceLabel={priceSourceLabel(price)} />
+      <PriceStamp
+        lastUpdated={price.last_updated}
+        sourceLabel={sourceLabel}
+        nextEiaUpdate={eia ? nextEiaSpotUpdate(new Date()).label : null}
+      />
       <DataMeta
         source={price.source}
         sourceUrl={price.source_url}
         lastUpdated={price.last_updated}
         dataType={price.data_type}
+        staleAfterHours={eia ? EIA_SPOT_STALE_AFTER_HOURS : undefined}
       />
     </div>
   );

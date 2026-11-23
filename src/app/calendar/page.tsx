@@ -30,8 +30,11 @@ export default function CalendarPage() {
           </h2>
           <p className="mt-2 max-w-3xl text-sm text-steel-400">
             The Weekly Petroleum Status Report is Wednesday 10:30 a.m. US Eastern, or Thursday when a US federal holiday
-            falls on the Monday or the Wednesday of that week. The CFTC Commitments of Traders report and the Baker
-            Hughes rig count are Friday releases. Rig counts are a link only. This site does not republish them.
+            falls on the Monday or the Wednesday of that week. The CFTC Commitments of Traders report is usually Friday
+            3:30 p.m. US Eastern. CFTC&apos;s published 2026 schedule moves some reports to the following Monday. The
+            Baker Hughes rig count is usually Friday 1:00 p.m. US Eastern (noon Central), and on the earlier day Baker
+            Hughes has posted for a holiday week. Where Baker Hughes has not posted that day, the row says it may
+            shift. Rig counts are a link only. This site does not republish them.
           </p>
           <div className="mt-4 overflow-x-auto rounded-lg border border-ink-700">
             <table className="table-dark min-w-[720px]">

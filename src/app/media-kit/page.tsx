@@ -44,11 +44,12 @@ export default function MediaKitPage() {
           </p>
           <p>
             Prices on the morning note and the weekly stocks page come from the
-            U.S. Energy Information Administration Open Data API. EIA daily
-            spots print one to two business days after the trade date. The
-            weekly stocks report is released on Wednesday for the week ending
-            the previous Friday. Figures are labelled with the series id, the
-            date and a delayed-data badge.
+            U.S. Energy Information Administration Open Data API. EIA posts
+            the crude and Henry Hub daily spots once a week, with the
+            Weekly Petroleum Status Report. The weekly stocks report is
+            released on Wednesday for the week ending the previous Friday, or
+            on Thursday when a US federal holiday moves it. Figures are
+            labelled with the series id, the date and a delayed-data badge.
           </p>
           <p>
             {SITE.name} is not authorised or regulated by the Financial Conduct

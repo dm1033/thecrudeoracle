@@ -17,8 +17,11 @@
  * getUsCommercialCrudeStocks, getCushingStocks) wire all three layers
  * together for the update script and the live spot cache.
  *
- * Spot series RBRTE and RWTC were checked on 29 Oct 2026 against FRED series
- * DCOILBRENTEU and DCOILWTICO (both sourced from EIA, dollars per barrel).
+ * Spot series RBRTE and RWTC are daily observations posted in a weekly batch
+ * with the Weekly Petroleum Status Report. Checked 23 Nov 2026 on FRED:
+ * DCOILBRENTEU and DCOILWTICO ran
+ * through 17 Nov, updated 18 Nov, next release 25 Nov. They were also checked
+ * on 29 Oct 2026 against those same FRED series (both sourced from EIA).
  * The 27 Oct 2026 prints are Brent 123.10 and WTI 103.37. That is a real
  * $19.73 Brent premium, not a swapped series, a unit conversion, or a
  * mismatched date. Weekly stock ids below were checked the same day against

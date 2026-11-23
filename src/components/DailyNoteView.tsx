@@ -7,6 +7,7 @@ import PresentedBy from "@/components/PresentedBy";
 import { EIA_SERIES } from "@/lib/eia";
 import {
   DAILY_NOTE_SPONSOR,
+  EIA_SPOT_CADENCE,
   formatLongDate,
   missingPrintExplanation,
   type DailyNote,
@@ -14,7 +15,7 @@ import {
   type PeriodChange,
   type PricePoint,
 } from "@/lib/daily-note";
-import { formatLondonTimestamp, upcomingReleases, type ReleaseEvent } from "@/lib/release-calendar";
+import { formatLondonTimestamp, nextEiaSpotUpdate, upcomingReleases, type ReleaseEvent } from "@/lib/release-calendar";
 import { SITE } from "@/lib/site";
 
 const SOURCE_URL = {
@@ -149,6 +150,7 @@ export function DailyNoteUnavailable({
   const dated = Boolean(date && /^\d{4}-\d{2}-\d{2}$/.test(date));
   const title = dated && date ? `Daily note, ${formatLongDate(date)}` : "Daily note";
   const releases = upcomingReleases(new Date());
+  const nextSpot = nextEiaSpotUpdate(new Date());
   const gap = !feedDown && dated && date;
   return (
     <>
@@ -173,8 +175,8 @@ export function DailyNoteUnavailable({
             </p>
           ) : null}
           <p className="text-sm text-steel-400">
-            Series used when the feed is up: Brent RBRTE, WTI RWTC, Henry Hub RNGWHHD. EIA publishes them with a lag of
-            one to two business days after the trade date. Weekends and US holidays can make the calendar gap longer.
+            Series used when the feed is up: Brent RBRTE, WTI RWTC, Henry Hub RNGWHHD. {EIA_SPOT_CADENCE} Next EIA
+            update: {nextSpot.label}.
           </p>
           <p className="text-sm font-medium text-steel-200">Information only, not investment advice.</p>
           <Link href="/data-sources" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
@@ -282,21 +284,21 @@ export default function DailyNoteView({
   const older = archiveDates.filter((date) => date < note.date).slice(0, 12);
   const newer = archiveDates.filter((date) => date > note.date).slice(-1)[0] ?? null;
   const previous = older[0] ?? null;
+  const nextSpot = nextEiaSpotUpdate(new Date());
 
   return (
     <>
       <PageHeader
         eyebrow="Morning note"
         title={headline}
-        intro="Brent, WTI and Henry Hub from the EIA daily spot, with the change from the previous print, from about a week earlier and from about a month earlier. EIA publishes the spot one to two business days after the trade date."
+        intro={`Brent, WTI and Henry Hub from the EIA daily spot, with the change from the previous print, from about a week earlier and from about a month earlier. ${EIA_SPOT_CADENCE}`}
       />
       <div className="container-site space-y-8 py-10">
         <section className="rounded-lg border border-gold-600/40 bg-ink-900 p-5 text-sm leading-relaxed text-steel-300" aria-label="Latest EIA print">
           <p className="text-lg font-semibold text-white sm:text-xl">Latest EIA print: {formatLongDate(latestPrint)}</p>
           <p className="mt-2">
-            EIA publishes the daily spot one to two business days after the trade date. A Monday trade date is often
-            on the site on Tuesday. Weekends and US holidays widen the calendar gap, so the print date is not the day
-            this page was opened.
+            {EIA_SPOT_CADENCE} Next EIA update: {nextSpot.label}. The print date is the trade date, which is often
+            several days behind that release, so it is not the day this page was opened.
           </p>
           <p className="mt-2">
             This note uses Brent {formatLongDate(note.brent.window.latest.date)}, WTI{" "}
