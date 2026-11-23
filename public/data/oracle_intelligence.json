@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-22T01:51:59Z",
+  "generated_utc": "2026-11-23T02:08:13Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-22T01:51:59Z",
+      "fetched_utc": "2026-11-23T02:08:13Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-22T01:51:59Z",
+      "fetched_utc": "2026-11-23T02:08:13Z",
       "as_of": "2026-11-19",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,21 +68,17 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-22T01:51:59Z",
-      "as_of": "2026-11-21T20:00:00Z",
+      "fetched_utc": "2026-11-23T02:08:13Z",
+      "as_of": "2026-11-22T22:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
-        "share_last_24h_pct": 0.4707,
-        "share_7d_average_pct": 0.4063,
-        "share_last_24h_vs_7d_average": 1.16,
-        "timeline_points": 24,
+        "share_last_24h_pct": 0.2276,
+        "share_7d_average_pct": 0.3488,
+        "share_last_24h_vs_7d_average": 0.65,
+        "timeline_points": 35,
         "timeline": [
-          {
-            "t": "2026-11-15T07:00:00Z",
-            "share_pct": 0.2749
-          },
           {
             "t": "2026-11-16T08:00:00Z",
             "share_pct": 0.1754
@@ -174,6 +170,54 @@
           {
             "t": "2026-11-21T20:00:00Z",
             "share_pct": 0.1052
+          },
+          {
+            "t": "2026-11-22T00:00:00Z",
+            "share_pct": 0.14
+          },
+          {
+            "t": "2026-11-22T05:00:00Z",
+            "share_pct": 0.0
+          },
+          {
+            "t": "2026-11-22T07:00:00Z",
+            "share_pct": 0.2191
+          },
+          {
+            "t": "2026-11-22T10:00:00Z",
+            "share_pct": 0.0429
+          },
+          {
+            "t": "2026-11-22T11:00:00Z",
+            "share_pct": 0.4032
+          },
+          {
+            "t": "2026-11-22T12:00:00Z",
+            "share_pct": 0.2669
+          },
+          {
+            "t": "2026-11-22T16:00:00Z",
+            "share_pct": 0.0
+          },
+          {
+            "t": "2026-11-22T18:00:00Z",
+            "share_pct": 0.2712
+          },
+          {
+            "t": "2026-11-22T19:00:00Z",
+            "share_pct": 0.1796
+          },
+          {
+            "t": "2026-11-22T20:00:00Z",
+            "share_pct": 0.3299
+          },
+          {
+            "t": "2026-11-22T21:00:00Z",
+            "share_pct": 0.4961
+          },
+          {
+            "t": "2026-11-22T22:00:00Z",
+            "share_pct": 0.3825
           }
         ],
         "search_terms": [
@@ -186,41 +230,82 @@
         ],
         "headlines": [
           {
-            "title": "Iran navy says three tankers on fire after hitting mines in Hormuz",
-            "domain": "bdnews24.com",
-            "url": "https://bdnews24.com/world/middle-east/47mh9vo0tx",
-            "seen_utc": "2026-11-15T07:45:00Z"
+            "title": "Tanker Market : Lower Refining Margins Leaving Less Room to Pay for Freight | Hellenic Shipping News Worldwide",
+            "domain": "hellenicshippingnews.com",
+            "url": "https://www.hellenicshippingnews.com/tanker-market-lower-refining-margins-leaving-less-room-to-pay-for-freight/",
+            "seen_utc": "2026-11-22T22:30:00Z"
           },
           {
-            "title": "Oil markets stay flush despite tanker attacks",
-            "domain": "economictimes.indiatimes.com",
-            "url": "https://economictimes.indiatimes.com/industry/energy/oil-gas/oil-markets-stay-flush-despite-tanker-attacks/articleshow/135841578.cms",
-            "seen_utc": "2026-11-14T20:00:00Z"
+            "title": "Two oil tankers explode after hitting naval mines in Strait of Hormuz",
+            "domain": "en.apa.az",
+            "url": "https://en.apa.az/asia/two-oil-tankers-explode-after-hitting-naval-mines-in-strait-of-hormuz-537786",
+            "seen_utc": "2026-11-22T21:30:00Z"
           },
           {
-            "title": "Russia Oil Revenues Hit Five - Month High on Crude Rally , IEA Says",
-            "domain": "gcaptain.com",
-            "url": "https://gcaptain.com/russia-oil-revenues-hit-five-month-high-on-crude-rally-iea-says/",
-            "seen_utc": "2026-11-13T18:00:00Z"
+            "title": "Iran says 2 supertankers struck naval mines near Strait of Hormuz",
+            "domain": "aa.com.tr",
+            "url": "https://aa.com.tr/en/middle-east/iran-says-2-supertankers-struck-naval-mines-near-strait-of-hormuz/4133736",
+            "seen_utc": "2026-11-22T21:30:00Z"
+          },
+          {
+            "title": "Iranian attacks in the Strait of Hormuz are at the highest levels since the conflict began",
+            "domain": "peakoil.com",
+            "url": "https://peakoil.com/publicpolicy/iranian-attacks-in-the-strait-of-hormuz-are-at-the-highest-levels-since-the-conflict-began",
+            "seen_utc": "2026-11-22T20:30:00Z"
+          },
+          {
+            "title": "UN - affiliated athlete swims in dangerous Strait of Hormuz to highlight Iran war impact on wildlife",
+            "domain": "cbc.ca",
+            "url": "https://www.cbc.ca/news/world/un-endurance-swimmer-strait-of-hormuz-wildlife-impact-9.7431891",
+            "seen_utc": "2026-11-22T20:30:00Z"
+          },
+          {
+            "title": "Iran says 2 supertankers struck naval mines near Strait of Hormuz",
+            "domain": "middleeastmonitor.com",
+            "url": "https://www.middleeastmonitor.com/20261122-iran-says-2-supertankers-struck-naval-mines-near-strait-of-hormuz/",
+            "seen_utc": "2026-11-22T18:45:00Z"
+          },
+          {
+            "title": "Iran claims it shot down US drone near Strait of Hormuz",
+            "domain": "news.az",
+            "url": "https://news.az/news/iran-claims-it-shot-down-us-drone-near-strait-of-hormuz",
+            "seen_utc": "2026-11-22T12:30:00Z"
+          },
+          {
+            "title": "Bahrain says Iran struck industrial site as tankers hit in Hormuz",
+            "domain": "enca.com",
+            "url": "https://www.enca.com/business/bahrain-says-iran-struck-industrial-site-tankers-hit-hormuz",
+            "seen_utc": "2026-11-22T07:30:00Z"
+          },
+          {
+            "title": "As war engulfs the Strait of Hormuz , one swimmer is fighting to protect its wildlife",
+            "domain": "sbs.com.au",
+            "url": "https://www.sbs.com.au/news/article/man-swims-across-the-strait-of-hormuz-to-protect-wildlife/sucyype2c",
+            "seen_utc": "2026-11-22T00:30:00Z"
+          },
+          {
+            "title": "Iran attacks US bases in Bahrain as its tankers get ready to break the US blockade",
+            "domain": "euronews.com",
+            "url": "https://www.euronews.com/2026/11/21/iran-attacks-us-bases-in-bahrain-as-its-tankers-get-ready-to-break-the-us-blockade",
+            "seen_utc": "2026-11-22T00:30:00Z"
           }
         ],
-        "headlines_note": "Headlines are from the previous fetch. A newer article list was not available.",
         "terms": [
           {
             "term": "Strait of Hormuz",
-            "as_of": "2026-11-21T20:00:00Z",
-            "share_last_24h_pct": 0.4707,
-            "share_7d_average_pct": 0.3911,
-            "share_last_24h_vs_7d_average": 1.2,
-            "fetched_utc": "2026-11-22T01:56:50Z"
+            "as_of": "2026-11-22T22:00:00Z",
+            "share_last_24h_pct": 0.2202,
+            "share_7d_average_pct": 0.3358,
+            "share_last_24h_vs_7d_average": 0.66,
+            "fetched_utc": "2026-11-23T02:10:29Z"
           },
           {
             "term": "OPEC quota",
-            "as_of": "2026-11-21T20:00:00Z",
+            "as_of": "2026-11-22T22:00:00Z",
             "share_last_24h_pct": 0.0,
-            "share_7d_average_pct": 0.0009,
+            "share_7d_average_pct": 0.0006,
             "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-22T01:56:50Z"
+            "fetched_utc": "2026-11-23T02:10:29Z"
           },
           {
             "term": "Suez Canal",
