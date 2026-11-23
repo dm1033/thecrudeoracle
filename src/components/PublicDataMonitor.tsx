@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import DataMeta from "@/components/DataMeta";
 import { formatLongDate } from "@/lib/daily-note";
+import { EIA_SPOT_STALE_AFTER_HOURS } from "@/lib/price-stamp";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
 import {
   headlines,
@@ -98,9 +99,9 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
       <Card
         id="pdm-prices"
         title="Spot prices, spread and crack"
-        about="EIA daily spot prices. The 3-2-1 crack is two barrels of New York Harbor gasoline plus one of diesel, less three of WTI, per barrel. EIA spot series run one to three business days behind."
+        about="EIA daily spot prices, posted once a week with the petroleum report. The 3-2-1 crack is two barrels of New York Harbor gasoline plus one of diesel, less three of WTI, per barrel. The newest trade date is often several days behind the release."
         module={feed.prices}
-        staleAfterHours={192}
+        staleAfterHours={EIA_SPOT_STALE_AFTER_HOURS}
       >
         {(v) => {
           const brent = num(v, "brent_usd_bbl");
@@ -155,7 +156,7 @@ export default function PublicDataMonitor({ feed }: { feed: MonitorFeed }) {
       <Card
         id="pdm-positioning"
         title="WTI futures positioning"
-        about="NYMEX WTI from the CFTC Disaggregated Commitments of Traders. Positions are as of a Tuesday and published the following Friday. Net is long minus short, in contracts."
+        about="NYMEX WTI from the CFTC Disaggregated Commitments of Traders. Positions are as of a Tuesday and usually published the following Friday. A federal holiday can move the release; the calendar page follows CFTC's schedule. Net is long minus short, in contracts."
         module={feed.positioning}
         staleAfterHours={288}
       >

@@ -18,10 +18,12 @@ function price(partial: Partial<MarketPrice> & Pick<MarketPrice, "ticker" | "pri
 }
 
 describe("price stamp", () => {
-  it("formats the trade date in UTC and flags anything older than 7 days", () => {
+  it("formats the trade date in UTC and flags a print only after the weekly EIA window", () => {
     expect(formatPriceDate("2026-10-14T00:00:00Z")).toBe("14 Oct 2026");
-    expect(priceIsStale("2026-10-14T00:00:00Z", Date.parse("2026-10-20T00:00:00Z"))).toBe(false);
-    expect(priceIsStale("2026-10-14T00:00:00Z", Date.parse("2026-10-22T00:00:00Z"))).toBe(true);
+    // Eight days is a normal gap from a Tuesday trade date to the next Wednesday release.
+    expect(priceIsStale("2026-11-17T00:00:00Z", Date.parse("2026-11-25T15:00:00Z"))).toBe(false);
+    expect(priceIsStale("2026-10-14T00:00:00Z", Date.parse("2026-10-22T00:00:00Z"))).toBe(false);
+    expect(priceIsStale("2026-10-14T00:00:00Z", Date.parse("2026-10-25T00:00:00Z"))).toBe(true);
     expect(priceSourceLabel({ source: "EIA Open Data API — Brent", data_type: "delayed" })).toBe("EIA");
     expect(priceSourceLabel({ source: "EIA (indicative)", data_type: "manual" })).toBe("desk mark");
   });

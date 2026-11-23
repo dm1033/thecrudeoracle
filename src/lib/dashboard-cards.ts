@@ -1,4 +1,5 @@
 import { num, type MonitorFeed } from "@/lib/oracle-intelligence";
+import { EIA_SPOT_STALE_AFTER_HOURS } from "@/lib/price-stamp";
 import { getMonitorFeedWithLiveEia } from "@/lib/monitor-live";
 import { formatSteoMonth, getSteoFeed, type SteoFeed, type SteoRow } from "@/lib/steo";
 import { SIZE_LABEL, whatChanged, type ChangeItem } from "@/lib/what-changed";
@@ -124,7 +125,7 @@ function crackCard(feed: MonitorFeed): DataCard | null {
     sourceUrl: prices.sourceUrl,
     asOf: date,
     dataType: "delayed",
-    staleAfterHours: DAILY_STALE,
+    staleAfterHours: EIA_SPOT_STALE_AFTER_HOURS,
     href: "/tools/curve-monitor",
   };
 }

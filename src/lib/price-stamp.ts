@@ -1,5 +1,14 @@
-/** Visible price badge. Age is measured from the EIA trade date, in UTC days. */
-export const PRICE_STALE_AFTER_DAYS = 7;
+/**
+ * Hours after the newest EIA spot trade date before a current print is called stale.
+ * RBRTE and RWTC are posted weekly with the petroleum report. A Tuesday trade
+ * date is about eight days old at the next Wednesday release, and about ten
+ * days old when that release moves to Thursday. Ten days covers that window.
+ * A missed week still flags. Measured from midnight UTC on the trade date.
+ */
+export const EIA_SPOT_STALE_AFTER_HOURS = 24 * 10;
+
+/** Whole days matching `EIA_SPOT_STALE_AFTER_HOURS`. Age is the EIA trade date, in UTC. */
+export const PRICE_STALE_AFTER_DAYS = EIA_SPOT_STALE_AFTER_HOURS / 24;
 
 export function priceAgeDays(lastUpdated: string, now = Date.now()): number | null {
   const day = lastUpdated.slice(0, 10);
@@ -9,8 +18,10 @@ export function priceAgeDays(lastUpdated: string, now = Date.now()): number | nu
 }
 
 export function priceIsStale(lastUpdated: string, now = Date.now()): boolean {
-  const age = priceAgeDays(lastUpdated, now);
-  return age !== null && age > PRICE_STALE_AFTER_DAYS;
+  const day = lastUpdated.slice(0, 10);
+  const parsed = Date.parse(`${day}T00:00:00Z`);
+  if (Number.isNaN(parsed)) return false;
+  return (now - parsed) / 3_600_000 > EIA_SPOT_STALE_AFTER_HOURS;
 }
 
 /** Calendar date in en-GB, pinned to UTC so the trade date does not shift overnight. */

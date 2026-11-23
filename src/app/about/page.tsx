@@ -87,9 +87,10 @@ export default function AboutPage() {
             minus WTI on a shared trade date. No forecast is added, and a missing print is left blank.
           </p>
           <p>
-            EIA publishes those daily spots one to two business days after the trade date. Weekends and US holidays
-            can make the calendar gap longer. The date on the page is the trade date of the print, not the day you
-            opened it.
+            EIA publishes a price for each trading day and posts the new days once a week. Brent and WTI go out with
+            the Weekly Petroleum Status Report, on Wednesday, or on Thursday when a US federal holiday moves that
+            report. Henry Hub is posted on that same weekly rhythm. The date on the page is the trade date of the
+            print, which is often several days behind the release, not the day you opened it.
           </p>
           <p>
             The Wednesday page reads the Weekly Petroleum Status Report from petroleum/stoc/wstk: US commercial crude

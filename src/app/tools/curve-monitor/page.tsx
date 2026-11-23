@@ -6,7 +6,8 @@ import DataMeta from "@/components/DataMeta";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SpreadHistoryChart from "@/components/charts/SpreadHistoryChart";
 import { formatLongDate } from "@/lib/daily-note";
-import { formatLondonTimestamp } from "@/lib/release-calendar";
+import { EIA_SPOT_STALE_AFTER_HOURS } from "@/lib/price-stamp";
+import { formatLondonTimestamp, nextEiaSpotUpdate } from "@/lib/release-calendar";
 import { getCurveFeed, type CurvePoint } from "@/lib/curve";
 
 export const revalidate = 7200;
@@ -20,8 +21,8 @@ export const metadata: Metadata = pageMeta(
 const SPOT_URL = "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm";
 const FUTURES_URL = "https://www.eia.gov/dnav/pet/pet_pri_fut_s1_d.htm";
 
-/** EIA posts daily spot prices some days in arrears, so allow for that before calling them stale. */
-const STALE_AFTER_HOURS = 24 * 12;
+/** EIA's NYMEX futures table. Spot rows use the weekly spot window instead. */
+const FUTURES_STALE_AFTER_HOURS = 24 * 12;
 
 function amount(value: number, digits = 2): string {
   return value.toLocaleString("en-GB", { minimumFractionDigits: digits, maximumFractionDigits: digits });
@@ -149,13 +150,16 @@ export default async function CurveMonitorPage() {
                   </table>
                 </div>
                 <div>
-                  <p className="text-xs text-steel-500">Fetched {formatLondonTimestamp(feed.fetchedAt)}.</p>
+                  <p className="text-xs text-steel-500">
+                    Fetched {formatLondonTimestamp(feed.fetchedAt)}. Next EIA spot update:{" "}
+                    {nextEiaSpotUpdate(new Date()).label}.
+                  </p>
                   <DataMeta
                     source="EIA spot prices"
                     sourceUrl={SPOT_URL}
                     lastUpdated={`${feed.spots.map((row) => row.latest.date).sort().at(-1)}T00:00:00Z`}
                     dataType="delayed"
-                    staleAfterHours={STALE_AFTER_HOURS}
+                    staleAfterHours={EIA_SPOT_STALE_AFTER_HOURS}
                   />
                 </div>
               </section>
@@ -209,7 +213,7 @@ export default async function CurveMonitorPage() {
                     sourceUrl={FUTURES_URL}
                     lastUpdated={`${futures.date}T00:00:00Z`}
                     dataType="delayed"
-                    staleAfterHours={STALE_AFTER_HOURS}
+                    staleAfterHours={FUTURES_STALE_AFTER_HOURS}
                   />
                 </>
               ) : (

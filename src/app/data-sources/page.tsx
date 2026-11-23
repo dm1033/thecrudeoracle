@@ -14,19 +14,20 @@ const ROWS: { dataset: string; source: string; terms: string; frequency: string 
     dataset: "Europe Brent spot (EIA series RBRTE)",
     source: "U.S. Energy Information Administration Open Data API v2, route petroleum/pri/spt. Credit: Source: U.S. EIA.",
     terms: "U.S. government work. Public domain. Free to show, chart and cite. https://www.eia.gov/opendata/",
-    frequency: "Daily spot. EIA publishes the trade date with a lag of several days. A successful response is cached for 2 hours.",
+    frequency:
+      "Daily values, posted once a week with the Weekly Petroleum Status Report (Wednesday, or Thursday when that report moves). A successful response is cached for 2 hours.",
   },
   {
     dataset: "WTI Cushing spot (EIA series RWTC)",
     source: "U.S. EIA Open Data API v2, route petroleum/pri/spt. Credit: Source: U.S. EIA.",
     terms: "U.S. government work. Public domain.",
-    frequency: "Daily spot, same lag and 2-hour cache as Brent.",
+    frequency: "Daily values, posted once a week with Brent, and the same 2-hour cache.",
   },
   {
     dataset: "Henry Hub natural gas spot (EIA series RNGWHHD)",
     source: "U.S. EIA Open Data API v2, route natural-gas/pri/fut. The spot series is published on that futures dataset. Credit: Source: U.S. EIA.",
     terms: "U.S. government work. Public domain.",
-    frequency: "Daily spot, in $/MMBtu, with the same publication lag and 2-hour cache.",
+    frequency: "Daily values in $/MMBtu, posted on the same weekly rhythm as Brent and WTI, with the same 2-hour cache.",
   },
   {
     dataset: "Dubai crude",

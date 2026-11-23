@@ -34,6 +34,6 @@ export default async function Image() {
     title: "Daily morning note",
     dateLine: `Latest EIA print: ${formatLongDate(note.date)}`,
     rows,
-    footnote: "EIA Open Data · 1–2 business day lag · Not financial advice",
+    footnote: "EIA Open Data · weekly batch, with the petroleum report · Not financial advice",
   });
 }

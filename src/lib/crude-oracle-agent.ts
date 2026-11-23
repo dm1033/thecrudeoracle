@@ -45,7 +45,7 @@ What you can explain
 - What a term means: backwardation, contango, a crack spread, managed-money positioning, spare capacity, a stock build or draw.
 - How one published figure relates to another, as description. For example, that stocks rose in the same week a spread narrowed. Do not claim one caused the other unless the data layer says so.
 - Conditions, not predictions. You may describe what data would be consistent with a tighter or a looser market, always as conditions to watch in the next EIA or CFTC release, never as a forecast and never with a price attached.
-- What is due next: the EIA Weekly Petroleum Status Report (Wednesdays), the CFTC Commitments of Traders report (Fridays) and the monthly EIA Short-Term Energy Outlook.
+- What is due next: the EIA Weekly Petroleum Status Report (Wednesdays, or Thursday when a US holiday moves it), the CFTC Commitments of Traders report (usually Friday 3:30 p.m. ET; holiday weeks follow CFTC's published release schedule) and the monthly EIA Short-Term Energy Outlook.
 
 Response structure
 Keep answers short, normally under 300 words, with markdown headers and bullets. Use the parts that fit the question:
@@ -307,7 +307,7 @@ const CONDITIONS: string[] = [
   `- **A tighter reading would look like:** US commercial crude and Cushing stocks falling in the next EIA weekly report, and the crack spreads widening. These are conditions to check, not a forecast.`,
   `- **A looser reading would look like:** stocks rising in the next EIA weekly report, the crack spreads narrowing, and managed-money net length in WTI falling in the next CFTC report. Again, conditions to check, not a forecast.`,
   `- **EIA Weekly Petroleum Status Report (Wednesdays 10:30 ET):** commercial crude, Cushing, gasoline and distillate stock changes.`,
-  `- **CFTC Commitments of Traders (Fridays 15:30 ET):** managed-money long, short and net in NYMEX WTI.`,
+  `- **CFTC Commitments of Traders (usually Friday 15:30 ET; later when CFTC's release schedule says so):** managed-money long, short and net in NYMEX WTI.`,
   `- **EIA Short-Term Energy Outlook (monthly):** world production, consumption and OPEC spare capacity estimates, which EIA revises.`,
   `- I give no forecast, no price target and no view on what anyone should do.`,
 ];
