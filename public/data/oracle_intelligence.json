@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-24T05:42:40Z",
+  "generated_utc": "2026-11-24T17:43:55Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-24T05:42:40Z",
+      "fetched_utc": "2026-11-24T17:43:55Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-24T05:42:40Z",
+      "fetched_utc": "2026-11-24T17:43:55Z",
       "as_of": "2026-11-20",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,16 +68,16 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-23T18:07:56Z",
-      "as_of": "2026-11-23T03:00:00Z",
+      "fetched_utc": "2026-11-24T17:43:55Z",
+      "as_of": "2026-11-24T07:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
-        "share_last_24h_pct": 0.1974,
-        "share_7d_average_pct": 0.3298,
-        "share_last_24h_vs_7d_average": 0.6,
-        "timeline_points": 37,
+        "share_last_24h_pct": 0.3026,
+        "share_7d_average_pct": 0.324,
+        "share_last_24h_vs_7d_average": 0.93,
+        "timeline_points": 47,
         "timeline": [
           {
             "t": "2026-11-18T01:00:00Z",
@@ -226,6 +226,46 @@
           {
             "t": "2026-11-23T03:00:00Z",
             "share_pct": 0.0593
+          },
+          {
+            "t": "2026-11-23T21:00:00Z",
+            "share_pct": 0.1692
+          },
+          {
+            "t": "2026-11-23T22:00:00Z",
+            "share_pct": 0.2611
+          },
+          {
+            "t": "2026-11-24T00:00:00Z",
+            "share_pct": 0.3256
+          },
+          {
+            "t": "2026-11-24T01:00:00Z",
+            "share_pct": 0.2323
+          },
+          {
+            "t": "2026-11-24T02:00:00Z",
+            "share_pct": 0.3076
+          },
+          {
+            "t": "2026-11-24T03:00:00Z",
+            "share_pct": 0.4912
+          },
+          {
+            "t": "2026-11-24T04:00:00Z",
+            "share_pct": 0.3612
+          },
+          {
+            "t": "2026-11-24T05:00:00Z",
+            "share_pct": 0.2922
+          },
+          {
+            "t": "2026-11-24T06:00:00Z",
+            "share_pct": 0.1529
+          },
+          {
+            "t": "2026-11-24T07:00:00Z",
+            "share_pct": 0.4323
           }
         ],
         "search_terms": [
@@ -310,11 +350,11 @@
           },
           {
             "term": "Bab el-Mandeb",
-            "as_of": "2026-11-23T03:00:00Z",
-            "share_last_24h_pct": 0.0032,
-            "share_7d_average_pct": 0.0151,
-            "share_last_24h_vs_7d_average": 0.21,
-            "fetched_utc": "2026-11-23T18:12:20Z"
+            "as_of": "2026-11-24T07:00:00Z",
+            "share_last_24h_pct": 0.0086,
+            "share_7d_average_pct": 0.0137,
+            "share_last_24h_vs_7d_average": 0.63,
+            "fetched_utc": "2026-11-24T17:47:29Z"
           },
           {
             "term": "OPEC quota",
@@ -326,17 +366,17 @@
           },
           {
             "term": "Suez Canal",
-            "as_of": "2026-11-21T20:00:00Z",
+            "as_of": "2026-11-24T07:00:00Z",
             "share_last_24h_pct": 0.0,
-            "share_7d_average_pct": 0.0097,
+            "share_7d_average_pct": 0.005,
             "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-22T01:56:50Z"
+            "fetched_utc": "2026-11-24T17:47:29Z"
           }
         ],
         "terms_without_figures": [
           {
             "term": "Red Sea tanker",
-            "reason": "api.gdeltproject.org answered HTTP 429"
+            "reason": "GDELT returned too few timeline points"
           },
           {
             "term": "Libya oilfield",
