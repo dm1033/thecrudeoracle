@@ -54,10 +54,10 @@ export default function SpotSpreadView({
       timeScale: { borderColor: THEME.hairline },
       crosshair: { vertLine: { color: THEME.brass }, horzLine: { color: THEME.brass } },
     });
-    const brent = chart.addSeries(LineSeries, { color: THEME.brent, lineWidth: 2, priceLineVisible: false });
-    const wti = chart.addSeries(LineSeries, { color: THEME.wti, lineWidth: 2, priceLineVisible: false });
-    const henry = showHenry ? chart.addSeries(LineSeries, { color: THEME.gas, lineWidth: 1, priceLineVisible: false }) : null;
-    const spread = chart.addSeries(HistogramSeries, { color: THEME.brass, priceScaleId: "spread", priceLineVisible: false });
+    const brent = chart.addSeries(LineSeries, { color: THEME.brent, lineWidth: 2, title: "BRN", lastValueVisible: true, priceLineVisible: true });
+    const wti = chart.addSeries(LineSeries, { color: THEME.wti, lineWidth: 2, title: "WTI", lastValueVisible: true, priceLineVisible: true });
+    const henry = showHenry ? chart.addSeries(LineSeries, { color: THEME.gas, lineWidth: 1, title: "HH", lastValueVisible: true, priceLineVisible: false }) : null;
+    const spread = chart.addSeries(HistogramSeries, { color: THEME.brass, priceScaleId: "spread", lastValueVisible: false, priceLineVisible: false });
     chart.priceScale("spread").applyOptions({ scaleMargins: { top: 0.72, bottom: 0 } });
     chart.priceScale("right").applyOptions({ mode: log ? 1 : 0 });
     brent.setData(windowed.brent.map((point) => ({ time: stamp(point.date), value: point.value })));
@@ -97,7 +97,10 @@ export default function SpotSpreadView({
       </div>
       <div ref={ref} className="h-[420px] w-full" />
       <p className="border-t border-border-hairline px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-muted">
-        EIA daily spot · Brent {THEME.brent} · WTI · Henry Hub · lower bars are Brent minus WTI · delayed
+        <span className="mr-3 inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 bg-brent" /> Brent</span>
+        <span className="mr-3 inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 bg-wti" /> WTI</span>
+        <span className="mr-3 inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 bg-gas" /> Henry Hub</span>
+        Lower bars are Brent minus WTI · delayed EIA spot
       </p>
     </div>
   );

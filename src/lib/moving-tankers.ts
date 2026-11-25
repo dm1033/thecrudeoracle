@@ -163,3 +163,22 @@ export function buildMovingTankerFeed(payload: unknown, retrievedAt: string): Mo
 export function unavailableMovingTankerFeed(retrievedAt: string): MovingTankerFeed {
   return envelope("unavailable", [], retrievedAt);
 }
+
+/** Server fetch of the documented live endpoint. Kept off the coastline module so the route stays small. */
+export async function loadMovingTankerFeed(): Promise<MovingTankerFeed> {
+  const retrievedAt = new Date().toISOString();
+  try {
+    const response = await fetch(TANKERMAP_LIVE_URL, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "TheCrudeOracle/1.0 (+https://www.thecrudeoracle.com; vessel watch)",
+      },
+      next: { revalidate: 1800 },
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!response.ok) return unavailableMovingTankerFeed(retrievedAt);
+    return buildMovingTankerFeed(await response.json(), retrievedAt);
+  } catch {
+    return unavailableMovingTankerFeed(retrievedAt);
+  }
+}

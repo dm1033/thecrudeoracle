@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import * as maplibregl from "maplibre-gl";
 import { MapboxOverlay } from "@deck.gl/mapbox";
-import { GeoJsonLayer, PathLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { GeoJsonLayer, IconLayer, PathLayer, ScatterplotLayer } from "@deck.gl/layers";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { COAST } from "@/components/globe-land";
 import { LANES } from "@/lib/sea-lanes";
@@ -14,7 +14,6 @@ import { THEME } from "@/lib/theme-tokens";
 import { tankermapShareUrl } from "@/lib/tankermap";
 import {
   TANKER_CLASSES,
-  headingTick,
   unavailableMovingTankerFeed,
   type MovingTanker,
   type MovingTankerFeed,
@@ -37,6 +36,14 @@ const SWATCH: Record<TankerClass, string> = {
   products: "bg-brass",
   chemical: "bg-wti",
   lng: "bg-gas",
+};
+
+const SHIP_ATLAS =
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><path fill="#fff" d="M32 4 L54 58 L32 46 L10 58 Z"/></svg>');
+
+const SHIP_MAPPING = {
+  ship: { x: 0, y: 0, width: 64, height: 64, anchorX: 32, anchorY: 32, mask: true },
 };
 
 const land = {
@@ -99,10 +106,6 @@ export default function SeaborneMapView() {
       path: lane.waypoints.map(([lat, lon]) => [lon, lat]),
     }));
     const shown = layersOn.ais ? visible : [];
-    const headings = shown.flatMap((tanker) => {
-      const path = headingTick(tanker);
-      return path ? [{ imo: tanker.imo, path, color: [...TANKER_CLASSES[tanker.tankerClass].color, 210] as [number, number, number, number] }] : [];
-    });
     return [
       basemap === "schematic"
         ? new GeoJsonLayer({ id: "land", data: land, filled: true, stroked: false, getFillColor: [17, 22, 31, 255] })
@@ -147,23 +150,17 @@ export default function SeaborneMapView() {
           })
         : null,
       shown.length
-        ? new PathLayer({
-            id: "headings",
-            data: headings,
-            getPath: (d) => d.path,
-            getColor: (d) => d.color,
-            getWidth: 1,
-            widthUnits: "pixels",
-          })
-        : null,
-      shown.length
-        ? new ScatterplotLayer({
+        ? new IconLayer({
             id: "moving",
             data: shown,
-            getPosition: (d) => [d.lon, d.lat],
-            getFillColor: (d: MovingTanker) => TANKER_CLASSES[d.tankerClass].color,
-            getRadius: 3.5,
-            radiusUnits: "pixels",
+            iconAtlas: SHIP_ATLAS,
+            iconMapping: SHIP_MAPPING,
+            getIcon: () => "ship",
+            getPosition: (d: MovingTanker) => [d.lon, d.lat],
+            getAngle: (d: MovingTanker) => d.cogDeg ?? 0,
+            getColor: (d: MovingTanker) => [...TANKER_CLASSES[d.tankerClass].color, 235] as [number, number, number, number],
+            getSize: (d: MovingTanker) => (selected?.kind === "ship" && selected.item.imo === d.imo ? 22 : 11),
+            sizeUnits: "pixels",
             pickable: true,
             onClick: (info: { object?: MovingTanker }) => {
               if (info.object) setSelected({ kind: "ship", item: info.object });
@@ -171,7 +168,7 @@ export default function SeaborneMapView() {
           })
         : null,
     ].filter(Boolean);
-  }, [basemap, layersOn, visible]);
+  }, [basemap, layersOn, selected, visible]);
 
   useEffect(() => {
     if (!node || mapRef.current) return;
@@ -204,7 +201,27 @@ export default function SeaborneMapView() {
   }, [node]);
 
   useEffect(() => {
-    overlayRef.current?.setProps({ layers: deckLayers });
+    overlayRef.current?.setProps({
+      layers: deckLayers,
+      getTooltip: ({ object }: { object?: { name?: string; speedKn?: number; tankerClass?: TankerClass; basin?: string } }) => {
+        if (!object?.name) return null;
+        const detail =
+          object.speedKn != null
+            ? `${object.tankerClass ? TANKER_CLASSES[object.tankerClass].label : "Hull"} · ${object.speedKn.toFixed(1)} kn`
+            : object.basin ?? "Schematic mark";
+        return {
+          text: `${object.name}\n${detail}`,
+          style: {
+            background: THEME.surface1,
+            color: THEME.ink,
+            fontSize: "11px",
+            fontFamily: "ui-monospace, monospace",
+            border: `1px solid ${THEME.hairline}`,
+            padding: "6px 8px",
+          },
+        };
+      },
+    });
   }, [deckLayers]);
 
   useEffect(() => {
