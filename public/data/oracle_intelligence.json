@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-25T04:44:21Z",
+  "generated_utc": "2026-11-25T23:46:05Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-25T04:44:21Z",
+      "fetched_utc": "2026-11-25T23:46:05Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,8 +38,8 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-25T04:44:21Z",
-      "as_of": "2026-11-23",
+      "fetched_utc": "2026-11-25T23:46:05Z",
+      "as_of": "2026-11-24",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
       "data_type": "delayed",
@@ -47,7 +47,7 @@
         "broad_dollar_index": 123.6,
         "broad_dollar_date": "2026-11-20",
         "real_yield_10y_pct": 2.79,
-        "real_yield_date": "2026-11-23",
+        "real_yield_date": "2026-11-24",
         "broad_dollar_change": {
           "change": 0.07,
           "previous_date": "2026-11-19",
@@ -55,12 +55,12 @@
           "changes_compared": 78
         },
         "real_yield_10y_change": {
-          "change": 0.02,
-          "previous_date": "2026-11-20",
-          "vs_usual": 0.42,
+          "change": 0.0,
+          "previous_date": "2026-11-23",
+          "vs_usual": 0.0,
           "changes_compared": 78
         },
-        "wti_vs_broad_dollar_correlation": 0.09,
+        "wti_vs_broad_dollar_correlation": 0.06,
         "wti_vs_broad_dollar_days": 30,
         "wti_vs_real_yield_10y_correlation": -0.13,
         "wti_vs_real_yield_10y_days": 30
