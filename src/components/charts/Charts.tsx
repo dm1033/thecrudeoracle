@@ -1,41 +1,19 @@
 "use client";
 
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
+import type { EChartsCoreOption } from "echarts/core";
+import EChart from "./EChart";
 import ChartDataTable, { type ChartTableColumn } from "./ChartDataTable";
-
-const GOLD = "#c9a038";
-const STEEL = "#8b98a9";
-const NAVYLINE = "#5b8dd6";
-const GRID = "#212936";
-
-const axisProps = {
-  stroke: STEEL,
-  tick: { fill: STEEL, fontSize: 11 },
-  tickLine: false,
-  axisLine: { stroke: GRID },
-} as const;
-
-const tooltipStyle = {
-  contentStyle: {
-    backgroundColor: "#10141b",
-    border: "1px solid #2e3948",
-    borderRadius: 6,
-    fontSize: 12,
-  },
-  labelStyle: { color: "#c3ccd8" },
-} as const;
+import { THEME } from "@/lib/theme-tokens";
 
 export type BrentWtiPoint = { date: string; brent: number; wti: number };
 export type HenryHubPoint = { date: string; hh: number };
+
+const base = {
+  backgroundColor: "transparent",
+  textStyle: { color: THEME.inkSecondary, fontFamily: "ui-monospace, monospace" },
+  grid: { left: 48, right: 16, top: 28, bottom: 28 },
+  tooltip: { trigger: "axis" as const, backgroundColor: THEME.surface1, borderColor: THEME.hairline, textStyle: { color: THEME.ink } },
+};
 
 function ChartFrame({
   title,
@@ -43,14 +21,14 @@ function ChartFrame({
   updated,
   data,
   columns,
-  children,
+  option,
 }: {
   title: string;
   note: string;
   updated: string;
   data: Record<string, string | number>[];
   columns: ChartTableColumn[];
-  children: React.ReactNode;
+  option: EChartsCoreOption;
 }) {
   return (
     <figure className="card">
@@ -59,7 +37,7 @@ function ChartFrame({
         <span className="text-[10px] uppercase tracking-wide text-steel-500">{note}</span>
       </figcaption>
       <div aria-hidden className="h-64 w-full">
-        {children}
+        <EChart option={option} />
       </div>
       <ChartDataTable caption={`${title} — data table`} columns={columns} rows={data} />
       <p className="mt-2 text-[11px] text-steel-300">
@@ -94,19 +72,17 @@ export function BrentWtiChart({ points }: { points: BrentWtiPoint[] }) {
         { key: "brent", label: "Brent (USD/bbl)" },
         { key: "wti", label: "WTI (USD/bbl)" },
       ]}
-    >
-      <ResponsiveContainer>
-        <LineChart data={points} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
-          <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
-          <XAxis dataKey="date" {...axisProps} minTickGap={24} />
-          <YAxis {...axisProps} domain={["auto", "auto"]} />
-          <Tooltip {...tooltipStyle} />
-          <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Line type="monotone" dataKey="brent" name="Brent" stroke={GOLD} strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="wti" name="WTI" stroke={NAVYLINE} strokeWidth={2} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </ChartFrame>
+      option={{
+        ...base,
+        legend: { textStyle: { color: THEME.inkSecondary }, top: 0 },
+        xAxis: { type: "category", data: points.map((point) => point.date), axisLabel: { color: THEME.inkMuted } },
+        yAxis: { type: "value", scale: true, axisLabel: { color: THEME.inkMuted }, splitLine: { lineStyle: { color: THEME.hairline } } },
+        series: [
+          { type: "line", name: "Brent", data: points.map((point) => point.brent), showSymbol: false, lineStyle: { color: THEME.brent, width: 1.5 } },
+          { type: "line", name: "WTI", data: points.map((point) => point.wti), showSymbol: false, lineStyle: { color: THEME.wti, width: 1.5 } },
+        ],
+      }}
+    />
   );
 }
 
@@ -123,17 +99,12 @@ export function HenryHubChart({ points }: { points: HenryHubPoint[] }) {
         { key: "date", label: "Trade date" },
         { key: "hh", label: "Henry Hub (USD/MMBtu)" },
       ]}
-    >
-      <ResponsiveContainer>
-        <LineChart data={points} margin={{ top: 5, right: 10, bottom: 0, left: -15 }}>
-          <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
-          <XAxis dataKey="date" {...axisProps} minTickGap={24} />
-          <YAxis {...axisProps} domain={["auto", "auto"]} />
-          <Tooltip {...tooltipStyle} />
-          <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Line type="monotone" dataKey="hh" name="Henry Hub" stroke={GOLD} strokeWidth={2} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </ChartFrame>
+      option={{
+        ...base,
+        xAxis: { type: "category", data: points.map((point) => point.date), axisLabel: { color: THEME.inkMuted } },
+        yAxis: { type: "value", scale: true, axisLabel: { color: THEME.inkMuted }, splitLine: { lineStyle: { color: THEME.hairline } } },
+        series: [{ type: "line", name: "Henry Hub", data: points.map((point) => point.hh), showSymbol: false, lineStyle: { color: THEME.gas, width: 1.5 } }],
+      }}
+    />
   );
 }

@@ -7,6 +7,8 @@ import PresentedBy from "@/components/PresentedBy";
 import JsonLd from "@/components/JsonLd";
 import { EiaCrudeStocksSnapshot } from "@/components/MarketSnapshot";
 import { getEiaWeekly, type WeeklyStockLine } from "@/lib/eia-weekly";
+import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
+import SeasonalChart from "@/components/viz/SeasonalChart";
 import { formatLongDate } from "@/lib/daily-note";
 import { formatLondonTimestamp } from "@/lib/release-calendar";
 import { pageMeta } from "@/lib/seo";
@@ -77,7 +79,7 @@ function StockTable({ lines }: { lines: WeeklyStockLine[] }) {
 }
 
 export default async function EiaWeeklyPage() {
-  const feed = await getEiaWeekly();
+  const [feed, seasonal] = await Promise.all([getEiaWeekly(), getEiaSeasonalSuite()]);
   return (
     <>
       <PageHeader
@@ -86,6 +88,9 @@ export default async function EiaWeeklyPage() {
         intro="US crude, gasoline, distillate and Cushing from the EIA Weekly Petroleum Status Report. Stocks are thousand barrels in the API and million barrels on this page."
       />
       <div className="container-site space-y-8 py-10">
+        <section className="border border-border-hairline" aria-label="Five-year seasonal band">
+          <SeasonalChart suite={seasonal} />
+        </section>
         {feed ? (
           <>
             <section className="rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm leading-relaxed text-steel-300" aria-label="Latest EIA print">

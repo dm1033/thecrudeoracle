@@ -12,6 +12,10 @@ import PriceFreshness from "@/components/PriceFreshness";
 import { getPublishedPrices } from "@/lib/published-prices";
 import { isSampleInstrument } from "@/lib/sample-marks";
 import { BrentWtiChart, HenryHubChart } from "@/components/charts/Charts";
+import SeasonalChart from "@/components/viz/SeasonalChart";
+import SpotSpreadTerminal from "@/components/viz/SpotSpreadTerminal";
+import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
+import { getHistoricalSpotSeries } from "@/lib/historical-series";
 
 export const revalidate = 7200;
 
@@ -33,7 +37,12 @@ const INTEL_GROUPS = [
 ];
 
 export default async function DashboardPage() {
-  const [feed, cards] = await Promise.all([getPublishedPrices(), getDashboardCards()]);
+  const [feed, cards, history, seasonal] = await Promise.all([
+    getPublishedPrices(),
+    getDashboardCards(),
+    getHistoricalSpotSeries(),
+    getEiaSeasonalSuite(),
+  ]);
   const intelRows = INTEL_GROUPS.flatMap((group) => {
     const company = watchlistCompanies.find(
       (row) =>
@@ -101,9 +110,15 @@ export default async function DashboardPage() {
           <h2 id="charts-h" className="h2">
             Chart pack
           </h2>
+          <div className="mt-4 border border-border-hairline">
+            <SpotSpreadTerminal data={history} />
+          </div>
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
             <BrentWtiChart points={feed.brentWtiHistory} />
             <HenryHubChart points={feed.henryHubHistory.map((point) => ({ date: point.date, hh: point.value }))} />
+          </div>
+          <div className="mt-4 border border-border-hairline">
+            <SeasonalChart suite={seasonal} />
           </div>
         </section>
 

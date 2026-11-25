@@ -1,25 +1,20 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Metadata } from "next";
-import FrontScreen from "@/components/FrontScreen";
-import MarketCard from "@/components/MarketCard";
 import DataCardView from "@/components/DataCardView";
-import { getDashboardCards, pickCards } from "@/lib/dashboard-cards";
-import BottomLineCard from "@/components/BottomLineCard";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
-import SubscribeCTA from "@/components/SubscribeCTA";
 import FAQ from "@/components/FAQ";
-import PaperBookPanel from "@/components/PaperBookPanel";
-import PriceFreshness from "@/components/PriceFreshness";
-import { PAPER_FUND_PUBLISHED } from "@/lib/sample-marks";
 import BeehiivSignup from "@/components/BeehiivSignup";
 import PresentedBy from "@/components/PresentedBy";
-import { getPublishedPrices } from "@/lib/published-prices";
-import type { BoardQuote } from "@/lib/desk-tape";
+import SeaborneTerminalMap from "@/components/viz/SeaborneTerminalMap";
+import SpotSpreadTerminal from "@/components/viz/SpotSpreadTerminal";
+import SeasonalChart from "@/components/viz/SeasonalChart";
+import { getDashboardCards, pickCards } from "@/lib/dashboard-cards";
+import { briefings } from "@/lib/data";
+import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
+import { getHistoricalSpotSeries } from "@/lib/historical-series";
 import { pageMeta } from "@/lib/seo";
-import { priceFigureShown } from "@/lib/price-stamp";
+import { upcomingReleases } from "@/lib/release-calendar";
 
-/** Two hours, same window as the EIA spot cache. Visitors are not held for a live call. */
 export const revalidate = 7200;
 
 export const metadata: Metadata = pageMeta(
@@ -28,29 +23,6 @@ export const metadata: Metadata = pageMeta(
   "/",
   { dynamicImage: true }
 );
-
-const MEMBER_BENEFITS = [
-  ["Daily market briefings", "Concise, source-backed crude oil and gas briefings every trading day — what moved, why, and what matters next."],
-  ["Oil and gas watchlists — coming soon", "The watchlist page is open. No company names are published yet. Sample tickers stay off the page."],
-  ["Supply and news figures", "US stocks, OPEC production and spare capacity, and a count of supply-route news coverage. Each figure has a source and a date. There is no alert product."],
-  ["Company intelligence — coming soon", "Company notes are not published yet. The page says so, and it does not show sample profiles as if they were real."],
-  ["Investment themes", "Multi-week themes across the energy complex, explained in plain English with the evidence behind them."],
-  ["Concise explanations", "Terminal-grade data, explained clearly — no noise, no filler, no jargon walls."],
-  ["Research library", "A growing archive of deep-dive notes on supply, demand, LNG, shipping and UK energy security."],
-  ["Oil market education", "From inventory reports to spare capacity: learn to read the oil market like a professional."],
-  ["UK energy security analysis", "Dedicated coverage of the North Sea, UKCS fiscal policy and Britain's import dependency."],
-] as const;
-
-const PRICING_FEATURES = [
-  "Full market dashboard",
-  "Daily crude oil briefing",
-  "Crude and gas market intelligence",
-  "Investment watchlist — no names published yet",
-  "Company notes — none published yet",
-  "Supply and demand alerts",
-  "OPEC / geopolitical risk monitoring",
-  "Research archive",
-];
 
 const FAQ_ITEMS = [
   {
@@ -76,189 +48,81 @@ const FAQ_ITEMS = [
 ];
 
 export default async function HomePage() {
-  const [feed, cards] = await Promise.all([getPublishedPrices(), getDashboardCards()]);
-  const heroPrices = feed.prices.slice(0, 6);
-  const previewCards = pickCards(cards, ["us-crude", "steo-cops_opec", "steo-patc_world", "wti-positioning", "supply-news", "cushing"], 4);
-  const brent = feed.prices.find((price) => price.ticker === "BRN");
-  const wti = feed.prices.find((price) => price.ticker === "WTI");
-  const board: BoardQuote | null =
-    brent && wti && priceFigureShown(brent) && priceFigureShown(wti)
-      ? {
-          brent: brent.price,
-          wti: wti.price,
-          asOf: feed.eia && feed.eiaUpdated ? feed.eiaUpdated : feed.manualUpdated,
-          live: feed.eia,
-        }
-      : null;
+  const [cards, history, seasonal] = await Promise.all([
+    getDashboardCards(),
+    getHistoricalSpotSeries(),
+    getEiaSeasonalSuite(),
+  ]);
+  const signals = pickCards(cards, ["us-crude", "steo-cops_opec", "wti-positioning", "supply-news", "cushing"], 5);
+  const note = briefings[0];
+  const releases = upcomingReleases(new Date()).slice(0, 3);
 
   return (
     <>
-      <FrontScreen board={board} tape={feed.brentWtiHistory} />
-
-      <section className="border-b border-ink-700 bg-ink-900">
-        <div className="container-site flex flex-wrap items-center justify-between gap-4 py-6">
-          <div>
-            <p className="eyebrow">Daily morning note</p>
-            <p className="mt-1 max-w-2xl text-sm text-steel-300">
-              Latest EIA Brent, WTI and Henry Hub prints, the changes, and what is due next.
+      <SeaborneTerminalMap />
+      <div className="container-site space-y-px bg-border-hairline py-px">
+        <div className="hairline-grid lg:grid-cols-12">
+          <section className="bg-canvas lg:col-span-8">
+            <header className="flex items-center justify-between border-b border-border-hairline px-4 py-3">
+              <h2 className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-secondary">Brent, WTI, spread, Henry Hub</h2>
+              <Link href="/crude-oil-prices" className="font-mono text-[10px] tracking-[0.08em] text-brass">
+                PRICES
+              </Link>
+            </header>
+            <SpotSpreadTerminal data={history} />
+          </section>
+          <aside className="bg-surface-1 p-4 lg:col-span-4">
+            <p className="eyebrow">Archive note · {note?.date ?? "—"}</p>
+            <h2 className="mt-2 font-serif text-2xl text-ink-primary">{note?.headline ?? "Daily note"}</h2>
+            <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
+              {note?.oil_summary} This briefing is the archived {note?.date} note. It is not a description of today&apos;s prices.
             </p>
-          </div>
-          <Link href="/daily" className="btn-primary">
-            Open the morning note
-          </Link>
-        </div>
-      </section>
-
-      {PAPER_FUND_PUBLISHED ? <PaperBookPanel /> : null}
-
-      {/* Dashboard preview */}
-      <section className="container-site py-14">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="eyebrow">Market Dashboard</p>
-            <h2 className="h2 mt-1">Today&apos;s market picture, at a glance</h2>
-            <PriceFreshness feed={feed} />
-          </div>
-          <Link href="/dashboard" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
-            Full free snapshot →
-          </Link>
-        </div>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {heroPrices.map((p) => (
-            <MarketCard key={p.ticker} price={p} />
-          ))}
-        </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {previewCards.map((card) => (
-            <DataCardView key={card.id} card={card} />
-          ))}
-        </div>
-        <div className="mt-4 grid gap-4 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <BottomLineCard feed={feed} />
-          </div>
-          <div className="card flex flex-col justify-between border-navy-700 bg-navy-900/40">
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-gold-500">
-                All free — no paywall
-              </h3>
-              <ul className="mt-4 space-y-2 text-sm text-steel-400">
-                <li>· Morning note from the EIA daily spot</li>
-                <li>· Brent, WTI and Henry Hub from the EIA daily spot</li>
-                <li>· Supply, demand and risk signal grids</li>
-                <li>· Daily briefing and bottom line</li>
-                <li>· Watchlist and company notes — none published yet</li>
-                <li>· Research archive and charts</li>
-              </ul>
-            </div>
-            <Link href="/dashboard" className="btn-primary mt-6 w-full">
-              Open the Full Dashboard
+            <Link href="/daily" className="mt-4 inline-block font-mono text-[10px] tracking-[0.08em] text-brass">
+              DAILY NOTE
             </Link>
-          </div>
-        </div>
-        <div className="mt-6">
-          <DisclaimerBlock />
-        </div>
-      </section>
-
-      {/* Why subscribe */}
-      <section className="border-y border-ink-700 bg-ink-900">
-        <div className="container-site py-14">
-          <p className="eyebrow">What You Get — Free</p>
-          <h2 className="h2 mt-1">Everything below is free for everyone</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {MEMBER_BENEFITS.map(([title, body]) => (
-              <div key={title} className="card card-hover">
-                <h3 className="h3">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-steel-500">{body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Inside the Oracle */}
-      <section className="container-site py-14">
-        <p className="eyebrow">Inside The Crude Oracle</p>
-        <h2 className="h2 mt-1">Built like a professional intelligence desk</h2>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-steel-400">
-          Every briefing starts the way a trading desk starts its day: prices, flows, inventories,
-          shipping, positioning — cross-checked against primary sources, then distilled into the
-          few paragraphs that actually matter.
-        </p>
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <figure className="group overflow-hidden rounded-lg border border-ink-700">
-            <div className="relative aspect-video">
-              <Image
-                src="/images/operations-room.png"
-                alt="Energy market operations room with global supply maps and price screens"
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            </div>
-            <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
-              Global supply, demand and risk — read from public releases, summarised on this site.
-            </figcaption>
-          </figure>
-          <figure className="group overflow-hidden rounded-lg border border-ink-700">
-            <div className="relative aspect-video">
-              <Image
-                src="/images/terminal-desk.png"
-                alt="Terminal-grade dual-screen desk showing oil volatility charts and a global supply heatmap"
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-            </div>
-            <figcaption className="border-t border-ink-700 bg-ink-900 p-3 text-xs text-steel-500">
-              Sourced, dated and clear, without the noise.
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      {/* Free access + portfolio performance */}
-      <section className="container-site py-14" id="pricing">
-        <div className="mx-auto max-w-xl">
-          <div className="rounded-xl border border-gold-600/50 bg-gradient-to-b from-ink-800 to-ink-900 p-8 text-center shadow-2xl shadow-gold-600/5">
-            <p className="eyebrow">No Plans · No Tiers · No Paywall</p>
-            <h2 className="mt-3 text-2xl font-bold text-white">The Crude Oracle is Free</h2>
-            <div className="mt-4">
-              <span className="text-5xl font-bold tracking-tight text-white">£0</span>
-              <span className="text-base text-steel-500">/forever</span>
-            </div>
-            <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left text-sm text-steel-400">
-              {PRICING_FEATURES.map((f) => (
-                <li key={f} className="flex gap-2">
-                  <span aria-hidden className="text-gold-500">✓</span>
-                  {f}
+            <ul className="mt-6 space-y-2 border-t border-border-hairline pt-4">
+              {releases.map((item) => (
+                <li key={item.id} className="flex justify-between gap-3 font-mono text-[11px] text-ink-secondary">
+                  <span>{item.title}</span>
+                  <span className="num text-ink-muted">{item.whenUk}</span>
                 </li>
               ))}
             </ul>
-            <Link href="/dashboard" className="btn-primary mt-8 w-full">
-              Open the Full Dashboard — Free
-            </Link>
-            <p className="mt-4 text-xs text-steel-500">
-              Free. Sourced. On time. Information only, not investment advice.
-            </p>
-          </div>
+          </aside>
         </div>
+        <div className="hairline-grid lg:grid-cols-12">
+          <section className="bg-canvas lg:col-span-7">
+            <header className="flex items-center justify-between border-b border-border-hairline px-4 py-3">
+              <h2 className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-secondary">EIA five-year stock band</h2>
+              <Link href="/eia-weekly" className="font-mono text-[10px] tracking-[0.08em] text-brass">
+                WPSR
+              </Link>
+            </header>
+            <SeasonalChart suite={seasonal} />
+          </section>
+          <section className="bg-surface-1 p-4 lg:col-span-5">
+            <h2 className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-secondary">Supply and demand</h2>
+            <div className="mt-3 space-y-3">
+              {signals.map((card) => (
+                <DataCardView key={card.id} card={card} />
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+      <section className="container-site flex flex-wrap gap-2 py-6">
+        {["/eia-summary", "/spread brent-wti", "/cot-extremes", "/chokepoint hormuz", "/balance-global"].map((command) => (
+          <Link key={command} href={`/desk-bot?cmd=${encodeURIComponent(command)}`} className="border border-border-strong px-3 py-2 font-mono text-[11px] text-brass">
+            {command}
+          </Link>
+        ))}
       </section>
-
-      <section className="container-site grid gap-6 py-14 lg:grid-cols-2">
-        <PresentedBy location="home_presented_by" enquireHref="/advertise#price-board" />
-        <BeehiivSignup location="homepage" />
-      </section>
-
-      {/* FAQ */}
-      <section className="container-site pb-14">
+      <div className="container-site space-y-10 pb-16">
+        <PresentedBy location="home_sponsor" enquireHref="/advertise" />
+        <BeehiivSignup location="home" />
         <FAQ items={FAQ_ITEMS} />
-      </section>
-
-      <section className="container-site pb-14">
-        <SubscribeCTA />
-      </section>
+        <DisclaimerBlock />
+      </div>
     </>
   );
 }

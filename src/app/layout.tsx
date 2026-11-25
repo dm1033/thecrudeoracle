@@ -1,13 +1,38 @@
 import type { Metadata } from "next";
+import { JetBrains_Mono, Newsreader, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import AdvertisingScripts from "@/components/AdvertisingScripts";
-import CrudeOracleBot from "@/components/CrudeOracleBot";
+import TerminalChrome, { type TapeCell } from "@/components/shell/TerminalChrome";
+import { getMarketSnapshot } from "@/lib/market-snapshot";
+import { priceFigureShown } from "@/lib/price-stamp";
+import { getPublishedPrices } from "@/lib/published-prices";
 import { SITE } from "@/lib/site";
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-newsreader",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-jakarta",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-jetbrains",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -75,28 +100,65 @@ const siteSchema = {
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+function money(value: number): string {
+  return value.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function signed(value: number, digits = 2): string {
+  const text = value.toFixed(digits);
+  return value > 0 ? `+${text}` : text;
+}
+
+async function tape(): Promise<TapeCell[]> {
+  const [feed, snapshot] = await Promise.all([getPublishedPrices(), Promise.resolve(getMarketSnapshot())]);
+  const quote = (ticker: string) => {
+    const price = feed.prices.find((item) => item.ticker === ticker);
+    return price && priceFigureShown(price) ? price : null;
+  };
+  const brent = quote("BRN");
+  const wti = quote("WTI");
+  const henry = quote("HH");
+  const stocks = snapshot.eia.rows[0] ?? null;
+  const cot = snapshot.cftc.rows[0] ?? null;
+  const cells: TapeCell[] = [
+    { label: "BRN", value: brent ? money(brent.price) : "—", delta: brent ? signed(brent.daily_change) : null },
+    { label: "WTI", value: wti ? money(wti.price) : "—", delta: wti ? signed(wti.daily_change) : null },
+    {
+      label: "BRN-WTI",
+      value: brent && wti ? money(brent.price - wti.price) : "—",
+      delta: null,
+    },
+    { label: "HH", value: henry ? money(henry.price) : "—", delta: henry ? signed(henry.daily_change) : null },
+    {
+      label: "US CRUDE STKS",
+      value: stocks ? `${stocks.millionBarrels.toFixed(1)} mb` : "—",
+      delta: stocks?.changeMillionBarrels == null ? null : signed(stocks.changeMillionBarrels, 1),
+    },
+    {
+      label: "WTI MM NET",
+      value: cot ? cot.net.toLocaleString("en-GB") : "—",
+      delta: cot?.netChange == null ? null : signed(cot.netChange, 0),
+    },
+  ];
+  return cells;
+}
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cells = await tape();
   return (
-    <html lang="en-GB">
+    <html lang="en-GB" className={`${newsreader.variable} ${jakarta.variable} ${jetbrains.variable}`}>
       <body className="flex min-h-screen flex-col">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-gold-500 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink-950 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-ink-950"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:bg-brass focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-canvas"
         >
           Skip to main content
         </a>
-        <a
-          href="/subscribe"
-          className="no-print block bg-gold-500 px-4 py-2 text-center text-xs font-semibold text-ink-950 hover:bg-gold-400"
-        >
-          The Crude Oracle is now 100% FREE — every dashboard, briefing and tool. No paywall, no
-          card. Learn more →
-        </a>
-        <Header />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <CrudeOracleBot mode="floating" />
+        <TerminalChrome tape={cells}>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
+        </TerminalChrome>
         <Footer />
         <JsonLd data={siteSchema} />
         <Analytics />

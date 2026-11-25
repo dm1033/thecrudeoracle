@@ -74,6 +74,11 @@ export interface SteoFeed {
   /** Newest estimated month across the rows, YYYY-MM. */
   asOf: string;
   fetchedAt: string;
+  /**
+   * Full monthly points behind the rows, oldest first per series.
+   * Older fixtures omit it; the balance chart uses it when present.
+   */
+  series?: SteoSeries[];
 }
 
 const PERIOD = /^\d{4}-\d{2}$/;
@@ -156,6 +161,7 @@ export function buildSteoFeed(series: SteoSeries[], currentPeriod: string, fetch
     balance,
     asOf: rows.map((row) => row.latest.period).sort().at(-1)!,
     fetchedAt,
+    series,
   };
 }
 

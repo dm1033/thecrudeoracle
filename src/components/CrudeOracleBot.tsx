@@ -185,7 +185,7 @@ export default function CrudeOracleBot({
     }
   }, [messages.length, open]);
 
-  if (mode === "floating" && pathname === "/desk-agent") {
+  if (mode === "floating" && (pathname === "/desk-bot" || pathname === "/desk-agent")) {
     return null;
   }
 
@@ -262,7 +262,7 @@ export default function CrudeOracleBot({
           {mode === "floating" && (
             <>
               <Link
-                href="/desk-agent"
+                href="/desk-bot"
                 className="rounded border border-ink-600 bg-ink-800 px-2 py-1 text-[11px] font-medium text-gold-400 hover:border-gold-400"
               >
                 Full Screen ↗

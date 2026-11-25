@@ -1,12 +1,9 @@
 "use client";
 
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import EChart from "./EChart";
 import ChartDataTable from "./ChartDataTable";
 import type { NewsTimelinePoint } from "@/lib/oracle-intelligence";
-
-const STEEL = "#8b98a9";
-const GRID = "#212936";
-const GOLD = "#c9a038";
+import { THEME } from "@/lib/theme-tokens";
 
 function label(t: string, withTime: boolean): string {
   return new Intl.DateTimeFormat("en-GB", {
@@ -20,36 +17,27 @@ function label(t: string, withTime: boolean): string {
 export default function CoverageChart({ points }: { points: NewsTimelinePoint[] }) {
   if (points.length < 2) return null;
   const title = "Share of online news matching the search terms, last seven days";
+  const average = points.reduce((sum, point) => sum + point.sharePct, 0) / points.length;
   return (
     <figure className="card">
       <figcaption className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <span className="text-sm font-semibold text-white">{title}</span>
-        <span className="text-[10px] uppercase tracking-wide text-steel-500">% of all coverage · times in UTC</span>
+        <span className="text-[10px] uppercase tracking-wide text-steel-500">GDELT coverage volume · times in UTC</span>
       </figcaption>
-      {/* Decorative: the sr-only table below is the accessible equivalent (WCAG 1.1.1) */}
       <div aria-hidden className="h-64 w-full">
-        <ResponsiveContainer>
-          <AreaChart data={points} margin={{ top: 5, right: 10, bottom: 0, left: -5 }}>
-            <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
-            <XAxis
-              dataKey="t"
-              tickFormatter={(t) => label(String(t), false)}
-              minTickGap={40}
-              stroke={STEEL}
-              tick={{ fill: STEEL, fontSize: 11 }}
-              tickLine={false}
-              axisLine={{ stroke: GRID }}
-            />
-            <YAxis stroke={STEEL} tick={{ fill: STEEL, fontSize: 11 }} tickLine={false} axisLine={{ stroke: GRID }} domain={[0, "auto"]} />
-            <Tooltip
-              labelFormatter={(t) => `${label(String(t), true)} UTC`}
-              formatter={(value) => [`${Number(value).toFixed(3)}%`, "Share of coverage"]}
-              contentStyle={{ backgroundColor: "#10141b", border: "1px solid #2e3948", borderRadius: 6, fontSize: 12 }}
-              labelStyle={{ color: "#c3ccd8" }}
-            />
-            <Area type="monotone" dataKey="sharePct" stroke={GOLD} fill={GOLD} fillOpacity={0.15} strokeWidth={2} isAnimationActive={false} />
-          </AreaChart>
-        </ResponsiveContainer>
+        <EChart
+          option={{
+            backgroundColor: "transparent",
+            grid: { left: 48, right: 12, top: 16, bottom: 28 },
+            tooltip: { trigger: "axis" },
+            xAxis: { type: "category", data: points.map((point) => label(point.t, false)), axisLabel: { color: THEME.inkMuted } },
+            yAxis: { type: "value", axisLabel: { color: THEME.inkMuted }, splitLine: { lineStyle: { color: THEME.hairline } } },
+            series: [
+              { type: "bar", name: "Coverage share", data: points.map((point) => point.sharePct), itemStyle: { color: THEME.brent } },
+              { type: "line", name: "7-day average", data: points.map(() => average), showSymbol: false, lineStyle: { color: THEME.inkSecondary, type: "dashed" } },
+            ],
+          }}
+        />
       </div>
       <ChartDataTable
         caption={`${title}: data table`}

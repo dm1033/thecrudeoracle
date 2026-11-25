@@ -10,6 +10,7 @@ import PremiumGate from "@/components/PremiumGate";
 import { formatUpdated } from "@/lib/data";
 import { loadWatchedVessel } from "@/lib/tankermap-feed";
 import VesselWatch from "@/components/VesselWatch";
+import SeaborneTerminalMap from "@/components/viz/SeaborneTerminalMap";
 
 export const metadata: Metadata = pageMeta(
   "Physical tanker flow map",
@@ -186,6 +187,7 @@ export default async function FlowMapPage({
         intro="Archive, not a current flow picture. The tables below were written in July 2026 and are not updated. A TankerMap hull, when one is shown, is a separate delayed position and is labelled as such."
       />
       <div className="container-site space-y-10 py-10">
+        <SeaborneTerminalMap />
         <ArchiveNotice
           what="The flow tables and anomalies"
           lastUpdated={flowData.meta.last_published}

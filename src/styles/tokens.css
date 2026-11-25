@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  /* Refinery Obsidian surfaces */
+  --color-canvas: #090b0e;
+  --color-ocean: #07090c;
+  --color-surface-1: #101318;
+  --color-surface-2: #151921;
+  --color-surface-3: #1a202b;
+  --color-land: #11161f;
+
+  /* Hairline borders */
+  --color-border-hairline: #1e2430;
+  --color-border-strong: #2b3445;
+  --color-border-chokepoint: #1f2937;
+
+  /* Ink */
+  --color-ink-primary: #eceef2;
+  --color-ink-secondary: #8a94a6;
+  --color-ink-muted: #566073;
+
+  /* Brass and data accents */
+  --color-brass: #c89b3c;
+  --color-brass-muted: #8c6b27;
+  --color-brent: #d97724;
+  --color-wti: #1f9d8b;
+  --color-gas: #38bdf8;
+  --color-bull: #10b981;
+  --color-bear: #ef4444;
+  --color-warn: #d97706;
+
+  /* Existing utility names, remapped onto the same sheet so older pages follow it */
+  --color-ink-950: #090b0e;
+  --color-ink-900: #07090c;
+  --color-ink-850: #101318;
+  --color-ink-800: #151921;
+  --color-ink-700: #1e2430;
+  --color-ink-600: #2b3445;
+  --color-navy-900: #0a1018;
+  --color-navy-800: #11161f;
+  --color-navy-700: #1a202b;
+  --color-steel-500: #8a94a6;
+  --color-steel-400: #c5ccd6;
+  --color-steel-300: #eceef2;
+  --color-steel-200: #eceef2;
+  --color-gold-600: #8c6b27;
+  --color-gold-500: #c89b3c;
+  --color-gold-400: #d7b15a;
+  --color-gold-300: #e4c98a;
+  --color-gain: #10b981;
+  --color-loss: #ef4444;
+  --color-risk: #d97706;
+
+  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+  --radius-3xl: 4px;
+  --radius-4xl: 4px;
+  --radius-full: 4px;
+
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+  --shadow-2xl: 0 0 #0000;
+
+  --blur-xs: 0;
+  --blur-sm: 0;
+  --blur-md: 0;
+  --blur-lg: 0;
+  --blur-xl: 0;
+  --blur-2xl: 0;
+  --blur-3xl: 0;
+
+  --spacing-tape: 2rem;
+  --spacing-header: 2.75rem;
+  --container-8xl: 88rem;
+  --container-terminal: 96rem;
+}
+
+:root {
+  color-scheme: dark;
+  --grid-hairline: 1px solid #1e2430;
+}

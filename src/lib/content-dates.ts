@@ -47,7 +47,7 @@ const tools = latest(flows, news, positioningAt, hypothesisAt, monitorAt ?? unde
 export const ROUTE_LASTMOD: Record<string, string> = {
   "/": latest(prices, charts, fund)!,
   "/dashboard": latest(prices, charts, watch, monitorAt ?? undefined)!,
-  "/desk-agent": latest(prices, monitorAt ?? undefined)!,
+  "/desk-bot": latest(prices, monitorAt ?? undefined)!,
   "/daily-briefing": briefing,
   "/watchlist": watch,
   "/company-intelligence": companies,

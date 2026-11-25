@@ -1,26 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import portfolioData from "../../data/virtual-portfolio.json";
 import ChartDataTable from "./charts/ChartDataTable";
-
-const GOLD = "#dcb54e";
-const GRID = "#212936";
-const GAIN = "#2ecc71";
-const LOSS = "#ff6b5c";
-const AXIS = { fill: "#8b98a9", fontSize: 11 };
+import EChart from "./charts/EChart";
+import { THEME } from "@/lib/theme-tokens";
 
 const { account, meta, positions, closed_trades, benchmarks } = portfolioData;
 
@@ -80,16 +64,6 @@ function axisUsd(n: number) {
   return `${sign}$${abs.toFixed(0)}`;
 }
 
-const tooltipStyle = {
-  contentStyle: {
-    backgroundColor: "#10141b",
-    border: "1px solid #2e3948",
-    borderRadius: 6,
-    fontSize: 12,
-  },
-  labelStyle: { color: "#c3ccd8" },
-};
-
 function GrowthChart() {
   return (
     <figure className="card">
@@ -98,25 +72,16 @@ function GrowthChart() {
         <span className="text-[10px] uppercase tracking-wide text-steel-500">Two published marks</span>
       </figcaption>
       <div aria-hidden className="h-44 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={marks} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke={GRID} vertical={false} />
-            <XAxis dataKey="date" tick={AXIS} tickLine={false} axisLine={{ stroke: GRID }} />
-            <YAxis
-              domain={valueDomain}
-              tick={AXIS}
-              tickLine={false}
-              axisLine={false}
-              width={64}
-              tickFormatter={(v: number) => axisUsd(v)}
-            />
-            <Tooltip
-              {...tooltipStyle}
-              formatter={(v: number) => [usd(v), "Value"]}
-            />
-            <Area type="monotone" dataKey="value" stroke={GOLD} fill={GOLD} fillOpacity={0.18} strokeWidth={2} />
-          </AreaChart>
-        </ResponsiveContainer>
+        <EChart
+          option={{
+            backgroundColor: "transparent",
+            grid: { left: 64, right: 8, top: 12, bottom: 24 },
+            tooltip: { trigger: "axis" },
+            xAxis: { type: "category", data: marks.map((row) => row.date), axisLabel: { color: THEME.inkMuted } },
+            yAxis: { type: "value", min: valueDomain[0], max: valueDomain[1], axisLabel: { color: THEME.inkMuted, formatter: (value: number) => axisUsd(value) }, splitLine: { lineStyle: { color: THEME.hairline } } },
+            series: [{ type: "line", data: marks.map((row) => row.value), showSymbol: true, lineStyle: { color: THEME.brass }, areaStyle: { color: "rgba(200,155,60,0.12)" } }],
+          }}
+        />
       </div>
       <ChartDataTable
         caption="Published account value"
@@ -134,17 +99,6 @@ function GrowthChart() {
   );
 }
 
-function profitBar(props: { x?: number; y?: number; width?: number; height?: number; fill?: string }) {
-  const x = props.x ?? 0;
-  const y = props.y ?? 0;
-  const width = props.width ?? 0;
-  const height = props.height ?? 0;
-  const w = Math.abs(width);
-  const left = width < 0 ? x + width : x;
-  if (w < 0.5 || height <= 0) return <g />;
-  return <rect x={left} y={y} width={w} height={height} fill={props.fill} rx={2} />;
-}
-
 function EarningsChart({ title, note }: { title: string; note: string }) {
   return (
     <figure className="card">
@@ -153,19 +107,16 @@ function EarningsChart({ title, note }: { title: string; note: string }) {
         <span className="text-[10px] uppercase tracking-wide text-steel-500">{note}</span>
       </figcaption>
       <div aria-hidden className="h-[420px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={earnings} layout="vertical" margin={{ top: 4, right: 16, left: 4, bottom: 0 }}>
-            <CartesianGrid stroke={GRID} horizontal={false} />
-            <XAxis type="number" tick={AXIS} tickLine={false} axisLine={{ stroke: GRID }} tickFormatter={(v: number) => axisUsd(v)} />
-            <YAxis type="category" dataKey="name" width={118} interval={0} tick={AXIS} tickLine={false} axisLine={false} />
-            <Tooltip {...tooltipStyle} formatter={(v: number) => [usd(v, true), "P&L"]} />
-            <Bar dataKey="pl" shape={profitBar}>
-              {earnings.map((row) => (
-                <Cell key={row.name} fill={row.pl >= 0 ? GAIN : LOSS} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        <EChart
+          option={{
+            backgroundColor: "transparent",
+            grid: { left: 128, right: 16, top: 8, bottom: 24 },
+            tooltip: { trigger: "axis" },
+            xAxis: { type: "value", axisLabel: { color: THEME.inkMuted, formatter: (value: number) => axisUsd(value) }, splitLine: { lineStyle: { color: THEME.hairline } } },
+            yAxis: { type: "category", data: earnings.map((row) => row.name), axisLabel: { color: THEME.inkSecondary, width: 110 } },
+            series: [{ type: "bar", data: earnings.map((row) => ({ value: row.pl, itemStyle: { color: row.pl >= 0 ? THEME.bull : THEME.bear } })) }],
+          }}
+        />
       </div>
       <ChartDataTable
         caption={`${title} — profit and loss by line`}

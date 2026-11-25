@@ -91,11 +91,22 @@ const publishedCompanies = watchlistCompanies.filter(isPublishedName);
 function WatchlistContent() {
   if (publishedCompanies.length === 0) {
     return (
-      <p className="max-w-3xl text-sm leading-relaxed text-steel-400">
-        No names are published on the watchlist. Entries labelled as samples or placeholders are
-        withheld until the desk replaces them with real marks. A name here is monitored, never a
-        recommendation.
-      </p>
+      <div>
+        <p className="border border-border-strong bg-surface-1 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-brass">
+          Watchlist — monitored names only. Not a recommendation or investment advice.
+        </p>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink-secondary">
+          No names are published. Sample tickers stay off this page until the desk replaces them with verified names.
+        </p>
+        <div className="mt-6 grid gap-px bg-border-hairline sm:grid-cols-2 lg:grid-cols-3">
+          {watchlistCategories.map((category) => (
+            <div key={category} className="bg-surface-1 p-4">
+              <h2 className="font-sans text-sm text-ink-primary">{category}</h2>
+              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ink-muted">0 published / awaiting desk verification</p>
+            </div>
+          ))}
+        </div>
+      </div>
     );
   }
 

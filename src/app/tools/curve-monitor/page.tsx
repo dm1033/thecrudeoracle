@@ -5,6 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import DataMeta from "@/components/DataMeta";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SpreadHistoryChart from "@/components/charts/SpreadHistoryChart";
+import CrackAnalyzer from "@/components/tools/CrackAnalyzer";
 import { formatLongDate } from "@/lib/daily-note";
 import { EIA_SPOT_STALE_AFTER_HOURS } from "@/lib/price-stamp";
 import { formatLondonTimestamp, nextEiaSpotUpdate } from "@/lib/release-calendar";
@@ -101,6 +102,14 @@ export default async function CurveMonitorPage() {
                     </tbody>
                   </table>
                 </div>
+                <CrackAnalyzer
+                  spots={{
+                    brent: feed.spots.find((row) => row.id === "RBRTE")?.latest.value ?? null,
+                    wti: feed.spots.find((row) => row.id === "RWTC")?.latest.value ?? null,
+                    gasolineGal: feed.spots.find((row) => row.id === "EER_EPMRU_PF4_Y35NY_DPG")?.latest.value ?? null,
+                    dieselGal: feed.spots.find((row) => row.id === "EER_EPD2DXL0_PF4_Y35NY_DPG")?.latest.value ?? null,
+                  }}
+                />
                 <SpreadHistoryChart rows={feed.history} />
               </section>
             ) : null}

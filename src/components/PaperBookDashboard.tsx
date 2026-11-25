@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import dashboardJson from "../../paper-book/report/dashboard.json";
+import EChart from "./charts/EChart";
+import { THEME } from "@/lib/theme-tokens";
 
 type Stats = { trading_days?: number; total_return_pct?: number; annualised_vol_pct?: number; sharpe?: number | null; max_drawdown_pct?: number; hit_rate_days_pct?: number };
 type Position = { id: string; sleeve: string; opened: string; closed: string | null; legs: string[]; entry: number; stop: number; target: number; thesis: string; kill_criteria: string; risk_usd: number | null };
@@ -27,16 +19,6 @@ interface Dashboard {
 // Empty arrays in the committed JSON infer as never[]; the shape is fixed by report/tearsheet.py.
 const dashboard = dashboardJson as unknown as Dashboard;
 import ChartDataTable from "./charts/ChartDataTable";
-
-const GOLD = "#dcb54e";
-const STEEL = "#8b98a9";
-const GRID = "#212936";
-const AXIS = { fill: STEEL, fontSize: 11 };
-
-const tooltipStyle = {
-  contentStyle: { backgroundColor: "#10141b", border: "1px solid #2e3948", borderRadius: 6, fontSize: 12 },
-  labelStyle: { color: "#c3ccd8" },
-};
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: string }) {
   return (
@@ -119,18 +101,21 @@ export default function PaperBookDashboard() {
         {curve.length ? (
           <>
             <div className="mt-4 h-64" aria-hidden="true">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={curve} margin={{ top: 8, right: 12, bottom: 0, left: -12 }}>
-                  <CartesianGrid stroke={GRID} strokeDasharray="3 3" />
-                  <XAxis dataKey="date" tick={AXIS} minTickGap={32} />
-                  <YAxis tick={AXIS} domain={["auto", "auto"]} />
-                  <Tooltip {...tooltipStyle} />
-                  <Legend wrapperStyle={{ fontSize: 11 }} />
-                  <Line type="monotone" dataKey="ai_net" name="AI sleeves" stroke={GOLD} dot={false} strokeWidth={2} />
-                  <Line type="monotone" dataKey="baseline_net" name="Baseline (no AI)" stroke={STEEL} dot={false} strokeWidth={2} />
-                  <Line type="monotone" dataKey="total_net" name="Whole book" stroke="#2ecc71" dot={false} strokeWidth={1} strokeDasharray="4 2" />
-                </LineChart>
-              </ResponsiveContainer>
+              <EChart
+                option={{
+                  backgroundColor: "transparent",
+                  grid: { left: 40, right: 12, top: 28, bottom: 24 },
+                  tooltip: { trigger: "axis" },
+                  legend: { textStyle: { color: THEME.inkSecondary }, top: 0 },
+                  xAxis: { type: "category", data: curve.map((row) => row.date), axisLabel: { color: THEME.inkMuted } },
+                  yAxis: { type: "value", scale: true, axisLabel: { color: THEME.inkMuted }, splitLine: { lineStyle: { color: THEME.hairline } } },
+                  series: [
+                    { type: "line", name: "AI sleeves", showSymbol: false, data: curve.map((row) => row.ai_net), lineStyle: { color: THEME.brass } },
+                    { type: "line", name: "Baseline (no AI)", showSymbol: false, data: curve.map((row) => row.baseline_net), lineStyle: { color: THEME.inkSecondary } },
+                    { type: "line", name: "Whole book", showSymbol: false, data: curve.map((row) => row.total_net), lineStyle: { color: THEME.bull, type: "dashed" } },
+                  ],
+                }}
+              />
             </div>
             <ChartDataTable caption="NAV by sleeve, net of costs, 100 = inception" columns={[{ key: "date", label: "Date" }, { key: "ai_net", label: "AI sleeves" }, { key: "baseline_net", label: "Baseline" }, { key: "total_net", label: "Whole book" }]} rows={curve} />
           </>

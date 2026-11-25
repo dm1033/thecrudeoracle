@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { deskCommandFor } from "@/lib/desk-command-context";
 import { getPublishedPrices } from "@/lib/published-prices";
 import { getDeskData } from "@/lib/desk-data";
 import {
@@ -71,8 +72,10 @@ export async function POST(req: Request) {
   const [feed, data] = await Promise.all([getPublishedPrices(), getDeskData()]);
 
   // Always enforce the deterministic guardrail for personalised advice requests
+  const command = await deskCommandFor(message);
+
   if (isPersonalizedAdviceRequest(message)) {
-    return NextResponse.json(generateDeskLeadResponse(message, feed, history, data));
+    return NextResponse.json({ ...generateDeskLeadResponse(message, feed, history, data), ...command });
   }
 
   const xaiKey = usableXaiKey();
@@ -122,6 +125,7 @@ export async function POST(req: Request) {
             eiaLive: feed.eia,
             promptVersion: CRUDE_ORACLE_PROMPT_VERSION,
             quickOptions: CRUDE_ORACLE_QUICK_PROMPTS,
+            ...command,
           });
         }
       }
@@ -130,5 +134,5 @@ export async function POST(req: Request) {
     }
   }
 
-  return NextResponse.json(generateDeskLeadResponse(message, feed, history, data));
+  return NextResponse.json({ ...generateDeskLeadResponse(message, feed, history, data), ...command });
 }

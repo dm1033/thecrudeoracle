@@ -1,0 +1,21 @@
+/** Canvas and chart colours. Kept in step with src/styles/tokens.css. */
+export const THEME = {
+  canvas: "#090B0E",
+  ocean: "#07090C",
+  surface1: "#101318",
+  surface2: "#151921",
+  surface3: "#1A202B",
+  land: "#11161F",
+  hairline: "#1E2430",
+  borderStrong: "#2B3445",
+  ink: "#ECEEF2",
+  inkSecondary: "#8A94A6",
+  inkMuted: "#566073",
+  brass: "#C89B3C",
+  brent: "#D97724",
+  wti: "#1F9D8B",
+  gas: "#38BDF8",
+  bull: "#10B981",
+  bear: "#EF4444",
+  warn: "#D97706",
+} as const;
