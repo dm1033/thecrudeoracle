@@ -37,7 +37,7 @@ const JURISDICTIONS = [
 const CAPABILITIES = [
   {
     title: "Seaborne flow globe",
-    body: "A globe of schematic crude and LNG routes, with one delayed tanker position, built for a market-intelligence header.",
+    body: "A globe of schematic crude and LNG routes, with delayed positions for tankers underway at 1 knot or more, built for a market-intelligence header.",
     href: "/",
     label: "See it on the front page",
   },

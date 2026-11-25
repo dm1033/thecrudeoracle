@@ -1,5 +1,6 @@
 import { COAST } from "@/components/globe-land";
 import attachmentsJson from "../../data/vessel-attachments.json";
+import { buildMovingTankerFeed, unavailableMovingTankerFeed, type MovingTankerFeed } from "@/lib/moving-tankers";
 import {
   TANKERMAP_ORIGIN,
   type VesselWatchView,
@@ -44,6 +45,16 @@ function baseView(imo: string, notice: string | null, retrievedAt: string): Vess
     map: null,
     retrievedAt,
   };
+}
+
+export async function loadMovingTankerFeed(): Promise<MovingTankerFeed> {
+  const retrievedAt = new Date().toISOString();
+  try {
+    const payload = await tankermapJson("/api/vessels/live");
+    return buildMovingTankerFeed(payload, retrievedAt);
+  } catch {
+    return unavailableMovingTankerFeed(retrievedAt);
+  }
 }
 
 export async function loadWatchedVessel(rawQuery: string | undefined): Promise<VesselWatchView> {

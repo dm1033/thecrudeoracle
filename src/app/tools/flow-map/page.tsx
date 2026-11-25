@@ -14,7 +14,7 @@ import SeaborneTerminalMap from "@/components/viz/SeaborneTerminalMap";
 
 export const metadata: Metadata = pageMeta(
   "Physical tanker flow map",
-  "July 2026 archive, not current. Sample tanker-flow tables. Not updated. A TankerMap hull can still be read on this page and is labelled delayed.",
+  "July 2026 archive, not current. Sample tanker-flow tables. Not updated. The map reads delayed TankerMap positions for hulls underway at 1 knot or more.",
   "/tools/flow-map"
 );
 
@@ -160,9 +160,11 @@ function FlowContent({ watch }: { watch: Awaited<ReturnType<typeof loadWatchedVe
         <p className="mt-2">
           Commercial-grade tanker tracking (Kpler, Vortexa class) requires licensing; until a
           licensed feed is connected, the anomaly tables are desk estimates from public summaries
-          and are labelled accordingly. The watched vessel is the exception: position, speed, course
-          and the cargo flag are read from TankerMap&apos;s public API for that hull and labelled
-          delayed. The desk layer attached to the hull is an indicative note, not a second AIS feed.
+          and are labelled accordingly. The map is separate from those tables: it reads TankerMap&apos;s
+          public live positions and keeps hulls at 1 knot or more that are not anchored, moored or
+          drifting. The watched-vessel card still reads one hull, with speed, course and the cargo
+          flag labelled delayed. The desk layer attached to that hull is an indicative note, not a
+          second AIS feed.
           The anomaly framework — baseline, sigma, factors, implication — is feed-agnostic and
           carries over unchanged when a licensed fleet feed lands.
         </p>
@@ -184,7 +186,7 @@ export default async function FlowMapPage({
       <PageHeader
         eyebrow="Trader Toolkit · Module 2 · July 2026 archive"
         title="Physical Flow Map — July 2026 archive"
-        intro="Archive, not a current flow picture. The tables below were written in July 2026 and are not updated. A TankerMap hull, when one is shown, is a separate delayed position and is labelled as such."
+        intro="Archive, not a current flow picture. The tables below were written in July 2026 and are not updated. The map above is separate: delayed TankerMap positions for hulls underway at 1 knot or more."
       />
       <div className="container-site space-y-10 py-10">
         <SeaborneTerminalMap />
