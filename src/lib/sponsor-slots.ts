@@ -77,9 +77,9 @@ export function slotCheckout(slot: SponsorSlot, contactEmail: string): SlotCheck
   return { href: `mailto:${contactEmail}?subject=${subject}`, external: false };
 }
 
-/** Buyer-facing reminder. The shared link cannot name the slot or the amount by itself. */
-export function slotCheckoutNote(slot: Pick<SponsorSlot, "name">): string {
-  return `At checkout, enter the slot name (${slot.name}) and amount shown.`;
+/** Buyer-facing reminder. client_reference_id already names the slot on the shared Payment Link. */
+export function slotCheckoutNote(slot: Pick<SponsorSlot, "name" | "price">): string {
+  return `${slot.name} at ${slot.price}. The slot is attached to this payment, so you do not type the slot name at checkout.`;
 }
 
 /** After payment: sponsor name, URL and artwork, in a prefilled email. */

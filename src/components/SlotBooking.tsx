@@ -14,24 +14,24 @@ export default function SlotBooking({ slot }: { slot: SponsorSlot }) {
           <>
             <a
               href={checkout.href}
-              className="text-sm font-semibold text-gold-400 hover:text-gold-300"
+              className="btn-primary px-3 py-2 text-xs"
               rel="sponsored noopener"
               target="_blank"
               aria-describedby={noteId}
             >
-              Book this slot
+              Sponsor this
             </a>
-            <p id={noteId} className="max-w-[16rem] text-xs leading-snug text-steel-500">
+            <p id={noteId} className="max-w-[18rem] text-xs leading-snug text-steel-500">
               {slotCheckoutNote(slot)}
             </p>
           </>
         ) : (
-          <AdvertiseCtaLink href={checkout.href} location={`book_${slot.id}`} className="text-sm font-semibold text-gold-400 hover:text-gold-300">
-            Book this slot
+          <AdvertiseCtaLink href={checkout.href} location={`book_${slot.id}`} className="btn-primary px-3 py-2 text-xs">
+            Sponsor this
           </AdvertiseCtaLink>
         )
       ) : (
-        <span className="text-sm text-steel-500">Not open</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-muted">Not yet placed</span>
       )}
       {slot.available ? (
         <a href={artwork} className="text-xs font-semibold text-steel-300 underline decoration-ink-600 underline-offset-2 hover:text-gold-400">

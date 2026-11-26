@@ -6,8 +6,7 @@ import FAQ from "@/components/FAQ";
 import BeehiivSignup from "@/components/BeehiivSignup";
 import PresentedBy from "@/components/PresentedBy";
 import SeaborneTerminalMap from "@/components/viz/SeaborneTerminalMap";
-import SpotSpreadTerminal from "@/components/viz/SpotSpreadTerminal";
-import SeasonalChart from "@/components/viz/SeasonalChart";
+import { DeferredSeasonalChart, DeferredSpotChart } from "@/components/viz/DeferredCharts";
 import { getDashboardCards, pickCards } from "@/lib/dashboard-cards";
 import { briefings } from "@/lib/data";
 import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
@@ -59,7 +58,14 @@ export default async function HomePage() {
 
   return (
     <>
-      <SeaborneTerminalMap />
+      <header className="container-site border-b border-border-hairline px-4 py-8 sm:py-10">
+        <p className="eyebrow">The Crude Oracle</p>
+        <h1 className="mt-2 max-w-3xl font-serif text-4xl text-ink-primary sm:text-5xl">Crude oil intelligence without the noise</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-secondary">
+          Delayed public prices for Brent, WTI and Henry Hub, weekly EIA stocks, and a seaborne map. The prices carry the trade date of the print. Not financial advice.
+        </p>
+      </header>
+      <SeaborneTerminalMap load="desktop" />
       <div className="container-site space-y-px bg-border-hairline py-px">
         <div className="hairline-grid lg:grid-cols-12">
           <section className="bg-canvas lg:col-span-8">
@@ -69,7 +75,7 @@ export default async function HomePage() {
                 PRICES
               </Link>
             </header>
-            <SpotSpreadTerminal data={history} />
+            <DeferredSpotChart data={history} />
           </section>
           <aside className="bg-surface-1 p-4 lg:col-span-4">
             <p className="eyebrow">Archive note · {note?.date ?? "—"}</p>
@@ -98,7 +104,7 @@ export default async function HomePage() {
                 WPSR
               </Link>
             </header>
-            <SeasonalChart suite={seasonal} />
+            <DeferredSeasonalChart suite={seasonal} />
           </section>
           <section className="bg-surface-1 p-4 lg:col-span-5">
             <h2 className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-secondary">Supply and demand</h2>
@@ -118,7 +124,7 @@ export default async function HomePage() {
         ))}
       </section>
       <div className="container-site space-y-10 pb-16">
-        <PresentedBy location="home_sponsor" enquireHref="/advertise" />
+        <PresentedBy location="home_sponsor" enquireHref="/advertise#price-board" />
         <BeehiivSignup location="home" />
         <FAQ items={FAQ_ITEMS} />
         <DisclaimerBlock />

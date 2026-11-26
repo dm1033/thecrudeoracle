@@ -15,6 +15,7 @@ const nextConfig = {
       { source: "/login", destination: "/", permanent: true },
       { source: "/release-calendar", destination: "/calendar", permanent: false },
       { source: "/desk-agent", destination: "/desk-bot", permanent: true },
+      { source: "/offshore", destination: "/", permanent: true },
     ];
   },
 };
