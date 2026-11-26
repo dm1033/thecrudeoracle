@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import DataMeta from "@/components/DataMeta";
@@ -115,6 +114,11 @@ export default async function EiaWeeklyPage() {
                 is left blank. Crude is commercial stocks excluding the Strategic Petroleum Reserve.
               </p>
               <StockTable lines={feed.report.lines} />
+              {feed.report.lines.length < 4 ? (
+                <p className="mt-3 text-sm text-steel-400">
+                  {4 - feed.report.lines.length} of the four weekly series did not return. The rows above are the prints that did.
+                </p>
+              ) : null}
               <DataMeta
                 source="EIA Weekly Petroleum Status Report"
                 sourceUrl="https://www.eia.gov/petroleum/supply/weekly/"
@@ -148,24 +152,18 @@ export default async function EiaWeeklyPage() {
                 })),
               }}
             />
+            {feed.report.crudeHistory.length > 0 ? (
+              <EiaCrudeStocksSnapshot rows={feed.report.crudeHistory} fetchedAt={feed.report.fetchedAt} />
+            ) : null}
           </>
         ) : (
-          <section className="max-w-3xl space-y-4">
-            <p className="text-lg font-semibold text-white">Latest EIA print: not loaded</p>
-            <p className="text-sm leading-relaxed text-steel-300">
-              EIA weekly stocks are not available for this page. No crude, gasoline, distillate or Cushing figure is
-              shown.
+          <section className="max-w-3xl" aria-label="Latest EIA print">
+            <p className="text-lg font-semibold text-white">Latest EIA print</p>
+            <p className="mt-2 text-sm leading-relaxed text-steel-300">
+              The latest weekly petroleum stocks are not available. No figure is shown until a print loads.
             </p>
-            <p className="text-sm text-steel-400">
-              Series used when the feed is up: WCESTUS1, WGTSTUS1, WDISTUS1 and W_EPC0_SAX_YCUOK_MBBL, on
-              petroleum/stoc/wstk. The report is published on Wednesdays.
-            </p>
-            <Link href="/data-sources" className="text-sm font-semibold text-gold-400 hover:text-gold-300">
-              Data sources
-            </Link>
           </section>
         )}
-        <EiaCrudeStocksSnapshot rows={feed?.report.crudeHistory} fetchedAt={feed?.report.fetchedAt ?? null} />
         <PresentedBy location="eia_weekly_sponsor" enquireHref="/advertise#eia-inventory-day" />
         <p className="text-sm font-medium text-steel-200">Not financial advice.</p>
         <DisclaimerBlock />

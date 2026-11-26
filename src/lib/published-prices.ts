@@ -4,11 +4,13 @@ import {
   EIA_SERIES,
   EiaFetchError,
   EiaValidationError,
+  buildDailySeriesResult,
   getBrentSpot,
   getHenryHubSpot,
   getWtiSpot,
   logEiaFallback,
   readEiaApiKey,
+  recentEiaWindow,
   redactApiKey,
   type DailySpotFetch,
   type EiaObservation,
@@ -92,6 +94,28 @@ function manualBoard(): PublishedPrices {
 
 function round2(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+/** Newest trade date present on both series. A newer print on only one side is not a spread. */
+export function latestSharedDate(brent: readonly EiaObservation[], wti: readonly EiaObservation[]): string | null {
+  const wtiDates = new Set(wti.map((row) => row.date));
+  let best: string | null = null;
+  for (const row of brent) {
+    if (!wtiDates.has(row.date)) continue;
+    if (!best || row.date > best) best = row.date;
+  }
+  return best;
+}
+
+function onOrBefore(rows: readonly EiaObservation[], date: string): EiaObservation[] {
+  return rows
+    .filter((row) => row.date <= date)
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+}
+
+function asOfSharedDate(rows: readonly EiaObservation[], date: string): DailySpotFetch {
+  const observations = onOrBefore(rows, date);
+  return { ...buildDailySeriesResult(observations), observations };
 }
 
 function brentWtiHistory(brent: readonly EiaObservation[], wti: readonly EiaObservation[]): TapePrint[] {
@@ -213,9 +237,11 @@ function newerPeriod(a: string | null, b: string | null): string | null {
 }
 
 async function probeSpots(): Promise<SpotProbe> {
-  // One attempt each, started together. A retry would hold a cold render for
-  // another full RWTC timeout after the first 8000ms failure.
-  const opts = { timeoutMs: 8_000, maxRetries: 0 };
+  // One combined window, fetched together and not from Next's per-URL cache.
+  // Separate cached URLs were serving Brent from one release and WTI or Henry
+  // Hub from another, including across pages.
+  const window = recentEiaWindow("daily");
+  const opts = { ...window, timeoutMs: 12_000, maxRetries: 1, cache: "no-store" as const };
   const [brentSettled, wtiSettled, hubSettled] = await Promise.allSettled([
     getBrentSpot(opts),
     getWtiSpot(opts),
@@ -229,12 +255,15 @@ async function probeSpots(): Promise<SpotProbe> {
   if (wtiSettled.status === "rejected") reasons.push(logThrownFallback(wtiSettled.reason));
   if (hubSettled.status === "rejected") reasons.push(logThrownFallback(hubSettled.reason));
 
-  const latestPeriod = newerPeriod(newerPeriod(periodOf(brent), periodOf(wti)), periodOf(hub));
+  const shared = brent && wti ? latestSharedDate(brent.observations, wti.observations) : null;
+  const brentAsOf = brent && shared ? asOfSharedDate(brent.observations, shared) : null;
+  const wtiAsOf = wti && shared ? asOfSharedDate(wti.observations, shared) : null;
+  const latestPeriod = newerPeriod(shared, periodOf(hub));
   const brentPrice = marketPrices.find((price) => price.ticker === "BRN");
   const wtiPrice = marketPrices.find((price) => price.ticker === "WTI");
   const hubPrice = marketPrices.find((price) => price.ticker === "HH");
-  const brentNext = brent && brentPrice ? overlaySpot(brentPrice, brent, EIA_SERIES.BRENT_SPOT.description, EIA_SERIES.BRENT_SPOT.sourcePageUrl) : null;
-  const wtiNext = wti && wtiPrice ? overlaySpot(wtiPrice, wti, EIA_SERIES.WTI_SPOT.description, EIA_SERIES.WTI_SPOT.sourcePageUrl) : null;
+  const brentNext = brentAsOf && brentPrice ? overlaySpot(brentPrice, brentAsOf, EIA_SERIES.BRENT_SPOT.description, EIA_SERIES.BRENT_SPOT.sourcePageUrl) : null;
+  const wtiNext = wtiAsOf && wtiPrice ? overlaySpot(wtiPrice, wtiAsOf, EIA_SERIES.WTI_SPOT.description, EIA_SERIES.WTI_SPOT.sourcePageUrl) : null;
   const hubNext =
     hub && hubPrice
       ? overlaySpot(hubPrice, hub, EIA_SERIES.HENRY_HUB_SPOT.description, EIA_SERIES.HENRY_HUB_SPOT.sourcePageUrl, HENRY_HUB_BOUNDS)
@@ -246,7 +275,7 @@ async function probeSpots(): Promise<SpotProbe> {
   if (wtiNext?.reason) reasons.push(wtiNext.reason);
   // Henry Hub fails on its own. A gas miss is already logged inside overlaySpot
   // or logThrownFallback, and it must not drop a good Brent/WTI print.
-  if (!brent || !wti || !brentMark || !wtiMark) {
+  if (!brent || !wti || !shared || !brentMark || !wtiMark) {
     if (hubNext?.reason) reasons.push(hubNext.reason);
     if (!reasons.length) reasons.push("Brent or WTI spot was rejected");
     return { ok: false, reason: reasons.join("; "), latestPeriod, value: null };
@@ -265,7 +294,7 @@ async function probeSpots(): Promise<SpotProbe> {
     prices,
     eia: true,
     manualUpdated: newestIso(manual.length ? manual : marketPrices),
-    eiaUpdated: brentMark.last_updated > wtiMark.last_updated ? brentMark.last_updated : wtiMark.last_updated,
+    eiaUpdated: `${shared}T00:00:00Z`,
     brentWtiHistory: brentWtiHistory(brent.observations, wti.observations),
     henryHubHistory: hubMark && hub ? hubHistory(hub.observations) : [],
   };
@@ -295,7 +324,7 @@ async function loadFreshPrices(): Promise<PublishedPrices> {
  * A stale hit returns the last good snapshot and refreshes in the background.
  * Failures throw, which leaves the previous cache entry in place.
  */
-const loadCachedPrices = unstable_cache(loadFreshPrices, ["eia-brent-wti-hh-v1"], {
+const loadCachedPrices = unstable_cache(loadFreshPrices, ["eia-brent-wti-hh-v2"], {
   revalidate: EIA_DATA_REVALIDATE_SECONDS,
   tags: ["eia-brent-wti"],
 });

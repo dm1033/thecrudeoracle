@@ -12,6 +12,8 @@ export interface TapeCell {
   label: string;
   value: string;
   delta: string | null;
+  /** Trade date or week-ending date, when the figure has one. */
+  asOf?: string | null;
 }
 
 const NAV = [
@@ -108,6 +110,7 @@ export default function TerminalChrome({ tape, children }: { tape: TapeCell[]; c
               <span className="font-mono text-[10px] tracking-[0.08em] text-ink-muted">{cell.label}</span>
               <span className="num text-xs text-ink-primary">{cell.value}</span>
               {cell.delta && <span className="num text-[10px] text-ink-secondary">{cell.delta}</span>}
+              {cell.asOf && <span className="num text-[10px] text-ink-muted">{cell.asOf}</span>}
             </div>
           ))}
           <div className="ml-auto flex items-center gap-3 px-3">

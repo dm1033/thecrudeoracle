@@ -7,8 +7,9 @@ import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import AdvertisingScripts from "@/components/AdvertisingScripts";
 import TerminalChrome, { type TapeCell } from "@/components/shell/TerminalChrome";
+import { getEiaWeekly } from "@/lib/eia-weekly";
 import { getMarketSnapshot } from "@/lib/market-snapshot";
-import { priceFigureShown } from "@/lib/price-stamp";
+import { formatPriceDate, priceFigureShown } from "@/lib/price-stamp";
 import { getPublishedPrices } from "@/lib/published-prices";
 import { SITE } from "@/lib/site";
 
@@ -46,6 +47,9 @@ const jetbrains = localFont({
   display: "swap",
   variable: "--font-jetbrains",
 });
+
+/** The tape is one EIA snapshot. A static page must not keep an older copy of it. */
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -123,7 +127,11 @@ function signed(value: number, digits = 2): string {
 }
 
 async function tape(): Promise<TapeCell[]> {
-  const [feed, snapshot] = await Promise.all([getPublishedPrices(), Promise.resolve(getMarketSnapshot())]);
+  const [feed, snapshot, weekly] = await Promise.all([
+    getPublishedPrices(),
+    Promise.resolve(getMarketSnapshot()),
+    getEiaWeekly(),
+  ]);
   const quote = (ticker: string) => {
     const price = feed.prices.find((item) => item.ticker === ticker);
     return price && priceFigureShown(price) ? price : null;
@@ -131,21 +139,33 @@ async function tape(): Promise<TapeCell[]> {
   const brent = quote("BRN");
   const wti = quote("WTI");
   const henry = quote("HH");
-  const stocks = snapshot.eia.rows[0] ?? null;
+  const brentDay = brent?.last_updated.slice(0, 10) ?? null;
+  const wtiDay = wti?.last_updated.slice(0, 10) ?? null;
+  const sameDay = Boolean(brent && wti && brentDay && brentDay === wtiDay);
+  const crude = weekly?.report.lines.find((line) => line.seriesId === "WCESTUS1") ?? null;
+  const fileStocks = snapshot.eia.rows[0] ?? null;
   const cot = snapshot.cftc.rows[0] ?? null;
   const cells: TapeCell[] = [
-    { label: "BRN", value: brent ? money(brent.price) : "—", delta: brent ? signed(brent.daily_change) : null },
-    { label: "WTI", value: wti ? money(wti.price) : "—", delta: wti ? signed(wti.daily_change) : null },
+    { label: "BRN", value: brent ? money(brent.price) : "—", delta: brent ? signed(brent.daily_change) : null, asOf: brent ? formatPriceDate(brent.last_updated) : null },
+    { label: "WTI", value: wti ? money(wti.price) : "—", delta: wti ? signed(wti.daily_change) : null, asOf: wti ? formatPriceDate(wti.last_updated) : null },
     {
       label: "BRN-WTI",
-      value: brent && wti ? money(brent.price - wti.price) : "—",
+      value: sameDay && brent && wti ? money(Math.round((brent.price - wti.price) * 100) / 100) : "—",
       delta: null,
+      asOf: sameDay && brent ? formatPriceDate(brent.last_updated) : null,
     },
-    { label: "HH", value: henry ? money(henry.price) : "—", delta: henry ? signed(henry.daily_change) : null },
+    { label: "HH", value: henry ? money(henry.price) : "—", delta: henry ? signed(henry.daily_change) : null, asOf: henry ? formatPriceDate(henry.last_updated) : null },
     {
       label: "US CRUDE STKS",
-      value: stocks ? `${stocks.millionBarrels.toFixed(1)} mb` : "—",
-      delta: stocks?.changeMillionBarrels == null ? null : signed(stocks.changeMillionBarrels, 1),
+      value: crude ? `${crude.millionBarrels.toFixed(1)} mb` : fileStocks ? `${fileStocks.millionBarrels.toFixed(1)} mb` : "—",
+      delta: crude
+        ? crude.changeMillionBarrels == null
+          ? null
+          : signed(crude.changeMillionBarrels, 1)
+        : fileStocks?.changeMillionBarrels == null
+          ? null
+          : signed(fileStocks.changeMillionBarrels, 1),
+      asOf: crude ? formatPriceDate(`${crude.weekEnding}T00:00:00Z`) : fileStocks ? formatPriceDate(`${fileStocks.weekEnding}T00:00:00Z`) : null,
     },
     {
       label: "WTI MM NET",

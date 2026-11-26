@@ -200,16 +200,39 @@ describe("EIA spot fallback", () => {
     expect(feed.prices.find((price) => price.ticker === "WTI")?.price).toBe(77);
     expect(inits.length).toBeGreaterThanOrEqual(2);
     for (const init of inits) {
-      const next = (init as { next?: { revalidate?: number }; cache?: string }).next;
-      expect(next?.revalidate).toBeGreaterThanOrEqual(3600);
-      expect(next?.revalidate).toBeLessThanOrEqual(10800);
-      expect((init as { cache?: string }).cache).not.toBe("no-store");
+      expect((init as { cache?: string }).cache).toBe("no-store");
     }
 
     vi.stubGlobal("fetch", () => Promise.reject(new Error("refetch inside the fresh window")));
     const again = await getPublishedPrices();
     expect(again.eia).toBe(true);
     expect(again.prices.find((price) => price.ticker === "BRN")?.price).toBe(82);
+  });
+
+  it("publishes Brent and WTI on the newest shared trade date", async () => {
+    process.env.EIA_API_KEY = SECRET;
+    const shared = daysAgo(3);
+    const newerWti = daysAgo(1);
+    vi.stubGlobal("fetch", (input: RequestInfo | URL) => {
+      const url = new URL(String(input));
+      expect(url.searchParams.get("start")).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      const series = url.searchParams.get("facets[series][]") ?? "RWTC";
+      const rows =
+        series === "RWTC"
+          ? [
+              { period: newerWti, value: 82.24 },
+              { period: shared, value: 89.53 },
+            ]
+          : [{ period: shared, value: spotValue(series, 92.94, 89.53, 3.1) }];
+      return Promise.resolve(new Response(JSON.stringify(payload(series, rows)), { status: 200 }));
+    });
+    const feed = await getPublishedPrices();
+    expect(feed.eia).toBe(true);
+    expect(feed.eiaUpdated).toBe(`${shared}T00:00:00Z`);
+    expect(feed.prices.find((price) => price.ticker === "BRN")).toMatchObject({ price: 92.94, last_updated: `${shared}T00:00:00Z` });
+    expect(feed.prices.find((price) => price.ticker === "WTI")).toMatchObject({ price: 89.53, last_updated: `${shared}T00:00:00Z` });
+    expect(feed.brentWtiHistory.at(-1)).toEqual({ date: shared, brent: 92.94, wti: 89.53 });
+    expect(feed.brentWtiHistory.some((point) => point.date === newerWti)).toBe(false);
   });
 
   it("returns the last good print immediately when a later RWTC call hangs", async () => {

@@ -303,7 +303,24 @@ function sleep(ms: number): Promise<void> {
  * frequency, data[0]=value, facets[series][], sort[0][column]=period desc.
  * `data[]=value` is documented as equivalent; this client sends `data[0]`.
  */
-export function buildEiaDataUrl(seriesDef: EiaSeriesDef, opts: { length?: number } = {}): string {
+/**
+ * Date window whose `length` covers every period from `start` through today.
+ * EIA applies `length` to the filtered rows. A short length and no `start` can
+ * be the oldest rows of the series, so a new weekly print never arrives.
+ * Either sort direction still includes the newest print when `length` is at
+ * least the number of periods in the window.
+ */
+export function recentEiaWindow(frequency: "daily" | "weekly", now = new Date()): { start: string; length: number } {
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  if (frequency === "weekly") {
+    start.setUTCDate(start.getUTCDate() - 6 * 366);
+    return { start: start.toISOString().slice(0, 10), length: 400 };
+  }
+  start.setUTCDate(start.getUTCDate() - 460);
+  return { start: start.toISOString().slice(0, 10), length: 360 };
+}
+
+export function buildEiaDataUrl(seriesDef: EiaSeriesDef, opts: { length?: number; start?: string } = {}): string {
   const apiKey = getApiKey();
   const length = opts.length ?? 10;
   const url = new URL(`${EIA_API_BASE}/${seriesDef.route}/data/`);
@@ -315,6 +332,7 @@ export function buildEiaDataUrl(seriesDef: EiaSeriesDef, opts: { length?: number
   url.searchParams.set("sort[0][direction]", "desc");
   url.searchParams.set("offset", "0");
   url.searchParams.set("length", String(length));
+  if (opts.start) url.searchParams.set("start", opts.start);
   return url.toString();
 }
 
@@ -338,6 +356,11 @@ export interface FetchRetryOptions {
   timeoutMs?: number;
   maxRetries?: number;
   retryBaseDelayMs?: number;
+  /**
+   * `no-store` skips Next's per-URL data cache. A shared snapshot then caches
+   * the combined read, so Brent, WTI and Henry Hub cannot come from different hours.
+   */
+  cache?: "no-store";
 }
 
 /**
@@ -361,16 +384,19 @@ class ClassifiedFetchError extends EiaFetchError {
 }
 
 /** Makes exactly one HTTP attempt. Never retries — that's fetchWithRetry's job. */
-async function attemptFetchOnce(url: string, timeoutMs: number): Promise<unknown> {
+async function attemptFetchOnce(url: string, timeoutMs: number, cache?: "no-store"): Promise<unknown> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await fetch(url, {
       signal: controller.signal,
       headers: { Accept: "application/json" },
-      // Cache a successful body for two hours. `cache: "no-store"` made every
-      // homepage request wait on EIA, so a slow RWTC call fell back to desk marks.
-      next: { revalidate: EIA_DATA_REVALIDATE_SECONDS, tags: ["eia-spot"] },
+      // The shared snapshot uses `no-store` and caches the combined read.
+      // Other callers keep a two-hour per-URL cache so a page render does not
+      // wait on EIA when that URL was just read.
+      ...(cache === "no-store"
+        ? { cache: "no-store" as const }
+        : { next: { revalidate: EIA_DATA_REVALIDATE_SECONDS, tags: ["eia-spot"] } }),
     });
 
     if (res.ok) {
@@ -426,7 +452,7 @@ export async function fetchWithRetry(url: string, opts: FetchRetryOptions = {}):
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      return await attemptFetchOnce(url, timeoutMs);
+      return await attemptFetchOnce(url, timeoutMs, opts.cache);
     } catch (err) {
       if (err instanceof EiaValidationError) {
         logEiaFallback("fetch error", err.message);
@@ -655,9 +681,9 @@ export function buildWeeklySeriesResult(observations: readonly EiaObservation[])
 
 export async function getDailySpotSeries(
   seriesDef: EiaSeriesDef,
-  opts: { length?: number } & FetchRetryOptions = {}
+  opts: { length?: number; start?: string } & FetchRetryOptions = {}
 ): Promise<DailySpotFetch> {
-  const url = buildEiaDataUrl(seriesDef, { length: opts.length ?? 45 });
+  const url = buildEiaDataUrl(seriesDef, { length: opts.length ?? 45, start: opts.start });
   const json = await fetchWithRetry(url, opts);
   const observations = parseEiaResponse(json, seriesDef);
   return { ...buildDailySeriesResult(observations), observations };
@@ -665,30 +691,32 @@ export async function getDailySpotSeries(
 
 export async function getWeeklyStockSeries(
   seriesDef: EiaSeriesDef,
-  opts: { length?: number } & FetchRetryOptions = {}
+  opts: { length?: number; start?: string } & FetchRetryOptions = {}
 ): Promise<WeeklySeriesResult> {
-  const url = buildEiaDataUrl(seriesDef, { length: opts.length ?? 6 });
+  const url = buildEiaDataUrl(seriesDef, { length: opts.length ?? 6, start: opts.start });
   const json = await fetchWithRetry(url, opts);
   const observations = parseEiaResponse(json, seriesDef);
   return buildWeeklySeriesResult(observations);
 }
 
-export function getWtiSpot(opts: FetchRetryOptions = {}): Promise<DailySpotFetch> {
+type SeriesFetchOptions = { length?: number; start?: string } & FetchRetryOptions;
+
+export function getWtiSpot(opts: SeriesFetchOptions = {}): Promise<DailySpotFetch> {
   return getDailySpotSeries(EIA_SERIES.WTI_SPOT, opts);
 }
 
-export function getBrentSpot(opts: FetchRetryOptions = {}): Promise<DailySpotFetch> {
+export function getBrentSpot(opts: SeriesFetchOptions = {}): Promise<DailySpotFetch> {
   return getDailySpotSeries(EIA_SERIES.BRENT_SPOT, opts);
 }
 
-export function getHenryHubSpot(opts: FetchRetryOptions = {}): Promise<DailySpotFetch> {
+export function getHenryHubSpot(opts: SeriesFetchOptions = {}): Promise<DailySpotFetch> {
   return getDailySpotSeries(EIA_SERIES.HENRY_HUB_SPOT, opts);
 }
 
-export function getUsCommercialCrudeStocks(opts: FetchRetryOptions = {}): Promise<WeeklySeriesResult> {
+export function getUsCommercialCrudeStocks(opts: SeriesFetchOptions = {}): Promise<WeeklySeriesResult> {
   return getWeeklyStockSeries(EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS, opts);
 }
 
-export function getCushingStocks(opts: FetchRetryOptions = {}): Promise<WeeklySeriesResult> {
+export function getCushingStocks(opts: SeriesFetchOptions = {}): Promise<WeeklySeriesResult> {
   return getWeeklyStockSeries(EIA_SERIES.CUSHING_CRUDE_STOCKS, opts);
 }

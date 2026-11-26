@@ -6,6 +6,7 @@ import {
   getWtiSpot,
   logEiaFallback,
   readEiaApiKey,
+  recentEiaWindow,
   redactApiKey,
   type EiaObservation,
 } from "@/lib/eia";
@@ -13,7 +14,6 @@ import { buildDailyNote, noteDates, type DailyNote, type PricePoint } from "@/li
 
 /** Same age cap as the homepage overlay. Older last-good prints are not shown as a morning note. */
 const MAX_AGE_DAYS = 21;
-const HISTORY_LENGTH = 120;
 const MEMORY_TTL_MS = EIA_DATA_REVALIDATE_SECONDS * 1000;
 
 export interface SpotHistory {
@@ -71,7 +71,7 @@ async function loadHistory(): Promise<SpotHistory> {
   if (!readEiaApiKey()) {
     throw new Error("EIA API key is not set");
   }
-  const opts = { length: HISTORY_LENGTH, timeoutMs: 8_000, maxRetries: 0 };
+  const opts = { ...recentEiaWindow("daily"), timeoutMs: 12_000, maxRetries: 1, cache: "no-store" as const };
   const [brentSettled, wtiSettled, hubSettled] = await Promise.allSettled([
     getBrentSpot(opts),
     getWtiSpot(opts),
@@ -99,7 +99,7 @@ async function loadHistory(): Promise<SpotHistory> {
   return history;
 }
 
-const loadCachedHistory = unstable_cache(loadHistory, ["daily-note-eia-v1"], {
+const loadCachedHistory = unstable_cache(loadHistory, ["daily-note-eia-v2"], {
   revalidate: EIA_DATA_REVALIDATE_SECONDS,
   tags: ["daily-note", "eia-spot", "eia-brent-wti"],
 });

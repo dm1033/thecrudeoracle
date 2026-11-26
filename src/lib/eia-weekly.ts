@@ -6,6 +6,7 @@ import {
   isThousandBarrelUnits,
   logEiaFallback,
   readEiaApiKey,
+  recentEiaWindow,
   redactApiKey,
   type EiaSeriesDef,
   type WeeklySeriesResult,
@@ -44,11 +45,21 @@ export interface WeeklyHistoryRow {
   changeMillionBarrels: number | null;
 }
 
+export interface WeeklySeriesHistory {
+  name: string;
+  seriesId: string;
+  sourceUrl: string;
+  /** Newest first. Values are million barrels. */
+  points: { date: string; millionBarrels: number }[];
+}
+
 export interface WeeklySnapshot {
   lines: WeeklyStockLine[];
   /** Recent US commercial crude weeks, newest first, from the same read as `lines`. */
   crudeHistory: WeeklyHistoryRow[];
-  /** Week-ending date of the US crude row. The page's "latest print" date. */
+  /** Full loaded history for each series that returned, newest first. */
+  series: WeeklySeriesHistory[];
+  /** Week-ending date of the US crude row, or the newest line when crude is absent. */
   weekEnding: string;
   fetchedAt: string;
 }
@@ -96,18 +107,30 @@ function lineFrom(name: string, def: EiaSeriesDef, result: WeeklySeriesResult): 
   };
 }
 
+function historyFrom(name: string, def: EiaSeriesDef, result: WeeklySeriesResult): WeeklySeriesHistory {
+  return {
+    name,
+    seriesId: def.seriesId,
+    sourceUrl: def.sourcePageUrl,
+    points: result.observations.map((obs) => ({ date: obs.date.slice(0, 10), millionBarrels: round3(obs.value) })),
+  };
+}
+
 async function loadReport(): Promise<WeeklySnapshot> {
   if (!readEiaApiKey()) throw new Error("EIA API key is not set");
+  const window = recentEiaWindow("weekly");
   const settled = await Promise.allSettled(
     WEEKLY_SERIES.map((series) =>
       getWeeklyStockSeries(series.def, {
-        length: series.def === EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS ? 12 : 8,
-        timeoutMs: 8_000,
-        maxRetries: 0,
+        ...window,
+        timeoutMs: 15_000,
+        maxRetries: 1,
+        cache: "no-store",
       }),
     ),
   );
   const lines: WeeklyStockLine[] = [];
+  const seriesHistory: WeeklySeriesHistory[] = [];
   let crudeHistory: WeeklyHistoryRow[] = [];
   const failures: string[] = [];
   settled.forEach((item, index) => {
@@ -119,8 +142,9 @@ async function loadReport(): Promise<WeeklySnapshot> {
     }
     try {
       lines.push(lineFrom(series.name, series.def, item.value));
+      seriesHistory.push(historyFrom(series.name, series.def, item.value));
       if (series.def === EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS) {
-        crudeHistory = item.value.observations.map((obs, obsIndex) => {
+        crudeHistory = item.value.observations.slice(0, 16).map((obs, obsIndex) => {
           const previous = item.value.observations[obsIndex + 1];
           return {
             weekEnding: obs.date.slice(0, 10),
@@ -135,19 +159,21 @@ async function loadReport(): Promise<WeeklySnapshot> {
       failures.push(detail);
     }
   });
-  if (lines.length !== WEEKLY_SERIES.length) {
+  if (!lines.length) {
     logEiaFallback("fetch error", failures.join("; ") || "EIA weekly stocks were not available");
     throw new Error("EIA weekly stocks were not available");
   }
-  const crude = lines[0];
+  if (failures.length) logEiaFallback("fetch error", failures.join("; "));
+  const crude = lines.find((line) => line.seriesId === EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS.seriesId) ?? lines[0];
+  // An older print stays on the page with its date. Hiding it made a missed
+  // Wednesday look like the feed had never loaded.
   if (!fresh(crude.weekEnding)) {
     logEiaFallback("stale data", `US crude stocks week ${crude.weekEnding} is outside the ${MAX_AGE_DAYS}-day window`);
-    throw new Error(`EIA weekly crude stocks ${crude.weekEnding} are outside the ${MAX_AGE_DAYS}-day window`);
   }
-  return { lines, crudeHistory, weekEnding: crude.weekEnding, fetchedAt: new Date().toISOString() };
+  return { lines, crudeHistory, series: seriesHistory, weekEnding: crude.weekEnding, fetchedAt: new Date().toISOString() };
 }
 
-const loadCachedReport = unstable_cache(loadReport, ["eia-weekly-wpsr-v2"], {
+const loadCachedReport = unstable_cache(loadReport, ["eia-weekly-wpsr-v3"], {
   revalidate: EIA_DATA_REVALIDATE_SECONDS,
   tags: ["eia-weekly", "eia-spot"],
 });
@@ -173,19 +199,15 @@ async function refresh(): Promise<WeeklySnapshot> {
   return pending;
 }
 
-function servable(report: WeeklySnapshot, now = Date.now()): boolean {
-  return (
-    report.lines.length === WEEKLY_SERIES.length &&
-    Array.isArray(report.crudeHistory) &&
-    report.crudeHistory.length > 0 &&
-    fresh(report.weekEnding, now)
-  );
+function servable(report: WeeklySnapshot): boolean {
+  return report.lines.length > 0 && Boolean(report.weekEnding) && Array.isArray(report.series);
 }
 
 /**
  * Wednesday petroleum stocks from the EIA API.
  * A warm snapshot is reused for two hours. A failed refresh keeps the last
- * good snapshot when that week is still inside the age window. No desk marks.
+ * good snapshot, including one past the usual freshness window, and the page
+ * shows that week-ending date. No desk marks.
  */
 export async function getEiaWeekly(): Promise<WeeklyFeed | null> {
   if (!readEiaApiKey()) return null;

@@ -13,7 +13,7 @@ is visible in the Actions tab while a missing EIA key is a clean skip.
 import json
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import requests
 
@@ -46,7 +46,8 @@ def fetch_eia_crude_stocks():
         "sort[0][column]": "period",
         "sort[0][direction]": "desc",
         "offset": 0,
-        "length": 12,
+        "start": (date.today() - timedelta(days=6 * 366)).isoformat(),
+        "length": 400,
     }
     resp = requests.get(url, params=params, timeout=20)
     resp.raise_for_status()
