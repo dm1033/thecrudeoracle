@@ -79,8 +79,8 @@ export function brentWtiSpread(brent: readonly HistoryPoint[], wti: readonly His
   return out;
 }
 
-async function daily(def: (typeof EIA_SERIES)[keyof typeof EIA_SERIES], length: number): Promise<HistoryPoint[]> {
-  const json = await fetchWithRetry(buildEiaDataUrl(def, { length }));
+async function daily(def: (typeof EIA_SERIES)[keyof typeof EIA_SERIES], length: number, start: string): Promise<HistoryPoint[]> {
+  const json = await fetchWithRetry(buildEiaDataUrl(def, { length, start }));
   return parseEiaResponse(json, def)
     .map((row) => ({ date: row.date, value: row.value }))
     .sort((a, b) => a.date.localeCompare(b.date));
@@ -89,11 +89,14 @@ async function daily(def: (typeof EIA_SERIES)[keyof typeof EIA_SERIES], length: 
 /** Up to about five years of EIA daily spots. Null without a key or when a read fails. */
 export async function getHistoricalSpotSeries(now = new Date()): Promise<SpotHistory | null> {
   if (!readEiaApiKey()) return null;
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  start.setUTCDate(start.getUTCDate() - 5 * 366);
+  const windowStart = start.toISOString().slice(0, 10);
   try {
     const [brent, wti, henryHub] = await Promise.all([
-      daily(EIA_SERIES.BRENT_SPOT, 1320),
-      daily(EIA_SERIES.WTI_SPOT, 1320),
-      daily(EIA_SERIES.HENRY_HUB_SPOT, 1320),
+      daily(EIA_SERIES.BRENT_SPOT, 1400, windowStart),
+      daily(EIA_SERIES.WTI_SPOT, 1400, windowStart),
+      daily(EIA_SERIES.HENRY_HUB_SPOT, 1400, windowStart),
     ]);
     if (brent.length < 2 && wti.length < 2 && henryHub.length < 2) return null;
     return { brent, wti, henryHub, spread: brentWtiSpread(brent, wti), fetchedAt: now.toISOString() };

@@ -1,14 +1,12 @@
 import {
   EIA_SERIES,
-  buildEiaDataUrl,
-  fetchWithRetry,
   getDailySpotSeries,
-  parseEiaResponse,
   readEiaApiKey,
   redactApiKey,
   type EiaObservation,
   type EiaSeriesDef,
 } from "@/lib/eia";
+import { getEiaWeekly, type WeeklySeriesHistory } from "@/lib/eia-weekly";
 import { getMonitorFeed, type MonitorFeed, type MonitorModule } from "@/lib/oracle-intelligence";
 
 /**
@@ -163,9 +161,41 @@ export function stockBlock(observations: EiaObservation[]): Record<string, unkno
   return block;
 }
 
-async function weeklyHistory(seriesDef: EiaSeriesDef): Promise<EiaObservation[]> {
-  const json = await fetchWithRetry(buildEiaDataUrl(seriesDef, { length: 60 }));
-  return parseEiaResponse(json, seriesDef);
+function observationsFrom(history: WeeklySeriesHistory): EiaObservation[] {
+  return history.points.map((point) => ({
+    date: point.date,
+    value: point.millionBarrels,
+    rawValue: Math.round(point.millionBarrels * 1000),
+    units: "MBBL",
+    seriesId: history.seriesId,
+    sourceUrl: history.sourceUrl,
+  }));
+}
+
+async function inventoriesFromWeekly(fetchedUtc: string): Promise<MonitorModule | null> {
+  const weekly = await getEiaWeekly();
+  if (!weekly) return null;
+  const crudeHistory = weekly.report.series.find((item) => item.seriesId === EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS.seriesId);
+  const crude = crudeHistory ? stockBlock(observationsFrom(crudeHistory)) : null;
+  if (!crude) return null;
+  const values: Record<string, unknown> = { us_commercial_crude: crude };
+  const cushingHistory = weekly.report.series.find((item) => item.seriesId === EIA_SERIES.CUSHING_CRUDE_STOCKS.seriesId);
+  const cushing = cushingHistory ? stockBlock(observationsFrom(cushingHistory)) : null;
+  if (cushing) values.cushing = cushing;
+  return {
+    status: "ok",
+    asOf: String(crude.week_ending),
+    fetchedUtc: weekly.report.fetchedAt || fetchedUtc,
+    sourceName: SOURCE_STOCKS,
+    sourceUrl: "https://www.eia.gov/petroleum/supply/weekly/",
+    values,
+  };
+}
+
+function preferNewer(live: MonitorModule | null | undefined, file: MonitorModule): MonitorModule {
+  if (!live || live.status !== "ok") return file;
+  if (file.status !== "ok") return live;
+  return live.asOf.slice(0, 10) >= file.asOf.slice(0, 10) ? live : file;
 }
 
 async function optional<T>(what: string, run: () => Promise<T>): Promise<T | undefined> {
@@ -203,38 +233,22 @@ async function livePrices(fetchedUtc: string): Promise<MonitorModule | null> {
   };
 }
 
-async function liveInventories(fetchedUtc: string): Promise<MonitorModule | null> {
-  const crude = stockBlock(await weeklyHistory(EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS));
-  if (!crude) return null;
-  const values: Record<string, unknown> = { us_commercial_crude: crude };
-  const cushing = await optional("Cushing", () => weeklyHistory(EIA_SERIES.CUSHING_CRUDE_STOCKS));
-  const cushingBlock = cushing ? stockBlock(cushing) : null;
-  if (cushingBlock) values.cushing = cushingBlock;
-  return {
-    status: "ok",
-    asOf: String(crude.week_ending),
-    fetchedUtc,
-    sourceName: SOURCE_STOCKS,
-    sourceUrl: "https://www.eia.gov/petroleum/supply/weekly/",
-    values,
-  };
-}
-
 /**
- * The feed the page renders: the scheduled file, with each EIA module that
- * has not loaded there replaced by a live read when the site has an EIA key.
+ * The feed the page renders. Prices fill in when the scheduled file has none.
+ * Stocks prefer the live weekly read whenever it is as new as the file, so a
+ * stuck snapshot cannot hide a Wednesday print.
  */
 export async function getMonitorFeedWithLiveEia(): Promise<MonitorFeed> {
   const feed = getMonitorFeed();
-  if ((feed.prices.status === "ok" && feed.inventories.status === "ok") || !readEiaApiKey()) return feed;
+  if (!readEiaApiKey()) return feed;
   const fetchedUtc = new Date().toISOString();
   const [prices, inventories] = await Promise.all([
     feed.prices.status === "ok" ? null : optional("prices", () => livePrices(fetchedUtc)),
-    feed.inventories.status === "ok" ? null : optional("inventories", () => liveInventories(fetchedUtc)),
+    optional("inventories", () => inventoriesFromWeekly(fetchedUtc)),
   ]);
   return {
     ...feed,
     prices: prices ?? feed.prices,
-    inventories: inventories ?? feed.inventories,
+    inventories: preferNewer(inventories, feed.inventories),
   };
 }

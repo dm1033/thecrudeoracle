@@ -1,12 +1,4 @@
-import {
-  EIA_SERIES,
-  buildEiaDataUrl,
-  fetchWithRetry,
-  parseEiaResponse,
-  readEiaApiKey,
-  redactApiKey,
-  type EiaSeriesDef,
-} from "@/lib/eia";
+import { getEiaWeekly } from "@/lib/eia-weekly";
 
 export interface WeeklyPoint {
   /** Week-ending date, YYYY-MM-DD. */
@@ -48,13 +40,6 @@ export interface SeasonalSuite {
   series: SeasonalSeries[];
   fetchedAt: string;
 }
-
-const SERIES: { def: EiaSeriesDef; name: string }[] = [
-  { def: EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS, name: "US crude (ex-SPR)" },
-  { def: EIA_SERIES.CUSHING_CRUDE_STOCKS, name: "Cushing" },
-  { def: EIA_SERIES.US_DISTILLATE_STOCKS, name: "Distillate" },
-  { def: EIA_SERIES.US_GASOLINE_STOCKS, name: "Gasoline" },
-];
 
 /** ISO week of a YYYY-MM-DD date. Week 1 is the week of the year's first Thursday. */
 export function isoWeekParts(date: string): { isoYear: number; isoWeek: number } {
@@ -123,32 +108,18 @@ export function buildSeasonalSeries(id: string, name: string, raw: readonly Week
   };
 }
 
-async function weekly(def: EiaSeriesDef): Promise<WeeklyPoint[]> {
-  const json = await fetchWithRetry(buildEiaDataUrl(def, { length: 265 }));
-  return parseEiaResponse(json, def).map((row) => ({ date: row.date, value: row.value }));
-}
-
-/** About five years of EIA weekly stocks. Null without a key or when every series fails. */
+/** About five years of EIA weekly stocks, from the same read as /eia-weekly. */
 export async function getEiaSeasonalSuite(now = new Date()): Promise<SeasonalSuite | null> {
-  if (!readEiaApiKey()) return null;
-  try {
-    const loaded = await Promise.all(
-      SERIES.map(async (series) => {
-        try {
-          const points = await weekly(series.def);
-          return points.length ? buildSeasonalSeries(series.def.seriesId, series.name, points) : null;
-        } catch (error) {
-          console.warn(
-            `[eia-seasonal] ${series.def.seriesId} not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`,
-          );
-          return null;
-        }
-      }),
-    );
-    const series = loaded.filter((item): item is SeasonalSeries => item != null);
-    return series.length ? { series, fetchedAt: now.toISOString() } : null;
-  } catch (error) {
-    console.warn(`[eia-seasonal] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
-    return null;
-  }
+  const feed = await getEiaWeekly();
+  if (!feed) return null;
+  const series = feed.report.series
+    .map((item) =>
+      buildSeasonalSeries(
+        item.seriesId,
+        item.name,
+        item.points.map((point) => ({ date: point.date, value: point.millionBarrels })),
+      ),
+    )
+    .filter((item) => item.points.length > 0);
+  return series.length ? { series, fetchedAt: feed.report.fetchedAt || now.toISOString() } : null;
 }

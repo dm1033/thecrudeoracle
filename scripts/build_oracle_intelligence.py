@@ -158,23 +158,38 @@ def pearson(xs, ys):
 
 # --- EIA ---------------------------------------------------------------------
 
-def eia_series(route, series_id, frequency, length):
+def eia_window(frequency):
+    """Start date and row count that still include the newest print either sort way.
+
+    EIA applies `length` to the filtered rows. A short length with no start can
+    be the oldest rows, so a new weekly print never arrives.
+    """
+    today = datetime.date.today()
+    if frequency == "weekly":
+        return (today - datetime.timedelta(days=6 * 366)).isoformat(), 400
+    return (today - datetime.timedelta(days=460)).isoformat(), 360
+
+
+def eia_series(route, series_id, frequency, length, start=None):
     """Newest-first list of (period, value) for one EIA v2 series."""
     if not EIA_API_KEY:
         warn("EIA_API_KEY is not set")
         raise NotLoaded("EIA figures are unavailable")
+    params = {
+        "api_key": EIA_API_KEY,
+        "frequency": frequency,
+        "data[0]": "value",
+        "facets[series][]": series_id,
+        "sort[0][column]": "period",
+        "sort[0][direction]": "desc",
+        "offset": 0,
+        "length": length,
+    }
+    if start:
+        params["start"] = start
     payload = fetch_json(
         f"https://api.eia.gov/v2/{route}/data/",
-        {
-            "api_key": EIA_API_KEY,
-            "frequency": frequency,
-            "data[0]": "value",
-            "facets[series][]": series_id,
-            "sort[0][column]": "period",
-            "sort[0][direction]": "desc",
-            "offset": 0,
-            "length": length,
-        },
+        params,
     )
     rows = payload.get("response", {}).get("data") if isinstance(payload, dict) else None
     if not isinstance(rows, list):
@@ -192,17 +207,26 @@ def eia_series(route, series_id, frequency, length):
 
 
 def build_prices():
-    brent = eia_series("petroleum/pri/spt", "RBRTE", "daily", 260)
-    wti = eia_series("petroleum/pri/spt", "RWTC", "daily", 260)
-    values = {
-        "brent_usd_bbl": round(brent[0][1], 2),
-        "brent_date": brent[0][0],
-        "wti_usd_bbl": round(wti[0][1], 2),
-        "wti_date": wti[0][0],
-    }
-    # A spread is only meaningful when both prints are for the same day.
-    if brent[0][0] == wti[0][0]:
-        values["brent_wti_spread_usd_bbl"] = round(brent[0][1] - wti[0][1], 2)
+    daily_start, daily_length = eia_window("daily")
+    brent = eia_series("petroleum/pri/spt", "RBRTE", "daily", daily_length, daily_start)
+    wti = eia_series("petroleum/pri/spt", "RWTC", "daily", daily_length, daily_start)
+    wti_by_date = dict(wti)
+    shared = next(((day, value, wti_by_date[day]) for day, value in brent if day in wti_by_date), None)
+    if shared:
+        values = {
+            "brent_usd_bbl": round(shared[1], 2),
+            "brent_date": shared[0],
+            "wti_usd_bbl": round(shared[2], 2),
+            "wti_date": shared[0],
+            "brent_wti_spread_usd_bbl": round(shared[1] - shared[2], 2),
+        }
+    else:
+        values = {
+            "brent_usd_bbl": round(brent[0][1], 2),
+            "brent_date": brent[0][0],
+            "wti_usd_bbl": round(wti[0][1], 2),
+            "wti_date": wti[0][0],
+        }
 
     wti_closes = [v for _, v in wti]
     if len(wti_closes) >= 50:
@@ -220,7 +244,7 @@ def build_prices():
             changes[name] = block
 
     try:
-        hub = eia_series("natural-gas/pri/fut", "RNGWHHD", "daily", 260)
+        hub = eia_series("natural-gas/pri/fut", "RNGWHHD", "daily", daily_length, daily_start)
         values["henry_hub_usd_mmbtu"] = round(hub[0][1], 2)
         values["henry_hub_date"] = hub[0][0]
         block = change_block(hub, 2)
@@ -232,12 +256,13 @@ def build_prices():
     # 3-2-1 crack from New York Harbor spot products, in $/bbl. Left out unless
     # all three prints are for the same day.
     try:
-        gasoline = eia_series("petroleum/pri/spt", "EER_EPMRU_PF4_Y35NY_DPG", "daily", 10)
-        diesel = eia_series("petroleum/pri/spt", "EER_EPD2DXL0_PF4_Y35NY_DPG", "daily", 10)
-        if gasoline[0][0] == diesel[0][0] == wti[0][0]:
-            crack = (2 * gasoline[0][1] * 42 + diesel[0][1] * 42 - 3 * wti[0][1]) / 3
+        product_start = (datetime.date.today() - datetime.timedelta(days=90)).isoformat()
+        gasoline = eia_series("petroleum/pri/spt", "EER_EPMRU_PF4_Y35NY_DPG", "daily", 80, product_start)
+        diesel = eia_series("petroleum/pri/spt", "EER_EPD2DXL0_PF4_Y35NY_DPG", "daily", 80, product_start)
+        if gasoline[0][0] == diesel[0][0] == values["wti_date"]:
+            crack = (2 * gasoline[0][1] * 42 + diesel[0][1] * 42 - 3 * values["wti_usd_bbl"]) / 3
             values["crack_321_usd_bbl"] = round(crack, 2)
-            values["crack_321_date"] = wti[0][0]
+            values["crack_321_date"] = values["wti_date"]
         else:
             warn("prices: 3-2-1 crack left out (product and crude prints are for different days)")
     except NotLoaded as exc:
@@ -247,7 +272,7 @@ def build_prices():
         values["changes"] = changes
 
     return {
-        "as_of": max(brent[0][0], wti[0][0]),
+        "as_of": values["brent_date"] if values["brent_date"] == values["wti_date"] else max(values["brent_date"], values["wti_date"]),
         "source_name": "U.S. Energy Information Administration, Open Data API v2",
         "source_url": "https://www.eia.gov/opendata/",
         "data_type": "delayed",
@@ -277,10 +302,11 @@ def stock_block(points):
 
 
 def build_inventories():
-    crude = eia_series("petroleum/stoc/wstk", "WCESTUS1", "weekly", 60)
+    weekly_start, weekly_length = eia_window("weekly")
+    crude = eia_series("petroleum/stoc/wstk", "WCESTUS1", "weekly", weekly_length, weekly_start)
     values = {"us_commercial_crude": stock_block(crude)}
     try:
-        cushing = eia_series("petroleum/stoc/wstk", "W_EPC0_SAX_YCUOK_MBBL", "weekly", 60)
+        cushing = eia_series("petroleum/stoc/wstk", "W_EPC0_SAX_YCUOK_MBBL", "weekly", weekly_length, weekly_start)
         values["cushing"] = stock_block(cushing)
     except NotLoaded as exc:
         warn(f"inventories: Cushing left out ({exc})")

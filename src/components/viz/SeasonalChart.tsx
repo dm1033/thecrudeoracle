@@ -16,7 +16,7 @@ export default function SeasonalChart({ suite }: { suite: SeasonalSuite | null }
     );
   }
   return (
-    <div>
+    <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap gap-1 border-b border-border-hairline px-3 py-2">
         {suite.series.map((item) => (
           <button key={item.id} type="button" onClick={() => setId(item.id)} className={`px-2 py-1 font-mono text-[10px] uppercase tracking-[0.08em] ${item.id === series.id ? "bg-brass text-canvas" : "text-ink-secondary"}`}>
@@ -36,19 +36,20 @@ function Band({ series }: { series: SeasonalSeries }) {
   const weeks = series.bands.map((band) => String(band.isoWeek));
   const recent = series.points.slice(-16);
   return (
-    <div className="grid gap-[1px] bg-border-hairline lg:grid-cols-2">
-      <div className="h-72 bg-surface-1">
+    <div className="grid min-h-72 flex-1 gap-[1px] bg-border-hairline lg:grid-cols-2">
+      <div className="min-h-72 bg-surface-1">
         <EChart
+          className="h-full min-h-72 w-full"
           option={{
             backgroundColor: "transparent",
-            grid: { left: 48, right: 12, top: 28, bottom: 24 },
+            grid: { left: 48, right: 12, top: 36, bottom: 24 },
             tooltip: { trigger: "axis" },
-            legend: { textStyle: { color: THEME.inkSecondary }, top: 0 },
+            legend: { data: ["5y mean", "Prior year", "Current year"], textStyle: { color: THEME.inkSecondary }, top: 4 },
             xAxis: { type: "category", data: weeks, axisLabel: { color: THEME.inkMuted } },
             yAxis: { type: "value", scale: true, axisLabel: { color: THEME.inkMuted }, splitLine: { lineStyle: { color: THEME.hairline } } },
             series: [
-              { type: "line", name: "5y max", data: series.bands.map((band) => band.max), showSymbol: false, lineStyle: { opacity: 0 }, stack: "band", areaStyle: { color: "transparent" } },
-              { type: "line", name: "5y min-max", data: series.bands.map((band) => (band.min != null && band.max != null ? band.max - band.min : null)), showSymbol: false, lineStyle: { opacity: 0 }, stack: "band", areaStyle: { color: "rgba(200,155,60,0.18)" } },
+              { type: "line", data: series.bands.map((band) => band.min), showSymbol: false, lineStyle: { opacity: 0 }, stack: "band", areaStyle: { color: "transparent" }, silent: true },
+              { type: "line", data: series.bands.map((band) => (band.min != null && band.max != null ? band.max - band.min : null)), showSymbol: false, lineStyle: { opacity: 0 }, stack: "band", areaStyle: { color: "rgba(200,155,60,0.18)" }, silent: true },
               { type: "line", name: "5y mean", data: series.bands.map((band) => band.mean), showSymbol: false, lineStyle: { color: THEME.inkSecondary, type: "dashed" } },
               { type: "line", name: "Prior year", data: series.bands.map((band) => band.prior), showSymbol: false, lineStyle: { color: THEME.wti } },
               { type: "line", name: "Current year", data: series.bands.map((band) => band.current), showSymbol: false, lineStyle: { color: THEME.brent, width: 2 } },
@@ -56,8 +57,9 @@ function Band({ series }: { series: SeasonalSeries }) {
           }}
         />
       </div>
-      <div className="h-72 bg-surface-1">
+      <div className="min-h-72 bg-surface-1">
         <EChart
+          className="h-full min-h-72 w-full"
           option={{
             backgroundColor: "transparent",
             grid: { left: 48, right: 12, top: 16, bottom: 24 },

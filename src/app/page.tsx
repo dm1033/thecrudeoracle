@@ -9,7 +9,8 @@ import SeaborneTerminalMap from "@/components/viz/SeaborneTerminalMap";
 import SpotSpreadTerminal from "@/components/viz/SpotSpreadTerminal";
 import SeasonalChart from "@/components/viz/SeasonalChart";
 import { getDashboardCards, pickCards } from "@/lib/dashboard-cards";
-import { briefings } from "@/lib/data";
+import { loadDailyNote } from "@/lib/daily-feed";
+import { formatLongDate } from "@/lib/daily-note";
 import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
 import { getHistoricalSpotSeries } from "@/lib/historical-series";
 import { pageMeta } from "@/lib/seo";
@@ -48,13 +49,13 @@ const FAQ_ITEMS = [
 ];
 
 export default async function HomePage() {
-  const [cards, history, seasonal] = await Promise.all([
+  const [cards, history, seasonal, noteResult] = await Promise.all([
     getDashboardCards(),
     getHistoricalSpotSeries(),
     getEiaSeasonalSuite(),
+    loadDailyNote("latest"),
   ]);
   const signals = pickCards(cards, ["us-crude", "steo-cops_opec", "wti-positioning", "supply-news", "cushing"], 5);
-  const note = briefings[0];
   const releases = upcomingReleases(new Date()).slice(0, 3);
 
   return (
@@ -72,11 +73,30 @@ export default async function HomePage() {
             <SpotSpreadTerminal data={history} />
           </section>
           <aside className="bg-surface-1 p-4 lg:col-span-4">
-            <p className="eyebrow">Archive note · {note?.date ?? "—"}</p>
-            <h2 className="mt-2 font-serif text-2xl text-ink-primary">{note?.headline ?? "Daily note"}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
-              {note?.oil_summary} This briefing is the archived {note?.date} note. It is not a description of today&apos;s prices.
-            </p>
+            {noteResult.status === "ready" ? (
+              <>
+                <p className="eyebrow">Daily note · {formatLongDate(noteResult.note.date)}</p>
+                <h2 className="mt-2 font-serif text-2xl text-ink-primary">Daily note</h2>
+                <div className="mt-3 space-y-2 text-sm leading-relaxed text-ink-secondary">
+                  {noteResult.note.summary.slice(0, 3).map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+                {noteResult.fallback ? (
+                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-muted">
+                    Last successful read. A newer note did not load.
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <p className="eyebrow">Daily note</p>
+                <h2 className="mt-2 font-serif text-2xl text-ink-primary">Daily note</h2>
+                <p className="mt-3 text-sm leading-relaxed text-ink-secondary">
+                  The latest daily note is not available. No archived briefing is shown in its place.
+                </p>
+              </>
+            )}
             <Link href="/daily" className="mt-4 inline-block font-mono text-[10px] tracking-[0.08em] text-brass">
               DAILY NOTE
             </Link>
@@ -91,7 +111,7 @@ export default async function HomePage() {
           </aside>
         </div>
         <div className="hairline-grid lg:grid-cols-12">
-          <section className="bg-canvas lg:col-span-7">
+          <section className="flex flex-col bg-canvas lg:col-span-7">
             <header className="flex items-center justify-between border-b border-border-hairline px-4 py-3">
               <h2 className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-secondary">EIA five-year stock band</h2>
               <Link href="/eia-weekly" className="font-mono text-[10px] tracking-[0.08em] text-brass">
