@@ -312,12 +312,15 @@ function sleep(ms: number): Promise<void> {
  */
 export function recentEiaWindow(frequency: "daily" | "weekly", now = new Date()): { start: string; length: number } {
   const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  // The row count has to cover the window, and it also has to come back
+  // inside the request timeout. A 360-row daily read was timing out, which
+  // left the tape blank.
   if (frequency === "weekly") {
-    start.setUTCDate(start.getUTCDate() - 6 * 366);
-    return { start: start.toISOString().slice(0, 10), length: 400 };
+    start.setUTCDate(start.getUTCDate() - 270 * 7);
+    return { start: start.toISOString().slice(0, 10), length: 280 };
   }
-  start.setUTCDate(start.getUTCDate() - 460);
-  return { start: start.toISOString().slice(0, 10), length: 360 };
+  start.setUTCDate(start.getUTCDate() - 100);
+  return { start: start.toISOString().slice(0, 10), length: 80 };
 }
 
 export function buildEiaDataUrl(seriesDef: EiaSeriesDef, opts: { length?: number; start?: string } = {}): string {

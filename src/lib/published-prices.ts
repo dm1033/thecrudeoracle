@@ -241,7 +241,7 @@ async function probeSpots(): Promise<SpotProbe> {
   // Separate cached URLs were serving Brent from one release and WTI or Henry
   // Hub from another, including across pages.
   const window = recentEiaWindow("daily");
-  const opts = { ...window, timeoutMs: 12_000, maxRetries: 1, cache: "no-store" as const };
+  const opts = { ...window, timeoutMs: 15_000, maxRetries: 0, cache: "no-store" as const };
   const [brentSettled, wtiSettled, hubSettled] = await Promise.allSettled([
     getBrentSpot(opts),
     getWtiSpot(opts),

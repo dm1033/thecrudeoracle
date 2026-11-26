@@ -165,9 +165,10 @@ def eia_window(frequency):
     be the oldest rows, so a new weekly print never arrives.
     """
     today = datetime.date.today()
+    # Same bound as recentEiaWindow: long enough for either sort, short enough to return.
     if frequency == "weekly":
-        return (today - datetime.timedelta(days=6 * 366)).isoformat(), 400
-    return (today - datetime.timedelta(days=460)).isoformat(), 360
+        return (today - datetime.timedelta(days=270 * 7)).isoformat(), 280
+    return (today - datetime.timedelta(days=100)).isoformat(), 80
 
 
 def eia_series(route, series_id, frequency, length, start=None):

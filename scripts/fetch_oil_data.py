@@ -46,8 +46,8 @@ def fetch_eia_crude_stocks():
         "sort[0][column]": "period",
         "sort[0][direction]": "desc",
         "offset": 0,
-        "start": (date.today() - timedelta(days=6 * 366)).isoformat(),
-        "length": 400,
+        "start": (date.today() - timedelta(days=270 * 7)).isoformat(),
+        "length": 280,
     }
     resp = requests.get(url, params=params, timeout=20)
     resp.raise_for_status()

@@ -124,7 +124,7 @@ async function loadReport(): Promise<WeeklySnapshot> {
       getWeeklyStockSeries(series.def, {
         ...window,
         timeoutMs: 15_000,
-        maxRetries: 1,
+        maxRetries: 0,
         cache: "no-store",
       }),
     ),
