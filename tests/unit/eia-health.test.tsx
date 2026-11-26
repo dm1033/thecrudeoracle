@@ -4,7 +4,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { GET } from "@/app/api/eia-health/route";
-import { buildEiaDataUrl, EIA_SERIES, readEiaApiKey } from "@/lib/eia";
+import { buildEiaDataUrl, EIA_SERIES, readEiaApiKey, recentEiaWindow } from "@/lib/eia";
 import { checkEiaHealth, expirePublishedPricesCache, getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
 import PriceFreshness from "@/components/PriceFreshness";
 import DeskTape from "@/components/DeskTape";
@@ -52,6 +52,20 @@ afterEach(() => {
   delete process.env.EIA_API;
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
+});
+
+describe("EIA request window", () => {
+  it("covers every period in the window without asking for a read that times out", () => {
+    const now = new Date("2026-11-26T12:00:00Z");
+    const daily = recentEiaWindow("daily", now);
+    const weekly = recentEiaWindow("weekly", now);
+    const dailySpan = (Date.parse("2026-11-26T00:00:00Z") - Date.parse(`${daily.start}T00:00:00Z`)) / 86_400_000;
+    const weeklySpan = (Date.parse("2026-11-26T00:00:00Z") - Date.parse(`${weekly.start}T00:00:00Z`)) / 86_400_000;
+    expect(daily.length).toBeGreaterThan((dailySpan * 5) / 7);
+    expect(daily.length).toBeLessThanOrEqual(100);
+    expect(weekly.length).toBeGreaterThan(weeklySpan / 7);
+    expect(weekly.length).toBeLessThanOrEqual(300);
+  });
 });
 
 describe("EIA API key", () => {
