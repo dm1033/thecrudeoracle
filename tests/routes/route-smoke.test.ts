@@ -64,7 +64,6 @@ const EXCLUDED_FROM_SITEMAP = new Set([
   "/account",
   "/payment/cancelled",
   "/payment/success",
-  "/offshore",
   // Dated copies are added by sitemap() from EIA trade dates. The template
   // path itself is not a URL.
   "/daily/[date]",
@@ -125,6 +124,12 @@ describe("sitemap coverage (src/app/sitemap.ts)", () => {
   it("every sitemap entry points at a route that actually exists", () => {
     const stale = sitemapPaths.filter((p) => !routes.includes(p));
     expect(stale, `sitemap.ts lists route(s) with no matching page.tsx: ${stale.join(", ")}`).toEqual([]);
+  });
+
+  it("redirects the removed offshore pitch home", () => {
+    const config = readFileSync(path.resolve(__dirname, "../../next.config.mjs"), "utf8");
+    expect(config).toContain('source: "/offshore", destination: "/", permanent: true');
+    expect(routes).not.toContain("/offshore");
   });
 
   it("excluded-from-sitemap routes are still real routes (the allowlist itself doesn't drift)", () => {

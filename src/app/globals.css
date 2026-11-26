@@ -202,9 +202,48 @@ body {
   bottom: 4px;
 }
 
+.media-kit-one-page {
+  display: none;
+}
+
 @media print {
-  .no-print {
+  .no-print,
+  .media-kit-screen {
     display: none !important;
+  }
+
+  .media-kit-one-page {
+    display: block !important;
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+
+  .media-kit-one-page h1 {
+    font-size: 18pt;
+    margin: 0;
+  }
+
+  .media-kit-one-page h2 {
+    font-size: 11pt;
+    margin: 8pt 0 2pt;
+  }
+
+  .media-kit-one-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4pt 0 6pt;
+  }
+
+  .media-kit-one-page th,
+  .media-kit-one-page td {
+    padding: 2pt 12pt 3pt 0;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm;
   }
 
   body,

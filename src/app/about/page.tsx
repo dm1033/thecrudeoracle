@@ -7,6 +7,48 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import SubscribeCTA from "@/components/SubscribeCTA";
 import { SITE } from "@/lib/site";
 
+const SOURCE_NOTES = [
+  {
+    source: "EIA",
+    covers:
+      "Brent (RBRTE) and WTI (RWTC) daily spots in dollars per barrel, Henry Hub (RNGWHHD) in dollars per MMBtu, and weekly stocks: US commercial crude ex-SPR (WCESTUS1), gasoline (WGTSTUS1), distillate (WDISTUS1) and Cushing (W_EPC0_SAX_YCUOK_MBBL). US government public-domain data.",
+    update:
+      "Daily spot values are posted once a week with the Weekly Petroleum Status Report, on Wednesday, or on Thursday when a US federal holiday moves that report. Weekly stocks are released Wednesday at 10:30 a.m. US Eastern, for the week ending the previous Friday. A successful read is cached for two hours.",
+    delay: "The date shown is the trade date or the week-ending date, which is often several days behind the release.",
+  },
+  {
+    source: "CFTC",
+    covers:
+      "NYMEX WTI managed-money futures positions (contract 067651) from the Disaggregated Commitments of Traders report. Net is long minus short, in contracts.",
+    update:
+      "The desk reads the report on the weekly cycle. CFTC usually releases it on Friday at 3:30 p.m. US Eastern, and later when its own schedule records a holiday delay.",
+    delay: "Positions are as of the previous Tuesday. The print is delayed.",
+  },
+  {
+    source: "FRED",
+    covers:
+      "Federal Reserve broad dollar index (DTWEXBGS) and the 10-year inflation-indexed Treasury yield (DFII10), via FRED. DTWEXBGS is not the ICE US Dollar Index.",
+    update: "The public-data job reads FRED up to four times a day. The card keeps the series date FRED publishes.",
+    delay: "The series date is the Federal Reserve's date. The figure is delayed.",
+  },
+  {
+    source: "GDELT",
+    covers:
+      "Share of online news the GDELT Project monitors that matches a fixed keyword list, plus links to matching articles. It is a coverage count, not a risk rating.",
+    update: "The same public-data job reads GDELT up to four times a day.",
+    delay: "The latest point is usually one to two days old, and that date is shown. It is delayed.",
+  },
+  {
+    source: "AIS",
+    covers:
+      "Delayed TankerMap positions for hulls at 1 knot or more that are not anchored, moored or drifting. Crude and LNG lanes, and the offshore rig marks, are fixed desk drawings. Satellite day and night layers are NASA mosaics.",
+    update:
+      "TankerMap refreshes through the day. The site re-reads the moving-tanker route every 30 minutes. A position older than six hours is badged on the vessel card.",
+    delay:
+      "The observation time is the AIS time, not the moment the page was opened. Not for navigation. The lanes and rigs are not a vessel feed and not a rig census.",
+  },
+] as const;
+
 export const metadata: Metadata = pageMeta(
   "About — The Crude Oracle",
   "The Crude Oracle is a professional oil and gas intelligence platform: daily crude, gas and energy-security intelligence for investors, traders and energy professionals — clear, concise and source-backed.",
@@ -71,11 +113,40 @@ export default function AboutPage() {
             </li>
           </ul>
 
-          <h2>Author</h2>
+          <h2>Editor</h2>
+          <p>David John Miller CEng</p>
           <p>
-            The morning note, the Wednesday stocks page and the longer notes are published by {SITE.name}. This page
-            does not name an individual author, and it does not list credentials, a track record or a professional
-            qualification. Where a note has a byline, that byline is the publication.
+            The morning note, the Wednesday stocks page and the longer notes are published by {SITE.name}. Where a note
+            has a byline, that byline is the publication.
+          </p>
+
+          <h2>Data sources and methodology</h2>
+          <p>
+            Every figure the desk reads from a public source is delayed. The date on the page is the source&apos;s own
+            date. A missing read is left blank.
+          </p>
+          <div className="not-prose my-4 grid gap-3">
+            {SOURCE_NOTES.map((note) => (
+              <article key={note.source} className="card">
+                <h3 className="text-base font-semibold text-white">{note.source}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-steel-300">
+                  <span className="font-semibold text-steel-200">Covers. </span>
+                  {note.covers}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-steel-300">
+                  <span className="font-semibold text-steel-200">Update. </span>
+                  {note.update}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-steel-300">
+                  <span className="font-semibold text-steel-200">Delay. </span>
+                  {note.delay}
+                </p>
+              </article>
+            ))}
+          </div>
+          <p>
+            The same sources are listed on <Link href="/data-sources">data sources</Link>. The public-data monitor
+            states the same limits for the figures it draws.
           </p>
 
           <h2>Methodology</h2>
@@ -106,6 +177,32 @@ export default function AboutPage() {
             <Link href="/corrections">corrections policy</Link>. Sponsors do not see copy before publication. That
             rule is the <Link href="/editorial-policy">editorial policy</Link>.
           </p>
+
+          <h2>Corrections log</h2>
+          <p>
+            A correction is a fix to something this site published that was wrong. It is not a change of view. The rule
+            is the <Link href="/corrections">corrections policy</Link>. Report one to{" "}
+            <a href={`mailto:${SITE.contactEmail}?subject=${encodeURIComponent("Correction")}`}>{SITE.contactEmail}</a>.
+          </p>
+          <div className="not-prose my-4 overflow-x-auto rounded-lg border border-ink-700">
+            <table className="table-dark">
+              <caption className="sr-only">Corrections log</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Page</th>
+                  <th scope="col">What changed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>None recorded</td>
+                  <td>—</td>
+                  <td>No correction has been entered on this log. EIA&apos;s own revision of a print is not listed here. That revision shows on the next successful read, with EIA&apos;s date.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <h2>What we are not</h2>
           <p>

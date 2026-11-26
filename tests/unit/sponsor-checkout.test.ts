@@ -43,7 +43,9 @@ describe("sponsor slot checkout", () => {
       expect(checkout.external).toBe(true);
       expect(`${url.origin}${url.pathname}`).toBe(PAYMENT_LINK);
       expect(url.searchParams.get("client_reference_id")).toBe(slot.id);
-      expect(slotCheckoutNote(slot)).toBe(`At checkout, enter the slot name (${slot.name}) and amount shown.`);
+      expect(slotCheckoutNote(slot)).toBe(
+        `${slot.name} at ${slot.price}. The slot is attached to this payment, so you do not type the slot name at checkout.`,
+      );
     }
     // A slot that is not open falls back to the enquiry email, never the payment link.
     for (const slot of SPONSOR_SLOTS.filter((item) => !item.available)) {

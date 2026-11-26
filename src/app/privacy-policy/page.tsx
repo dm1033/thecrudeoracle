@@ -38,6 +38,12 @@ export default function PrivacyPolicyPage() {
               sponsor names, links and artwork.
             </li>
             <li>
+              <strong>Sponsorship enquiries:</strong> the name, email, organisation, slot, period and message you
+              send from the advertise or media-kit form. When a form service is configured, that service receives
+              the same fields and delivers them to the desk. When it is not, the form opens an email to{" "}
+              {SITE.contactEmail}. The email link stays on the page either way.
+            </li>
+            <li>
               <strong>Account data:</strong> if you sign in on the Account page, your email address.
             </li>
             <li>
@@ -64,8 +70,9 @@ export default function PrivacyPolicyPage() {
           <h2>4. Sharing</h2>
           <p>
             We share data only with service providers needed to run the Site: beehiiv (newsletter), Stripe
-            (sponsorship payments), Vercel (hosting and analytics) and our email provider, each acting under
-            their own compliance frameworks. We do not sell personal data.
+            (sponsorship payments), Vercel (hosting and analytics), our email provider, and Web3Forms when a
+            sponsorship-enquiry key is configured. Each acts under its own compliance framework. We do not sell
+            personal data.
           </p>
 
           <h2>5. Retention</h2>
