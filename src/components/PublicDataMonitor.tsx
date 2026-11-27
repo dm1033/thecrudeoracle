@@ -84,7 +84,7 @@ function Card({
         </>
       ) : (
         <div className="mt-4 flex-1 rounded border border-ink-700 bg-ink-900 p-3 text-sm leading-relaxed text-steel-300">
-          <p className="font-semibold text-white">Data unavailable</p>
+          <p className="font-semibold text-white">Data temporarily unavailable</p>
           <p className="mt-1 text-steel-400">No figure is shown. {visitorModuleReason(module.reason)}</p>
         </div>
       )}

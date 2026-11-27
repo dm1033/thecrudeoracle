@@ -1,4 +1,6 @@
 import {
+  DEFAULT_MAX_RETRIES,
+  DEFAULT_TIMEOUT_MS,
   EIA_SERIES,
   getDailySpotSeries,
   readEiaApiKey,
@@ -207,13 +209,15 @@ async function optional<T>(what: string, run: () => Promise<T>): Promise<T | und
   }
 }
 
+const RENDER = { timeoutMs: DEFAULT_TIMEOUT_MS, maxRetries: DEFAULT_MAX_RETRIES, cache: "no-store" as const };
+
 async function livePrices(fetchedUtc: string): Promise<MonitorModule | null> {
   const [brent, wti, hub, gasoline, diesel] = await Promise.all([
-    getDailySpotSeries(EIA_SERIES.BRENT_SPOT, { length: 260 }),
-    getDailySpotSeries(EIA_SERIES.WTI_SPOT, { length: 260 }),
-    optional("Henry Hub", () => getDailySpotSeries(EIA_SERIES.HENRY_HUB_SPOT, { length: 260 })),
-    optional("NY Harbor gasoline", () => getDailySpotSeries(NYH_GASOLINE, { length: 10 })),
-    optional("NY Harbor diesel", () => getDailySpotSeries(NYH_DIESEL, { length: 10 })),
+    getDailySpotSeries(EIA_SERIES.BRENT_SPOT, { length: 260, ...RENDER }),
+    getDailySpotSeries(EIA_SERIES.WTI_SPOT, { length: 260, ...RENDER }),
+    optional("Henry Hub", () => getDailySpotSeries(EIA_SERIES.HENRY_HUB_SPOT, { length: 260, ...RENDER })),
+    optional("NY Harbor gasoline", () => getDailySpotSeries(NYH_GASOLINE, { length: 10, ...RENDER })),
+    optional("NY Harbor diesel", () => getDailySpotSeries(NYH_DIESEL, { length: 10, ...RENDER })),
   ]);
   const built = pricesFromObservations({
     brent: brent.observations,

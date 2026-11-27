@@ -174,7 +174,7 @@ export async function loadMovingTankerFeed(): Promise<MovingTankerFeed> {
         "User-Agent": "TheCrudeOracle/1.0 (+https://www.thecrudeoracle.com; vessel watch)",
       },
       next: { revalidate: 1800 },
-      signal: AbortSignal.timeout(12_000),
+      signal: AbortSignal.timeout(4_000),
     });
     if (!response.ok) return unavailableMovingTankerFeed(retrievedAt);
     return buildMovingTankerFeed(await response.json(), retrievedAt);

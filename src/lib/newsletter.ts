@@ -65,6 +65,7 @@ export async function subscribeEmail(email: string, env: Record<string, string |
           utm_source: "thecrudeoracle",
         }),
         cache: "no-store",
+        signal: AbortSignal.timeout(4_000),
       });
       if (res.ok || res.status === 409) return { ok: true, status: "subscribed" };
       return { ok: false, status: "rejected" };
@@ -78,6 +79,7 @@ export async function subscribeEmail(email: string, env: Record<string, string |
       },
       body: JSON.stringify({ email_address: email, tags: ["daily-bottom-line"] }),
       cache: "no-store",
+      signal: AbortSignal.timeout(4_000),
     });
     if (res.ok || res.status === 409) return { ok: true, status: "subscribed" };
     return { ok: false, status: "rejected" };

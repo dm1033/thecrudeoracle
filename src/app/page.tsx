@@ -11,7 +11,7 @@ import { getDashboardCards, pickCards } from "@/lib/dashboard-cards";
 import { loadDailyNote } from "@/lib/daily-feed";
 import { formatLongDate } from "@/lib/daily-note";
 import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
-import { getHistoricalSpotSeries } from "@/lib/historical-series";
+import { getHistoricalSpotSeries } from "@/lib/historical-feed";
 import { pageMeta } from "@/lib/seo";
 import { upcomingReleases } from "@/lib/release-calendar";
 

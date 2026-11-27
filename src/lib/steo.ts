@@ -1,4 +1,5 @@
-import { EIA_API_BASE, fetchWithRetry, readEiaApiKey, redactApiKey } from "@/lib/eia";
+import { cachedFeed } from "@/lib/cached-feed";
+import { DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT_MS, EIA_API_BASE, fetchWithRetry, readEiaApiKey, redactApiKey } from "@/lib/eia";
 
 /**
  * World oil balance from the EIA Short-Term Energy Outlook (STEO), read
@@ -180,18 +181,47 @@ export function buildSteoUrl(apiKey: string, start: string, end: string): string
   return url.toString();
 }
 
+const RENDER = { timeoutMs: DEFAULT_TIMEOUT_MS, maxRetries: DEFAULT_MAX_RETRIES, cache: "no-store" as const };
+
+async function loadSteo(now: Date): Promise<SteoFeed> {
+  const apiKey = readEiaApiKey();
+  if (!apiKey) throw new Error("EIA API key is not set");
+  const current = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
+  const json = await fetchWithRetry(buildSteoUrl(apiKey, shiftMonth(current, -15), shiftMonth(current, 6)), RENDER);
+  const feed = buildSteoFeed(parseSteoResponse(json), current, now.toISOString());
+  if (!feed) throw new Error("STEO feed was empty");
+  return feed;
+}
+
+const steoCache = cachedFeed({
+  key: "eia-steo-v1",
+  tags: ["eia-spot"],
+  load: async () => {
+    try {
+      return await loadSteo(new Date());
+    } catch (error) {
+      console.warn(`[steo] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
+      throw error;
+    }
+  },
+});
+
+function sameUtcDay(now: Date): boolean {
+  return now.toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10);
+}
+
 /** The STEO world balance, or null when the site has no EIA key or the read fails. Never throws. */
 export async function getSteoFeed(now = new Date()): Promise<SteoFeed | null> {
-  const apiKey = readEiaApiKey();
-  if (!apiKey) return null;
-  const current = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
-  try {
-    const json = await fetchWithRetry(buildSteoUrl(apiKey, shiftMonth(current, -15), shiftMonth(current, 6)));
-    return buildSteoFeed(parseSteoResponse(json), current, now.toISOString());
-  } catch (error) {
-    console.warn(`[steo] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
-    return null;
+  if (!readEiaApiKey()) return null;
+  if (!sameUtcDay(now)) {
+    try {
+      return await loadSteo(now);
+    } catch (error) {
+      console.warn(`[steo] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
+      return null;
+    }
   }
+  return steoCache.get();
 }
 
 export function formatSteoMonth(period: string): string {
