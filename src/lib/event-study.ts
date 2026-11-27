@@ -1,4 +1,7 @@
+import { cachedFeed } from "@/lib/cached-feed";
 import {
+  DEFAULT_MAX_RETRIES,
+  DEFAULT_TIMEOUT_MS,
   EIA_SERIES,
   buildEiaDataUrl,
   fetchWithRetry,
@@ -195,23 +198,47 @@ export function buildEventStudy(stocks: Point[], wti: Point[], brent: Point[], f
   };
 }
 
+const RENDER = { timeoutMs: DEFAULT_TIMEOUT_MS, maxRetries: DEFAULT_MAX_RETRIES, cache: "no-store" as const };
+
 async function history(seriesDef: EiaSeriesDef, length: number): Promise<Point[]> {
-  const json = await fetchWithRetry(buildEiaDataUrl(seriesDef, { length }));
+  const json = await fetchWithRetry(buildEiaDataUrl(seriesDef, { length }), RENDER);
   return parseEiaResponse(json, seriesDef).map((observation) => ({ date: observation.date, value: observation.value }));
 }
+
+async function loadEventStudy(now: Date): Promise<EventStudy> {
+  const [stocks, wti, brent] = await Promise.all([
+    history(EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS, 262),
+    history(EIA_SERIES.WTI_SPOT, 1320),
+    history(EIA_SERIES.BRENT_SPOT, 1320),
+  ]);
+  const study = buildEventStudy(stocks, wti, brent, now.toISOString());
+  if (!study) throw new Error("event study was empty");
+  return study;
+}
+
+const studyCache = cachedFeed({
+  key: "eia-event-study-v1",
+  tags: ["eia-weekly", "eia-spot"],
+  load: async () => {
+    try {
+      return await loadEventStudy(new Date());
+    } catch (error) {
+      console.warn(`[event-study] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
+      throw error;
+    }
+  },
+});
 
 /** About five years of history. Null when the site has no EIA key or a read fails. Never throws. */
 export async function getEventStudy(now = new Date()): Promise<EventStudy | null> {
   if (!readEiaApiKey()) return null;
-  try {
-    const [stocks, wti, brent] = await Promise.all([
-      history(EIA_SERIES.US_COMMERCIAL_CRUDE_STOCKS, 262),
-      history(EIA_SERIES.WTI_SPOT, 1320),
-      history(EIA_SERIES.BRENT_SPOT, 1320),
-    ]);
-    return buildEventStudy(stocks, wti, brent, now.toISOString());
-  } catch (error) {
-    console.warn(`[event-study] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
-    return null;
+  if (now.toISOString().slice(0, 10) !== new Date().toISOString().slice(0, 10)) {
+    try {
+      return await loadEventStudy(now);
+    } catch (error) {
+      console.warn(`[event-study] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
+      return null;
+    }
   }
+  return studyCache.get();
 }

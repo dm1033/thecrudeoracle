@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
 import {
+  DEFAULT_MAX_RETRIES,
+  DEFAULT_TIMEOUT_MS,
   EIA_DATA_REVALIDATE_SECONDS,
   EIA_SERIES,
   getWeeklyStockSeries,
@@ -77,6 +79,7 @@ interface MemoryEntry {
 
 let memory: MemoryEntry | null = null;
 let pending: Promise<WeeklySnapshot> | null = null;
+let refreshFailed = false;
 
 function round3(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -123,8 +126,8 @@ async function loadReport(): Promise<WeeklySnapshot> {
     WEEKLY_SERIES.map((series) =>
       getWeeklyStockSeries(series.def, {
         ...window,
-        timeoutMs: 15_000,
-        maxRetries: 1,
+        timeoutMs: DEFAULT_TIMEOUT_MS,
+        maxRetries: DEFAULT_MAX_RETRIES,
         cache: "no-store",
       }),
     ),
@@ -203,26 +206,33 @@ function servable(report: WeeklySnapshot): boolean {
   return report.lines.length > 0 && Boolean(report.weekEnding) && Array.isArray(report.series);
 }
 
+function refreshInBackground(): void {
+  void refresh()
+    .then(() => {
+      refreshFailed = false;
+    })
+    .catch(() => {
+      refreshFailed = true;
+    });
+}
+
 /**
  * Wednesday petroleum stocks from the EIA API.
- * A warm snapshot is reused for two hours. A failed refresh keeps the last
- * good snapshot, including one past the usual freshness window, and the page
- * shows that week-ending date. No desk marks.
+ * A warm snapshot is returned without waiting, including after it is due for
+ * a refresh. A failed refresh keeps the last good snapshot and the page shows
+ * that week-ending date. No desk marks.
  */
 export async function getEiaWeekly(): Promise<WeeklyFeed | null> {
   if (!readEiaApiKey()) return null;
   if (memory && servable(memory.value)) {
-    if (Date.now() - memory.at < MEMORY_TTL_MS) return { report: memory.value, fallback: false };
-    try {
-      return { report: await refresh(), fallback: false };
-    } catch {
-      if (memory && servable(memory.value)) return { report: memory.value, fallback: true };
-      return null;
-    }
+    if (Date.now() - memory.at >= MEMORY_TTL_MS) refreshInBackground();
+    return { report: memory.value, fallback: refreshFailed };
   }
   try {
+    refreshFailed = false;
     return { report: await refresh(), fallback: false };
   } catch {
+    refreshFailed = true;
     if (memory && servable(memory.value)) return { report: memory.value, fallback: true };
     return null;
   }
@@ -232,4 +242,10 @@ export async function getEiaWeekly(): Promise<WeeklyFeed | null> {
 export function resetEiaWeeklyCache(): void {
   memory = null;
   pending = null;
+  refreshFailed = false;
+}
+
+/** Test helper: the next read should treat the in-process snapshot as stale. */
+export function expireEiaWeeklyCache(): void {
+  if (memory) memory.at = 0;
 }

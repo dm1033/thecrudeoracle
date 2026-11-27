@@ -16,14 +16,14 @@ import {
 
 const ATTACHMENTS = readAttachments(attachmentsJson);
 
-async function tankermapJson(path: string): Promise<unknown> {
+async function tankermapJson(path: string, signal: AbortSignal): Promise<unknown> {
   const response = await fetch(`${TANKERMAP_ORIGIN}${path}`, {
     headers: {
       Accept: "application/json",
       "User-Agent": "TheCrudeOracle/1.0 (+https://www.thecrudeoracle.com; vessel watch)",
     },
     next: { revalidate: 1800 },
-    signal: AbortSignal.timeout(12_000),
+    signal,
   });
   if (!response.ok) {
     throw new Error(`TankerMap ${response.status} for ${path}`);
@@ -51,17 +51,18 @@ export async function loadWatchedVessel(rawQuery: string | undefined): Promise<V
   const { imo, notice } = resolveVesselQuery(rawQuery);
 
   const view = baseView(imo, notice, retrievedAt);
+  const signal = AbortSignal.timeout(4_000);
 
   try {
-    const search = await tankermapJson(`/api/search?q=${encodeURIComponent(imo)}`);
+    const search = await tankermapJson(`/api/search?q=${encodeURIComponent(imo)}`, signal);
     const hit = parseSearchHit(search, Number(imo));
     if (!hit) {
       return { ...view, status: "missing" };
     }
 
     const [vesselPayload, trackPayload] = await Promise.all([
-      tankermapJson(`/api/vessels/${hit.id}`),
-      tankermapJson(`/api/vessels/${hit.id}/track`),
+      tankermapJson(`/api/vessels/${hit.id}`, signal),
+      tankermapJson(`/api/vessels/${hit.id}/track`, signal),
     ]);
     const vessel = parseVessel(vesselPayload);
     if (!vessel || vessel.imo !== Number(imo)) {

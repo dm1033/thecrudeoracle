@@ -91,6 +91,7 @@ export async function deliverSponsorEnquiry(
     const response = await fetchImpl("https://api.web3forms.com/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
+      signal: AbortSignal.timeout(4_000),
       body: JSON.stringify({
         access_key: accessKey,
         subject: `Sponsorship enquiry: ${slotName}`,

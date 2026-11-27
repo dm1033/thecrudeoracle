@@ -15,7 +15,7 @@ import { BrentWtiChart, HenryHubChart } from "@/components/charts/Charts";
 import SeasonalChart from "@/components/viz/SeasonalChart";
 import SpotSpreadTerminal from "@/components/viz/SpotSpreadTerminal";
 import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
-import { getHistoricalSpotSeries } from "@/lib/historical-series";
+import { getHistoricalSpotSeries } from "@/lib/historical-feed";
 
 export const revalidate = 7200;
 

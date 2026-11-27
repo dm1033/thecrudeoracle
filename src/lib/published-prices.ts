@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
 import {
+  DEFAULT_MAX_RETRIES,
+  DEFAULT_TIMEOUT_MS,
   EIA_DATA_REVALIDATE_SECONDS,
   EIA_SERIES,
   EiaFetchError,
@@ -241,7 +243,7 @@ async function probeSpots(): Promise<SpotProbe> {
   // Separate cached URLs were serving Brent from one release and WTI or Henry
   // Hub from another, including across pages.
   const window = recentEiaWindow("daily");
-  const opts = { ...window, timeoutMs: 12_000, maxRetries: 1, cache: "no-store" as const };
+  const opts = { ...window, timeoutMs: DEFAULT_TIMEOUT_MS, maxRetries: DEFAULT_MAX_RETRIES, cache: "no-store" as const };
   const [brentSettled, wtiSettled, hubSettled] = await Promise.allSettled([
     getBrentSpot(opts),
     getWtiSpot(opts),

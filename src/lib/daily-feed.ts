@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
 import {
+  DEFAULT_MAX_RETRIES,
+  DEFAULT_TIMEOUT_MS,
   EIA_DATA_REVALIDATE_SECONDS,
   getBrentSpot,
   getHenryHubSpot,
@@ -47,6 +49,7 @@ interface MemoryEntry {
 
 let memory: MemoryEntry | null = null;
 let pending: Promise<SpotHistory> | null = null;
+let refreshFailed = false;
 
 function toPoints(rows: readonly EiaObservation[]): PricePoint[] {
   return rows.map((row) => ({ date: row.date.slice(0, 10), value: row.value }));
@@ -71,7 +74,7 @@ async function loadHistory(): Promise<SpotHistory> {
   if (!readEiaApiKey()) {
     throw new Error("EIA API key is not set");
   }
-  const opts = { ...recentEiaWindow("daily"), timeoutMs: 12_000, maxRetries: 1, cache: "no-store" as const };
+  const opts = { ...recentEiaWindow("daily"), timeoutMs: DEFAULT_TIMEOUT_MS, maxRetries: DEFAULT_MAX_RETRIES, cache: "no-store" as const };
   const [brentSettled, wtiSettled, hubSettled] = await Promise.allSettled([
     getBrentSpot(opts),
     getWtiSpot(opts),
@@ -125,25 +128,33 @@ async function refresh(): Promise<SpotHistory> {
   return pending;
 }
 
+function refreshInBackground(): void {
+  void refresh()
+    .then(() => {
+      refreshFailed = false;
+    })
+    .catch(() => {
+      refreshFailed = true;
+    });
+}
+
 /**
  * Brent, WTI and Henry Hub history from the EIA API.
- * A warm snapshot is reused for two hours. A failed refresh keeps the last
- * good snapshot when that print is still inside the age window. No desk marks.
+ * A warm snapshot is returned without waiting, including after it is due for
+ * a refresh. A failed refresh keeps the last good snapshot when that print is
+ * still inside the age window. No desk marks.
  */
 export async function getDailyFeed(): Promise<DailyFeed | null> {
   if (!readEiaApiKey()) return null;
   if (memory && servable(memory.value)) {
-    if (Date.now() - memory.at < MEMORY_TTL_MS) return { history: memory.value, fallback: false };
-    try {
-      return { history: await refresh(), fallback: false };
-    } catch {
-      if (memory && servable(memory.value)) return { history: memory.value, fallback: true };
-      return null;
-    }
+    if (Date.now() - memory.at >= MEMORY_TTL_MS) refreshInBackground();
+    return { history: memory.value, fallback: refreshFailed };
   }
   try {
+    refreshFailed = false;
     return { history: await refresh(), fallback: false };
   } catch {
+    refreshFailed = true;
     if (memory && servable(memory.value)) return { history: memory.value, fallback: true };
     return null;
   }
@@ -186,4 +197,10 @@ export async function listDailyNoteDates(): Promise<string[]> {
 export function resetDailyFeedCache(): void {
   memory = null;
   pending = null;
+  refreshFailed = false;
+}
+
+/** Test helper: the next read should treat the in-process snapshot as stale. */
+export function expireDailyFeedCache(): void {
+  if (memory) memory.at = 0;
 }

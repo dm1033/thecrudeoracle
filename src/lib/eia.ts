@@ -31,6 +31,8 @@
  * ----------------------------------------------------------------------------
  */
 
+import https from "node:https";
+
 // ============================================================================
 // Errors
 // ============================================================================
@@ -71,11 +73,15 @@ export const EIA_API_BASE = "https://api.eia.gov/v2";
  */
 export const EIA_DATA_REVALIDATE_SECONDS = 2 * 60 * 60;
 
-/** Default per-attempt network timeout. */
-export const DEFAULT_TIMEOUT_MS = 15_000;
+/**
+ * One attempt, a few seconds. A page render must not sit on a silent EIA
+ * connection, and it must not multiply that wait with retries. Callers that
+ * are not on the render path can still pass a longer timeoutMs or maxRetries.
+ */
+export const DEFAULT_TIMEOUT_MS = 4_000;
 
-/** Hard cap on retry attempts (in addition to the initial attempt). */
-export const DEFAULT_MAX_RETRIES = 3;
+/** Render path does not retry. Pass maxRetries to opt back in. */
+export const DEFAULT_MAX_RETRIES = 0;
 
 /** Base delay for exponential backoff between retries (doubles each attempt, plus jitter). */
 export const DEFAULT_RETRY_BASE_DELAY_MS = 1_000;
@@ -383,21 +389,74 @@ class ClassifiedFetchError extends EiaFetchError {
   }
 }
 
+/**
+ * Node's https client, not the fetch Next.js patches.
+ * `cache: "no-store"` on that patched fetch sets the route revalidate to 0,
+ * which forces every page that touches it to render dynamically. The shared
+ * snapshot still skips Next's per-URL cache, and tests keep using global fetch.
+ */
+function directGet(url: string, timeoutMs: number, signal: AbortSignal): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    if (signal.aborted) {
+      const aborted = new Error("aborted");
+      aborted.name = "AbortError";
+      reject(aborted);
+      return;
+    }
+    let settled = false;
+    const finish = (err: Error | null, response?: Response) => {
+      if (settled) return;
+      settled = true;
+      if (err) reject(err);
+      else resolve(response as Response);
+    };
+    const req = https.get(url, { headers: { Accept: "application/json" } }, (res) => {
+      const chunks: Buffer[] = [];
+      res.on("data", (chunk: Buffer) => chunks.push(chunk));
+      res.on("error", (err) => finish(err));
+      res.on("end", () => {
+        finish(
+          null,
+          new Response(Buffer.concat(chunks), {
+            status: res.statusCode ?? 0,
+            statusText: res.statusMessage ?? "",
+          })
+        );
+      });
+    });
+    const abort = () => {
+      const err = new Error("aborted");
+      err.name = "AbortError";
+      req.destroy();
+      finish(err);
+    };
+    signal.addEventListener("abort", abort, { once: true });
+    req.setTimeout(timeoutMs, abort);
+    req.on("error", (err) => finish(err));
+  });
+}
+
+function bypassNextFetch(cache: "no-store" | undefined, url: string): boolean {
+  return cache === "no-store" && process.env.VITEST !== "true" && url.startsWith("https:");
+}
+
 /** Makes exactly one HTTP attempt. Never retries — that's fetchWithRetry's job. */
 async function attemptFetchOnce(url: string, timeoutMs: number, cache?: "no-store"): Promise<unknown> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { Accept: "application/json" },
-      // The shared snapshot uses `no-store` and caches the combined read.
-      // Other callers keep a two-hour per-URL cache so a page render does not
-      // wait on EIA when that URL was just read.
-      ...(cache === "no-store"
-        ? { cache: "no-store" as const }
-        : { next: { revalidate: EIA_DATA_REVALIDATE_SECONDS, tags: ["eia-spot"] } }),
-    });
+    const res = bypassNextFetch(cache, url)
+      ? await directGet(url, timeoutMs, controller.signal)
+      : await fetch(url, {
+          signal: controller.signal,
+          headers: { Accept: "application/json" },
+          // The shared snapshot uses `no-store` and caches the combined read.
+          // Other callers keep a two-hour per-URL cache so a page render does not
+          // wait on EIA when that URL was just read. Vitest stubs global fetch.
+          ...(cache === "no-store"
+            ? { cache: "no-store" as const }
+            : { next: { revalidate: EIA_DATA_REVALIDATE_SECONDS, tags: ["eia-spot"] } }),
+        });
 
     if (res.ok) {
       try {

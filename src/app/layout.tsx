@@ -48,8 +48,11 @@ const jetbrains = localFont({
   variable: "--font-jetbrains",
 });
 
-/** The tape is one EIA snapshot. A static page must not keep an older copy of it. */
-export const dynamic = "force-dynamic";
+/**
+ * One shared tape, regenerated with the page. A request serves the cached
+ * page and does not wait on EIA, FRED, CFTC or AIS.
+ */
+export const revalidate = 7200;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -126,6 +129,13 @@ function signed(value: number, digits = 2): string {
   return value > 0 ? `+${text}` : text;
 }
 
+const UNAVAILABLE = "unavailable";
+
+function reading(value: string | null): Pick<TapeCell, "value" | "title"> {
+  if (value == null) return { value: UNAVAILABLE, title: "Data temporarily unavailable" };
+  return { value, title: null };
+}
+
 async function tape(): Promise<TapeCell[]> {
   const [feed, snapshot, weekly] = await Promise.all([
     getPublishedPrices(),
@@ -145,19 +155,27 @@ async function tape(): Promise<TapeCell[]> {
   const crude = weekly?.report.lines.find((line) => line.seriesId === "WCESTUS1") ?? null;
   const fileStocks = snapshot.eia.rows[0] ?? null;
   const cot = snapshot.cftc.rows[0] ?? null;
+  const brentRead = reading(brent ? money(brent.price) : null);
+  const wtiRead = reading(wti ? money(wti.price) : null);
+  const spreadRead = reading(sameDay && brent && wti ? money(Math.round((brent.price - wti.price) * 100) / 100) : null);
+  const henryRead = reading(henry ? money(henry.price) : null);
+  const stocksRead = reading(
+    crude ? `${crude.millionBarrels.toFixed(1)} mb` : fileStocks ? `${fileStocks.millionBarrels.toFixed(1)} mb` : null
+  );
+  const cotRead = reading(cot ? cot.net.toLocaleString("en-GB") : null);
   const cells: TapeCell[] = [
-    { label: "BRN", value: brent ? money(brent.price) : "—", delta: brent ? signed(brent.daily_change) : null, asOf: brent ? formatPriceDate(brent.last_updated) : null },
-    { label: "WTI", value: wti ? money(wti.price) : "—", delta: wti ? signed(wti.daily_change) : null, asOf: wti ? formatPriceDate(wti.last_updated) : null },
+    { label: "BRN", ...brentRead, delta: brent ? signed(brent.daily_change) : null, asOf: brent ? formatPriceDate(brent.last_updated) : null },
+    { label: "WTI", ...wtiRead, delta: wti ? signed(wti.daily_change) : null, asOf: wti ? formatPriceDate(wti.last_updated) : null },
     {
       label: "BRN-WTI",
-      value: sameDay && brent && wti ? money(Math.round((brent.price - wti.price) * 100) / 100) : "—",
+      ...spreadRead,
       delta: null,
       asOf: sameDay && brent ? formatPriceDate(brent.last_updated) : null,
     },
-    { label: "HH", value: henry ? money(henry.price) : "—", delta: henry ? signed(henry.daily_change) : null, asOf: henry ? formatPriceDate(henry.last_updated) : null },
+    { label: "HH", ...henryRead, delta: henry ? signed(henry.daily_change) : null, asOf: henry ? formatPriceDate(henry.last_updated) : null },
     {
       label: "US CRUDE STKS",
-      value: crude ? `${crude.millionBarrels.toFixed(1)} mb` : fileStocks ? `${fileStocks.millionBarrels.toFixed(1)} mb` : "—",
+      ...stocksRead,
       delta: crude
         ? crude.changeMillionBarrels == null
           ? null
@@ -169,7 +187,7 @@ async function tape(): Promise<TapeCell[]> {
     },
     {
       label: "WTI MM NET",
-      value: cot ? cot.net.toLocaleString("en-GB") : "—",
+      ...cotRead,
       delta: cot?.netChange == null ? null : signed(cot.netChange, 0),
     },
   ];
@@ -178,6 +196,7 @@ async function tape(): Promise<TapeCell[]> {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cells = await tape();
+  const tapeDown = cells.every((cell) => cell.value === UNAVAILABLE);
   return (
     <html lang="en-GB" className={`${newsreader.variable} ${jakarta.variable} ${jetbrains.variable}`}>
       <body className="flex min-h-screen flex-col">
@@ -187,7 +206,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           Skip to main content
         </a>
-        <TerminalChrome tape={cells}>
+        <TerminalChrome tape={cells} notice={tapeDown ? "Data temporarily unavailable" : null}>
           <main id="main-content" className="flex-1">
             {children}
           </main>

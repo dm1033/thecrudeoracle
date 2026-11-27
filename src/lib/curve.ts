@@ -1,4 +1,5 @@
-import { EIA_API_BASE, fetchWithRetry, readEiaApiKey, redactApiKey } from "@/lib/eia";
+import { cachedFeed } from "@/lib/cached-feed";
+import { DEFAULT_MAX_RETRIES, DEFAULT_TIMEOUT_MS, EIA_API_BASE, fetchWithRetry, readEiaApiKey, redactApiKey } from "@/lib/eia";
 
 /**
  * Curve and spread data for /tools/curve-monitor, read from the EIA Open Data
@@ -303,22 +304,49 @@ export function buildPriceUrl(apiKey: string, route: string, seriesIds: readonly
   return url.toString();
 }
 
+const RENDER = { timeoutMs: DEFAULT_TIMEOUT_MS, maxRetries: DEFAULT_MAX_RETRIES, cache: "no-store" as const };
+
 async function read(what: string, url: string, wanted: readonly { id: string; unit: Unit }[]): Promise<CurveSeries[]> {
   try {
-    return parsePriceResponse(await fetchWithRetry(url), wanted);
+    return parsePriceResponse(await fetchWithRetry(url, RENDER), wanted);
   } catch (error) {
     console.warn(`[curve] ${what} not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
     return [];
   }
 }
 
-/** The curve feed, or null when the site has no EIA key or nothing loads. Never throws. */
-export async function getCurveFeed(now = new Date()): Promise<CurveFeed | null> {
+async function loadCurve(now: Date): Promise<CurveFeed> {
   const apiKey = readEiaApiKey();
-  if (!apiKey) return null;
+  if (!apiKey) throw new Error("EIA API key is not set");
   const [spots, futures] = await Promise.all([
     read("spot prices", buildPriceUrl(apiKey, "petroleum/pri/spt", SPOT_SERIES.map((s) => s.id), 400), SPOT_SERIES),
     read("futures", buildPriceUrl(apiKey, "petroleum/pri/fut", FUTURES_SERIES.map((s) => s.id), 40), FUTURES_SERIES),
   ]);
-  return buildCurveFeed(spots, futures, now.toISOString().slice(0, 10), now.toISOString());
+  const feed = buildCurveFeed(spots, futures, now.toISOString().slice(0, 10), now.toISOString());
+  if (!feed) throw new Error("curve feed was empty");
+  return feed;
+}
+
+const curveCache = cachedFeed({
+  key: "eia-curve-v1",
+  tags: ["eia-spot"],
+  load: () => loadCurve(new Date()),
+});
+
+function sameUtcDay(now: Date): boolean {
+  return now.toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10);
+}
+
+/** The curve feed, or null when the site has no EIA key or nothing loads. Never throws. */
+export async function getCurveFeed(now = new Date()): Promise<CurveFeed | null> {
+  if (!readEiaApiKey()) return null;
+  if (!sameUtcDay(now)) {
+    try {
+      return await loadCurve(now);
+    } catch (error) {
+      console.warn(`[curve] not loaded: ${redactApiKey(error instanceof Error ? error.message : String(error))}`);
+      return null;
+    }
+  }
+  return curveCache.get();
 }

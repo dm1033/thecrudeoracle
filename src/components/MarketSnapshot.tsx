@@ -34,7 +34,7 @@ function tone(value: number): string {
 function NotLoaded({ what, detail }: { what: string; detail: string }) {
   return (
     <div className="mt-4 rounded-lg border border-ink-700 bg-ink-900 p-4 text-sm leading-relaxed text-steel-300">
-      <p className="font-semibold text-white">Data unavailable</p>
+      <p className="font-semibold text-white">Data temporarily unavailable</p>
       <p className="mt-1 text-steel-400">
         {what}. {detail} No figure is shown.
       </p>

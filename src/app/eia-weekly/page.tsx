@@ -160,7 +160,7 @@ export default async function EiaWeeklyPage() {
           <section className="max-w-3xl" aria-label="Latest EIA print">
             <p className="text-lg font-semibold text-white">Latest EIA print</p>
             <p className="mt-2 text-sm leading-relaxed text-steel-300">
-              The latest weekly petroleum stocks are not available. No figure is shown until a print loads.
+              Data temporarily unavailable. No figure is shown until a print loads.
             </p>
           </section>
         )}

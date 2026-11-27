@@ -14,6 +14,8 @@ export interface TapeCell {
   delta: string | null;
   /** Trade date or week-ending date, when the figure has one. */
   asOf?: string | null;
+  /** Set when the figure could not be read. */
+  title?: string | null;
 }
 
 const NAV = [
@@ -59,7 +61,7 @@ function sessionOpen(zone: string, now: Date): boolean {
   return hour >= 8 && hour < 17;
 }
 
-export default function TerminalChrome({ tape, children }: { tape: TapeCell[]; children: ReactNode }) {
+export default function TerminalChrome({ tape, notice, children }: { tape: TapeCell[]; notice?: string | null; children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
@@ -108,13 +110,15 @@ export default function TerminalChrome({ tape, children }: { tape: TapeCell[]; c
           {tape.map((cell) => (
             <div key={cell.label} className="flex min-w-[8.5rem] items-center gap-2 border-r border-border-hairline px-3">
               <span className="font-mono text-[10px] tracking-[0.08em] text-ink-muted">{cell.label}</span>
-              <span className="num text-xs text-ink-primary">{cell.value}</span>
+              <span className="num text-xs text-ink-primary" title={cell.title ?? undefined}>{cell.value}</span>
               {cell.delta && <span className="num text-[10px] text-ink-secondary">{cell.delta}</span>}
               {cell.asOf && <span className="num text-[10px] text-ink-muted">{cell.asOf}</span>}
             </div>
           ))}
           <div className="ml-auto flex items-center gap-3 px-3">
-            <span className="font-mono text-[10px] tracking-[0.08em] text-brass">DELAYED EIA SPOT</span>
+            <span className={`font-mono text-[10px] tracking-[0.08em] ${notice ? "text-ink-muted" : "text-brass"}`}>
+              {notice ?? "DELAYED EIA SPOT"}
+            </span>
             {now &&
               ZONES.map((item) => (
                 <span key={item.id} className="flex items-center gap-1 font-mono text-[10px] text-ink-secondary">
