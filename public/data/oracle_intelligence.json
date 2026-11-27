@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-25T23:46:05Z",
+  "generated_utc": "2026-11-27T03:54:12Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-25T23:46:05Z",
+      "fetched_utc": "2026-11-27T03:54:12Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-25T23:46:05Z",
+      "fetched_utc": "2026-11-27T03:54:12Z",
       "as_of": "2026-11-24",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,53 +68,17 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-24T17:43:55Z",
-      "as_of": "2026-11-24T07:00:00Z",
+      "fetched_utc": "2026-11-27T03:54:12Z",
+      "as_of": "2026-11-27T02:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
-        "share_last_24h_pct": 0.3026,
-        "share_7d_average_pct": 0.324,
-        "share_last_24h_vs_7d_average": 0.93,
-        "timeline_points": 47,
+        "share_last_24h_pct": 0.1068,
+        "share_7d_average_pct": 0.2274,
+        "share_last_24h_vs_7d_average": 0.47,
+        "timeline_points": 68,
         "timeline": [
-          {
-            "t": "2026-11-18T01:00:00Z",
-            "share_pct": 0.9372
-          },
-          {
-            "t": "2026-11-18T17:00:00Z",
-            "share_pct": 0.3161
-          },
-          {
-            "t": "2026-11-19T17:00:00Z",
-            "share_pct": 0.5282
-          },
-          {
-            "t": "2026-11-19T19:00:00Z",
-            "share_pct": 0.4392
-          },
-          {
-            "t": "2026-11-19T23:00:00Z",
-            "share_pct": 0.3303
-          },
-          {
-            "t": "2026-11-20T00:00:00Z",
-            "share_pct": 0.2536
-          },
-          {
-            "t": "2026-11-20T01:00:00Z",
-            "share_pct": 0.3074
-          },
-          {
-            "t": "2026-11-20T02:00:00Z",
-            "share_pct": 0.1258
-          },
-          {
-            "t": "2026-11-20T03:00:00Z",
-            "share_pct": 0.2506
-          },
           {
             "t": "2026-11-20T04:00:00Z",
             "share_pct": 0.5491
@@ -265,7 +229,127 @@
           },
           {
             "t": "2026-11-24T07:00:00Z",
-            "share_pct": 0.4323
+            "share_pct": 0.2432
+          },
+          {
+            "t": "2026-11-24T20:00:00Z",
+            "share_pct": 0.1842
+          },
+          {
+            "t": "2026-11-24T21:00:00Z",
+            "share_pct": 0.1181
+          },
+          {
+            "t": "2026-11-24T22:00:00Z",
+            "share_pct": 0.1921
+          },
+          {
+            "t": "2026-11-24T23:00:00Z",
+            "share_pct": 0.1687
+          },
+          {
+            "t": "2026-11-25T00:00:00Z",
+            "share_pct": 0.276
+          },
+          {
+            "t": "2026-11-25T01:00:00Z",
+            "share_pct": 0.1116
+          },
+          {
+            "t": "2026-11-25T02:00:00Z",
+            "share_pct": 0.2909
+          },
+          {
+            "t": "2026-11-25T03:00:00Z",
+            "share_pct": 0.3149
+          },
+          {
+            "t": "2026-11-25T04:00:00Z",
+            "share_pct": 0.1746
+          },
+          {
+            "t": "2026-11-25T05:00:00Z",
+            "share_pct": 0.1624
+          },
+          {
+            "t": "2026-11-25T06:00:00Z",
+            "share_pct": 0.0
+          },
+          {
+            "t": "2026-11-25T09:00:00Z",
+            "share_pct": 0.0
+          },
+          {
+            "t": "2026-11-25T10:00:00Z",
+            "share_pct": 0.1101
+          },
+          {
+            "t": "2026-11-25T14:00:00Z",
+            "share_pct": 0.0
+          },
+          {
+            "t": "2026-11-26T00:00:00Z",
+            "share_pct": 0.1157
+          },
+          {
+            "t": "2026-11-26T01:00:00Z",
+            "share_pct": 0.1522
+          },
+          {
+            "t": "2026-11-26T02:00:00Z",
+            "share_pct": 0.1524
+          },
+          {
+            "t": "2026-11-26T03:00:00Z",
+            "share_pct": 0.1965
+          },
+          {
+            "t": "2026-11-26T04:00:00Z",
+            "share_pct": 0.1022
+          },
+          {
+            "t": "2026-11-26T05:00:00Z",
+            "share_pct": 0.0312
+          },
+          {
+            "t": "2026-11-26T06:00:00Z",
+            "share_pct": 0.1131
+          },
+          {
+            "t": "2026-11-26T12:00:00Z",
+            "share_pct": 0.0788
+          },
+          {
+            "t": "2026-11-26T14:00:00Z",
+            "share_pct": 0.0
+          },
+          {
+            "t": "2026-11-26T19:00:00Z",
+            "share_pct": 0.0428
+          },
+          {
+            "t": "2026-11-26T20:00:00Z",
+            "share_pct": 0.2627
+          },
+          {
+            "t": "2026-11-26T22:00:00Z",
+            "share_pct": 0.2235
+          },
+          {
+            "t": "2026-11-26T23:00:00Z",
+            "share_pct": 0.0994
+          },
+          {
+            "t": "2026-11-27T00:00:00Z",
+            "share_pct": 0.0899
+          },
+          {
+            "t": "2026-11-27T01:00:00Z",
+            "share_pct": 0.0954
+          },
+          {
+            "t": "2026-11-27T02:00:00Z",
+            "share_pct": 0.0534
           }
         ],
         "search_terms": [
@@ -341,39 +425,35 @@
         "headlines_note": "Headlines are from the previous fetch. A newer article list was not available.",
         "terms": [
           {
-            "term": "Strait of Hormuz",
-            "as_of": "2026-11-23T03:00:00Z",
-            "share_last_24h_pct": 0.1911,
-            "share_7d_average_pct": 0.32,
-            "share_last_24h_vs_7d_average": 0.6,
-            "fetched_utc": "2026-11-23T18:12:20Z"
-          },
-          {
             "term": "Bab el-Mandeb",
-            "as_of": "2026-11-24T07:00:00Z",
-            "share_last_24h_pct": 0.0086,
-            "share_7d_average_pct": 0.0137,
-            "share_last_24h_vs_7d_average": 0.63,
-            "fetched_utc": "2026-11-24T17:47:29Z"
+            "as_of": "2026-11-27T02:00:00Z",
+            "share_last_24h_pct": 0.0083,
+            "share_7d_average_pct": 0.0061,
+            "share_last_24h_vs_7d_average": 1.36,
+            "fetched_utc": "2026-11-27T03:57:35Z"
           },
           {
             "term": "OPEC quota",
-            "as_of": "2026-11-22T22:00:00Z",
+            "as_of": "2026-11-27T02:00:00Z",
             "share_last_24h_pct": 0.0,
-            "share_7d_average_pct": 0.0006,
+            "share_7d_average_pct": 0.0008,
             "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-23T02:10:29Z"
+            "fetched_utc": "2026-11-27T03:57:35Z"
           },
           {
             "term": "Suez Canal",
-            "as_of": "2026-11-24T07:00:00Z",
+            "as_of": "2026-11-27T02:00:00Z",
             "share_last_24h_pct": 0.0,
-            "share_7d_average_pct": 0.005,
+            "share_7d_average_pct": 0.0019,
             "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-24T17:47:29Z"
+            "fetched_utc": "2026-11-27T03:57:35Z"
           }
         ],
         "terms_without_figures": [
+          {
+            "term": "Strait of Hormuz",
+            "reason": "api.gdeltproject.org answered HTTP 429"
+          },
           {
             "term": "Red Sea tanker",
             "reason": "GDELT returned too few timeline points"
