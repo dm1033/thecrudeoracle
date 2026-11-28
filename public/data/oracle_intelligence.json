@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-28T02:40:40Z",
+  "generated_utc": "2026-11-28T03:41:20Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-28T02:40:40Z",
+      "fetched_utc": "2026-11-28T03:41:20Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,7 +38,7 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-28T02:40:40Z",
+      "fetched_utc": "2026-11-28T03:41:20Z",
       "as_of": "2026-11-25",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
@@ -68,7 +68,7 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-28T02:40:40Z",
+      "fetched_utc": "2026-11-28T03:41:20Z",
       "as_of": "2026-11-28T02:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
@@ -442,14 +442,23 @@
             "seen_utc": "2026-11-27T05:30:00Z"
           }
         ],
+        "headlines_note": "Headlines are from the previous fetch. A newer article list was not available.",
         "terms": [
           {
+            "term": "Strait of Hormuz",
+            "as_of": "2026-11-28T02:00:00Z",
+            "share_last_24h_pct": 0.2695,
+            "share_7d_average_pct": 0.2137,
+            "share_last_24h_vs_7d_average": 1.26,
+            "fetched_utc": "2026-11-28T03:44:20Z"
+          },
+          {
             "term": "Bab el-Mandeb",
-            "as_of": "2026-11-27T02:00:00Z",
-            "share_last_24h_pct": 0.0083,
-            "share_7d_average_pct": 0.0061,
-            "share_last_24h_vs_7d_average": 1.36,
-            "fetched_utc": "2026-11-27T03:57:35Z"
+            "as_of": "2026-11-28T02:00:00Z",
+            "share_last_24h_pct": 0.0099,
+            "share_7d_average_pct": 0.0067,
+            "share_last_24h_vs_7d_average": 1.49,
+            "fetched_utc": "2026-11-28T03:44:20Z"
           },
           {
             "term": "OPEC quota",
@@ -457,7 +466,7 @@
             "share_last_24h_pct": 0.0023,
             "share_7d_average_pct": 0.0007,
             "share_last_24h_vs_7d_average": 3.13,
-            "fetched_utc": "2026-11-28T02:43:19Z"
+            "fetched_utc": "2026-11-28T03:44:20Z"
           },
           {
             "term": "Suez Canal",
@@ -465,17 +474,13 @@
             "share_last_24h_pct": 0.0,
             "share_7d_average_pct": 0.0014,
             "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-28T02:43:19Z"
+            "fetched_utc": "2026-11-28T03:44:20Z"
           }
         ],
         "terms_without_figures": [
           {
-            "term": "Strait of Hormuz",
-            "reason": "api.gdeltproject.org answered HTTP 429"
-          },
-          {
             "term": "Red Sea tanker",
-            "reason": "api.gdeltproject.org answered HTTP 429"
+            "reason": "GDELT returned too few timeline points"
           },
           {
             "term": "Libya oilfield",
