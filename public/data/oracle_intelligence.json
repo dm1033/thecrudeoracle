@@ -1,6 +1,6 @@
 {
   "schema_version": "3.0.0",
-  "generated_utc": "2026-11-27T03:54:12Z",
+  "generated_utc": "2026-11-28T02:40:40Z",
   "publisher": "The Crude Oracle (https://www.thecrudeoracle.com)",
   "notice": "Delayed public data for information only. Not financial advice. This product uses the FRED API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
   "modules": {
@@ -14,7 +14,7 @@
     },
     "positioning": {
       "status": "ok",
-      "fetched_utc": "2026-11-27T03:54:12Z",
+      "fetched_utc": "2026-11-28T02:40:40Z",
       "as_of": "2026-11-17",
       "source_name": "CFTC Disaggregated Commitments of Traders, futures only",
       "source_url": "https://publicreporting.cftc.gov/d/72hh-3qpy",
@@ -38,16 +38,16 @@
     },
     "macro": {
       "status": "ok",
-      "fetched_utc": "2026-11-27T03:54:12Z",
-      "as_of": "2026-11-24",
+      "fetched_utc": "2026-11-28T02:40:40Z",
+      "as_of": "2026-11-25",
       "source_name": "Board of Governors of the Federal Reserve System, via FRED",
       "source_url": "https://fred.stlouisfed.org/",
       "data_type": "delayed",
       "values": {
         "broad_dollar_index": 123.6,
         "broad_dollar_date": "2026-11-20",
-        "real_yield_10y_pct": 2.79,
-        "real_yield_date": "2026-11-24",
+        "real_yield_10y_pct": 2.73,
+        "real_yield_date": "2026-11-25",
         "broad_dollar_change": {
           "change": 0.07,
           "previous_date": "2026-11-19",
@@ -55,9 +55,9 @@
           "changes_compared": 78
         },
         "real_yield_10y_change": {
-          "change": 0.0,
-          "previous_date": "2026-11-23",
-          "vs_usual": 0.0,
+          "change": -0.06,
+          "previous_date": "2026-11-24",
+          "vs_usual": -1.29,
           "changes_compared": 78
         },
         "wti_vs_broad_dollar_correlation": 0.06,
@@ -68,37 +68,17 @@
     },
     "news": {
       "status": "ok",
-      "fetched_utc": "2026-11-27T03:54:12Z",
-      "as_of": "2026-11-27T02:00:00Z",
+      "fetched_utc": "2026-11-28T02:40:40Z",
+      "as_of": "2026-11-28T02:00:00Z",
       "source_name": "The GDELT Project, DOC 2.0 API",
       "source_url": "https://www.gdeltproject.org/",
       "data_type": "delayed",
       "values": {
-        "share_last_24h_pct": 0.1068,
-        "share_7d_average_pct": 0.2274,
-        "share_last_24h_vs_7d_average": 0.47,
-        "timeline_points": 68,
+        "share_last_24h_pct": 0.2817,
+        "share_7d_average_pct": 0.2195,
+        "share_last_24h_vs_7d_average": 1.28,
+        "timeline_points": 73,
         "timeline": [
-          {
-            "t": "2026-11-20T04:00:00Z",
-            "share_pct": 0.5491
-          },
-          {
-            "t": "2026-11-20T05:00:00Z",
-            "share_pct": 0.1607
-          },
-          {
-            "t": "2026-11-20T06:00:00Z",
-            "share_pct": 0.3947
-          },
-          {
-            "t": "2026-11-20T21:00:00Z",
-            "share_pct": 0.324
-          },
-          {
-            "t": "2026-11-21T00:00:00Z",
-            "share_pct": 0.8214
-          },
           {
             "t": "2026-11-21T06:00:00Z",
             "share_pct": 0.0769
@@ -349,7 +329,47 @@
           },
           {
             "t": "2026-11-27T02:00:00Z",
-            "share_pct": 0.0534
+            "share_pct": 0.0476
+          },
+          {
+            "t": "2026-11-27T03:00:00Z",
+            "share_pct": 0.2801
+          },
+          {
+            "t": "2026-11-27T04:00:00Z",
+            "share_pct": 0.0992
+          },
+          {
+            "t": "2026-11-27T05:00:00Z",
+            "share_pct": 0.2724
+          },
+          {
+            "t": "2026-11-27T06:00:00Z",
+            "share_pct": 0.2813
+          },
+          {
+            "t": "2026-11-27T20:00:00Z",
+            "share_pct": 0.2324
+          },
+          {
+            "t": "2026-11-27T22:00:00Z",
+            "share_pct": 0.5592
+          },
+          {
+            "t": "2026-11-27T23:00:00Z",
+            "share_pct": 0.3228
+          },
+          {
+            "t": "2026-11-28T00:00:00Z",
+            "share_pct": 0.3604
+          },
+          {
+            "t": "2026-11-28T01:00:00Z",
+            "share_pct": 0.1637
+          },
+          {
+            "t": "2026-11-28T02:00:00Z",
+            "share_pct": 0.2455
           }
         ],
         "search_terms": [
@@ -362,67 +382,66 @@
         ],
         "headlines": [
           {
-            "title": "Tanker Market : Lower Refining Margins Leaving Less Room to Pay for Freight | Hellenic Shipping News Worldwide",
-            "domain": "hellenicshippingnews.com",
-            "url": "https://www.hellenicshippingnews.com/tanker-market-lower-refining-margins-leaving-less-room-to-pay-for-freight/",
-            "seen_utc": "2026-11-22T22:30:00Z"
+            "title": "Breaking through enemy blockade is underway : Iran Navy chief dismisses US blockade in Strait of Hormuz",
+            "domain": "aninews.in",
+            "url": "https://aninews.in/news/world/middle-east/breaking-through-enemy-blockade-is-underway-iran-navy-chief-dismisses-us-blockade-in-strait-of-hormuz20261128042046/",
+            "seen_utc": "2026-11-28T02:30:00Z"
           },
           {
-            "title": "Two oil tankers explode after hitting naval mines in Strait of Hormuz",
-            "domain": "en.apa.az",
-            "url": "https://en.apa.az/asia/two-oil-tankers-explode-after-hitting-naval-mines-in-strait-of-hormuz-537786",
-            "seen_utc": "2026-11-22T21:30:00Z"
+            "title": "Oil notches first weekly gain in November on supply fears",
+            "domain": "businesstimes.com.sg",
+            "url": "https://www.businesstimes.com.sg/companies-markets/oil-notches-first-weekly-gain-november-supply-fears",
+            "seen_utc": "2026-11-28T01:45:00Z"
           },
           {
-            "title": "Iran says 2 supertankers struck naval mines near Strait of Hormuz",
-            "domain": "aa.com.tr",
-            "url": "https://aa.com.tr/en/middle-east/iran-says-2-supertankers-struck-naval-mines-near-strait-of-hormuz/4133736",
-            "seen_utc": "2026-11-22T21:30:00Z"
+            "title": "Crude Oil Slides As Trump Offers More Time For Diplomacy To Resolve Iran Crisis",
+            "domain": "rttnews.com",
+            "url": "https://www.rttnews.com/story.aspx?Id=3718749",
+            "seen_utc": "2026-11-28T00:15:00Z"
           },
           {
-            "title": "Iranian attacks in the Strait of Hormuz are at the highest levels since the conflict began",
-            "domain": "peakoil.com",
-            "url": "https://peakoil.com/publicpolicy/iranian-attacks-in-the-strait-of-hormuz-are-at-the-highest-levels-since-the-conflict-began",
-            "seen_utc": "2026-11-22T20:30:00Z"
+            "title": "Senior IRGC officials vow to break US blockade on Strait of Hormuz",
+            "domain": "jpost.com",
+            "url": "https://www.jpost.com/middle-east/iran-news/article-916347",
+            "seen_utc": "2026-11-28T00:15:00Z"
           },
           {
-            "title": "UN - affiliated athlete swims in dangerous Strait of Hormuz to highlight Iran war impact on wildlife",
-            "domain": "cbc.ca",
-            "url": "https://www.cbc.ca/news/world/un-endurance-swimmer-strait-of-hormuz-wildlife-impact-9.7431891",
-            "seen_utc": "2026-11-22T20:30:00Z"
+            "title": "US Lobbied Iraq & Venezuela To Exit OPEC , Sparking Saudi Intervention",
+            "domain": "zerohedge.com",
+            "url": "https://www.zerohedge.com/energy/us-lobbied-iraq-venezuela-exit-opec-sparking-saudi-intervention",
+            "seen_utc": "2026-11-28T00:15:00Z"
           },
           {
-            "title": "Iran says 2 supertankers struck naval mines near Strait of Hormuz",
-            "domain": "middleeastmonitor.com",
-            "url": "https://www.middleeastmonitor.com/20261122-iran-says-2-supertankers-struck-naval-mines-near-strait-of-hormuz/",
-            "seen_utc": "2026-11-22T18:45:00Z"
+            "title": "Breaking through enemy blockade is underway : Iran Navy chief dismisses US blockade in Strait of Hormuz",
+            "domain": "news.webindia123.com",
+            "url": "https://news.webindia123.com/news/Articles/World/20261128/4525488.html",
+            "seen_utc": "2026-11-27T23:45:00Z"
           },
           {
-            "title": "Iran claims it shot down US drone near Strait of Hormuz",
-            "domain": "news.az",
-            "url": "https://news.az/news/iran-claims-it-shot-down-us-drone-near-strait-of-hormuz",
-            "seen_utc": "2026-11-22T12:30:00Z"
+            "title": "U . S . pushed for Venezuela and Iraq to exit OPEC : Reuters exclusive",
+            "domain": "bnnbloomberg.ca",
+            "url": "https://www.bnnbloomberg.ca/business/international/2026/11/27/us-pushed-venezuela-iraq-to-consider-leaving-opec-sources-say-reuters-exclusive/",
+            "seen_utc": "2026-11-27T22:45:00Z"
           },
           {
-            "title": "Bahrain says Iran struck industrial site as tankers hit in Hormuz",
-            "domain": "enca.com",
-            "url": "https://www.enca.com/business/bahrain-says-iran-struck-industrial-site-tankers-hit-hormuz",
-            "seen_utc": "2026-11-22T07:30:00Z"
+            "title": "Crude Oil Slides As Trump Offers More Time For Diplomacy To Resolve Iran Crisis",
+            "domain": "finanzen.ch",
+            "url": "https://www.finanzen.ch/nachrichten/aktien/crude-oil-slides-as-trump-offers-more-time-for-diplomacy-to-resolve-iran-crisis-1036806310",
+            "seen_utc": "2026-11-27T20:30:00Z"
           },
           {
-            "title": "As war engulfs the Strait of Hormuz , one swimmer is fighting to protect its wildlife",
-            "domain": "sbs.com.au",
-            "url": "https://www.sbs.com.au/news/article/man-swims-across-the-strait-of-hormuz-to-protect-wildlife/sucyype2c",
-            "seen_utc": "2026-11-22T00:30:00Z"
+            "title": "Iran insists demands must be met before Strait of Hormuz reopens",
+            "domain": "israelnationalnews.com",
+            "url": "https://www.israelnationalnews.com/news/437249",
+            "seen_utc": "2026-11-27T06:30:00Z"
           },
           {
-            "title": "Iran attacks US bases in Bahrain as its tankers get ready to break the US blockade",
-            "domain": "euronews.com",
-            "url": "https://www.euronews.com/2026/11/21/iran-attacks-us-bases-in-bahrain-as-its-tankers-get-ready-to-break-the-us-blockade",
-            "seen_utc": "2026-11-22T00:30:00Z"
+            "title": "Rupee Drops 24 Paise to 92 . 62 Against US Dollar Amid Crude Oil Recovery",
+            "domain": "dailypioneer.com",
+            "url": "https://dailypioneer.com/business/rupee-falls-24-paise-9262-against-us-dollar",
+            "seen_utc": "2026-11-27T05:30:00Z"
           }
         ],
-        "headlines_note": "Headlines are from the previous fetch. A newer article list was not available.",
         "terms": [
           {
             "term": "Bab el-Mandeb",
@@ -434,19 +453,19 @@
           },
           {
             "term": "OPEC quota",
-            "as_of": "2026-11-27T02:00:00Z",
-            "share_last_24h_pct": 0.0,
-            "share_7d_average_pct": 0.0008,
-            "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-27T03:57:35Z"
+            "as_of": "2026-11-28T02:00:00Z",
+            "share_last_24h_pct": 0.0023,
+            "share_7d_average_pct": 0.0007,
+            "share_last_24h_vs_7d_average": 3.13,
+            "fetched_utc": "2026-11-28T02:43:19Z"
           },
           {
             "term": "Suez Canal",
-            "as_of": "2026-11-27T02:00:00Z",
+            "as_of": "2026-11-28T02:00:00Z",
             "share_last_24h_pct": 0.0,
-            "share_7d_average_pct": 0.0019,
+            "share_7d_average_pct": 0.0014,
             "share_last_24h_vs_7d_average": 0.0,
-            "fetched_utc": "2026-11-27T03:57:35Z"
+            "fetched_utc": "2026-11-28T02:43:19Z"
           }
         ],
         "terms_without_figures": [
@@ -456,7 +475,7 @@
           },
           {
             "term": "Red Sea tanker",
-            "reason": "GDELT returned too few timeline points"
+            "reason": "api.gdeltproject.org answered HTTP 429"
           },
           {
             "term": "Libya oilfield",
