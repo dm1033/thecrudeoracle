@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
 import { ROUTE_LASTMOD } from "@/lib/content-dates";
 import { listDailyNoteDates } from "@/lib/daily-feed";
+import { isNoteDate } from "@/lib/daily-note";
 import { SITE } from "@/lib/site";
+
+/** Same window as the daily note. Dated note URLs refresh with that read. */
+export const revalidate = 7200;
 
 const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }[] = [
   { path: "/", priority: 1.0, changeFrequency: "daily" },
@@ -48,7 +52,7 @@ const ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/editorial-policy", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export function sitemapEntries(noteDates: readonly string[]): MetadataRoute.Sitemap {
   const today = new Date().toISOString().slice(0, 10);
   const entries: MetadataRoute.Sitemap = ROUTES.map((route) => {
     const stamp = route.path === "/daily" || route.path === "/eia-weekly" ? `${today}T00:00:00Z` : ROUTE_LASTMOD[route.path];
@@ -59,14 +63,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: route.priority,
     };
   });
-  const dates = await listDailyNoteDates().catch(() => [] as string[]);
-  for (const date of dates) {
+  const seen = new Set(entries.map((entry) => entry.url));
+  for (const date of noteDates) {
+    if (!isNoteDate(date)) continue;
+    const url = `${SITE.url}/daily/${date}`;
+    if (seen.has(url)) continue;
+    seen.add(url);
     entries.push({
-      url: `${SITE.url}/daily/${date}`,
+      url,
       lastModified: new Date(`${date}T00:00:00Z`),
       changeFrequency: "weekly",
       priority: 0.5,
     });
   }
   return entries;
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const dates = await listDailyNoteDates().catch(() => [] as string[]);
+  return sitemapEntries(dates);
 }

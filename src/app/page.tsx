@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import DataCardView from "@/components/DataCardView";
 import DisclaimerBlock from "@/components/DisclaimerBlock";
 import FAQ from "@/components/FAQ";
-import BeehiivSignup from "@/components/BeehiivSignup";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import PresentedBy from "@/components/PresentedBy";
 import SeaborneTerminalMap from "@/components/viz/SeaborneTerminalMap";
 import { DeferredSeasonalChart, DeferredSpotChart } from "@/components/viz/DeferredCharts";
@@ -12,6 +12,7 @@ import { loadDailyNote } from "@/lib/daily-feed";
 import { formatLongDate } from "@/lib/daily-note";
 import { getEiaSeasonalSuite } from "@/lib/eia-seasonal";
 import { getHistoricalSpotSeries } from "@/lib/historical-feed";
+import { newsletterFormReady } from "@/lib/newsletter";
 import { pageMeta } from "@/lib/seo";
 import { upcomingReleases } from "@/lib/release-calendar";
 
@@ -66,6 +67,16 @@ export default async function HomePage() {
           Delayed public prices for Brent, WTI and Henry Hub, weekly EIA stocks, and a seaborne map. The prices carry the trade date of the print. Not financial advice.
         </p>
       </header>
+      <div className="container-site py-6">
+        <NewsletterSignup
+          configured={newsletterFormReady()}
+          location="home"
+          eyebrow="Newsletter"
+          heading="Free weekday morning oil brief"
+          body="A weekday morning note from delayed public oil data: what moved, why, and what matters next. Market commentary for information only. It is not financial advice."
+          buttonLabel="Get the weekday brief"
+        />
+      </div>
       <SeaborneTerminalMap load="desktop" />
       <div className="container-site space-y-px bg-border-hairline py-px">
         <div className="hairline-grid lg:grid-cols-12">
@@ -145,7 +156,6 @@ export default async function HomePage() {
       </section>
       <div className="container-site space-y-10 pb-16">
         <PresentedBy location="home_sponsor" enquireHref="/advertise#price-board" />
-        <BeehiivSignup location="home" />
         <FAQ items={FAQ_ITEMS} />
         <DisclaimerBlock />
       </div>
