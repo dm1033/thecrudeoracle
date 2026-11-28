@@ -129,6 +129,7 @@ describe("sitemap coverage (src/app/sitemap.ts)", () => {
   it("redirects the removed offshore pitch home", () => {
     const config = readFileSync(path.resolve(__dirname, "../../next.config.mjs"), "utf8");
     expect(config).toContain('source: "/offshore", destination: "/", permanent: true');
+    expect(config).toContain('source: "/rss.xml", destination: "/feed.xml", permanent: true');
     expect(routes).not.toContain("/offshore");
   });
 

@@ -16,6 +16,7 @@ const nextConfig = {
       { source: "/release-calendar", destination: "/calendar", permanent: false },
       { source: "/desk-agent", destination: "/desk-bot", permanent: true },
       { source: "/offshore", destination: "/", permanent: true },
+      { source: "/rss.xml", destination: "/feed.xml", permanent: true },
     ];
   },
 };

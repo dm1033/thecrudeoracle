@@ -6,6 +6,7 @@ import DisclaimerBlock from "@/components/DisclaimerBlock";
 import PremiumGate from "@/components/PremiumGate";
 import JsonLd from "@/components/JsonLd";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import { newsletterFormReady } from "@/lib/newsletter";
 import BottomLineCard from "@/components/BottomLineCard";
 import { BrentWtiChart } from "@/components/charts/Charts";
 import { SITE } from "@/lib/site";
@@ -32,7 +33,7 @@ const SECTIONS: { key: keyof Briefing; label: string }[] = [
 
 function BriefingArticle({ briefing }: { briefing: Briefing }) {
   return (
-    <article className="card p-6 sm:p-8">
+    <article id={`briefing-${briefing.date}`} className="card p-6 sm:p-8">
       <header className="border-b border-ink-700 pb-5">
         <p className="eyebrow">The Crude Oracle Daily Briefing — {briefing.date}</p>
         <h2 className="mt-2 text-xl font-bold text-white sm:text-2xl">{briefing.headline}</h2>
@@ -134,7 +135,7 @@ export default async function DailyBriefingPage() {
             )}
           </div>
         </PremiumGate>
-        <NewsletterSignup />
+        <NewsletterSignup configured={newsletterFormReady()} />
         <DisclaimerBlock />
       </div>
     </>

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { SITE } from "@/lib/site";
 
+/** Public RSS document. /rss.xml redirects here. */
+export const FEED_PATH = "/feed.xml";
+export const FEED_URL = `${SITE.url}${FEED_PATH}`;
+export const FEED_TYPE = "application/rss+xml";
+
 const OG_IMAGE = {
   url: "/images/brand-compass.jpg",
   width: 1200,
@@ -36,8 +41,8 @@ export function pageTitle(title: string): { title: Metadata["title"]; social: st
 
 /**
  * Build consistent per-page metadata: title, description, canonical, Open Graph, Twitter.
- * `dynamicImage` leaves the image to a sibling opengraph-image file so a static brand
- * photo is not listed ahead of the generated card.
+ * `dynamicImage` leaves the image to a sibling opengraph-image file so a static
+ * brand photo is not listed ahead of the generated card.
  */
 export function pageMeta(
   title: string,
@@ -51,7 +56,10 @@ export function pageMeta(
   return {
     title: named.title,
     description,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      types: { [FEED_TYPE]: FEED_URL },
+    },
     openGraph: {
       title: named.social,
       description,
@@ -68,4 +76,25 @@ export function pageMeta(
       ...(dynamicImage ? {} : { images: [OG_IMAGE.url] }),
     },
   };
+}
+
+/**
+ * Google Search Console HTML-tag token. Blank, quoted-empty, and the
+ * `replace_me` placeholder omit the meta tag. A pasted meta tag is reduced
+ * to its content attribute. No token is invented here.
+ */
+export function googleSiteVerification(env: Record<string, string | undefined> = process.env): string | undefined {
+  const raw = env.GOOGLE_SITE_VERIFICATION;
+  if (typeof raw !== "string") return undefined;
+  let token = raw.trim();
+  if (
+    token.length >= 2 &&
+    ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("'") && token.endsWith("'")))
+  ) {
+    token = token.slice(1, -1).trim();
+  }
+  const content = token.match(/content\s*=\s*["']([^"']+)["']/i);
+  if (content?.[1]) token = content[1].trim();
+  if (!token || token === "replace_me" || /[<>]/.test(token)) return undefined;
+  return token;
 }

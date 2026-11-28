@@ -40,6 +40,16 @@ export function newsletterConfig(env: Record<string, string | undefined> = proce
   return { provider: "unconfigured" };
 }
 
+/** True only when the beehiiv list can accept an address. Missing key or publication id is false. */
+export function beehiivReady(env: Record<string, string | undefined> = process.env): boolean {
+  return newsletterConfig(env).provider === "beehiiv";
+}
+
+/** True when the on-site form has a provider. Otherwise the box links out and does not submit. */
+export function newsletterFormReady(env: Record<string, string | undefined> = process.env): boolean {
+  return newsletterConfig(env).provider !== "unconfigured";
+}
+
 export interface SubscribeResult {
   ok: boolean;
   status: "subscribed" | "unconfigured" | "rejected";

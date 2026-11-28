@@ -11,6 +11,7 @@ import { getEiaWeekly } from "@/lib/eia-weekly";
 import { getMarketSnapshot } from "@/lib/market-snapshot";
 import { formatPriceDate, priceFigureShown } from "@/lib/price-stamp";
 import { getPublishedPrices } from "@/lib/published-prices";
+import { FEED_TYPE, FEED_URL, googleSiteVerification } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 const newsreader = localFont({
@@ -54,6 +55,8 @@ const jetbrains = localFont({
  */
 export const revalidate = 7200;
 
+const googleVerification = googleSiteVerification();
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -77,6 +80,10 @@ export const metadata: Metadata = {
     images: ["/og-logo.jpg"],
   },
   robots: { index: true, follow: true },
+  alternates: {
+    types: { [FEED_TYPE]: FEED_URL },
+  },
+  ...(googleVerification ? { verification: { google: googleVerification } } : {}),
   manifest: "/manifest.json",
   icons: {
     icon: [

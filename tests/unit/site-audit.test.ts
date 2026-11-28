@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import robots from "@/app/robots";
-import sitemap from "@/app/sitemap";
-import { pageMeta, pageTitle } from "@/lib/seo";
-import { isValidEmail, newsletterConfig } from "@/lib/newsletter";
+import sitemap, { sitemapEntries } from "@/app/sitemap";
+import { beehiivReady, isValidEmail, newsletterConfig, newsletterFormReady, subscribeEmail } from "@/lib/newsletter";
 import { getPublishedPrices, resetPublishedPricesCache } from "@/lib/published-prices";
+import { FEED_URL, googleSiteVerification, pageMeta, pageTitle } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 describe("page titles", () => {
@@ -21,6 +21,7 @@ describe("page titles", () => {
     const meta = pageMeta(title, "Daily oil intelligence.", "/");
     expect(meta.title).toEqual({ absolute: title });
     expect(meta.openGraph?.title).toBe(title);
+    expect(meta.alternates?.types?.["application/rss+xml"]).toBe(FEED_URL);
   });
 });
 
@@ -36,6 +37,7 @@ describe("robots.txt rules", () => {
       const disallow = Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow];
       expect(disallow).toEqual(expect.arrayContaining(["/admin", "/account", "/payment/"]));
     }
+    expect(robots().sitemap).toBe(`${SITE.url}/sitemap.xml`);
   });
 });
 
@@ -58,6 +60,8 @@ describe("sitemap lastmod", () => {
     expect(entries.some((entry) => entry.url === `${SITE.url}/media-kit`)).toBe(true);
     expect(entries.some((entry) => entry.url === `${SITE.url}/corrections`)).toBe(true);
     expect(entries.some((entry) => entry.url === `${SITE.url}/daily-briefing`)).toBe(true);
+    const briefing = entries.find((entry) => entry.url === `${SITE.url}/daily-briefing`);
+    expect(briefing?.lastModified).toEqual(new Date("2026-07-15T07:00:00Z"));
     expect(entries.some((entry) => entry.url.includes("/premium-dashboard"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/login"))).toBe(false);
     expect(entries.some((entry) => entry.url.includes("/subscription-terms"))).toBe(false);
@@ -66,18 +70,68 @@ describe("sitemap lastmod", () => {
   });
 });
 
+describe("search console verification", () => {
+  it("omits a blank or placeholder token and keeps a supplied one", () => {
+    expect(googleSiteVerification({})).toBeUndefined();
+    expect(googleSiteVerification({ GOOGLE_SITE_VERIFICATION: "  " })).toBeUndefined();
+    expect(googleSiteVerification({ GOOGLE_SITE_VERIFICATION: "replace_me" })).toBeUndefined();
+    expect(googleSiteVerification({ GOOGLE_SITE_VERIFICATION: '"replace_me"' })).toBeUndefined();
+    expect(googleSiteVerification({ GOOGLE_SITE_VERIFICATION: "<meta>" })).toBeUndefined();
+    expect(googleSiteVerification({ GOOGLE_SITE_VERIFICATION: "  gsc-test-token  " })).toBe("gsc-test-token");
+    expect(
+      googleSiteVerification({
+        GOOGLE_SITE_VERIFICATION: '<meta name="google-site-verification" content="gsc-test-token" />',
+      }),
+    ).toBe("gsc-test-token");
+  });
+});
+
+describe("sitemap notes and briefings", () => {
+  it("lists a dated note and the briefing page with lastModified, and drops a bad date", () => {
+    const entries = sitemapEntries(["2026-07-14", "not-a-date", "2026-02-31"]);
+    const note = entries.find((entry) => entry.url === `${SITE.url}/daily/2026-07-14`);
+    expect(note?.lastModified).toEqual(new Date("2026-07-14T00:00:00Z"));
+    expect(entries.some((entry) => entry.url.includes("not-a-date"))).toBe(false);
+    expect(entries.some((entry) => entry.url.includes("2026-02-31"))).toBe(false);
+    expect(entries.find((entry) => entry.url === `${SITE.url}/daily`)?.lastModified).toBeInstanceOf(Date);
+    expect(entries.find((entry) => entry.url === `${SITE.url}/daily-briefing`)?.lastModified).toEqual(
+      new Date("2026-07-15T07:00:00Z"),
+    );
+    expect(entries.find((entry) => entry.url === SITE.url)?.url).toBe(SITE.url);
+  });
+});
+
 describe("newsletter config", () => {
   it("stays unconfigured until a real provider key is present", () => {
     expect(newsletterConfig({}).provider).toBe("unconfigured");
+    expect(beehiivReady({})).toBe(false);
+    expect(newsletterFormReady({})).toBe(false);
     expect(newsletterConfig({ NEWSLETTER_PROVIDER: "beehiiv", BEEHIIV_API_KEY: "replace_me" }).provider).toBe(
       "unconfigured",
     );
+    expect(
+      newsletterConfig({ NEWSLETTER_PROVIDER: "beehiiv", BEEHIIV_API_KEY: "bh_test" }).provider,
+    ).toBe("unconfigured");
+    expect(
+      newsletterConfig({ NEWSLETTER_PROVIDER: "beehiiv", BEEHIIV_PUBLICATION_ID: "pub_test" }).provider,
+    ).toBe("unconfigured");
+    expect(
+      beehiivReady({
+        NEWSLETTER_PROVIDER: "beehiiv",
+        BEEHIIV_API_KEY: "bh_test",
+        BEEHIIV_PUBLICATION_ID: "pub_test",
+      }),
+    ).toBe(true);
     expect(
       newsletterConfig({
         NEWSLETTER_PROVIDER: "buttondown",
         BUTTONDOWN_API_KEY: "bd_test",
       }),
     ).toEqual({ provider: "buttondown", apiKey: "bd_test" });
+  });
+
+  it("does not throw when the list is unconfigured", async () => {
+    await expect(subscribeEmail("reader@example.com", {})).resolves.toEqual({ ok: true, status: "unconfigured" });
   });
 
   it("accepts a normal email and rejects an empty one", () => {

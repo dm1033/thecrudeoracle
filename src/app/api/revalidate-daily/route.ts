@@ -25,5 +25,10 @@ export async function GET(request: Request) {
   revalidatePath("/daily/[date]", "page");
   revalidatePath("/eia-weekly");
   revalidatePath("/");
-  return Response.json({ ok: true, revalidated: ["/", "/daily", "/daily/[date]", "/eia-weekly"] });
+  revalidatePath("/feed.xml");
+  revalidatePath("/sitemap.xml");
+  return Response.json({
+    ok: true,
+    revalidated: ["/", "/daily", "/daily/[date]", "/eia-weekly", "/feed.xml", "/sitemap.xml"],
+  });
 }
